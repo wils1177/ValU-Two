@@ -1,0 +1,591 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		47DDCCCA22A890DB0049E3A5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47DDCCC922A890DB0049E3A5 /* AppDelegate.swift */; };
+		47DDCCCC22A890DB0049E3A5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47DDCCCB22A890DB0049E3A5 /* ViewController.swift */; };
+		47DDCCCF22A890DB0049E3A5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 47DDCCCD22A890DB0049E3A5 /* Main.storyboard */; };
+		47DDCCD122A890E00049E3A5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 47DDCCD022A890E00049E3A5 /* Assets.xcassets */; };
+		47DDCCD422A890E00049E3A5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 47DDCCD222A890E00049E3A5 /* LaunchScreen.storyboard */; };
+		47DDCCDF22A890E00049E3A5 /* ValU_TwoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47DDCCDE22A890E00049E3A5 /* ValU_TwoTests.swift */; };
+		47DDCCEA22A890E00049E3A5 /* ValU_TwoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47DDCCE922A890E00049E3A5 /* ValU_TwoUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		47DDCCDB22A890E00049E3A5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 47DDCCBE22A890DB0049E3A5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 47DDCCC522A890DB0049E3A5;
+			remoteInfo = "ValU Two";
+		};
+		47DDCCE622A890E00049E3A5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 47DDCCBE22A890DB0049E3A5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 47DDCCC522A890DB0049E3A5;
+			remoteInfo = "ValU Two";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		47DDCCC622A890DB0049E3A5 /* ValU Two.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ValU Two.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		47DDCCC922A890DB0049E3A5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		47DDCCCB22A890DB0049E3A5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		47DDCCCE22A890DB0049E3A5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		47DDCCD022A890E00049E3A5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		47DDCCD322A890E00049E3A5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		47DDCCD522A890E00049E3A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		47DDCCDA22A890E00049E3A5 /* ValU TwoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ValU TwoTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		47DDCCDE22A890E00049E3A5 /* ValU_TwoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValU_TwoTests.swift; sourceTree = "<group>"; };
+		47DDCCE022A890E00049E3A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		47DDCCE522A890E00049E3A5 /* ValU TwoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ValU TwoUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		47DDCCE922A890E00049E3A5 /* ValU_TwoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValU_TwoUITests.swift; sourceTree = "<group>"; };
+		47DDCCEB22A890E00049E3A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		47DDCCC322A890DB0049E3A5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		47DDCCD722A890E00049E3A5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		47DDCCE222A890E00049E3A5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		47DDCCBD22A890DB0049E3A5 = {
+			isa = PBXGroup;
+			children = (
+				47DDCCC822A890DB0049E3A5 /* ValU Two */,
+				47DDCCDD22A890E00049E3A5 /* ValU TwoTests */,
+				47DDCCE822A890E00049E3A5 /* ValU TwoUITests */,
+				47DDCCC722A890DB0049E3A5 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		47DDCCC722A890DB0049E3A5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				47DDCCC622A890DB0049E3A5 /* ValU Two.app */,
+				47DDCCDA22A890E00049E3A5 /* ValU TwoTests.xctest */,
+				47DDCCE522A890E00049E3A5 /* ValU TwoUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		47DDCCC822A890DB0049E3A5 /* ValU Two */ = {
+			isa = PBXGroup;
+			children = (
+				47DDCCC922A890DB0049E3A5 /* AppDelegate.swift */,
+				47DDCCCB22A890DB0049E3A5 /* ViewController.swift */,
+				47DDCCCD22A890DB0049E3A5 /* Main.storyboard */,
+				47DDCCD022A890E00049E3A5 /* Assets.xcassets */,
+				47DDCCD222A890E00049E3A5 /* LaunchScreen.storyboard */,
+				47DDCCD522A890E00049E3A5 /* Info.plist */,
+			);
+			path = "ValU Two";
+			sourceTree = "<group>";
+		};
+		47DDCCDD22A890E00049E3A5 /* ValU TwoTests */ = {
+			isa = PBXGroup;
+			children = (
+				47DDCCDE22A890E00049E3A5 /* ValU_TwoTests.swift */,
+				47DDCCE022A890E00049E3A5 /* Info.plist */,
+			);
+			path = "ValU TwoTests";
+			sourceTree = "<group>";
+		};
+		47DDCCE822A890E00049E3A5 /* ValU TwoUITests */ = {
+			isa = PBXGroup;
+			children = (
+				47DDCCE922A890E00049E3A5 /* ValU_TwoUITests.swift */,
+				47DDCCEB22A890E00049E3A5 /* Info.plist */,
+			);
+			path = "ValU TwoUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		47DDCCC522A890DB0049E3A5 /* ValU Two */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 47DDCCEE22A890E00049E3A5 /* Build configuration list for PBXNativeTarget "ValU Two" */;
+			buildPhases = (
+				47DDCCC222A890DB0049E3A5 /* Sources */,
+				47DDCCC322A890DB0049E3A5 /* Frameworks */,
+				47DDCCC422A890DB0049E3A5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "ValU Two";
+			productName = "ValU Two";
+			productReference = 47DDCCC622A890DB0049E3A5 /* ValU Two.app */;
+			productType = "com.apple.product-type.application";
+		};
+		47DDCCD922A890E00049E3A5 /* ValU TwoTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 47DDCCF122A890E00049E3A5 /* Build configuration list for PBXNativeTarget "ValU TwoTests" */;
+			buildPhases = (
+				47DDCCD622A890E00049E3A5 /* Sources */,
+				47DDCCD722A890E00049E3A5 /* Frameworks */,
+				47DDCCD822A890E00049E3A5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				47DDCCDC22A890E00049E3A5 /* PBXTargetDependency */,
+			);
+			name = "ValU TwoTests";
+			productName = "ValU TwoTests";
+			productReference = 47DDCCDA22A890E00049E3A5 /* ValU TwoTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		47DDCCE422A890E00049E3A5 /* ValU TwoUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 47DDCCF422A890E00049E3A5 /* Build configuration list for PBXNativeTarget "ValU TwoUITests" */;
+			buildPhases = (
+				47DDCCE122A890E00049E3A5 /* Sources */,
+				47DDCCE222A890E00049E3A5 /* Frameworks */,
+				47DDCCE322A890E00049E3A5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				47DDCCE722A890E00049E3A5 /* PBXTargetDependency */,
+			);
+			name = "ValU TwoUITests";
+			productName = "ValU TwoUITests";
+			productReference = 47DDCCE522A890E00049E3A5 /* ValU TwoUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		47DDCCBE22A890DB0049E3A5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1020;
+				LastUpgradeCheck = 1020;
+				ORGANIZATIONNAME = "Clayton Wilson";
+				TargetAttributes = {
+					47DDCCC522A890DB0049E3A5 = {
+						CreatedOnToolsVersion = 10.2.1;
+					};
+					47DDCCD922A890E00049E3A5 = {
+						CreatedOnToolsVersion = 10.2.1;
+						TestTargetID = 47DDCCC522A890DB0049E3A5;
+					};
+					47DDCCE422A890E00049E3A5 = {
+						CreatedOnToolsVersion = 10.2.1;
+						TestTargetID = 47DDCCC522A890DB0049E3A5;
+					};
+				};
+			};
+			buildConfigurationList = 47DDCCC122A890DB0049E3A5 /* Build configuration list for PBXProject "ValU Two" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 47DDCCBD22A890DB0049E3A5;
+			productRefGroup = 47DDCCC722A890DB0049E3A5 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				47DDCCC522A890DB0049E3A5 /* ValU Two */,
+				47DDCCD922A890E00049E3A5 /* ValU TwoTests */,
+				47DDCCE422A890E00049E3A5 /* ValU TwoUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		47DDCCC422A890DB0049E3A5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				47DDCCD422A890E00049E3A5 /* LaunchScreen.storyboard in Resources */,
+				47DDCCD122A890E00049E3A5 /* Assets.xcassets in Resources */,
+				47DDCCCF22A890DB0049E3A5 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		47DDCCD822A890E00049E3A5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		47DDCCE322A890E00049E3A5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		47DDCCC222A890DB0049E3A5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				47DDCCCC22A890DB0049E3A5 /* ViewController.swift in Sources */,
+				47DDCCCA22A890DB0049E3A5 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		47DDCCD622A890E00049E3A5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				47DDCCDF22A890E00049E3A5 /* ValU_TwoTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		47DDCCE122A890E00049E3A5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				47DDCCEA22A890E00049E3A5 /* ValU_TwoUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		47DDCCDC22A890E00049E3A5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 47DDCCC522A890DB0049E3A5 /* ValU Two */;
+			targetProxy = 47DDCCDB22A890E00049E3A5 /* PBXContainerItemProxy */;
+		};
+		47DDCCE722A890E00049E3A5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 47DDCCC522A890DB0049E3A5 /* ValU Two */;
+			targetProxy = 47DDCCE622A890E00049E3A5 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		47DDCCCD22A890DB0049E3A5 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				47DDCCCE22A890DB0049E3A5 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		47DDCCD222A890E00049E3A5 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				47DDCCD322A890E00049E3A5 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		47DDCCEC22A890E00049E3A5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		47DDCCED22A890E00049E3A5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		47DDCCEF22A890E00049E3A5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2DVRRZC3M5;
+				INFOPLIST_FILE = "ValU Two/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "clay.ValU-Two";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		47DDCCF022A890E00049E3A5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2DVRRZC3M5;
+				INFOPLIST_FILE = "ValU Two/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "clay.ValU-Two";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		47DDCCF222A890E00049E3A5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2DVRRZC3M5;
+				INFOPLIST_FILE = "ValU TwoTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "clay.ValU-TwoTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ValU Two.app/ValU Two";
+			};
+			name = Debug;
+		};
+		47DDCCF322A890E00049E3A5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2DVRRZC3M5;
+				INFOPLIST_FILE = "ValU TwoTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "clay.ValU-TwoTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ValU Two.app/ValU Two";
+			};
+			name = Release;
+		};
+		47DDCCF522A890E00049E3A5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2DVRRZC3M5;
+				INFOPLIST_FILE = "ValU TwoUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "clay.ValU-TwoUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "ValU Two";
+			};
+			name = Debug;
+		};
+		47DDCCF622A890E00049E3A5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2DVRRZC3M5;
+				INFOPLIST_FILE = "ValU TwoUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "clay.ValU-TwoUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "ValU Two";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		47DDCCC122A890DB0049E3A5 /* Build configuration list for PBXProject "ValU Two" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				47DDCCEC22A890E00049E3A5 /* Debug */,
+				47DDCCED22A890E00049E3A5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		47DDCCEE22A890E00049E3A5 /* Build configuration list for PBXNativeTarget "ValU Two" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				47DDCCEF22A890E00049E3A5 /* Debug */,
+				47DDCCF022A890E00049E3A5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		47DDCCF122A890E00049E3A5 /* Build configuration list for PBXNativeTarget "ValU TwoTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				47DDCCF222A890E00049E3A5 /* Debug */,
+				47DDCCF322A890E00049E3A5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		47DDCCF422A890E00049E3A5 /* Build configuration list for PBXNativeTarget "ValU TwoUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				47DDCCF522A890E00049E3A5 /* Debug */,
+				47DDCCF622A890E00049E3A5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 47DDCCBE22A890DB0049E3A5 /* Project object */;
+}
