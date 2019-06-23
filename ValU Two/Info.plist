@@ -18,12 +18,25 @@
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>PLKPlaidLinkConfiguration</key>
+	<dict>
+		<key>apiVersion</key>
+		<string>Default</string>
+		<key>clientName</key>
+		<string>ValU Two</string>
+		<key>env</key>
+		<string>sandbox</string>
+		<key>key</key>
+		<string>d77e9d8584d9f161593bda890bacbb</string>
+		<key>product</key>
+		<string>transactions</string>
+	</dict>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
-	<key>UIMainStoryboardFile</key>
-	<string>Main</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
