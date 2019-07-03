@@ -11,7 +11,7 @@ import UIKit
 
 
 
-class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, CreateBudgetPresentorDelegate{
+class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, CreateBudgetPresentorDelegate, SetSavingsViewDelegate, PlaidLinkDelegate{
 
     // Dependencies
     var budgetToCreate : Budget?
@@ -36,7 +36,7 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, CreateBudg
     func continueToOnboarding() {
         print("Contionue onto onboarding")
         let newBudget = Budget()
-        let newBudgetPresentor = CreateBudgetFormPresentor(budget: newBudget, callToActionMessage: "Continue")
+        let newBudgetPresentor = CreateBudgetFormPresentor(budget: newBudget, callToActionMessage: "testing 123")
         self.currentPresentor = newBudgetPresentor
         newBudgetPresentor.coordinator = self
         let NewBudgetVC = self.currentPresentor?.configure()
@@ -59,9 +59,32 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, CreateBudg
     
     func continueToSetSavings(){
         print("Contine to Set Savings Screen")
-        let setSavingVC = SetSavingsViewController()
-        let ContainerVC = ContainerViewController(title: "Set a Savings Target", vc: setSavingVC)
+        let presentor = SetSavingsPresentor(budget: self.budgetToCreate!)
+        presentor.coordinator = self
+        self.currentPresentor = presentor
+        let setSavingsVC = presentor.configure()
+        let ContainerVC = ContainerViewController(title: "Set a Savings Target", vc: setSavingsVC)
         self.navigationController!.pushViewController(ContainerVC, animated: true)
+    }
+    
+    func savingsSubmitted(budget: Budget, sender: SetSavingsPresentor){
+        self.budgetToCreate = budget
+        temp_launch_plaid()
+        
+    }
+    
+    // This is just a temporary function to play with the Plaid functionality. 
+    func temp_launch_plaid(){
+        print("hey dude")
+        let presentor = PlaidLinkViewPresentor(nibName: nil, bundle: nil)
+        self.currentPresentor = presentor
+        let linkVC = presentor.configure()
+        self.navigationController!.present(linkVC, animated: true)
+        
+    }
+    
+    func dismissPlaidLink() {
+        print("no")
     }
     
     

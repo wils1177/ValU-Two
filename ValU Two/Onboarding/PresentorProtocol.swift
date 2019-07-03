@@ -23,3 +23,11 @@ protocol CreateBudgetVCDelegate {
 protocol StartPageViewDelegate {
     func continueToOnboarding()
 }
+
+protocol SetSavingsViewDelegate {
+    func savingsSubmitted(budget : Budget, sender: SetSavingsPresentor)
+}
+
+protocol PlaidLinkDelegate {
+    func dismissPlaidLink()
+}

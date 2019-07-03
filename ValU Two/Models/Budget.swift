@@ -18,18 +18,21 @@ class Budget{
     //Member Variables
     var amount: Float?
     var budgetTimeFrame: timeFrame
-    var savings: Float?
+    var savingsPercent: Float?
     var spengingCategories: [SpendingCategory]?
     
     init(amount: Float?, budgetTimeFrame: timeFrame){
+        
         self.amount = amount
         self.budgetTimeFrame = budgetTimeFrame
         self.spengingCategories = generateDefaultCategories()
+        self.savingsPercent = 0.2
         
     }
     
     init (){
         self.budgetTimeFrame = timeFrame.monthly
+        self.savingsPercent = 0.2
     }
     
     func calculateSavingsAmount(percentageOfAmount: Float) -> Float{
@@ -41,16 +44,15 @@ class Budget{
     func getAmount() -> Float?{
         
         return self.amount
-        //return (self.amount!*100).rounded()/100
         
     }
     
-    func setSavings(savingsAmount: Float){
-        self.savings = savingsAmount
+    func setSavingsPercent(savingsPercent: Float){
+        self.savingsPercent = savingsPercent
     }
     
-    func getSavings() -> Float{
-        return self.savings!
+    func getSavingsPercent() -> Float{
+        return self.savingsPercent!
     }
     
     func getSpendingCategories() -> [SpendingCategory]{

@@ -14,9 +14,9 @@
             <connections>
                 <outlet property="incomeAmountLabel" destination="yIw-DN-c3m" id="4Xg-3d-Yfe"/>
                 <outlet property="requiredLabel" destination="7gs-sM-vG2" id="J23-r2-c3W"/>
-                <outlet property="submitButton" destination="C3T-0n-fEv" id="PJE-Hk-FRr"/>
+                <outlet property="submitButton" destination="fpp-De-aDe" id="XLf-bi-U7a"/>
                 <outlet property="timeFrameSegementControl" destination="7Mh-Xh-YCl" id="GCP-K9-RYG"/>
-                <outlet property="view" destination="iN0-l3-epB" id="w0e-qI-JeT"/>
+                <outlet property="view" destination="iN0-l3-epB" id="boV-1W-va2"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -60,13 +60,12 @@
                     <color key="textColor" red="0.8866007924" green="0.079829432069999998" blue="0.080708675090000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C3T-0n-fEv">
-                    <rect key="frame" x="146" y="456" width="132" height="40"/>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fpp-De-aDe">
+                    <rect key="frame" x="85" y="452" width="246" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="23"/>
-                    <state key="normal" title="Call to Action"/>
+                    <state key="normal" title="Button"/>
                     <connections>
-                        <action selector="selectedCallToAction:" destination="-1" eventType="touchUpInside" id="iLf-q0-d4c"/>
+                        <action selector="selectedCallToAction:" destination="-1" eventType="touchUpInside" id="A0k-RM-zVW"/>
                     </connections>
                 </button>
             </subviews>

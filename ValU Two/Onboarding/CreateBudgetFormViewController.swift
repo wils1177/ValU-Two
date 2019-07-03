@@ -57,12 +57,17 @@ class CreateBudgetFormViewController: UIViewController {
         self.requiredLabel.isHidden = false
     }
     
+
+    
+
     @IBAction func selectedCallToAction(_ sender: Any) {
         
         let viewData = CreateBudgetFormViewRep(timeFrameIndex: self.timeFrameSegementControl.selectedSegmentIndex, incomeAmountText: self.incomeAmountLabel.text!, callToActionMessage: self.callToActionMessage)
         self.delegate?.userSelectedCTA(viewData: viewData)
-        
+        print("yo")
     }
+    
+    
     
    
     

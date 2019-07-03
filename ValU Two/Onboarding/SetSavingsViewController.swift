@@ -17,20 +17,38 @@ class SetSavingsViewController: UIViewController {
     @IBOutlet var callToActionButton: UIButton!
     
     // Member Variables
+    var viewData : SetSavingsViewData
+    var delagate: SetSavingsPresentor?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        setUpView()
     }
     
+    init(viewData : SetSavingsViewData){
+        
+        self.viewData = viewData
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    func setUpView(){
+        savingsTotalLabel.text = viewData.savingsTotal
+        incomeAmountLabel.text = viewData.incomeAmount
+        savingsSlider.value = viewData.savingsPercent
+        callToActionButton.titleLabel?.text = viewData.callToAction
+        
+    }
     
     
     @IBAction func selectedCallToAction(_ sender: Any) {
         print("submit savings total")
+        self.delagate?.updateBudget()
     }
     
     @IBAction func sliderMoved(_ sender: Any) {
+        self.delagate?.sliderMoved(sliderVal: self.savingsSlider.value)
     }
     
     

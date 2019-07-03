@@ -13,10 +13,13 @@ class ContainerViewController: UIViewController {
     //UX Elements
     @IBOutlet var headerLabel: UILabel!
     @IBOutlet var bottomView: UIView!
+    @IBOutlet var continueButton: UIButton!
+    
     
     // Member Variables
     private var bottomVC : UIViewController
     private let headerText : String?
+
     
     
     init(title: String, vc: UIViewController){
@@ -55,7 +58,7 @@ class ContainerViewController: UIViewController {
         
     }
     
-
+  
     /*
     // MARK: - Navigation
 

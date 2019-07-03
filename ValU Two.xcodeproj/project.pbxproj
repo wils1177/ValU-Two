@@ -17,6 +17,7 @@
 		4743EAC222BC4AA90046D6EA /* StartPageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4743EABC22BC4AA90046D6EA /* StartPageViewController.xib */; };
 		4743EAC422BC4B3E0046D6EA /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4743EAC322BC4B3E0046D6EA /* ContainerViewController.swift */; };
 		4743EAC622BC4DFA0046D6EA /* CreateBudgetFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4743EAC522BC4DFA0046D6EA /* CreateBudgetFormViewController.swift */; };
+		4774311922C70C0200FBA11B /* PlaidLinkPresentor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4774311822C70C0200FBA11B /* PlaidLinkPresentor.swift */; };
 		47BE456422BC85AF00FB9A31 /* CreateBudgetFormPresentor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BE456322BC85AF00FB9A31 /* CreateBudgetFormPresentor.swift */; };
 		47BE456822BC96A100FB9A31 /* PresentorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BE456722BC96A100FB9A31 /* PresentorProtocol.swift */; };
 		47BE456A22BF006800FB9A31 /* SetSavingsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47BE456922BF006800FB9A31 /* SetSavingsView.xib */; };
@@ -28,7 +29,6 @@
 		47BE457C22C00E5500FB9A31 /* user.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BE457622C00E5400FB9A31 /* user.swift */; };
 		47BE457D22C00E5500FB9A31 /* Budget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BE457722C00E5400FB9A31 /* Budget.swift */; };
 		47BE457E22C00E5500FB9A31 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BE457822C00E5400FB9A31 /* Account.swift */; };
-		47BE457F22C00E5500FB9A31 /* ValU Two.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 47BE457922C00E5400FB9A31 /* ValU Two.xcdatamodeld */; };
 		47BE458122C0105700FB9A31 /* SetSavingsPresentor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BE458022C0105700FB9A31 /* SetSavingsPresentor.swift */; };
 		47DDCCCA22A890DB0049E3A5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47DDCCC922A890DB0049E3A5 /* AppDelegate.swift */; };
 		47DDCCD122A890E00049E3A5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 47DDCCD022A890E00049E3A5 /* Assets.xcassets */; };
@@ -72,6 +72,7 @@
 		4743EABC22BC4AA90046D6EA /* StartPageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StartPageViewController.xib; sourceTree = "<group>"; };
 		4743EAC322BC4B3E0046D6EA /* ContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
 		4743EAC522BC4DFA0046D6EA /* CreateBudgetFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBudgetFormViewController.swift; sourceTree = "<group>"; };
+		4774311822C70C0200FBA11B /* PlaidLinkPresentor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaidLinkPresentor.swift; sourceTree = "<group>"; };
 		47BE456322BC85AF00FB9A31 /* CreateBudgetFormPresentor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBudgetFormPresentor.swift; sourceTree = "<group>"; };
 		47BE456722BC96A100FB9A31 /* PresentorProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresentorProtocol.swift; sourceTree = "<group>"; };
 		47BE456922BF006800FB9A31 /* SetSavingsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SetSavingsView.xib; sourceTree = "<group>"; };
@@ -83,7 +84,6 @@
 		47BE457622C00E5400FB9A31 /* user.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = user.swift; sourceTree = "<group>"; };
 		47BE457722C00E5400FB9A31 /* Budget.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Budget.swift; sourceTree = "<group>"; };
 		47BE457822C00E5400FB9A31 /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
-		47BE457A22C00E5400FB9A31 /* Budget.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Budget.xcdatamodel; sourceTree = "<group>"; };
 		47BE458022C0105700FB9A31 /* SetSavingsPresentor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetSavingsPresentor.swift; sourceTree = "<group>"; };
 		47DDCCC622A890DB0049E3A5 /* ValU Two.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ValU Two.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		47DDCCC922A890DB0049E3A5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -154,6 +154,7 @@
 			isa = PBXGroup;
 			children = (
 				47BE456E22C00DBC00FB9A31 /* PlaidLinkViewController.swift */,
+				4774311822C70C0200FBA11B /* PlaidLinkPresentor.swift */,
 				47BE456F22C00DBC00FB9A31 /* PlaidProccesor.swift */,
 				47BE457022C00DBC00FB9A31 /* PlaidConnection.swift */,
 			);
@@ -167,7 +168,6 @@
 				47BE457622C00E5400FB9A31 /* user.swift */,
 				47BE457722C00E5400FB9A31 /* Budget.swift */,
 				47BE457822C00E5400FB9A31 /* Account.swift */,
-				47BE457922C00E5400FB9A31 /* ValU Two.xcdatamodeld */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -502,13 +502,13 @@
 				4743EAA622B6DE470046D6EA /* AppCoordinator.swift in Sources */,
 				47BE456822BC96A100FB9A31 /* PresentorProtocol.swift in Sources */,
 				47BE456C22C00A3600FB9A31 /* SetSavingsViewController.swift in Sources */,
-				47BE457F22C00E5500FB9A31 /* ValU Two.xcdatamodeld in Sources */,
 				47BE457E22C00E5500FB9A31 /* Account.swift in Sources */,
 				4743EAA822B6E1020046D6EA /* Coordinator.swift in Sources */,
 				47BE457C22C00E5500FB9A31 /* user.swift in Sources */,
 				4743EABD22BC4AA90046D6EA /* StartPageViewController.swift in Sources */,
 				47BE457122C00DBC00FB9A31 /* PlaidLinkViewController.swift in Sources */,
 				47BE457222C00DBC00FB9A31 /* PlaidProccesor.swift in Sources */,
+				4774311922C70C0200FBA11B /* PlaidLinkPresentor.swift in Sources */,
 				4743EA9122AD91B70046D6EA /* SetSpendingCategoriesViewController.swift in Sources */,
 				4743EAC422BC4B3E0046D6EA /* ContainerViewController.swift in Sources */,
 				47BE456422BC85AF00FB9A31 /* CreateBudgetFormPresentor.swift in Sources */,
@@ -843,19 +843,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		47BE457922C00E5400FB9A31 /* ValU Two.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				47BE457A22C00E5400FB9A31 /* Budget.xcdatamodel */,
-			);
-			currentVersion = 47BE457A22C00E5400FB9A31 /* Budget.xcdatamodel */;
-			path = "ValU Two.xcdatamodeld";
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 47DDCCBE22A890DB0049E3A5 /* Project object */;
 }

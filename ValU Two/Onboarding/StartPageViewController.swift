@@ -19,6 +19,8 @@ class StartPageViewController: UIViewController {
     // Member Variables
     var coordinator: StartPageViewDelegate?
     
+    
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
