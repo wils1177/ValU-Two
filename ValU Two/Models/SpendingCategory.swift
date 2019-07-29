@@ -10,30 +10,21 @@ import Foundation
 
 class SpendingCategory{
     
-    var name: String
-    var limit: Float
-    var amontSpent: Float
+    let category: Category
+    var limit: Float?
+    var amountSpent: Float?
     
-    init(name: String, limit: Float, amountSpent: Float){
+    init(category: Category, limit: Float, amountSpent: Float){
         
-        self.name = name
-        self.limit = limit
-        self.amontSpent = amountSpent
+        self.category = category
+        self.limit? = limit
+        self.amountSpent? = amountSpent
         
     }
     
-    func getName() -> String{
-        return self.name
+    func updateSpendingLimit(newLimit: Float){
+        self.limit = newLimit
     }
-    
-    func setLimit(amount: Float){
-        self.limit = amount
-    }
-    
-    func setName(name: String){
-        self.name = name
-    }
-    
-    
+
 
 }

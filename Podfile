@@ -7,6 +7,7 @@ target 'ValU Two' do
 
   # Pods for ValU Two
   pod 'Plaid'
+  pod 'SwiftKeychainWrapper'
 
   target 'ValU TwoTests' do
     inherit! :search_paths

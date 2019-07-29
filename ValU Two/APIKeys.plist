@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>5cf863c7584f980012544d3f</string>
+	<key>SANDBOX_CLIENT_SECRET</key>
+	<string>d529850a3a94d4f57b3659d38ae239</string>
+</dict>
+</plist>

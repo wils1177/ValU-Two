@@ -28,6 +28,20 @@ protocol SetSavingsViewDelegate {
     func savingsSubmitted(budget : Budget, sender: SetSavingsPresentor)
 }
 
+protocol BudgetCategoriesDelegate {
+    func categoriesSubmitted()
+}
+
+protocol SetSpendingLimitDelegate {
+    func finishedSettingLimits()
+}
+
 protocol PlaidLinkDelegate {
     func dismissPlaidLink()
+    func plaidLinkSuccess(accounts : [Account], sender : PlaidLinkViewPresentor)
+}
+
+protocol CardsPresentor : Presentor{
+    func setupTableView()
+    func submit()
 }

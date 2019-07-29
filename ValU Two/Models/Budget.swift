@@ -19,13 +19,12 @@ class Budget{
     var amount: Float?
     var budgetTimeFrame: timeFrame
     var savingsPercent: Float?
-    var spengingCategories: [SpendingCategory]?
+    var spendingCategories = [SpendingCategory]()
     
     init(amount: Float?, budgetTimeFrame: timeFrame){
         
         self.amount = amount
         self.budgetTimeFrame = budgetTimeFrame
-        self.spengingCategories = generateDefaultCategories()
         self.savingsPercent = 0.2
         
     }
@@ -56,59 +55,11 @@ class Budget{
     }
     
     func getSpendingCategories() -> [SpendingCategory]{
-        return self.spengingCategories!
+        return self.spendingCategories
     }
     
     func getTimeFrame() -> timeFrame{
         return self.budgetTimeFrame
-    }
-    
-    func generateDefaultCategories() -> [SpendingCategory]{
-        
-        let categoriesToGenerate = ["Food", "Rent", "Fun"]
-        var toReturn = [SpendingCategory]()
-        
-        for category in categoriesToGenerate{
-            let newSpendingCategory = SpendingCategory(name: category, limit: 100.00, amountSpent: 0.0)
-            toReturn.append(newSpendingCategory)
-        }
-        
-        return toReturn
-        
-    }
-    
-    func updateSpendingCategoryLimit(index: Int, amount: String?){
-        
-        let categoryToUpdate = findSpendingCategoryByIndex(index: index)
-        
-        if amount != nil && amount != "" {
-            categoryToUpdate.setLimit(amount: Float(amount!)!)
-
-        }
-        
-        
-    }
-    
-    func updateSpendingCategoryName(index: Int, name: String?){
-        
-        let categoryToUpdate = findSpendingCategoryByIndex(index: index)
-        
-        if name != nil && name != "" {
-            categoryToUpdate.setName(name: name!)
-        }
-        
-    }
-    
-    
-    func findSpendingCategoryByIndex(index: Int)  -> SpendingCategory {
-        
-        return self.spengingCategories![index]
-       
-    }
-    
-    func addNewSpendingCategory(name:String){
-        let newSpendingCategory = SpendingCategory(name:name, limit: 100.00, amountSpent: 0.0)
-        self.spengingCategories?.append(newSpendingCategory)
     }
     
     func isAmountEmpty() -> Bool {
@@ -117,6 +68,15 @@ class Budget{
         }
         else{
             return false
+        }
+    }
+    
+    func updateSpendingLimitByName(name: String, newLimit: Float){
+        
+        for spendingCategory in spendingCategories{
+            if spendingCategory.category.name == name{
+                spendingCategory.updateSpendingLimit(newLimit: newLimit)
+            }
         }
     }
     

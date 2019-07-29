@@ -64,7 +64,6 @@ class CreateBudgetFormViewController: UIViewController {
         
         let viewData = CreateBudgetFormViewRep(timeFrameIndex: self.timeFrameSegementControl.selectedSegmentIndex, incomeAmountText: self.incomeAmountLabel.text!, callToActionMessage: self.callToActionMessage)
         self.delegate?.userSelectedCTA(viewData: viewData)
-        print("yo")
     }
     
     

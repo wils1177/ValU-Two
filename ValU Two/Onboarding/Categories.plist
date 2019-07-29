@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Categories</key>
+	<array>
+		<dict>
+			<key>name</key>
+			<string>Food and Drink</string>
+			<key>contains</key>
+			<array>
+				<string>Food and Drink</string>
+			</array>
+			<key>subCategories</key>
+			<array>
+				<dict>
+					<key>name</key>
+					<string>Bar</string>
+					<key>contains</key>
+					<array>
+						<string>Food and Drink</string>
+						<string>Bar</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Breweries</string>
+					<key>contains</key>
+					<array>
+						<string>Food and Drink</string>
+						<string>Breweries</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Restaurants</string>
+					<key>contains</key>
+					<array>
+						<string>Food and Drink</string>
+						<string>Restaurants</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Other Nightlife</string>
+					<key>contains</key>
+					<array>
+						<string>Food and Drink</string>
+						<string>Nightlife</string>
+					</array>
+				</dict>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>

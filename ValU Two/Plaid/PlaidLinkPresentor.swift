@@ -41,13 +41,14 @@ extension PlaidLinkViewPresentor : PLKPlaidLinkViewDelegate
     func linkViewController(_ linkViewController:
         PLKPlaidLinkViewController, didSucceedWithPublicToken publicToken:
         String, metadata: [String : Any]?) {
-        self.linkViewController!.dismiss(animated: true) {
-            // Handle success, e.g. by storing publicToken with your
-            print("Success")
-            print(publicToken)
-            self.plaidConnection  = PlaidConnection(publicKey: publicToken)
-            self.plaidConnection?.getTransactionCategories()
-        }
+        
+            print(metadata)
+            let accounts = [Account]()
+            self.plaidConnection  = PlaidConnection(accounts: accounts)
+            self.plaidConnection?.exchangePublicForAccessToken(publicKey: publicToken)
+            self.coordinator?.plaidLinkSuccess(accounts : accounts, sender : self)
+        
+ 
     }
     
     func linkViewController(_ linkViewController:

@@ -8,21 +8,28 @@
 
 import Foundation
 
-class Account{
+class Account : Equatable{
     
-    var name : String
-    var accountId: String
-    var type: String
-    var subType: String
-    var institution: String
     
-    init(name: String, accountId: String, type: String, subType: String, instituion: String){
-        self.name = name
-        self.accountId = accountId
-        self.type = type
-        self.subType = subType
-        self.institution = instituion
+    
+    var accountData : AccountData
+    var transactions = [Transaction]()
+    var item : ItemData
+    
+    init(accountData: AccountData, item: ItemData){
+        self.accountData = accountData
+        self.item = item
     }
+    
+    static func == (lhs: Account, rhs: Account) -> Bool {
+        
+        if lhs.accountData.accountId == rhs.accountData.accountId{
+            return true
+        }
+        return false
+        
+    }
+    
     
     
 }
