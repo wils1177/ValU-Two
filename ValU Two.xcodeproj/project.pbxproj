@@ -7,13 +7,47 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		473D0881231CA001004C24A9 /* ValU Two.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 473D087F231CA001004C24A9 /* ValU Two.xcdatamodeld */; };
+		473D089D231D9019004C24A9 /* LoadingAccountsPresentor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D089C231D9019004C24A9 /* LoadingAccountsPresentor.swift */; };
+		473D089F231D9049004C24A9 /* LoadingAccountsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D089E231D9049004C24A9 /* LoadingAccountsViewController.swift */; };
+		473D08A523232257004C24A9 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08A423232257004C24A9 /* CoreDataManager.swift */; };
+		473D08A72323665B004C24A9 /* SetSpendingPresentor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08A62323665B004C24A9 /* SetSpendingPresentor.swift */; };
+		473D08AB232451EC004C24A9 /* PlaidParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08AA232451EC004C24A9 /* PlaidParsing.swift */; };
+		473D08B6232451FA004C24A9 /* Budget+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08AD232451FA004C24A9 /* Budget+CoreDataClass.swift */; };
+		473D08B7232451FA004C24A9 /* AccountData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08AE232451FA004C24A9 /* AccountData+CoreDataClass.swift */; };
+		473D08B8232451FA004C24A9 /* Location+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08AF232451FA004C24A9 /* Location+CoreDataClass.swift */; };
+		473D08B9232451FA004C24A9 /* BalanceData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08B0232451FA004C24A9 /* BalanceData+CoreDataClass.swift */; };
+		473D08BA232451FA004C24A9 /* Category+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08B1232451FA004C24A9 /* Category+CoreDataClass.swift */; };
+		473D08BB232451FA004C24A9 /* Transaction+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08B2232451FA004C24A9 /* Transaction+CoreDataClass.swift */; };
+		473D08BC232451FA004C24A9 /* ItemData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08B3232451FA004C24A9 /* ItemData+CoreDataClass.swift */; };
+		473D08BD232451FA004C24A9 /* User+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08B4232451FA004C24A9 /* User+CoreDataClass.swift */; };
+		473D08BE232451FA004C24A9 /* SpendingCategory+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08B5232451FA004C24A9 /* SpendingCategory+CoreDataClass.swift */; };
+		473D08C923245203004C24A9 /* Category+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08C023245203004C24A9 /* Category+CoreDataProperties.swift */; };
+		473D08CA23245203004C24A9 /* Location+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08C123245203004C24A9 /* Location+CoreDataProperties.swift */; };
+		473D08CB23245203004C24A9 /* SpendingCategory+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08C223245203004C24A9 /* SpendingCategory+CoreDataProperties.swift */; };
+		473D08CC23245203004C24A9 /* ItemData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08C323245203004C24A9 /* ItemData+CoreDataProperties.swift */; };
+		473D08CE23245203004C24A9 /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08C523245203004C24A9 /* User+CoreDataProperties.swift */; };
+		473D08CF23245203004C24A9 /* Transaction+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08C623245203004C24A9 /* Transaction+CoreDataProperties.swift */; };
+		473D08D023245203004C24A9 /* AccountData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08C723245203004C24A9 /* AccountData+CoreDataProperties.swift */; };
+		473D08D123245203004C24A9 /* BalanceData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08C823245203004C24A9 /* BalanceData+CoreDataProperties.swift */; };
+		473D08D52324522D004C24A9 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08D42324522D004C24A9 /* Protocols.swift */; };
+		473D08D723245270004C24A9 /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08D623245270004C24A9 /* ContainerViewController.swift */; };
+		473D08DD2325B43C004C24A9 /* Budget+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08DC2325B43C004C24A9 /* Budget+CoreDataProperties.swift */; };
+		473D08DE2325B786004C24A9 /* SetSavingsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4795A62022D110C600292E8F /* SetSavingsView.xib */; };
+		473D08DF2325B786004C24A9 /* ContainerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4795A62222D110C600292E8F /* ContainerViewController.xib */; };
+		473D08E02325B786004C24A9 /* BudgetCategories.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47B9DE1F22DB974F00434F4A /* BudgetCategories.xib */; };
+		473D08E12325B786004C24A9 /* CreateBudgetFormView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4795A62322D110C600292E8F /* CreateBudgetFormView.xib */; };
+		473D08E22325B786004C24A9 /* SetSpendingLimits.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47B9DE2522E28CE400434F4A /* SetSpendingLimits.xib */; };
+		473D08E32325B786004C24A9 /* StartPageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4795A62422D110C600292E8F /* StartPageViewController.xib */; };
+		473D08E42325B786004C24A9 /* SpendingLimitCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47B9DE2922E2998500434F4A /* SpendingLimitCell.xib */; };
+		473D08E52325B786004C24A9 /* PlaidViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 473D08D823245299004C24A9 /* PlaidViewController.xib */; };
+		473D08E62325B786004C24A9 /* LoadingAccountsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 473D08DA2324529F004C24A9 /* LoadingAccountsViewController.xib */; };
+		473D08E72325B836004C24A9 /* APIKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 473D08A8232451E1004C24A9 /* APIKeys.plist */; };
+		473D08E82325B836004C24A9 /* Categories.plist in Resources */ = {isa = PBXBuildFile; fileRef = 473D08D223245228004C24A9 /* Categories.plist */; };
 		4743EAA622B6DE470046D6EA /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4743EAA522B6DE470046D6EA /* AppCoordinator.swift */; };
 		4743EAA822B6E1020046D6EA /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4743EAA722B6E1020046D6EA /* Coordinator.swift */; };
 		4743EAC122BC4AA90046D6EA /* OnboardingFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4743EABB22BC4AA90046D6EA /* OnboardingFlowCoordinator.swift */; };
-		4743EAC422BC4B3E0046D6EA /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4743EAC322BC4B3E0046D6EA /* ContainerViewController.swift */; };
 		4774311922C70C0200FBA11B /* PlaidLinkPresentor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4774311822C70C0200FBA11B /* PlaidLinkPresentor.swift */; };
-		4795A60C22CD8A2A00292E8F /* Test.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 4795A60B22CD8A2A00292E8F /* Test.stringsdict */; };
-		4795A60E22CD8B4400292E8F /* Categories.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4795A60D22CD8B4400292E8F /* Categories.plist */; };
 		4795A61322D110B400292E8F /* CreateBudgetFormPresentor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4795A61022D110B300292E8F /* CreateBudgetFormPresentor.swift */; };
 		4795A61422D110B400292E8F /* BudgetCategoriesPresentor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4795A61122D110B300292E8F /* BudgetCategoriesPresentor.swift */; };
 		4795A61522D110B400292E8F /* SetSavingsPresentor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4795A61222D110B300292E8F /* SetSavingsPresentor.swift */; };
@@ -21,37 +55,16 @@
 		4795A61C22D110C000292E8F /* BudgetCategoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4795A61822D110C000292E8F /* BudgetCategoriesViewController.swift */; };
 		4795A61D22D110C000292E8F /* SetSavingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4795A61922D110C000292E8F /* SetSavingsViewController.swift */; };
 		4795A61E22D110C000292E8F /* CreateBudgetFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4795A61A22D110C000292E8F /* CreateBudgetFormViewController.swift */; };
-		4795A62522D110C600292E8F /* SetSavingsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4795A62022D110C600292E8F /* SetSavingsView.xib */; };
-		4795A62722D110C600292E8F /* ContainerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4795A62222D110C600292E8F /* ContainerViewController.xib */; };
-		4795A62822D110C600292E8F /* CreateBudgetFormView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4795A62322D110C600292E8F /* CreateBudgetFormView.xib */; };
-		4795A62922D110C600292E8F /* StartPageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4795A62422D110C600292E8F /* StartPageViewController.xib */; };
 		4795A62B22D112EC00292E8F /* CardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4795A62A22D112EC00292E8F /* CardViewController.swift */; };
-		47992C3322EE2FAA00CF74DE /* LoadingAccountsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47992C3122EE2FAA00CF74DE /* LoadingAccountsViewController.swift */; };
-		47992C3422EE2FAA00CF74DE /* LoadingAccountsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47992C3222EE2FAA00CF74DE /* LoadingAccountsViewController.xib */; };
-		47992C3622EE2FF600CF74DE /* LoadingAccountsPresentor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47992C3522EE2FF600CF74DE /* LoadingAccountsPresentor.swift */; };
-		47992C3822EE51A700CF74DE /* PlaidParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47992C3722EE51A700CF74DE /* PlaidParsing.swift */; };
 		47B9DE1A22D945C000434F4A /* CategoriesData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B9DE1922D945C000434F4A /* CategoriesData.swift */; };
 		47B9DE1E22D960E400434F4A /* CategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B9DE1D22D960E400434F4A /* CategoryTableViewCell.swift */; };
-		47B9DE2022DB974F00434F4A /* BudgetCategories.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47B9DE1F22DB974F00434F4A /* BudgetCategories.xib */; };
-		47B9DE2622E28CE400434F4A /* SetSpendingLimits.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47B9DE2522E28CE400434F4A /* SetSpendingLimits.xib */; };
 		47B9DE2822E28E2A00434F4A /* SetSpendingLimitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B9DE2722E28E2A00434F4A /* SetSpendingLimitViewController.swift */; };
-		47B9DE2A22E2998500434F4A /* SpendingLimitCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47B9DE2922E2998500434F4A /* SpendingLimitCell.xib */; };
 		47B9DE2D22E3B47100434F4A /* PlaidViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B9DE2B22E3B47100434F4A /* PlaidViewController.swift */; };
-		47B9DE2E22E3B47100434F4A /* PlaidViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47B9DE2C22E3B47100434F4A /* PlaidViewController.xib */; };
-		47BE456822BC96A100FB9A31 /* PresentorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BE456722BC96A100FB9A31 /* PresentorProtocol.swift */; };
-		47BE457122C00DBC00FB9A31 /* BankConnectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BE456E22C00DBC00FB9A31 /* BankConnectViewController.swift */; };
 		47BE457222C00DBC00FB9A31 /* PlaidProccesor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BE456F22C00DBC00FB9A31 /* PlaidProccesor.swift */; };
 		47BE457322C00DBC00FB9A31 /* PlaidConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BE457022C00DBC00FB9A31 /* PlaidConnection.swift */; };
-		47BE457B22C00E5500FB9A31 /* SpendingCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BE457522C00E5400FB9A31 /* SpendingCategory.swift */; };
-		47BE457C22C00E5500FB9A31 /* user.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BE457622C00E5400FB9A31 /* user.swift */; };
-		47BE457D22C00E5500FB9A31 /* Budget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BE457722C00E5400FB9A31 /* Budget.swift */; };
-		47BE457E22C00E5500FB9A31 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BE457822C00E5400FB9A31 /* Account.swift */; };
 		47DDCCCA22A890DB0049E3A5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47DDCCC922A890DB0049E3A5 /* AppDelegate.swift */; };
-		47DDCCD122A890E00049E3A5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 47DDCCD022A890E00049E3A5 /* Assets.xcassets */; };
-		47DDCCD422A890E00049E3A5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 47DDCCD222A890E00049E3A5 /* LaunchScreen.storyboard */; };
 		47DDCCDF22A890E00049E3A5 /* ValU_TwoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47DDCCDE22A890E00049E3A5 /* ValU_TwoTests.swift */; };
 		47DDCCEA22A890E00049E3A5 /* ValU_TwoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47DDCCE922A890E00049E3A5 /* ValU_TwoUITests.swift */; };
-		47FF6A4C22E4DBAE00ECFE1E /* APIKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 47FF6A4B22E4DBAE00ECFE1E /* APIKeys.plist */; };
 		554B096B8A89D3D9BBA9055E /* Pods_ValU_TwoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5ABCAA528B58D48AA6AF142E /* Pods_ValU_TwoTests.framework */; };
 		745A1C9D86D7665686186136 /* Pods_ValU_TwoUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 276F7743E43167502E0AD368 /* Pods_ValU_TwoUITests.framework */; };
 		F37EFADA9F2F08A705CBBE02 /* Pods_ValU_Two.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E12898A13131670A5C0F61E /* Pods_ValU_Two.framework */; };
@@ -79,13 +92,40 @@
 		21ED67144E7F14461A336F22 /* Pods-ValU TwoUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ValU TwoUITests.release.xcconfig"; path = "Target Support Files/Pods-ValU TwoUITests/Pods-ValU TwoUITests.release.xcconfig"; sourceTree = "<group>"; };
 		276F7743E43167502E0AD368 /* Pods_ValU_TwoUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ValU_TwoUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C06C0DA4483D20C5FACB36A /* Pods-ValU TwoUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ValU TwoUITests.debug.xcconfig"; path = "Target Support Files/Pods-ValU TwoUITests/Pods-ValU TwoUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		473D0880231CA001004C24A9 /* ValU Two.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ValU Two.xcdatamodel"; sourceTree = "<group>"; };
+		473D089C231D9019004C24A9 /* LoadingAccountsPresentor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingAccountsPresentor.swift; sourceTree = "<group>"; };
+		473D089E231D9049004C24A9 /* LoadingAccountsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingAccountsViewController.swift; sourceTree = "<group>"; };
+		473D08A423232257004C24A9 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		473D08A62323665B004C24A9 /* SetSpendingPresentor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetSpendingPresentor.swift; sourceTree = "<group>"; };
+		473D08A8232451E1004C24A9 /* APIKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = APIKeys.plist; sourceTree = "<group>"; };
+		473D08AA232451EC004C24A9 /* PlaidParsing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaidParsing.swift; sourceTree = "<group>"; };
+		473D08AD232451FA004C24A9 /* Budget+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Budget+CoreDataClass.swift"; sourceTree = "<group>"; };
+		473D08AE232451FA004C24A9 /* AccountData+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AccountData+CoreDataClass.swift"; sourceTree = "<group>"; };
+		473D08AF232451FA004C24A9 /* Location+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Location+CoreDataClass.swift"; sourceTree = "<group>"; };
+		473D08B0232451FA004C24A9 /* BalanceData+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BalanceData+CoreDataClass.swift"; sourceTree = "<group>"; };
+		473D08B1232451FA004C24A9 /* Category+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Category+CoreDataClass.swift"; sourceTree = "<group>"; };
+		473D08B2232451FA004C24A9 /* Transaction+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Transaction+CoreDataClass.swift"; sourceTree = "<group>"; };
+		473D08B3232451FA004C24A9 /* ItemData+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ItemData+CoreDataClass.swift"; sourceTree = "<group>"; };
+		473D08B4232451FA004C24A9 /* User+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "User+CoreDataClass.swift"; sourceTree = "<group>"; };
+		473D08B5232451FA004C24A9 /* SpendingCategory+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SpendingCategory+CoreDataClass.swift"; sourceTree = "<group>"; };
+		473D08C023245203004C24A9 /* Category+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Category+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		473D08C123245203004C24A9 /* Location+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Location+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		473D08C223245203004C24A9 /* SpendingCategory+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SpendingCategory+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		473D08C323245203004C24A9 /* ItemData+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ItemData+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		473D08C523245203004C24A9 /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "User+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		473D08C623245203004C24A9 /* Transaction+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Transaction+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		473D08C723245203004C24A9 /* AccountData+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AccountData+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		473D08C823245203004C24A9 /* BalanceData+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BalanceData+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		473D08D223245228004C24A9 /* Categories.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Categories.plist; sourceTree = "<group>"; };
+		473D08D42324522D004C24A9 /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
+		473D08D623245270004C24A9 /* ContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
+		473D08D823245299004C24A9 /* PlaidViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaidViewController.xib; sourceTree = "<group>"; };
+		473D08DA2324529F004C24A9 /* LoadingAccountsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoadingAccountsViewController.xib; sourceTree = "<group>"; };
+		473D08DC2325B43C004C24A9 /* Budget+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Budget+CoreDataProperties.swift"; path = "../../Budget+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		4743EAA522B6DE470046D6EA /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		4743EAA722B6E1020046D6EA /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		4743EABB22BC4AA90046D6EA /* OnboardingFlowCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingFlowCoordinator.swift; sourceTree = "<group>"; };
-		4743EAC322BC4B3E0046D6EA /* ContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
 		4774311822C70C0200FBA11B /* PlaidLinkPresentor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaidLinkPresentor.swift; sourceTree = "<group>"; };
-		4795A60B22CD8A2A00292E8F /* Test.stringsdict */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; path = Test.stringsdict; sourceTree = "<group>"; };
-		4795A60D22CD8B4400292E8F /* Categories.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Categories.plist; sourceTree = "<group>"; };
 		4795A61022D110B300292E8F /* CreateBudgetFormPresentor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateBudgetFormPresentor.swift; sourceTree = "<group>"; };
 		4795A61122D110B300292E8F /* BudgetCategoriesPresentor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BudgetCategoriesPresentor.swift; sourceTree = "<group>"; };
 		4795A61222D110B300292E8F /* SetSavingsPresentor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetSavingsPresentor.swift; sourceTree = "<group>"; };
@@ -98,10 +138,6 @@
 		4795A62322D110C600292E8F /* CreateBudgetFormView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CreateBudgetFormView.xib; sourceTree = "<group>"; };
 		4795A62422D110C600292E8F /* StartPageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StartPageViewController.xib; sourceTree = "<group>"; };
 		4795A62A22D112EC00292E8F /* CardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewController.swift; sourceTree = "<group>"; };
-		47992C3122EE2FAA00CF74DE /* LoadingAccountsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LoadingAccountsViewController.swift; path = "../../../../../../../../../../../../System/Volumes/Data/Users/claytonwilson/Library/CloudStorage/iCloud Drive/Documents/Documents - Clayton’s MacBook Air/programming_projects/ValU-Two/ValU Two/Onboarding/ViewControllers/LoadingAccountsViewController.swift"; sourceTree = "<group>"; };
-		47992C3222EE2FAA00CF74DE /* LoadingAccountsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = LoadingAccountsViewController.xib; path = "../../../../../../../../../../../../System/Volumes/Data/Users/claytonwilson/Library/CloudStorage/iCloud Drive/Documents/Documents - Clayton’s MacBook Air/programming_projects/ValU-Two/ValU Two/Onboarding/ViewControllers/LoadingAccountsViewController.xib"; sourceTree = "<group>"; };
-		47992C3522EE2FF600CF74DE /* LoadingAccountsPresentor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LoadingAccountsPresentor.swift; path = "../../../../../../../../../../../../System/Volumes/Data/Users/claytonwilson/Library/CloudStorage/iCloud Drive/Documents/Documents - Clayton’s MacBook Air/programming_projects/ValU-Two/ValU Two/Onboarding/presentors/LoadingAccountsPresentor.swift"; sourceTree = "<group>"; };
-		47992C3722EE51A700CF74DE /* PlaidParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PlaidParsing.swift; path = "../../../../../../../../../../../System/Volumes/Data/Users/claytonwilson/Library/CloudStorage/iCloud Drive/Documents/Documents - Clayton’s MacBook Air/programming_projects/ValU-Two/ValU Two/Models/PlaidParsing.swift"; sourceTree = "<group>"; };
 		47B9DE1922D945C000434F4A /* CategoriesData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesData.swift; sourceTree = "<group>"; };
 		47B9DE1D22D960E400434F4A /* CategoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewCell.swift; sourceTree = "<group>"; };
 		47B9DE1F22DB974F00434F4A /* BudgetCategories.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BudgetCategories.xib; sourceTree = "<group>"; };
@@ -109,15 +145,8 @@
 		47B9DE2722E28E2A00434F4A /* SetSpendingLimitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetSpendingLimitViewController.swift; sourceTree = "<group>"; };
 		47B9DE2922E2998500434F4A /* SpendingLimitCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SpendingLimitCell.xib; sourceTree = "<group>"; };
 		47B9DE2B22E3B47100434F4A /* PlaidViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaidViewController.swift; sourceTree = "<group>"; };
-		47B9DE2C22E3B47100434F4A /* PlaidViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = PlaidViewController.xib; path = ../ViewControllers/PlaidViewController.xib; sourceTree = "<group>"; };
-		47BE456722BC96A100FB9A31 /* PresentorProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresentorProtocol.swift; sourceTree = "<group>"; };
-		47BE456E22C00DBC00FB9A31 /* BankConnectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BankConnectViewController.swift; sourceTree = "<group>"; };
 		47BE456F22C00DBC00FB9A31 /* PlaidProccesor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaidProccesor.swift; sourceTree = "<group>"; };
 		47BE457022C00DBC00FB9A31 /* PlaidConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaidConnection.swift; sourceTree = "<group>"; };
-		47BE457522C00E5400FB9A31 /* SpendingCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpendingCategory.swift; sourceTree = "<group>"; };
-		47BE457622C00E5400FB9A31 /* user.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = user.swift; sourceTree = "<group>"; };
-		47BE457722C00E5400FB9A31 /* Budget.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Budget.swift; sourceTree = "<group>"; };
-		47BE457822C00E5400FB9A31 /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		47DDCCC622A890DB0049E3A5 /* ValU Two.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ValU Two.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		47DDCCC922A890DB0049E3A5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		47DDCCD022A890E00049E3A5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -129,7 +158,6 @@
 		47DDCCE522A890E00049E3A5 /* ValU TwoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ValU TwoUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		47DDCCE922A890E00049E3A5 /* ValU_TwoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValU_TwoUITests.swift; sourceTree = "<group>"; };
 		47DDCCEB22A890E00049E3A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		47FF6A4B22E4DBAE00ECFE1E /* APIKeys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = APIKeys.plist; path = "../../../../../../../../../../System/Volumes/Data/Users/claytonwilson/Library/CloudStorage/iCloud Drive/Documents/Documents - Clayton’s MacBook Air/programming_projects/ValU-Two/ValU Two/APIKeys.plist"; sourceTree = "<group>"; };
 		5ABCAA528B58D48AA6AF142E /* Pods_ValU_TwoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ValU_TwoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B6157E9917879C99D71879E /* Pods-ValU Two.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ValU Two.debug.xcconfig"; path = "Target Support Files/Pods-ValU Two/Pods-ValU Two.debug.xcconfig"; sourceTree = "<group>"; };
 		748C8B11CED7054383845D1F /* Pods-ValU TwoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ValU TwoTests.release.xcconfig"; path = "Target Support Files/Pods-ValU TwoTests/Pods-ValU TwoTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -165,6 +193,39 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		473D08AC232451FA004C24A9 /* ModelInteractors */ = {
+			isa = PBXGroup;
+			children = (
+				473D08AD232451FA004C24A9 /* Budget+CoreDataClass.swift */,
+				473D08AE232451FA004C24A9 /* AccountData+CoreDataClass.swift */,
+				473D08AF232451FA004C24A9 /* Location+CoreDataClass.swift */,
+				473D08B0232451FA004C24A9 /* BalanceData+CoreDataClass.swift */,
+				473D08B1232451FA004C24A9 /* Category+CoreDataClass.swift */,
+				473D08B2232451FA004C24A9 /* Transaction+CoreDataClass.swift */,
+				473D08B3232451FA004C24A9 /* ItemData+CoreDataClass.swift */,
+				473D08B4232451FA004C24A9 /* User+CoreDataClass.swift */,
+				473D08B5232451FA004C24A9 /* SpendingCategory+CoreDataClass.swift */,
+			);
+			path = ModelInteractors;
+			sourceTree = "<group>";
+		};
+		473D08BF23245203004C24A9 /* CoreDataModels */ = {
+			isa = PBXGroup;
+			children = (
+				473D08C023245203004C24A9 /* Category+CoreDataProperties.swift */,
+				473D08C123245203004C24A9 /* Location+CoreDataProperties.swift */,
+				473D08C223245203004C24A9 /* SpendingCategory+CoreDataProperties.swift */,
+				473D08C323245203004C24A9 /* ItemData+CoreDataProperties.swift */,
+				473D08DC2325B43C004C24A9 /* Budget+CoreDataProperties.swift */,
+				473D08C523245203004C24A9 /* User+CoreDataProperties.swift */,
+				473D08C623245203004C24A9 /* Transaction+CoreDataProperties.swift */,
+				473D08C723245203004C24A9 /* AccountData+CoreDataProperties.swift */,
+				473D08C823245203004C24A9 /* BalanceData+CoreDataProperties.swift */,
+			);
+			name = CoreDataModels;
+			path = "ValU Two/Models/CoreDataModels";
+			sourceTree = SOURCE_ROOT;
+		};
 		4743EAB622BC4AA90046D6EA /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
@@ -172,10 +233,6 @@
 				4795A61622D110C000292E8F /* ViewControllers */,
 				4795A60F22D110B300292E8F /* presentors */,
 				4743EABB22BC4AA90046D6EA /* OnboardingFlowCoordinator.swift */,
-				4795A60B22CD8A2A00292E8F /* Test.stringsdict */,
-				4795A60D22CD8B4400292E8F /* Categories.plist */,
-				47BE456722BC96A100FB9A31 /* PresentorProtocol.swift */,
-				4743EAC322BC4B3E0046D6EA /* ContainerViewController.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -184,9 +241,10 @@
 			isa = PBXGroup;
 			children = (
 				4795A61022D110B300292E8F /* CreateBudgetFormPresentor.swift */,
-				47992C3522EE2FF600CF74DE /* LoadingAccountsPresentor.swift */,
+				473D089C231D9019004C24A9 /* LoadingAccountsPresentor.swift */,
 				4795A61122D110B300292E8F /* BudgetCategoriesPresentor.swift */,
 				4795A61222D110B300292E8F /* SetSavingsPresentor.swift */,
+				473D08A62323665B004C24A9 /* SetSpendingPresentor.swift */,
 			);
 			path = presentors;
 			sourceTree = "<group>";
@@ -197,8 +255,8 @@
 				4795A61722D110C000292E8F /* StartPageViewController.swift */,
 				4795A61822D110C000292E8F /* BudgetCategoriesViewController.swift */,
 				4795A61922D110C000292E8F /* SetSavingsViewController.swift */,
-				47992C3122EE2FAA00CF74DE /* LoadingAccountsViewController.swift */,
-				47992C3222EE2FAA00CF74DE /* LoadingAccountsViewController.xib */,
+				473D08D623245270004C24A9 /* ContainerViewController.swift */,
+				473D089E231D9049004C24A9 /* LoadingAccountsViewController.swift */,
 				4795A61A22D110C000292E8F /* CreateBudgetFormViewController.swift */,
 				4795A62A22D112EC00292E8F /* CardViewController.swift */,
 				47B9DE1D22D960E400434F4A /* CategoryTableViewCell.swift */,
@@ -218,7 +276,8 @@
 				47B9DE2522E28CE400434F4A /* SetSpendingLimits.xib */,
 				4795A62422D110C600292E8F /* StartPageViewController.xib */,
 				47B9DE2922E2998500434F4A /* SpendingLimitCell.xib */,
-				47B9DE2C22E3B47100434F4A /* PlaidViewController.xib */,
+				473D08D823245299004C24A9 /* PlaidViewController.xib */,
+				473D08DA2324529F004C24A9 /* LoadingAccountsViewController.xib */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -226,9 +285,10 @@
 		47BE456D22C00DBC00FB9A31 /* Plaid */ = {
 			isa = PBXGroup;
 			children = (
-				47BE456E22C00DBC00FB9A31 /* BankConnectViewController.swift */,
 				4774311822C70C0200FBA11B /* PlaidLinkPresentor.swift */,
+				473D08AA232451EC004C24A9 /* PlaidParsing.swift */,
 				47BE456F22C00DBC00FB9A31 /* PlaidProccesor.swift */,
+				473D08A8232451E1004C24A9 /* APIKeys.plist */,
 				47BE457022C00DBC00FB9A31 /* PlaidConnection.swift */,
 			);
 			path = Plaid;
@@ -237,12 +297,11 @@
 		47BE457422C00E5400FB9A31 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				47BE457522C00E5400FB9A31 /* SpendingCategory.swift */,
-				47BE457622C00E5400FB9A31 /* user.swift */,
-				47BE457722C00E5400FB9A31 /* Budget.swift */,
-				47BE457822C00E5400FB9A31 /* Account.swift */,
-				47992C3722EE51A700CF74DE /* PlaidParsing.swift */,
+				473D087F231CA001004C24A9 /* ValU Two.xcdatamodeld */,
 				47B9DE1922D945C000434F4A /* CategoriesData.swift */,
+				473D08A423232257004C24A9 /* CoreDataManager.swift */,
+				473D08BF23245203004C24A9 /* CoreDataModels */,
+				473D08AC232451FA004C24A9 /* ModelInteractors */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -277,11 +336,12 @@
 				4743EAB622BC4AA90046D6EA /* Onboarding */,
 				47DDCCC922A890DB0049E3A5 /* AppDelegate.swift */,
 				4743EAA522B6DE470046D6EA /* AppCoordinator.swift */,
+				473D08D42324522D004C24A9 /* Protocols.swift */,
+				473D08D223245228004C24A9 /* Categories.plist */,
 				4743EAA722B6E1020046D6EA /* Coordinator.swift */,
 				47DDCCD022A890E00049E3A5 /* Assets.xcassets */,
 				47DDCCD222A890E00049E3A5 /* LaunchScreen.storyboard */,
 				47DDCCD522A890E00049E3A5 /* Info.plist */,
-				47FF6A4B22E4DBAE00ECFE1E /* APIKeys.plist */,
 			);
 			path = "ValU Two";
 			sourceTree = "<group>";
@@ -436,20 +496,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				47B9DE2022DB974F00434F4A /* BudgetCategories.xib in Resources */,
-				47DDCCD422A890E00049E3A5 /* LaunchScreen.storyboard in Resources */,
-				4795A60E22CD8B4400292E8F /* Categories.plist in Resources */,
-				4795A62722D110C600292E8F /* ContainerViewController.xib in Resources */,
-				4795A62522D110C600292E8F /* SetSavingsView.xib in Resources */,
-				47B9DE2E22E3B47100434F4A /* PlaidViewController.xib in Resources */,
-				4795A62922D110C600292E8F /* StartPageViewController.xib in Resources */,
-				47B9DE2A22E2998500434F4A /* SpendingLimitCell.xib in Resources */,
-				47FF6A4C22E4DBAE00ECFE1E /* APIKeys.plist in Resources */,
-				4795A60C22CD8A2A00292E8F /* Test.stringsdict in Resources */,
-				47DDCCD122A890E00049E3A5 /* Assets.xcassets in Resources */,
-				47B9DE2622E28CE400434F4A /* SetSpendingLimits.xib in Resources */,
-				4795A62822D110C600292E8F /* CreateBudgetFormView.xib in Resources */,
-				47992C3422EE2FAA00CF74DE /* LoadingAccountsViewController.xib in Resources */,
+				473D08E72325B836004C24A9 /* APIKeys.plist in Resources */,
+				473D08E82325B836004C24A9 /* Categories.plist in Resources */,
+				473D08DE2325B786004C24A9 /* SetSavingsView.xib in Resources */,
+				473D08DF2325B786004C24A9 /* ContainerViewController.xib in Resources */,
+				473D08E02325B786004C24A9 /* BudgetCategories.xib in Resources */,
+				473D08E12325B786004C24A9 /* CreateBudgetFormView.xib in Resources */,
+				473D08E22325B786004C24A9 /* SetSpendingLimits.xib in Resources */,
+				473D08E32325B786004C24A9 /* StartPageViewController.xib in Resources */,
+				473D08E42325B786004C24A9 /* SpendingLimitCell.xib in Resources */,
+				473D08E52325B786004C24A9 /* PlaidViewController.xib in Resources */,
+				473D08E62325B786004C24A9 /* LoadingAccountsViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -581,31 +638,47 @@
 				47DDCCCA22A890DB0049E3A5 /* AppDelegate.swift in Sources */,
 				4795A61D22D110C000292E8F /* SetSavingsViewController.swift in Sources */,
 				47BE457322C00DBC00FB9A31 /* PlaidConnection.swift in Sources */,
+				473D08D023245203004C24A9 /* AccountData+CoreDataProperties.swift in Sources */,
+				473D08B7232451FA004C24A9 /* AccountData+CoreDataClass.swift in Sources */,
+				473D08CE23245203004C24A9 /* User+CoreDataProperties.swift in Sources */,
+				473D08D52324522D004C24A9 /* Protocols.swift in Sources */,
 				4795A61522D110B400292E8F /* SetSavingsPresentor.swift in Sources */,
-				47BE457B22C00E5500FB9A31 /* SpendingCategory.swift in Sources */,
+				473D08BE232451FA004C24A9 /* SpendingCategory+CoreDataClass.swift in Sources */,
+				473D08D723245270004C24A9 /* ContainerViewController.swift in Sources */,
+				473D08BB232451FA004C24A9 /* Transaction+CoreDataClass.swift in Sources */,
 				4795A61422D110B400292E8F /* BudgetCategoriesPresentor.swift in Sources */,
+				473D089F231D9049004C24A9 /* LoadingAccountsViewController.swift in Sources */,
+				473D08D123245203004C24A9 /* BalanceData+CoreDataProperties.swift in Sources */,
 				4743EAA622B6DE470046D6EA /* AppCoordinator.swift in Sources */,
 				47B9DE1A22D945C000434F4A /* CategoriesData.swift in Sources */,
-				47BE456822BC96A100FB9A31 /* PresentorProtocol.swift in Sources */,
+				473D08DD2325B43C004C24A9 /* Budget+CoreDataProperties.swift in Sources */,
+				473D08BC232451FA004C24A9 /* ItemData+CoreDataClass.swift in Sources */,
+				473D0881231CA001004C24A9 /* ValU Two.xcdatamodeld in Sources */,
 				47B9DE2D22E3B47100434F4A /* PlaidViewController.swift in Sources */,
-				47BE457E22C00E5500FB9A31 /* Account.swift in Sources */,
+				473D08BD232451FA004C24A9 /* User+CoreDataClass.swift in Sources */,
 				47B9DE2822E28E2A00434F4A /* SetSpendingLimitViewController.swift in Sources */,
-				47992C3322EE2FAA00CF74DE /* LoadingAccountsViewController.swift in Sources */,
+				473D08CA23245203004C24A9 /* Location+CoreDataProperties.swift in Sources */,
+				473D08BA232451FA004C24A9 /* Category+CoreDataClass.swift in Sources */,
+				473D08A523232257004C24A9 /* CoreDataManager.swift in Sources */,
 				4743EAA822B6E1020046D6EA /* Coordinator.swift in Sources */,
-				47BE457C22C00E5500FB9A31 /* user.swift in Sources */,
-				47BE457122C00DBC00FB9A31 /* BankConnectViewController.swift in Sources */,
+				473D08CB23245203004C24A9 /* SpendingCategory+CoreDataProperties.swift in Sources */,
+				473D089D231D9019004C24A9 /* LoadingAccountsPresentor.swift in Sources */,
 				47BE457222C00DBC00FB9A31 /* PlaidProccesor.swift in Sources */,
 				4774311922C70C0200FBA11B /* PlaidLinkPresentor.swift in Sources */,
-				4743EAC422BC4B3E0046D6EA /* ContainerViewController.swift in Sources */,
+				473D08CF23245203004C24A9 /* Transaction+CoreDataProperties.swift in Sources */,
 				4795A61C22D110C000292E8F /* BudgetCategoriesViewController.swift in Sources */,
 				4795A62B22D112EC00292E8F /* CardViewController.swift in Sources */,
+				473D08A72323665B004C24A9 /* SetSpendingPresentor.swift in Sources */,
 				4795A61322D110B400292E8F /* CreateBudgetFormPresentor.swift in Sources */,
-				47992C3822EE51A700CF74DE /* PlaidParsing.swift in Sources */,
 				4795A61E22D110C000292E8F /* CreateBudgetFormViewController.swift in Sources */,
-				47BE457D22C00E5500FB9A31 /* Budget.swift in Sources */,
+				473D08AB232451EC004C24A9 /* PlaidParsing.swift in Sources */,
+				473D08B8232451FA004C24A9 /* Location+CoreDataClass.swift in Sources */,
+				473D08CC23245203004C24A9 /* ItemData+CoreDataProperties.swift in Sources */,
+				473D08B6232451FA004C24A9 /* Budget+CoreDataClass.swift in Sources */,
+				473D08C923245203004C24A9 /* Category+CoreDataProperties.swift in Sources */,
 				4795A61B22D110C000292E8F /* StartPageViewController.swift in Sources */,
-				47992C3622EE2FF600CF74DE /* LoadingAccountsPresentor.swift in Sources */,
 				4743EAC122BC4AA90046D6EA /* OnboardingFlowCoordinator.swift in Sources */,
+				473D08B9232451FA004C24A9 /* BalanceData+CoreDataClass.swift in Sources */,
 				47B9DE1E22D960E400434F4A /* CategoryTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -935,6 +1008,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		473D087F231CA001004C24A9 /* ValU Two.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				473D0880231CA001004C24A9 /* ValU Two.xcdatamodel */,
+			);
+			currentVersion = 473D0880231CA001004C24A9 /* ValU Two.xcdatamodel */;
+			path = "ValU Two.xcdatamodeld";
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 47DDCCBE22A890DB0049E3A5 /* Project object */;
 }

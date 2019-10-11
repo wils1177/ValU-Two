@@ -20,9 +20,9 @@ struct TokenExchangeResponse : Codable {
 
 struct TransactionsResponse : Codable{
     
-    let trasactions : [Transaction]
-    let accounts : [AccountData]
-    let item : ItemData
+    let trasactions : [TransactionJSON]
+    let accounts : [AccountJSON]
+    let item : ItemJSON
     let request_id : String?
     let total_transactions : Int?
     
@@ -33,12 +33,12 @@ struct TransactionsResponse : Codable{
         case total_transactions = "total_transactions"
         case accounts = "accounts"
     }
-    
+
 }
 
 struct AccountsResponse : Codable{
-    let accounts : [AccountData]
-    let item : ItemData
+    let accounts : [AccountJSON]
+    let item : ItemJSON
     
     enum CodingKeys : String, CodingKey {
         case accounts = "accounts"
@@ -47,12 +47,13 @@ struct AccountsResponse : Codable{
     
 }
 
-struct Transaction : Codable {
+
+struct TransactionJSON : Codable {
     var accountId : String
     var amount : Double
     var date : String
     var name : String
-    var location : Location
+    var location : LocationJSON
     var pending : Bool
     var transactionId : String
     var plaidCategories : [String]
@@ -71,10 +72,10 @@ struct Transaction : Codable {
     
 }
 
-struct AccountData : Codable {
+struct AccountJSON : Codable {
     
     var accountId : String
-    var balances : BalanceData
+    var balances : BalanceJSON
     var mask : String
     var name : String
     var officialName : String?
@@ -94,7 +95,7 @@ struct AccountData : Codable {
     
 }
 
-struct BalanceData : Codable {
+struct BalanceJSON : Codable {
     var available : Double?
     var current : Double
     var limit : Double?
@@ -107,7 +108,7 @@ struct BalanceData : Codable {
     
 }
 
-struct ItemData : Codable {
+struct ItemJSON: Codable {
     
     var billedProducts : [String]
     var error : String?
@@ -125,7 +126,7 @@ struct ItemData : Codable {
 
 
 
-struct Location : Codable {
+struct LocationJSON : Codable {
     var address : String?
     var city :  String?
     var country : String?
@@ -146,5 +147,6 @@ struct Location : Codable {
         case storeNumber = "store_number"
     }
 }
+
 
 

@@ -9,13 +9,13 @@
 import Foundation
 
 struct CategoryList : Codable {
-    let categories : [Category]
+    let categories : [CategoryEntry]
     
     enum CodingKeys : String, CodingKey {
         case categories =  "Categories"
     }
     
-    func getCategoryByName(name : String) -> Category?{
+    func getCategoryByName(name : String) -> CategoryEntry?{
         
         for category in self.categories{
             
@@ -38,11 +38,12 @@ struct CategoryList : Codable {
     
 }
 
-struct Category : Codable {
+
+struct CategoryEntry : Codable {
     
     let name : String
     let contains : [String]?
-    let subCategories : [Category]?
+    let subCategories : [CategoryEntry]?
     
     enum CodingKeys : String, CodingKey {
         case name =  "name"
@@ -51,6 +52,7 @@ struct Category : Codable {
     }
     
 }
+
 
 class CategoriesData {
     

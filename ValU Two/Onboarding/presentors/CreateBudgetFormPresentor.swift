@@ -40,22 +40,18 @@ class CreateBudgetFormPresentor : Presentor, CreateBudgetVCDelegate {
     func createViewData(budget: Budget, callToActoinMessage: String) ->CreateBudgetFormViewRep{
         
         let timeFrameIndex : Int?
-        if budget.getTimeFrame() == timeFrame.monthly{
+        if budget.timeFrame == TimeFrame.monthly.rawValue{
             timeFrameIndex = 0
         }
         else{
             timeFrameIndex = 1
         }
         
-        let incomeAmountText : String?
-        if let incomeAmount = budget.getAmount(){
-            incomeAmountText =  String(describing: incomeAmount)
-        } else{
-            incomeAmountText =  ""
-        }
+        let incomeAmount = budget.amount
+        let incomeAmountText =  String(describing: incomeAmount)
         
         
-        return CreateBudgetFormViewRep(timeFrameIndex: timeFrameIndex!, incomeAmountText: incomeAmountText!, callToActionMessage: callToActoinMessage)
+        return CreateBudgetFormViewRep(timeFrameIndex: timeFrameIndex!, incomeAmountText: incomeAmountText, callToActionMessage: callToActoinMessage)
     }
     
     func userSelectedCTA(viewData: CreateBudgetFormViewRep){
@@ -65,17 +61,20 @@ class CreateBudgetFormPresentor : Presentor, CreateBudgetVCDelegate {
     
     func viewDataToBudget(viewData: CreateBudgetFormViewRep) -> Budget{
         
-        let budgetTimeFrame : timeFrame
+        let budgetTimeFrame : Int32
         if viewData.timeFrameIndex == 0{
-            budgetTimeFrame = timeFrame.monthly
+            budgetTimeFrame = TimeFrame.monthly.rawValue
         }
         else{
-            budgetTimeFrame = timeFrame.semiMonthly
+            budgetTimeFrame = TimeFrame.semiMonthly.rawValue
         }
         
         let amount = Float(viewData.incomeAmountText)
         
-        return Budget(amount: amount, budgetTimeFrame: budgetTimeFrame)
+        self.budget.amount = amount!
+        self.budget.timeFrame = budgetTimeFrame
+        
+        return self.budget
     }
     
     func enterErroState(){

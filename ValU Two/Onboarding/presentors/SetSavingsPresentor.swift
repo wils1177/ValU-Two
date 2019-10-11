@@ -42,9 +42,9 @@ class SetSavingsPresentor : Presentor {
     
     func generateViewData() -> SetSavingsViewData{
         
-        let savingsPercent = self.budget.getSavingsPercent()
+        let savingsPercent = self.budget.savingsPercent
         let savingsTotal = String(self.budget.calculateSavingsAmount(percentageOfAmount: savingsPercent))
-        let incomeAmount = String(self.budget.getAmount()!)
+        let incomeAmount = String(self.budget.amount)
         let callToAction  = "Continue"
         
         return SetSavingsViewData(savingsTotal: savingsTotal, incomeAmount: incomeAmount, callToAction: callToAction, savingsPercent: savingsPercent)
@@ -59,7 +59,7 @@ class SetSavingsPresentor : Presentor {
     func updateBudget(){
         
         let newPercent = self.setSavingsVC?.savingsSlider.value
-        self.budget.setSavingsPercent(savingsPercent: newPercent!)
+        self.budget.savingsPercent = newPercent!
         
         self.coordinator?.savingsSubmitted(budget: self.budget, sender: self)
     }

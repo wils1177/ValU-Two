@@ -17,6 +17,11 @@ enum PlaidURLs{
     case GetTransactions
 }
 
+enum PlaidConnectionError: Error {
+    case AccessTokenNotFound
+    case PublicTokenNotFound
+}
+
 struct Keys : Codable{
     let clientID : String
     let clientSecret : String
@@ -37,8 +42,8 @@ class PlaidConnection{
         
 
     
-    init(accounts: [Account]){
-        self.proccessor = PlaidProccessor(accounts: accounts)
+    init(){
+        self.proccessor = PlaidProccessor()
         self.URLdict = [PlaidURLs.GetCategories : URL(string : (rootURL + "/categories/get"))!]
         self.URLdict[PlaidURLs.TokenExchange] = URL(string : (rootURL + "/item/public_token/exchange"))!
         self.URLdict[PlaidURLs.GetTransactions] = URL(string : (rootURL + "/transactions/get"))!
@@ -47,32 +52,36 @@ class PlaidConnection{
 
     }
     
-    
-    func exchangePublicForAccessToken(publicKey : String){
+    func exchangePublicForAccessToken(dispatch: DispatchGroup) throws{
         
+        print("how about this??")
         let URL = PlaidURLs.TokenExchange
         let keys = getAPIKeys()
+        
+        guard let publicKey: String = KeychainWrapper.standard.string(forKey: "public_token") else{
+            print("Error: missing access Token")
+            throw PlaidConnectionError.AccessTokenNotFound
+        }
+        
         let json: [String: Any] = ["client_id" : keys.clientID, "secret" : keys.clientSecret, "public_token" : publicKey]
         
-        postRequest(url: URL, jsonBody: json, successHandler: self.proccessor.saveAccessToken(response:))
+        postRequest(url: URL, jsonBody: json, successHandler: self.proccessor.saveAccessToken(response:), dispatch: dispatch)
         
         
     }
     
-    func getAccounts(dispatch: DispatchGroup){
-        let URL = PlaidURLs.GetAccounts
-        let keys = getAPIKeys()
-        let accessToken: String! = KeychainWrapper.standard.string(forKey: "access_token")
-        
-        let json: [String: Any] = ["client_id" : keys.clientID, "secret" : keys.clientSecret, "access_token" : accessToken!]
-        postRequest(url: URL, jsonBody: json, successHandler: proccessor.aggregateAccounts(response:), dispatch: dispatch)
-    }
+
+
     
-    func getTransactions(dispatch: DispatchGroup){
+    func getTransactions(dispatch: DispatchGroup) throws{
         
         let URL = PlaidURLs.GetTransactions
         let keys = getAPIKeys()
-        let accessToken: String! = KeychainWrapper.standard.string(forKey: "access_token")
+        
+        guard let accessToken: String = KeychainWrapper.standard.string(forKey: "access_token") else{
+            print("Error: missing access Token")
+            throw PlaidConnectionError.AccessTokenNotFound
+        }
         
         let calendar = Calendar.current
         let currentDate = Date()
@@ -82,9 +91,9 @@ class PlaidConnection{
         let formattedStartDate = format.string(from: startDate!) as! String
         let formattedCurrentDate = format.string(from: currentDate) as! String
         
-        let json: [String: Any] = ["client_id" : keys.clientID, "secret" : keys.clientSecret, "access_token" : accessToken!, "start_date" : formattedStartDate, "end_date" : formattedCurrentDate]
+        let json: [String: Any] = ["client_id" : keys.clientID, "secret" : keys.clientSecret, "access_token" : accessToken, "start_date" : formattedStartDate, "end_date" : formattedCurrentDate]
         
-        postRequest(url: URL, jsonBody: json, successHandler: proccessor.aggregateTransactions(response:), dispatch: dispatch)
+        postRequest(url: URL, jsonBody: json, successHandler: proccessor.aggregate(response:), dispatch: dispatch)
     }
     
     
@@ -92,7 +101,11 @@ class PlaidConnection{
     
     func postRequest(url: PlaidURLs, jsonBody : [String: Any], successHandler : @escaping successHandler, dispatch: DispatchGroup? = nil){
         
-        dispatch?.enter()
+        // not every PostRequest will require a distpatch group
+        if dispatch != nil{
+            dispatch?.enter()
+        }
+        
         
         let requestURL = URLdict[url]
         var request = URLRequest(url: requestURL!)
@@ -106,25 +119,18 @@ class PlaidConnection{
             if let error = error {
                 print("error: \(error)")
             } else {
+                
                 let dataResponse = data
-                do{
+                
+                //Response result
+                successHandler(dataResponse!)
                     
-                    //here dataResponse received from a network request
-                    let jsonResponse = try JSONSerialization.jsonObject(with:
-                        
-                        dataResponse!, options: [])
-                    
-                    //Response result
-                    successHandler(dataResponse!)
-                    dispatch?.leave()
-                    
-                } catch let parsingError {
-                    print("Error", parsingError)
+                if dispatch != nil{
+                    print("request done!")
                     dispatch?.leave()
                 }
-                
+  
             }
-            
         }
         
         task.resume()

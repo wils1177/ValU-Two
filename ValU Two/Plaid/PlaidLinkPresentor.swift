@@ -12,7 +12,6 @@ import LinkKit
 
 class PlaidLinkViewPresentor : UIViewController, Presentor  {
     
-    var plaidConnection : PlaidConnection?
     var coordinator : PlaidLinkDelegate?
     var linkViewController: PLKPlaidLinkViewController?
     
@@ -42,11 +41,9 @@ extension PlaidLinkViewPresentor : PLKPlaidLinkViewDelegate
         PLKPlaidLinkViewController, didSucceedWithPublicToken publicToken:
         String, metadata: [String : Any]?) {
         
-            print(metadata)
-            let accounts = [Account]()
-            self.plaidConnection  = PlaidConnection(accounts: accounts)
-            self.plaidConnection?.exchangePublicForAccessToken(publicKey: publicToken)
-            self.coordinator?.plaidLinkSuccess(accounts : accounts, sender : self)
+            let proccessor = PlaidProccessor()
+            proccessor.savePublicToken(publicToken: publicToken)
+            self.coordinator?.plaidLinkSuccess(sender : self)
         
  
     }

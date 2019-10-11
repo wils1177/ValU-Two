@@ -15,7 +15,6 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, CreateBudg
 
     // Dependencies
     var budgetToCreate : Budget?
-    var accounts : [Account]?
     
     var childCoordinators = [Coordinator]()
     weak var parent: AppCoordinator?
@@ -35,8 +34,8 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, CreateBudg
     }
     
     func continueToOnboarding() {
-        print("Contionue onto onboarding")
-        let newBudget = Budget()
+        print("Contionue to onboarding")
+        let newBudget = DataManager().createNewBudget()
         let newBudgetPresentor = CreateBudgetFormPresentor(budget: newBudget, callToActionMessage: "Continue")
         self.currentPresentor = newBudgetPresentor
         newBudgetPresentor.coordinator = self
@@ -88,8 +87,11 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, CreateBudg
     
     func contionueToSetSpendingLimits(){
         print("Continue to Set Spending Limits")
-        let vc = SetSpendingLimitViewController(budget: self.budgetToCreate!)
-        vc.coordinator = self
+        
+        let presentor = SetSpendingPresentor(spendingCategories: self.budgetToCreate!.spendingCategories!)
+        presentor.coordinator = self
+        let vc = presentor.configure()
+        
         let ContainerVC = ContainerViewController(title: "Set spending limits", vc: vc)
         self.navigationController!.pushViewController(ContainerVC, animated: true)
     }
@@ -114,10 +116,9 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, CreateBudg
         
     }
     
-    func plaidLinkSuccess(accounts : [Account], sender: PlaidLinkViewPresentor){
+    func plaidLinkSuccess(sender: PlaidLinkViewPresentor){
         
-        self.accounts = accounts
-        let presentor = LoadingAccountsPresentor(accounts: self.accounts!)
+        let presentor = LoadingAccountsPresentor()
         let vc = presentor.configure()
         
         self.navigationController!.pushViewController(vc, animated: true)
@@ -131,15 +132,7 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, CreateBudg
         print("NOT IMPLEMENTED DISMISS ON PLAID LINK")
     }
     
-    
-    //func continueToAccountsPage(){
-    //    let presentor = SelectAccountsPresentor(accounts : self.accounts!)
-        //presentor.coordinator = self
-     //   let vc = presentor.configure()
-   //     let ContainerVC = ContainerViewController(title: "Select your Accounts", vc: vc)
-    //    self.navigationController!.pushViewController(ContainerVC, animated: true)
-        
-  //  }
+
     
     
 }

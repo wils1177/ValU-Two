@@ -76,11 +76,14 @@ class BudgetCardsPresentor : NSObject, UITableViewDelegate, CardsPresentor {
         var newSpendingCategoriesList = [SpendingCategory]()
         for name in self.selectedCategoryNames{
             let category = self.categoryList?.getCategoryByName(name: name)
-            let newSpendingCategory = SpendingCategory(category: category!, limit: 0.0, amountSpent: 0.0)
+            let newSpendingCategory = DataManager().createNewSpendingCategory(categoryEntry: category!)
             newSpendingCategoriesList.append(newSpendingCategory)
         }
+                
+        for category in newSpendingCategoriesList{
+            self.budget.addToSpendingCategories(category)
+        }
         
-        self.budget.spendingCategories = newSpendingCategoriesList
         self.coordinator?.categoriesSubmitted()
         
     }

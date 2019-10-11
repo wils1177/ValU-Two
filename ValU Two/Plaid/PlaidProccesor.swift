@@ -8,15 +8,12 @@
 
 import Foundation
 import SwiftKeychainWrapper
+import CoreData
 
 class PlaidProccessor{
     
-    var accounts : [Account]
     
-    init(accounts: [Account]){
-        self.accounts = accounts
-    }
-    
+    // Save the access token securly to the device's KeyChain
     func saveAccessToken(response : Data){
         
         let decoder = JSONDecoder()
@@ -32,61 +29,84 @@ class PlaidProccessor{
 
     }
     
-    
-    func aggregateAccounts(response: Data){
-        let decoder = JSONDecoder()
+    //Save the public token to the devices keychain
+    func savePublicToken(publicToken: String){
         
-        do {
-            let paresedResponse = try decoder.decode(AccountsResponse.self, from: response)
-            let item = paresedResponse.item
-            let accountData = paresedResponse.accounts
-            
-            for account in accountData{
-                if account.subType == "checking" || account.subType == "credit card"{
-                    let newAccount = Account(accountData: account, item: item)
-                    self.accounts.append(newAccount)
-                }
-                
-            }
-            print(self.accounts)
-            
-        } catch (let err) {
-            print("error:")
-            print(err)
-        }
+        let saveSuccessful: Bool = KeychainWrapper.standard.set(publicToken, forKey: "public_token")
+        print(saveSuccessful)
     }
     
-    func aggregateTransactions(response: Data){
+    
+    /*
+     Takes in Plaid JSON response
+     Parses and saves trasnsactions response to CoreData
+    */
+    func aggregate(response: Data){
    
         let decoder = JSONDecoder()
         
         do {
-            let transactionsResponse = try decoder.decode(TransactionsResponse.self, from: response)
-            addTransactions(transactionsResponse: transactionsResponse)
+            let parsedResponse = try decoder.decode(TransactionsResponse.self, from: response)
+            
+            proccessAccounts(response: parsedResponse.accounts)
+            proccessTransactions(response: parsedResponse.trasactions)
+            processItem(response: parsedResponse.item)
+     
+            
         } catch (let err) {
             print("error:")
             print(err)
         }
-        
-    }
-    
-    
-    func addTransactions(transactionsResponse : TransactionsResponse){
-        
-        for account in self.accounts{
-            
-            for transaction in transactionsResponse.trasactions{
-                if transaction.accountId == account.accountData.accountId{
-                    account.transactions.append(transaction)
-                }
-            }
-            
-            
-            
-        }
-        
 
         
     }
+    
+    func proccessAccounts(response: [AccountJSON]){
+        
+        
+        let dataManager = DataManager()
+        
+        for account in response{
+            
+            if account.subType == "checking" || account.subType == "credit card"{
+                
+                dataManager.saveAccount(account: account)
+                
+            }
+            
+        }
+        
+        dataManager.saveDatabase()
+        
+    }
+    
+    // Saves only transactions that are under an aggregated account
+    func proccessTransactions(response: [TransactionJSON]){
+        
+        let dataManager = DataManager()
+        
+        for transaction in response{
+            
+            for account in dataManager.getAccounts(){
+                if account.accountId == transaction.accountId{
+                    dataManager.saveTransaction(transaction: transaction)
+                }
+            }
+
+        }
+        
+        dataManager.saveDatabase()
+
+        
+    }
+    
+    func processItem(response : ItemJSON){
+        
+        let dataManager = DataManager()
+        dataManager.saveItem(item: response)
+
+        dataManager.saveDatabase()
+    }
+
 
 }

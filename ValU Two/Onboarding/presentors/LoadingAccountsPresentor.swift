@@ -12,11 +12,7 @@ import UIKit
 class LoadingAccountsPresentor : Presentor {
     
     var viewController : LoadingAccountsViewController?
-    var accounts : [Account]
-    
-    init(accounts : [Account]){
-        self.accounts = accounts
-    }
+
     
     func configure() -> UIViewController {
         let vc = LoadingAccountsViewController()
@@ -31,18 +27,27 @@ class LoadingAccountsPresentor : Presentor {
     }
     
     func pullInAccountData(){
-        let plaid = PlaidConnection(accounts : self.accounts)
-        let dispatch = DispatchGroup()
+        let plaid = PlaidConnection()
         
-        print("getting accounts...")
-        plaid.getAccounts(dispatch: dispatch)
+        let dispatchA = DispatchGroup()
+        let dispatchB = DispatchGroup()
         
-        print("getting transactions...")
-        plaid.getTransactions(dispatch: dispatch)
+        print("Exchanging public token...")
+        try? plaid.exchangePublicForAccessToken(dispatch: dispatchA)
         
-        dispatch.notify(queue: .main){
-            self.viewController?.enterSuccessState()
+        
+        dispatchA.notify(queue: .main){
+            print("getting transactions...")
+            
+            try? plaid.getTransactions(dispatch: dispatchB)
+            
+            dispatchB.notify(queue: .main){
+                self.viewController?.enterSuccessState()
+            }
+    
         }
+        
+        
     }
     
     

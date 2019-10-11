@@ -24,28 +24,17 @@ class SetSpendingLimitCell: UITableViewCell {
         
     }
     
-
+    
 }
 
-class SetSpendingLimitViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class SetSpendingLimitViewController: UIViewController{
     
-    var budget : Budget
-    var coordinator : SetSpendingLimitDelegate?
+    //var budget : Budget
+    var presentor : CardsPresentor?
     
     //UX Elements
     @IBOutlet var tableView: UITableView!
     
-    
-    init(budget : Budget){
-        
-        self.budget = budget
-        super.init(nibName: "SetSpendingLimits", bundle: nil)
-        
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,44 +43,25 @@ class SetSpendingLimitViewController: UIViewController, UITableViewDelegate, UIT
         setupView()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        let nib = UINib(nibName: "SpendingLimitCell", bundle: nil)
-        self.tableView.register(nib, forCellReuseIdentifier: "spendingLimitCell")
+    func setupView(){
+        self.presentor!.setupTableView()
+        tableView?.reloadData()
     }
     
-    func setupView(){
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.reloadData()
-    }
     
     @IBAction func pressedCallToAction(_ sender: Any) {
         
-        coordinator?.finishedSettingLimits()
+        //coordinator?.finishedSettingLimits()
         
     }
     
     func updateSpendingLimit(name: String, newLimit: String){
         
-    }
-    
-    
-    
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.budget.spendingCategories.count
-    }
-    
-    
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "spendingLimitCell" , for: indexPath) as! SetSpendingLimitCell
-        let spendingCategories = self.budget.spendingCategories
-        cell.categoryNameLabel.text = self.budget.spendingCategories[indexPath.row].category.name
-        cell.delegate = self
         
-        return cell
+        
     }
+    
+    
     
     
 

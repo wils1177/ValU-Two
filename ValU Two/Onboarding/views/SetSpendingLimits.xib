@@ -12,7 +12,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SetSpendingLimitViewController" customModule="ValU_Two" customModuleProvider="target">
             <connections>
-                <outlet property="tableView" destination="tqT-td-wWA" id="iF1-sA-MLR"/>
+                <outlet property="tableView" destination="tqT-td-wWA" id="pHm-j3-SyT"/>
                 <outlet property="view" destination="RRs-IC-VFY" id="AR8-Ds-jcl"/>
             </connections>
         </placeholder>
