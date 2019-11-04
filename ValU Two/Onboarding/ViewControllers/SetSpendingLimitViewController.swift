@@ -30,7 +30,7 @@ class SetSpendingLimitCell: UITableViewCell {
 class SetSpendingLimitViewController: UIViewController{
     
     //var budget : Budget
-    var presentor : CardsPresentor?
+    var presentor : SetSpendingPresentor?
     
     //UX Elements
     @IBOutlet var tableView: UITableView!
@@ -51,7 +51,7 @@ class SetSpendingLimitViewController: UIViewController{
     
     @IBAction func pressedCallToAction(_ sender: Any) {
         
-        //coordinator?.finishedSettingLimits()
+        self.presentor?.submit()
         
     }
     

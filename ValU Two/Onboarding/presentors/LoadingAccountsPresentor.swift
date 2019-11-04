@@ -12,6 +12,7 @@ import UIKit
 class LoadingAccountsPresentor : Presentor {
     
     var viewController : LoadingAccountsViewController?
+    var coordinator : OnboardingFlowCoordinator?
 
     
     func configure() -> UIViewController {
@@ -47,6 +48,12 @@ class LoadingAccountsPresentor : Presentor {
     
         }
         
+        
+    }
+    
+    func userPressedContinue(){
+        
+        self.coordinator?.onboardingComplete()
         
     }
     

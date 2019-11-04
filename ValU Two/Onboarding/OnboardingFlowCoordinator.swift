@@ -18,18 +18,19 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, CreateBudg
     
     var childCoordinators = [Coordinator]()
     weak var parent: AppCoordinator?
-    let navigationController : UINavigationController?
+    let navigationController : UINavigationController
     var currentPresentor : Presentor?
     
     
     init(navigationController: UINavigationController){
         self.navigationController = navigationController
+        
     }
     
     func start(){
         print("onboarding flow started")
-        let vc = StartPageViewController(nibName: "StartPageViewController", bundle: nil)
-        self.navigationController!.pushViewController(vc, animated: false)
+        let vc = StartPageViewController()
+        self.navigationController.pushViewController(vc, animated: false)
         vc.coordinator = self
     }
     
@@ -41,7 +42,7 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, CreateBudg
         newBudgetPresentor.coordinator = self
         let NewBudgetVC = self.currentPresentor?.configure()
         let ContainerVC = ContainerViewController(title: "Create a Budget", vc: NewBudgetVC!)
-        self.navigationController!.pushViewController(ContainerVC, animated: true)
+        self.navigationController.pushViewController(ContainerVC, animated: true)
     }
     
     func budgetSubmitted(budget: Budget, sender: CreateBudgetFormPresentor) {
@@ -63,7 +64,7 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, CreateBudg
         self.currentPresentor = presentor
         let setSavingsVC = presentor.configure()
         let ContainerVC = ContainerViewController(title: "Set a Savings Target", vc: setSavingsVC)
-        self.navigationController!.pushViewController(ContainerVC, animated: true)
+        self.navigationController.pushViewController(ContainerVC, animated: true)
     }
     
     func savingsSubmitted(budget: Budget, sender: SetSavingsPresentor){
@@ -78,7 +79,7 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, CreateBudg
         presentor.coordinator = self
         let vc = presentor.configure()
         let ContainerVC = ContainerViewController(title: "Select your budget categories", vc: vc)
-        self.navigationController!.pushViewController(ContainerVC, animated: true)
+        self.navigationController.pushViewController(ContainerVC, animated: true)
     }
     
     func categoriesSubmitted(){
@@ -93,7 +94,7 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, CreateBudg
         let vc = presentor.configure()
         
         let ContainerVC = ContainerViewController(title: "Set spending limits", vc: vc)
-        self.navigationController!.pushViewController(ContainerVC, animated: true)
+        self.navigationController.pushViewController(ContainerVC, animated: true)
     }
     
     func finishedSettingLimits(){
@@ -103,7 +104,7 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, CreateBudg
     func continueToPlaid(){
         let vc = PlaidViewController()
         vc.coordinator = self
-        self.navigationController!.pushViewController(vc, animated: true)
+        self.navigationController.pushViewController(vc, animated: true)
     }
     
 
@@ -112,20 +113,28 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, CreateBudg
         presentor.coordinator = self
         self.currentPresentor = presentor
         let linkVC = presentor.configure()
-        self.navigationController!.present(linkVC, animated: true)
+        self.navigationController.present(linkVC, animated: true)
         
     }
     
     func plaidLinkSuccess(sender: PlaidLinkViewPresentor){
         
         let presentor = LoadingAccountsPresentor()
+        presentor.coordinator = self
         let vc = presentor.configure()
         
-        self.navigationController!.pushViewController(vc, animated: true)
+        self.navigationController.pushViewController(vc, animated: true)
         sender.linkViewController?.dismiss(animated: true, completion: {
             print("link dismissed")
             
         })
+    }
+    
+    func onboardingComplete(){
+        
+        print("onboarding finished")
+        //self.parent?.onboardingComplete()
+
     }
     
     func dismissPlaidLink() {

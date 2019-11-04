@@ -13,6 +13,8 @@ class LoadingAccountsViewController: UIViewController {
     @IBOutlet var loadingSpinner: UIActivityIndicatorView!
     @IBOutlet var loadingLabel: UILabel!
     
+    @IBOutlet weak var continueButton: UIButton!
+    
     //Member Variables
     var presentor : LoadingAccountsPresentor?
     
@@ -25,16 +27,24 @@ class LoadingAccountsViewController: UIViewController {
     
     func enterLoadingState(){
         self.loadingSpinner.startAnimating()
+        self.continueButton.isHidden = true
     }
     
     func enterSuccessState(){
         self.loadingSpinner.isHidden = true
         self.loadingLabel.text = "Success!"
+        self.continueButton.isHidden = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.presentor!.viewWillLoad()
     }
+    
+    @IBAction func pressedContinue(_ sender: Any) {
+        
+        self.presentor?.userPressedContinue()
+    }
+    
 
 
     /*

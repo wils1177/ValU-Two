@@ -65,6 +65,9 @@
 		47DDCCCA22A890DB0049E3A5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47DDCCC922A890DB0049E3A5 /* AppDelegate.swift */; };
 		47DDCCDF22A890E00049E3A5 /* ValU_TwoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47DDCCDE22A890E00049E3A5 /* ValU_TwoTests.swift */; };
 		47DDCCEA22A890E00049E3A5 /* ValU_TwoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47DDCCE922A890E00049E3A5 /* ValU_TwoUITests.swift */; };
+		47EED5AA236F9B050052A211 /* DashboardCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EED5A9236F9B050052A211 /* DashboardCoordinator.swift */; };
+		47EED5B2236FB1400052A211 /* DashboardTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EED5B0236FB1400052A211 /* DashboardTabBarController.swift */; };
+		47EED5B3236FB1400052A211 /* DashboardTabBarController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47EED5B1236FB1400052A211 /* DashboardTabBarController.xib */; };
 		554B096B8A89D3D9BBA9055E /* Pods_ValU_TwoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5ABCAA528B58D48AA6AF142E /* Pods_ValU_TwoTests.framework */; };
 		745A1C9D86D7665686186136 /* Pods_ValU_TwoUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 276F7743E43167502E0AD368 /* Pods_ValU_TwoUITests.framework */; };
 		F37EFADA9F2F08A705CBBE02 /* Pods_ValU_Two.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E12898A13131670A5C0F61E /* Pods_ValU_Two.framework */; };
@@ -158,6 +161,9 @@
 		47DDCCE522A890E00049E3A5 /* ValU TwoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ValU TwoUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		47DDCCE922A890E00049E3A5 /* ValU_TwoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValU_TwoUITests.swift; sourceTree = "<group>"; };
 		47DDCCEB22A890E00049E3A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		47EED5A9236F9B050052A211 /* DashboardCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardCoordinator.swift; sourceTree = "<group>"; };
+		47EED5B0236FB1400052A211 /* DashboardTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardTabBarController.swift; sourceTree = "<group>"; };
+		47EED5B1236FB1400052A211 /* DashboardTabBarController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DashboardTabBarController.xib; sourceTree = "<group>"; };
 		5ABCAA528B58D48AA6AF142E /* Pods_ValU_TwoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ValU_TwoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B6157E9917879C99D71879E /* Pods-ValU Two.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ValU Two.debug.xcconfig"; path = "Target Support Files/Pods-ValU Two/Pods-ValU Two.debug.xcconfig"; sourceTree = "<group>"; };
 		748C8B11CED7054383845D1F /* Pods-ValU TwoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ValU TwoTests.release.xcconfig"; path = "Target Support Files/Pods-ValU TwoTests/Pods-ValU TwoTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -334,6 +340,7 @@
 				47BE457422C00E5400FB9A31 /* Models */,
 				47BE456D22C00DBC00FB9A31 /* Plaid */,
 				4743EAB622BC4AA90046D6EA /* Onboarding */,
+				47EED5A8236F9AAF0052A211 /* Dashboard */,
 				47DDCCC922A890DB0049E3A5 /* AppDelegate.swift */,
 				4743EAA522B6DE470046D6EA /* AppCoordinator.swift */,
 				473D08D42324522D004C24A9 /* Protocols.swift */,
@@ -362,6 +369,16 @@
 				47DDCCEB22A890E00049E3A5 /* Info.plist */,
 			);
 			path = "ValU TwoUITests";
+			sourceTree = "<group>";
+		};
+		47EED5A8236F9AAF0052A211 /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				47EED5A9236F9B050052A211 /* DashboardCoordinator.swift */,
+				47EED5B0236FB1400052A211 /* DashboardTabBarController.swift */,
+				47EED5B1236FB1400052A211 /* DashboardTabBarController.xib */,
+			);
+			path = Dashboard;
 			sourceTree = "<group>";
 		};
 		D7196FC0E055B0C71A51CDE9 /* Pods */ = {
@@ -460,6 +477,7 @@
 				TargetAttributes = {
 					47DDCCC522A890DB0049E3A5 = {
 						CreatedOnToolsVersion = 10.2.1;
+						LastSwiftMigration = 1120;
 					};
 					47DDCCD922A890E00049E3A5 = {
 						CreatedOnToolsVersion = 10.2.1;
@@ -502,6 +520,7 @@
 				473D08DF2325B786004C24A9 /* ContainerViewController.xib in Resources */,
 				473D08E02325B786004C24A9 /* BudgetCategories.xib in Resources */,
 				473D08E12325B786004C24A9 /* CreateBudgetFormView.xib in Resources */,
+				47EED5B3236FB1400052A211 /* DashboardTabBarController.xib in Resources */,
 				473D08E22325B786004C24A9 /* SetSpendingLimits.xib in Resources */,
 				473D08E32325B786004C24A9 /* StartPageViewController.xib in Resources */,
 				473D08E42325B786004C24A9 /* SpendingLimitCell.xib in Resources */,
@@ -660,6 +679,7 @@
 				473D08CA23245203004C24A9 /* Location+CoreDataProperties.swift in Sources */,
 				473D08BA232451FA004C24A9 /* Category+CoreDataClass.swift in Sources */,
 				473D08A523232257004C24A9 /* CoreDataManager.swift in Sources */,
+				47EED5B2236FB1400052A211 /* DashboardTabBarController.swift in Sources */,
 				4743EAA822B6E1020046D6EA /* Coordinator.swift in Sources */,
 				473D08CB23245203004C24A9 /* SpendingCategory+CoreDataProperties.swift in Sources */,
 				473D089D231D9019004C24A9 /* LoadingAccountsPresentor.swift in Sources */,
@@ -678,6 +698,7 @@
 				473D08C923245203004C24A9 /* Category+CoreDataProperties.swift in Sources */,
 				4795A61B22D110C000292E8F /* StartPageViewController.swift in Sources */,
 				4743EAC122BC4AA90046D6EA /* OnboardingFlowCoordinator.swift in Sources */,
+				47EED5AA236F9B050052A211 /* DashboardCoordinator.swift in Sources */,
 				473D08B9232451FA004C24A9 /* BalanceData+CoreDataClass.swift in Sources */,
 				47B9DE1E22D960E400434F4A /* CategoryTableViewCell.swift in Sources */,
 			);
@@ -847,6 +868,7 @@
 			baseConfigurationReference = 5B6157E9917879C99D71879E /* Pods-ValU Two.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2DVRRZC3M5;
 				INFOPLIST_FILE = "ValU Two/Info.plist";
@@ -857,6 +879,7 @@
 				LINK_ENVIRONMENT = Sandbox;
 				PRODUCT_BUNDLE_IDENTIFIER = "clay.ValU-Two";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -867,6 +890,7 @@
 			baseConfigurationReference = 02CB0933549AB52086057F90 /* Pods-ValU Two.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2DVRRZC3M5;
 				INFOPLIST_FILE = "ValU Two/Info.plist";

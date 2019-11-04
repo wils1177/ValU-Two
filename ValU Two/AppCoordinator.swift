@@ -18,11 +18,13 @@ class AppCoordinator: Coordinator{
     var childCoordinators = [Coordinator]()
     let navigationController : UINavigationController
     
+    
     init(rootViewController: UINavigationController){
         self.navigationController = rootViewController
     }
     
     func start(){
+        
         if currentBudget == nil{
             showOboardingFlow()
         }
@@ -30,11 +32,21 @@ class AppCoordinator: Coordinator{
     
     private func showOboardingFlow(){
         print("display the onboarding flow")
-        let OnboardingCoordinator = OnboardingFlowCoordinator(navigationController:  self.navigationController)
-        OnboardingCoordinator.parent = self
-        self.childCoordinators.append(OnboardingCoordinator)
+        let onboardingCoordinator = OnboardingFlowCoordinator(navigationController:  self.navigationController)
+        onboardingCoordinator.parent = self
+        self.childCoordinators.append(onboardingCoordinator)
         
-        OnboardingCoordinator.start()        
+        onboardingCoordinator.start()
+    }
+    
+    func startDashboard(){
+        
+        //let dasboardCoordinator = DasboardCoordinator(tabBarController: self.navigationController)
+        //dasboardCoordinator.parent = self
+        //self.childCoordinators.append(dasboardCoordinator)
+        
+        //dasboardCoordinator.start()
+        
     }
     
 }

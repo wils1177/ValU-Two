@@ -14,7 +14,7 @@ class SetSpendingPresentor : NSObject, UITableViewDelegate, Presentor, CardsPres
     
     
     let spendingCategories : NSOrderedSet
-    var coordinator : Coordinator?
+    var coordinator : OnboardingFlowCoordinator?
     var vc : SetSpendingLimitViewController?
     
     init(spendingCategories : NSOrderedSet){
@@ -24,7 +24,7 @@ class SetSpendingPresentor : NSObject, UITableViewDelegate, Presentor, CardsPres
     
     func configure() -> UIViewController {
         
-        self.vc = SetSpendingLimitViewController()
+        self.vc = SetSpendingLimitViewController(nibName: "SetSpendingLimits", bundle: nil)
         self.vc!.presentor = self
         return self.vc!
     }
@@ -33,13 +33,33 @@ class SetSpendingPresentor : NSObject, UITableViewDelegate, Presentor, CardsPres
         
         self.vc!.tableView!.dataSource = self
         self.vc!.tableView!.delegate = self
-        self.vc!.tableView!.register(SetSpendingLimitCell.self, forCellReuseIdentifier: "spendingLimitCell")
-        
+        self.vc!.tableView!.register(UINib(nibName: "SpendingLimitCell", bundle: nil), forCellReuseIdentifier: "spendingLimitCell")
         
     }
     
     func submit() {
-        print("hi")
+        self.coordinator?.finishedSettingLimits()
+    }
+    
+    @objc func textFieldDidChange(field: UITextField){
+        
+        
+        let amount = field.text
+        if CharacterSet.decimalDigits.isSuperset(of: CharacterSet(charactersIn: amount!)) && (amount! != "") {
+            print("amount field did change")
+            let newLimit = Float(amount!)
+            let categoryIndex = field.tag
+            updateSpendingLimit(newLimit: newLimit!, categoryIndex: categoryIndex)
+        }
+
+        
+    }
+    
+    func updateSpendingLimit(newLimit : Float, categoryIndex: Int){
+        
+        let spendingCategory = self.spendingCategories[categoryIndex] as! SpendingCategory
+        spendingCategory.limit = newLimit
+        
     }
     
     
@@ -57,6 +77,11 @@ extension SetSpendingPresentor : UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "spendingLimitCell" , for: indexPath) as! SetSpendingLimitCell
         let spendingCategory = self.spendingCategories[indexPath.row] as! SpendingCategory
         cell.categoryNameLabel.text = spendingCategory.category?.name
+        
+        // Add a function that will be called everytime that the user updates the amount text field
+        cell.amountTextFeild.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        cell.amountTextFeild.tag = indexPath.row
+        
         //cell.delegate = self
         
         return cell

@@ -20,11 +20,19 @@ class StartPageViewController: UIViewController {
     var coordinator: StartPageViewDelegate?
     
     
+    init(){
+        super.init(nibName: "StartPageViewController", bundle: nil)
+        print("am i being made")
+    }
     
-
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        print("are you loading me")
     }
     
     @IBAction func tappedContinue(_ sender: Any) {
