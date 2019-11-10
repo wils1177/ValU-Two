@@ -1,74 +1,77 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14492.1" systemVersion="19A546d" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15508" systemVersion="19B88" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="AccountData" representedClassName="AccountData" syncable="YES">
-        <attribute name="accountId" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="mask" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="officialName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="subType" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="balances" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="BalanceData" syncable="YES"/>
+        <attribute name="accountId" optional="YES" attributeType="String"/>
+        <attribute name="mask" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="officialName" optional="YES" attributeType="String"/>
+        <attribute name="subType" optional="YES" attributeType="String"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
+        <relationship name="balances" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="BalanceData"/>
     </entity>
     <entity name="BalanceData" representedClassName="BalanceData" syncable="YES">
-        <attribute name="available" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="current" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="limit" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="available" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="current" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="limit" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
     </entity>
     <entity name="Budget" representedClassName="Budget" syncable="YES">
-        <attribute name="amount" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="savingsPercent" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="timeFrame" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <relationship name="spendingCategories" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="SpendingCategory" syncable="YES"/>
+        <attribute name="active" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="amount" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="endDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="savingsPercent" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="timeFrame" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="spendingCategories" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="SpendingCategory"/>
     </entity>
     <entity name="Category" representedClassName="Category" syncable="YES">
-        <attribute name="contains" optional="YES" attributeType="Transformable" customClassName="[String]" syncable="YES"/>
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="subCategories" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Category" syncable="YES"/>
+        <attribute name="contains" optional="YES" attributeType="Transformable" customClassName="[String]"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="subCategories" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Category"/>
     </entity>
     <entity name="ItemData" representedClassName="ItemData" syncable="YES">
-        <attribute name="billedProducts" optional="YES" attributeType="Transformable" customClassName="NSArray" syncable="YES"/>
-        <attribute name="error" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="institutionId" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="itemId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="billedProducts" optional="YES" attributeType="Transformable" customClassName="NSArray"/>
+        <attribute name="error" optional="YES" attributeType="String"/>
+        <attribute name="institutionId" optional="YES" attributeType="String"/>
+        <attribute name="itemId" optional="YES" attributeType="String"/>
     </entity>
     <entity name="Location" representedClassName="Location" syncable="YES">
-        <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="city" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="country" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="lat" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="lon" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="postalCode" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="region" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="storeNumber" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="address" optional="YES" attributeType="String"/>
+        <attribute name="city" optional="YES" attributeType="String"/>
+        <attribute name="country" optional="YES" attributeType="String"/>
+        <attribute name="lat" optional="YES" attributeType="String"/>
+        <attribute name="lon" optional="YES" attributeType="String"/>
+        <attribute name="postalCode" optional="YES" attributeType="String"/>
+        <attribute name="region" optional="YES" attributeType="String"/>
+        <attribute name="storeNumber" optional="YES" attributeType="String"/>
     </entity>
     <entity name="SpendingCategory" representedClassName="SpendingCategory" syncable="YES">
-        <attribute name="amountSpent" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="limit" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Category" syncable="YES"/>
+        <attribute name="amountSpent" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="limit" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Category"/>
     </entity>
     <entity name="Transaction" representedClassName="Transaction" syncable="YES">
-        <attribute name="accountId" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="amount" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="date" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="pending" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="plaidCategories" optional="YES" attributeType="Transformable" customClassName="[String]" syncable="YES"/>
-        <attribute name="transactionId" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="location" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Location" syncable="YES"/>
+        <attribute name="accountId" optional="YES" attributeType="String"/>
+        <attribute name="amount" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="date" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="pending" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="plaidCategories" optional="YES" attributeType="Transformable" customClassName="[String]"/>
+        <attribute name="transactionId" optional="YES" attributeType="String"/>
+        <relationship name="location" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Location"/>
     </entity>
     <entity name="User" representedClassName="User" syncable="YES">
-        <relationship name="accounts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="AccountData" syncable="YES"/>
-        <relationship name="budget" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Budget" syncable="YES"/>
+        <relationship name="accounts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="AccountData"/>
+        <relationship name="budget" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Budget"/>
     </entity>
     <elements>
         <element name="AccountData" positionX="-63" positionY="-18" width="128" height="150"/>
         <element name="BalanceData" positionX="199.73046875" positionY="222.078125" width="128" height="88"/>
+        <element name="Budget" positionX="-261" positionY="153" width="128" height="148"/>
+        <element name="Category" positionX="-270" positionY="144" width="128" height="90"/>
         <element name="ItemData" positionX="-342.16796875" positionY="193.79296875" width="128" height="105"/>
         <element name="Location" positionX="-483.3671875" positionY="444.94140625" width="128" height="165"/>
-        <element name="Transaction" positionX="408.94921875" positionY="482.421875" width="128" height="165"/>
         <element name="SpendingCategory" positionX="-279" positionY="135" width="128" height="90"/>
-        <element name="Category" positionX="-270" positionY="144" width="128" height="90"/>
-        <element name="Budget" positionX="-261" positionY="153" width="128" height="105"/>
+        <element name="Transaction" positionX="408.94921875" positionY="482.421875" width="128" height="165"/>
         <element name="User" positionX="-243" positionY="171" width="128" height="75"/>
     </elements>
 </model>

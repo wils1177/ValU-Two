@@ -123,12 +123,17 @@ class PlaidConnection{
                 let dataResponse = data
                 
                 //Response result
-                successHandler(dataResponse!)
+                DispatchQueue.main.async {
+                    successHandler(dataResponse!)
                     
-                if dispatch != nil{
-                    print("request done!")
-                    dispatch?.leave()
+                    if dispatch != nil{
+                        print("request done!")
+                        dispatch?.leave()
+                    }
                 }
+                
+                    
+                
   
             }
         }

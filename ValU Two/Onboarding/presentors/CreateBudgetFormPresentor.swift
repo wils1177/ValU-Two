@@ -61,18 +61,17 @@ class CreateBudgetFormPresentor : Presentor, CreateBudgetVCDelegate {
     
     func viewDataToBudget(viewData: CreateBudgetFormViewRep) -> Budget{
         
-        let budgetTimeFrame : Int32
         if viewData.timeFrameIndex == 0{
-            budgetTimeFrame = TimeFrame.monthly.rawValue
+            self.budget.setTimeFrame(timeFrame: TimeFrame.monthly)
         }
         else{
-            budgetTimeFrame = TimeFrame.semiMonthly.rawValue
+            self.budget.setTimeFrame(timeFrame: TimeFrame.semiMonthly)
         }
         
         let amount = Float(viewData.incomeAmountText)
         
         self.budget.amount = amount!
-        self.budget.timeFrame = budgetTimeFrame
+        self.budget.active = true
         
         return self.budget
     }

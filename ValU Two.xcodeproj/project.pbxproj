@@ -32,7 +32,6 @@
 		473D08D123245203004C24A9 /* BalanceData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08C823245203004C24A9 /* BalanceData+CoreDataProperties.swift */; };
 		473D08D52324522D004C24A9 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08D42324522D004C24A9 /* Protocols.swift */; };
 		473D08D723245270004C24A9 /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08D623245270004C24A9 /* ContainerViewController.swift */; };
-		473D08DD2325B43C004C24A9 /* Budget+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08DC2325B43C004C24A9 /* Budget+CoreDataProperties.swift */; };
 		473D08DE2325B786004C24A9 /* SetSavingsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4795A62022D110C600292E8F /* SetSavingsView.xib */; };
 		473D08DF2325B786004C24A9 /* ContainerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4795A62222D110C600292E8F /* ContainerViewController.xib */; };
 		473D08E02325B786004C24A9 /* BudgetCategories.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47B9DE1F22DB974F00434F4A /* BudgetCategories.xib */; };
@@ -65,9 +64,18 @@
 		47DDCCCA22A890DB0049E3A5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47DDCCC922A890DB0049E3A5 /* AppDelegate.swift */; };
 		47DDCCDF22A890E00049E3A5 /* ValU_TwoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47DDCCDE22A890E00049E3A5 /* ValU_TwoTests.swift */; };
 		47DDCCEA22A890E00049E3A5 /* ValU_TwoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47DDCCE922A890E00049E3A5 /* ValU_TwoUITests.swift */; };
-		47EED5AA236F9B050052A211 /* DashboardCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EED5A9236F9B050052A211 /* DashboardCoordinator.swift */; };
+		47EED5AA236F9B050052A211 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EED5A9236F9B050052A211 /* HomeCoordinator.swift */; };
 		47EED5B2236FB1400052A211 /* DashboardTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EED5B0236FB1400052A211 /* DashboardTabBarController.swift */; };
 		47EED5B3236FB1400052A211 /* DashboardTabBarController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47EED5B1236FB1400052A211 /* DashboardTabBarController.xib */; };
+		47EED5BB2377657C0052A211 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EED5B92377657C0052A211 /* HomeViewController.swift */; };
+		47EED5BC2377657C0052A211 /* HomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47EED5BA2377657C0052A211 /* HomeViewController.xib */; };
+		47EED5BE23776BD20052A211 /* Budget+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EED5BD23776BD20052A211 /* Budget+CoreDataProperties.swift */; };
+		47EED5C0237773A90052A211 /* HomeContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EED5BF237773A90052A211 /* HomeContainerViewController.swift */; };
+		47EED5C2237775A20052A211 /* HomeContainerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47EED5C1237775A20052A211 /* HomeContainerViewController.xib */; };
+		47EED5C4237777C40052A211 /* HomeViewZeroState.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47EED5C3237777C40052A211 /* HomeViewZeroState.xib */; };
+		47EED5C623777BAB0052A211 /* HomeViewZeroStateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EED5C523777BAB0052A211 /* HomeViewZeroStateViewController.swift */; };
+		47EED5C823778B920052A211 /* SwiftUITestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EED5C723778B920052A211 /* SwiftUITestView.swift */; };
+		47EED5CA2378AE770052A211 /* HomePresentor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EED5C92378AE760052A211 /* HomePresentor.swift */; };
 		554B096B8A89D3D9BBA9055E /* Pods_ValU_TwoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5ABCAA528B58D48AA6AF142E /* Pods_ValU_TwoTests.framework */; };
 		745A1C9D86D7665686186136 /* Pods_ValU_TwoUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 276F7743E43167502E0AD368 /* Pods_ValU_TwoUITests.framework */; };
 		F37EFADA9F2F08A705CBBE02 /* Pods_ValU_Two.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E12898A13131670A5C0F61E /* Pods_ValU_Two.framework */; };
@@ -124,7 +132,6 @@
 		473D08D623245270004C24A9 /* ContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
 		473D08D823245299004C24A9 /* PlaidViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaidViewController.xib; sourceTree = "<group>"; };
 		473D08DA2324529F004C24A9 /* LoadingAccountsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoadingAccountsViewController.xib; sourceTree = "<group>"; };
-		473D08DC2325B43C004C24A9 /* Budget+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Budget+CoreDataProperties.swift"; path = "../../Budget+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		4743EAA522B6DE470046D6EA /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		4743EAA722B6E1020046D6EA /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		4743EABB22BC4AA90046D6EA /* OnboardingFlowCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingFlowCoordinator.swift; sourceTree = "<group>"; };
@@ -161,9 +168,18 @@
 		47DDCCE522A890E00049E3A5 /* ValU TwoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ValU TwoUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		47DDCCE922A890E00049E3A5 /* ValU_TwoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValU_TwoUITests.swift; sourceTree = "<group>"; };
 		47DDCCEB22A890E00049E3A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		47EED5A9236F9B050052A211 /* DashboardCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardCoordinator.swift; sourceTree = "<group>"; };
+		47EED5A9236F9B050052A211 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
 		47EED5B0236FB1400052A211 /* DashboardTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardTabBarController.swift; sourceTree = "<group>"; };
 		47EED5B1236FB1400052A211 /* DashboardTabBarController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DashboardTabBarController.xib; sourceTree = "<group>"; };
+		47EED5B92377657C0052A211 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		47EED5BA2377657C0052A211 /* HomeViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomeViewController.xib; sourceTree = "<group>"; };
+		47EED5BD23776BD20052A211 /* Budget+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Budget+CoreDataProperties.swift"; path = "/Users/claytonwilson/Documents/programming_projects.nosync/ValU-Two/ValU Two/Models/CoreDataModels/Budget+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
+		47EED5BF237773A90052A211 /* HomeContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeContainerViewController.swift; sourceTree = "<group>"; };
+		47EED5C1237775A20052A211 /* HomeContainerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomeContainerViewController.xib; sourceTree = "<group>"; };
+		47EED5C3237777C40052A211 /* HomeViewZeroState.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomeViewZeroState.xib; sourceTree = "<group>"; };
+		47EED5C523777BAB0052A211 /* HomeViewZeroStateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewZeroStateViewController.swift; sourceTree = "<group>"; };
+		47EED5C723778B920052A211 /* SwiftUITestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUITestView.swift; sourceTree = "<group>"; };
+		47EED5C92378AE760052A211 /* HomePresentor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePresentor.swift; sourceTree = "<group>"; };
 		5ABCAA528B58D48AA6AF142E /* Pods_ValU_TwoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ValU_TwoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B6157E9917879C99D71879E /* Pods-ValU Two.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ValU Two.debug.xcconfig"; path = "Target Support Files/Pods-ValU Two/Pods-ValU Two.debug.xcconfig"; sourceTree = "<group>"; };
 		748C8B11CED7054383845D1F /* Pods-ValU TwoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ValU TwoTests.release.xcconfig"; path = "Target Support Files/Pods-ValU TwoTests/Pods-ValU TwoTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -220,9 +236,9 @@
 			children = (
 				473D08C023245203004C24A9 /* Category+CoreDataProperties.swift */,
 				473D08C123245203004C24A9 /* Location+CoreDataProperties.swift */,
+				47EED5BD23776BD20052A211 /* Budget+CoreDataProperties.swift */,
 				473D08C223245203004C24A9 /* SpendingCategory+CoreDataProperties.swift */,
 				473D08C323245203004C24A9 /* ItemData+CoreDataProperties.swift */,
-				473D08DC2325B43C004C24A9 /* Budget+CoreDataProperties.swift */,
 				473D08C523245203004C24A9 /* User+CoreDataProperties.swift */,
 				473D08C623245203004C24A9 /* Transaction+CoreDataProperties.swift */,
 				473D08C723245203004C24A9 /* AccountData+CoreDataProperties.swift */,
@@ -374,7 +390,15 @@
 		47EED5A8236F9AAF0052A211 /* Dashboard */ = {
 			isa = PBXGroup;
 			children = (
-				47EED5A9236F9B050052A211 /* DashboardCoordinator.swift */,
+				47EED5A9236F9B050052A211 /* HomeCoordinator.swift */,
+				47EED5C92378AE760052A211 /* HomePresentor.swift */,
+				47EED5C723778B920052A211 /* SwiftUITestView.swift */,
+				47EED5B92377657C0052A211 /* HomeViewController.swift */,
+				47EED5BF237773A90052A211 /* HomeContainerViewController.swift */,
+				47EED5C523777BAB0052A211 /* HomeViewZeroStateViewController.swift */,
+				47EED5BA2377657C0052A211 /* HomeViewController.xib */,
+				47EED5C1237775A20052A211 /* HomeContainerViewController.xib */,
+				47EED5C3237777C40052A211 /* HomeViewZeroState.xib */,
 				47EED5B0236FB1400052A211 /* DashboardTabBarController.swift */,
 				47EED5B1236FB1400052A211 /* DashboardTabBarController.xib */,
 			);
@@ -516,15 +540,18 @@
 			files = (
 				473D08E72325B836004C24A9 /* APIKeys.plist in Resources */,
 				473D08E82325B836004C24A9 /* Categories.plist in Resources */,
+				47EED5BC2377657C0052A211 /* HomeViewController.xib in Resources */,
 				473D08DE2325B786004C24A9 /* SetSavingsView.xib in Resources */,
 				473D08DF2325B786004C24A9 /* ContainerViewController.xib in Resources */,
 				473D08E02325B786004C24A9 /* BudgetCategories.xib in Resources */,
 				473D08E12325B786004C24A9 /* CreateBudgetFormView.xib in Resources */,
+				47EED5C2237775A20052A211 /* HomeContainerViewController.xib in Resources */,
 				47EED5B3236FB1400052A211 /* DashboardTabBarController.xib in Resources */,
 				473D08E22325B786004C24A9 /* SetSpendingLimits.xib in Resources */,
 				473D08E32325B786004C24A9 /* StartPageViewController.xib in Resources */,
 				473D08E42325B786004C24A9 /* SpendingLimitCell.xib in Resources */,
 				473D08E52325B786004C24A9 /* PlaidViewController.xib in Resources */,
+				47EED5C4237777C40052A211 /* HomeViewZeroState.xib in Resources */,
 				473D08E62325B786004C24A9 /* LoadingAccountsViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -665,12 +692,14 @@
 				473D08BE232451FA004C24A9 /* SpendingCategory+CoreDataClass.swift in Sources */,
 				473D08D723245270004C24A9 /* ContainerViewController.swift in Sources */,
 				473D08BB232451FA004C24A9 /* Transaction+CoreDataClass.swift in Sources */,
+				47EED5BB2377657C0052A211 /* HomeViewController.swift in Sources */,
 				4795A61422D110B400292E8F /* BudgetCategoriesPresentor.swift in Sources */,
 				473D089F231D9049004C24A9 /* LoadingAccountsViewController.swift in Sources */,
+				47EED5C623777BAB0052A211 /* HomeViewZeroStateViewController.swift in Sources */,
 				473D08D123245203004C24A9 /* BalanceData+CoreDataProperties.swift in Sources */,
 				4743EAA622B6DE470046D6EA /* AppCoordinator.swift in Sources */,
 				47B9DE1A22D945C000434F4A /* CategoriesData.swift in Sources */,
-				473D08DD2325B43C004C24A9 /* Budget+CoreDataProperties.swift in Sources */,
+				47EED5BE23776BD20052A211 /* Budget+CoreDataProperties.swift in Sources */,
 				473D08BC232451FA004C24A9 /* ItemData+CoreDataClass.swift in Sources */,
 				473D0881231CA001004C24A9 /* ValU Two.xcdatamodeld in Sources */,
 				47B9DE2D22E3B47100434F4A /* PlaidViewController.swift in Sources */,
@@ -680,13 +709,16 @@
 				473D08BA232451FA004C24A9 /* Category+CoreDataClass.swift in Sources */,
 				473D08A523232257004C24A9 /* CoreDataManager.swift in Sources */,
 				47EED5B2236FB1400052A211 /* DashboardTabBarController.swift in Sources */,
+				47EED5C823778B920052A211 /* SwiftUITestView.swift in Sources */,
 				4743EAA822B6E1020046D6EA /* Coordinator.swift in Sources */,
 				473D08CB23245203004C24A9 /* SpendingCategory+CoreDataProperties.swift in Sources */,
 				473D089D231D9019004C24A9 /* LoadingAccountsPresentor.swift in Sources */,
+				47EED5C0237773A90052A211 /* HomeContainerViewController.swift in Sources */,
 				47BE457222C00DBC00FB9A31 /* PlaidProccesor.swift in Sources */,
 				4774311922C70C0200FBA11B /* PlaidLinkPresentor.swift in Sources */,
 				473D08CF23245203004C24A9 /* Transaction+CoreDataProperties.swift in Sources */,
 				4795A61C22D110C000292E8F /* BudgetCategoriesViewController.swift in Sources */,
+				47EED5CA2378AE770052A211 /* HomePresentor.swift in Sources */,
 				4795A62B22D112EC00292E8F /* CardViewController.swift in Sources */,
 				473D08A72323665B004C24A9 /* SetSpendingPresentor.swift in Sources */,
 				4795A61322D110B400292E8F /* CreateBudgetFormPresentor.swift in Sources */,
@@ -698,7 +730,7 @@
 				473D08C923245203004C24A9 /* Category+CoreDataProperties.swift in Sources */,
 				4795A61B22D110C000292E8F /* StartPageViewController.swift in Sources */,
 				4743EAC122BC4AA90046D6EA /* OnboardingFlowCoordinator.swift in Sources */,
-				47EED5AA236F9B050052A211 /* DashboardCoordinator.swift in Sources */,
+				47EED5AA236F9B050052A211 /* HomeCoordinator.swift in Sources */,
 				473D08B9232451FA004C24A9 /* BalanceData+CoreDataClass.swift in Sources */,
 				47B9DE1E22D960E400434F4A /* CategoryTableViewCell.swift in Sources */,
 			);
@@ -798,7 +830,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -853,7 +885,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

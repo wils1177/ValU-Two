@@ -9,14 +9,35 @@
 import UIKit
 
 class DashboardTabBarController: UITabBarController {
-
+    
+    var homeController = HomeCoordinator(navigationController: UINavigationController())
+    var parentCoordinator : AppCoordinator?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        homeController.start()
+        self.viewControllers = [homeController.navigationController]
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        setupView()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.parentCoordinator?.loadDashboard()
+
     }
 
-
+    func setupView(){
+        
+        self.viewControllers?[0].tabBarItem = UITabBarItem(tabBarSystemItem: .featured, tag: 0)
+        self.selectedIndex = 0
+        
+        
+    }
+    
     /*
     // MARK: - Navigation
 

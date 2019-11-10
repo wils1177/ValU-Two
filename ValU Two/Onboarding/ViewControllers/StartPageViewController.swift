@@ -22,7 +22,6 @@ class StartPageViewController: UIViewController {
     
     init(){
         super.init(nibName: "StartPageViewController", bundle: nil)
-        print("am i being made")
     }
     
     required init?(coder: NSCoder) {
@@ -32,7 +31,6 @@ class StartPageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        print("are you loading me")
     }
     
     @IBAction func tappedContinue(_ sender: Any) {

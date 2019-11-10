@@ -9,6 +9,10 @@
 import Foundation
 import CoreData
 
+enum DataManagerErrors: Error {
+    case NoBudgetFound
+}
+
 class DataManager {
     
     let context : NSManagedObjectContext
@@ -68,6 +72,32 @@ class DataManager {
         }
         
         return accountsToReturn
+    }
+    
+    func getBudget() throws ->  Budget?{
+        
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Budget")
+        request.predicate = NSPredicate(format: "active == true")
+        
+        do {
+            let result = try context.fetch(request) as! [Budget]
+            if result.count == 1{
+                return result[0]
+            }
+            else{
+                return nil
+            }
+            
+            
+        } catch {
+            
+            print("Failed to fetch budget")
+            throw DataManagerErrors.NoBudgetFound
+            
+            
+        }
+        
+        
     }
     
     func saveDatabase(){

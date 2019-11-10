@@ -35,5 +35,22 @@ public class Budget: NSManagedObject {
     }
     
     
+    func setTimeFrame(timeFrame: TimeFrame) {
+        
+        if timeFrame == TimeFrame.monthly{
+            self.timeFrame = TimeFrame.monthly.rawValue
+            self.startDate = Date()
+            self.endDate = Calendar.current.date(byAdding: .month, value: 1, to: Date())
+        }
+        else if timeFrame == TimeFrame.semiMonthly{
+            self.timeFrame = TimeFrame.semiMonthly.rawValue
+            self.startDate = Date()
+            self.endDate = Calendar.current.date(byAdding: .day, value: 15, to: Date())
+        }
+        
+        
+    }
+    
+    
 
 }

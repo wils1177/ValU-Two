@@ -133,7 +133,14 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, CreateBudg
     func onboardingComplete(){
         
         print("onboarding finished")
-        //self.parent?.onboardingComplete()
+        
+        self.parent?.currentBudget = self.budgetToCreate
+        self.parent?.onboardingComplete(self)
+        
+
+        
+        self.navigationController.dismiss(animated: true)
+        
 
     }
     

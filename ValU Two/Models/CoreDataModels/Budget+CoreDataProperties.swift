@@ -2,7 +2,7 @@
 //  Budget+CoreDataProperties.swift
 //  
 //
-//  Created by Clayton Wilson on 9/8/19.
+//  Created by Clayton Wilson on 11/9/19.
 //
 //
 
@@ -16,9 +16,12 @@ extension Budget {
         return NSFetchRequest<Budget>(entityName: "Budget")
     }
 
-    @NSManaged public var savingsPercent: Float
     @NSManaged public var amount: Float
+    @NSManaged public var savingsPercent: Float
     @NSManaged public var timeFrame: Int32
+    @NSManaged public var startDate: Date?
+    @NSManaged public var endDate: Date?
+    @NSManaged public var active: Bool
     @NSManaged public var spendingCategories: NSOrderedSet?
 
 }
