@@ -20,13 +20,21 @@ public class Transaction: NSManagedObject {
         
         self.accountId = (transaction.accountId)
         self.amount = (transaction.amount)
-        self.date = (transaction.date)
+        self.date = getDate(dateString: transaction.date)
         self.name = transaction.name
         self.location = Location(location: transaction.location, context: context)
         self.pending = transaction.pending
         self.transactionId = transaction.transactionId
         self.plaidCategories = transaction.plaidCategories
         
+    }
+    
+    func getDate(dateString : String) -> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "YYYY-MM-DD"
+        dateFormatter.timeZone = TimeZone.current
+        dateFormatter.locale = Locale.current
+        return dateFormatter.date(from: dateString)
     }
 
     

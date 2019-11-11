@@ -16,11 +16,11 @@ class AppCoordinator: Coordinator{
     
     // Member Variables
     var childCoordinators = [Coordinator]()
-    let tabBarController : UITabBarController
+    let tabBarController : DashboardTabBarController
     let userDefaults = UserDefaults.standard
     
     
-    init(rootViewController: UITabBarController){
+    init(rootViewController: DashboardTabBarController){
         self.tabBarController = rootViewController
         
     }
@@ -68,6 +68,9 @@ class AppCoordinator: Coordinator{
                 break
             }
         }
+        
+        self.tabBarController.setUpViews()
+        
     }
     
     

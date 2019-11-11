@@ -36,6 +36,13 @@ class LoadingAccountsViewController: UIViewController {
         self.continueButton.isHidden = false
     }
     
+    func enterErrorState(){
+        print("clay's test")
+        self.loadingSpinner.isHidden = true
+        self.loadingLabel.text = "Failure!!!!!"
+        self.continueButton.isHidden = true
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         self.presentor!.viewWillLoad()
     }

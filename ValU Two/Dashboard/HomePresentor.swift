@@ -33,8 +33,13 @@ class HomePresentor : Presentor {
     
     func generateViewData() -> BudgetCardViewData{
         
-        let income = "$" + String(self.budget.amount)
-        let spent = "$400.00"
+        let income = "$" + String(format: "%.2f", self.budget.amount)
+        var spendValue = self.budget.calculateAmountSpent()
+        if spendValue != 0{
+            spendValue = spendValue * -1
+        }
+        let spent = "$" + String(format: "%.2f", spendValue)
+        
         
         return BudgetCardViewData(income: income, spent: spent)
     }

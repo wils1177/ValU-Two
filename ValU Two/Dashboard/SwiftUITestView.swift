@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+
 struct SwiftUITestView: View {
     
     let viewData : BudgetCardViewData
@@ -46,11 +47,13 @@ struct SwiftUITestView: View {
     }
 }
 
-//struct SwiftUITestView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        SwiftUITestView()
-//    }
-//}
+#if DEBUG
+struct SwiftUITestView_Previews: PreviewProvider {
+    static var previews: some View {
+        SwiftUITestView(viewData: BudgetCardViewData(income: "$1000.00", spent: "$339.00"))
+    }
+}
+#endif
 
 
 

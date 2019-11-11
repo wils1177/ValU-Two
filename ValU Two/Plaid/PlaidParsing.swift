@@ -20,7 +20,7 @@ struct TokenExchangeResponse : Codable {
 
 struct TransactionsResponse : Codable{
     
-    let trasactions : [TransactionJSON]
+    let trasactions : [TransactionJSON]?
     let accounts : [AccountJSON]
     let item : ItemJSON
     let request_id : String?

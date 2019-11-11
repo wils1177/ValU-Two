@@ -28,15 +28,23 @@ class HomeCoordinator: Coordinator{
     
     func start(){
         print("starting up home tab")
-        //let vc = HomeViewZeroStateViewController()
-        //let containerVC = HomeContainerViewController(vc: vc)
-        //self.navigationController.pushViewController(containerVC, animated: false)
-        //vc.coordinator = self
+        
+        if self.budget == nil{
+            
+            let vc = HomeViewZeroStateViewController()
+            let containerVC = HomeContainerViewController(vc: vc)
+            self.navigationController.pushViewController(containerVC, animated: false)
+            //vc.coordinator = self
+            
+        }
+        else{
+            let vc = HomePresentor(budget: self.budget!).configure()
+            self.navigationController.pushViewController(vc, animated: false)
+        }
         
         
         
-        let vc = HomePresentor(budget: self.budget!).configure()
-        self.navigationController.pushViewController(vc, animated: false)
+        
         
         
         

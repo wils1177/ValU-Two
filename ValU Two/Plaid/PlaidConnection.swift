@@ -20,6 +20,7 @@ enum PlaidURLs{
 enum PlaidConnectionError: Error {
     case AccessTokenNotFound
     case PublicTokenNotFound
+    case BadRequest
 }
 
 struct Keys : Codable{
@@ -52,7 +53,7 @@ class PlaidConnection{
 
     }
     
-    func exchangePublicForAccessToken(dispatch: DispatchGroup) throws{
+    func exchangePublicForAccessToken(dispatch: DispatchGroup, completion : @escaping (Result<Data, Error>) -> ()) throws{
         
         print("how about this??")
         let URL = PlaidURLs.TokenExchange
@@ -65,7 +66,7 @@ class PlaidConnection{
         
         let json: [String: Any] = ["client_id" : keys.clientID, "secret" : keys.clientSecret, "public_token" : publicKey]
         
-        postRequest(url: URL, jsonBody: json, successHandler: self.proccessor.saveAccessToken(response:), dispatch: dispatch)
+        try postRequest(url: URL, jsonBody: json, completion: completion, dispatch: dispatch)
         
         
     }
@@ -73,7 +74,7 @@ class PlaidConnection{
 
 
     
-    func getTransactions(dispatch: DispatchGroup) throws{
+    func getTransactions(completion : @escaping (Result<Data, Error>) -> ()) throws{
         
         let URL = PlaidURLs.GetTransactions
         let keys = getAPIKeys()
@@ -88,23 +89,21 @@ class PlaidConnection{
         let startDate = calendar.date(byAdding: .month, value: -1, to: currentDate)
         let format = DateFormatter()
         format.dateFormat = "yyyy-MM-dd"
-        let formattedStartDate = format.string(from: startDate!) as! String
-        let formattedCurrentDate = format.string(from: currentDate) as! String
+        let formattedStartDate = format.string(from: startDate!)
+        let formattedCurrentDate = format.string(from: currentDate)
         
         let json: [String: Any] = ["client_id" : keys.clientID, "secret" : keys.clientSecret, "access_token" : accessToken, "start_date" : formattedStartDate, "end_date" : formattedCurrentDate]
         
-        postRequest(url: URL, jsonBody: json, successHandler: proccessor.aggregate(response:), dispatch: dispatch)
+            
+        try postRequest(url: URL, jsonBody: json, completion: completion, dispatch: nil)
+        
+         
     }
     
     
     
     
-    func postRequest(url: PlaidURLs, jsonBody : [String: Any], successHandler : @escaping successHandler, dispatch: DispatchGroup? = nil){
-        
-        // not every PostRequest will require a distpatch group
-        if dispatch != nil{
-            dispatch?.enter()
-        }
+    func postRequest(url: PlaidURLs, jsonBody : [String: Any], completion : @escaping (Result<Data, Error>) -> (), dispatch: DispatchGroup? = nil) throws{
         
         
         let requestURL = URLdict[url]
@@ -118,23 +117,46 @@ class PlaidConnection{
             
             if let error = error {
                 print("error: \(error)")
+                    
+                completion(Result.failure(PlaidConnectionError.BadRequest))
+                
             } else {
                 
                 let dataResponse = data
-                
-                //Response result
-                DispatchQueue.main.async {
-                    successHandler(dataResponse!)
+                //Check if it was a 200 response code or not
+                if let httpResponse = response as? HTTPURLResponse {
+                    if httpResponse.statusCode != 200{
+                            
+                        completion(Result.failure(PlaidConnectionError.BadRequest))
+
+                        
+                        
+                    }else{
+                        completion(.success(dataResponse!))
+
                     
-                    if dispatch != nil{
-                        print("request done!")
-                        dispatch?.leave()
-                    }
+                }
+            }
+                else{
+                    completion(Result.failure(PlaidConnectionError.BadRequest))
+                    
                 }
                 
-                    
                 
-  
+                if dispatch != nil{
+                    print("request done!")
+                    dispatch?.leave()
+                }
+                
+                //do {
+                //    let jsonObject = try JSONSerialization.jsonObject(with: data!, options: []) as? [String:AnyObject]
+                //   print(jsonObject) // This will print the below json.
+                //}
+                //catch{}
+                
+                //Response result
+                
+
             }
         }
         

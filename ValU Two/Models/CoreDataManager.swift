@@ -11,6 +11,7 @@ import CoreData
 
 enum DataManagerErrors: Error {
     case NoBudgetFound
+    case NoTransactionsFound
 }
 
 class DataManager {
@@ -97,6 +98,22 @@ class DataManager {
             
         }
         
+        
+    }
+    
+    func getTransactions(startDate: Date) throws -> [Transaction]{
+        
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Transaction")
+        request.predicate = NSPredicate(format: "date > %@", startDate as NSDate)
+        
+        do{
+            let result = try context.fetch(request) as! [Transaction]
+            return result
+        }
+        catch{
+           print("Failed to fetch transactions")
+            throw DataManagerErrors.NoTransactionsFound
+        }
         
     }
     

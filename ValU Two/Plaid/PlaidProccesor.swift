@@ -49,7 +49,12 @@ class PlaidProccessor{
             let parsedResponse = try decoder.decode(TransactionsResponse.self, from: response)
             
             proccessAccounts(response: parsedResponse.accounts)
-            proccessTransactions(response: parsedResponse.trasactions)
+            
+            //check to make sure there are some transactions before proccessing
+            if parsedResponse.trasactions != nil{
+                proccessTransactions(response: parsedResponse.trasactions!)
+            }
+            
             processItem(response: parsedResponse.item)
      
             

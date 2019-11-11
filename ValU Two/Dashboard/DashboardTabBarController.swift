@@ -10,15 +10,20 @@ import UIKit
 
 class DashboardTabBarController: UITabBarController {
     
-    var homeController = HomeCoordinator(navigationController: UINavigationController())
+    var homeController : HomeCoordinator?
     var parentCoordinator : AppCoordinator?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        homeController.start()
-        self.viewControllers = [homeController.navigationController]
+        setUpViews()
+    }
+    
+    func setUpViews(){
+        self.homeController = HomeCoordinator(navigationController: UINavigationController())
+        homeController!.start()
+        self.viewControllers = [homeController!.navigationController]
     }
     
     override func viewWillAppear(_ animated: Bool) {

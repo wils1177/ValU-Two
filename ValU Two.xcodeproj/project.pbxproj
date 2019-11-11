@@ -27,7 +27,6 @@
 		473D08CB23245203004C24A9 /* SpendingCategory+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08C223245203004C24A9 /* SpendingCategory+CoreDataProperties.swift */; };
 		473D08CC23245203004C24A9 /* ItemData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08C323245203004C24A9 /* ItemData+CoreDataProperties.swift */; };
 		473D08CE23245203004C24A9 /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08C523245203004C24A9 /* User+CoreDataProperties.swift */; };
-		473D08CF23245203004C24A9 /* Transaction+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08C623245203004C24A9 /* Transaction+CoreDataProperties.swift */; };
 		473D08D023245203004C24A9 /* AccountData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08C723245203004C24A9 /* AccountData+CoreDataProperties.swift */; };
 		473D08D123245203004C24A9 /* BalanceData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08C823245203004C24A9 /* BalanceData+CoreDataProperties.swift */; };
 		473D08D52324522D004C24A9 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08D42324522D004C24A9 /* Protocols.swift */; };
@@ -76,6 +75,7 @@
 		47EED5C623777BAB0052A211 /* HomeViewZeroStateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EED5C523777BAB0052A211 /* HomeViewZeroStateViewController.swift */; };
 		47EED5C823778B920052A211 /* SwiftUITestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EED5C723778B920052A211 /* SwiftUITestView.swift */; };
 		47EED5CA2378AE770052A211 /* HomePresentor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EED5C92378AE760052A211 /* HomePresentor.swift */; };
+		47EED5CC2378C20C0052A211 /* Transaction+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EED5CB2378C20C0052A211 /* Transaction+CoreDataProperties.swift */; };
 		554B096B8A89D3D9BBA9055E /* Pods_ValU_TwoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5ABCAA528B58D48AA6AF142E /* Pods_ValU_TwoTests.framework */; };
 		745A1C9D86D7665686186136 /* Pods_ValU_TwoUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 276F7743E43167502E0AD368 /* Pods_ValU_TwoUITests.framework */; };
 		F37EFADA9F2F08A705CBBE02 /* Pods_ValU_Two.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E12898A13131670A5C0F61E /* Pods_ValU_Two.framework */; };
@@ -124,7 +124,6 @@
 		473D08C223245203004C24A9 /* SpendingCategory+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SpendingCategory+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		473D08C323245203004C24A9 /* ItemData+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ItemData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		473D08C523245203004C24A9 /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "User+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		473D08C623245203004C24A9 /* Transaction+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Transaction+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		473D08C723245203004C24A9 /* AccountData+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AccountData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		473D08C823245203004C24A9 /* BalanceData+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BalanceData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		473D08D223245228004C24A9 /* Categories.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Categories.plist; sourceTree = "<group>"; };
@@ -180,6 +179,7 @@
 		47EED5C523777BAB0052A211 /* HomeViewZeroStateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewZeroStateViewController.swift; sourceTree = "<group>"; };
 		47EED5C723778B920052A211 /* SwiftUITestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUITestView.swift; sourceTree = "<group>"; };
 		47EED5C92378AE760052A211 /* HomePresentor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePresentor.swift; sourceTree = "<group>"; };
+		47EED5CB2378C20C0052A211 /* Transaction+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Transaction+CoreDataProperties.swift"; path = "../../Transaction+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		5ABCAA528B58D48AA6AF142E /* Pods_ValU_TwoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ValU_TwoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B6157E9917879C99D71879E /* Pods-ValU Two.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ValU Two.debug.xcconfig"; path = "Target Support Files/Pods-ValU Two/Pods-ValU Two.debug.xcconfig"; sourceTree = "<group>"; };
 		748C8B11CED7054383845D1F /* Pods-ValU TwoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ValU TwoTests.release.xcconfig"; path = "Target Support Files/Pods-ValU TwoTests/Pods-ValU TwoTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -240,7 +240,7 @@
 				473D08C223245203004C24A9 /* SpendingCategory+CoreDataProperties.swift */,
 				473D08C323245203004C24A9 /* ItemData+CoreDataProperties.swift */,
 				473D08C523245203004C24A9 /* User+CoreDataProperties.swift */,
-				473D08C623245203004C24A9 /* Transaction+CoreDataProperties.swift */,
+				47EED5CB2378C20C0052A211 /* Transaction+CoreDataProperties.swift */,
 				473D08C723245203004C24A9 /* AccountData+CoreDataProperties.swift */,
 				473D08C823245203004C24A9 /* BalanceData+CoreDataProperties.swift */,
 			);
@@ -685,6 +685,7 @@
 				4795A61D22D110C000292E8F /* SetSavingsViewController.swift in Sources */,
 				47BE457322C00DBC00FB9A31 /* PlaidConnection.swift in Sources */,
 				473D08D023245203004C24A9 /* AccountData+CoreDataProperties.swift in Sources */,
+				47EED5CC2378C20C0052A211 /* Transaction+CoreDataProperties.swift in Sources */,
 				473D08B7232451FA004C24A9 /* AccountData+CoreDataClass.swift in Sources */,
 				473D08CE23245203004C24A9 /* User+CoreDataProperties.swift in Sources */,
 				473D08D52324522D004C24A9 /* Protocols.swift in Sources */,
@@ -716,7 +717,6 @@
 				47EED5C0237773A90052A211 /* HomeContainerViewController.swift in Sources */,
 				47BE457222C00DBC00FB9A31 /* PlaidProccesor.swift in Sources */,
 				4774311922C70C0200FBA11B /* PlaidLinkPresentor.swift in Sources */,
-				473D08CF23245203004C24A9 /* Transaction+CoreDataProperties.swift in Sources */,
 				4795A61C22D110C000292E8F /* BudgetCategoriesViewController.swift in Sources */,
 				47EED5CA2378AE770052A211 /* HomePresentor.swift in Sources */,
 				4795A62B22D112EC00292E8F /* CardViewController.swift in Sources */,
@@ -837,6 +837,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -891,6 +892,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
