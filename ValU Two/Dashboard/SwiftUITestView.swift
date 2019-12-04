@@ -38,7 +38,22 @@ struct SwiftUITestView: View {
                 Text(self.viewData.spent).font(.subheadline).fontWeight(.bold)
                 
             }
-            }.padding().background(Color(.yellow)).cornerRadius(20).padding().shadow(radius: 20)
+            
+             HStack{
+                 
+                 //Image(systemName: "gamecontroller")
+                 ZStack(alignment: .leading){
+                 
+                    Capsule().frame(width: 320, height: 30).foregroundColor(.gray).cornerRadius(15)
+                     
+                     
+                     Capsule().frame(width: 170, height: 30).foregroundColor(.clear)
+                         .background(LinearGradient(gradient:  Gradient(colors: [.red, .orange]), startPoint: .topTrailing, endPoint: .center)).cornerRadius(15)
+
+                     
+                 }
+             }
+            }.padding().background(Color(.white)).cornerRadius(20).padding().shadow(radius: 20)
         
         
         }

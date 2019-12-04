@@ -28,6 +28,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = tabBarController
         window?.makeKeyAndVisible()
         
+        UINavigationBar.appearance().tintColor = .black
+        
         return true
     }
 

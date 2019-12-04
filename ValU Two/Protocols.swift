@@ -12,13 +12,6 @@ protocol Presentor {
     func configure() -> UIViewController
 }
 
-protocol CreateBudgetPresentorDelegate {
-    func budgetSubmitted(budget : Budget, sender: CreateBudgetFormPresentor)
-}
-
-protocol CreateBudgetVCDelegate {
-    func userSelectedCTA(viewData: CreateBudgetFormViewRep)
-}
 
 protocol StartPageViewDelegate {
     func continueToOnboarding()

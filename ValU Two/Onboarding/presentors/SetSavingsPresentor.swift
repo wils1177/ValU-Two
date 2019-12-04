@@ -8,59 +8,76 @@
 
 import Foundation
 import UIKit
+import SwiftUI
 
-struct SetSavingsViewData {
+class SetSavingsViewData : ObservableObject {
     
-    var savingsTotal: String
-    var incomeAmount: String
-    var callToAction: String
-    var savingsPercent : Float
+    @Published var savingsAmount : String
+    @Published var spendingAmount : String
+    @Published var savingsPercentage : Float
+    
+    init(savingsAmount: String, spendingAmount : String, savingsPercentage: Float){
+        self.savingsAmount =  savingsAmount
+        self.spendingAmount = spendingAmount
+        self.savingsPercentage = savingsPercentage
+    }
+    
+    
     
 }
 
 class SetSavingsPresentor : Presentor {
     
     var budget : Budget
-    var setSavingsVC : SetSavingsViewController?
+    var setSavingsVC : UIViewController?
     var coordinator : SetSavingsViewDelegate?
+    var viewData : SetSavingsViewData?
     
     
     init (budget : Budget){
         
         self.budget = budget
+        self.budget.savingsPercent = 0.5
         
     }
     
     func configure() -> UIViewController {
         
-        let viewData = generateViewData()
-        self.setSavingsVC = SetSavingsViewController(viewData: viewData)
-        self.setSavingsVC?.delagate = self
-        
+        var viewData = generateViewData()
+        self.viewData = viewData
+        self.setSavingsVC = UIHostingController(rootView: SetSavingsView(presentor: self, viewData: viewData))
+        self.setSavingsVC?.navigationController?.setNavigationBarHidden(true, animated: false)
         return self.setSavingsVC!
     }
     
     func generateViewData() -> SetSavingsViewData{
         
-        let savingsPercent = self.budget.savingsPercent
-        let savingsTotal = String(self.budget.calculateSavingsAmount(percentageOfAmount: savingsPercent))
-        let incomeAmount = String(self.budget.amount)
-        let callToAction  = "Continue"
+        let amount = Float(self.budget.amount)
+        let percentage = self.budget.savingsPercent
+        let spendingAmount = String(Int(amount * (1-percentage)))
+        let savingsAmount = String(Int((amount * percentage)))
         
-        return SetSavingsViewData(savingsTotal: savingsTotal, incomeAmount: incomeAmount, callToAction: callToAction, savingsPercent: savingsPercent)
+        let viewData = SetSavingsViewData(savingsAmount: savingsAmount, spendingAmount: spendingAmount, savingsPercentage: percentage)
         
+        
+        return viewData
     }
     
     func sliderMoved(sliderVal : Float){
-        let newSavingsAmount = self.budget.calculateSavingsAmount(percentageOfAmount: sliderVal)
-        self.setSavingsVC?.savingsTotalLabel.text = String(newSavingsAmount)
+        self.budget.savingsPercent = sliderVal
+        
+        let newViewData = generateViewData()
+        
+        self.viewData?.savingsAmount = newViewData.savingsAmount
+        self.viewData?.spendingAmount = newViewData.spendingAmount
+        self.viewData?.savingsPercentage = newViewData.savingsPercentage
     }
     
     func updateBudget(){
         
-        let newPercent = self.setSavingsVC?.savingsSlider.value
-        self.budget.savingsPercent = newPercent!
+        //let newPercent = self.setSavingsVC?.savingsSlider.value
+        //self.budget.savingsPercent = newPercent!
         
-        self.coordinator?.savingsSubmitted(budget: self.budget, sender: self)
+        //self.coordinator?.savingsSubmitted(budget: self.budget, sender: self)
     }
 }

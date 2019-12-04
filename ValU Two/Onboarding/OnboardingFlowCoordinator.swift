@@ -8,10 +8,11 @@
 
 import Foundation
 import UIKit
+import SwiftUI
 
 
 
-class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, CreateBudgetPresentorDelegate, SetSavingsViewDelegate, PlaidLinkDelegate, BudgetCategoriesDelegate, SetSpendingLimitDelegate{
+class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, SetSavingsViewDelegate, PlaidLinkDelegate, BudgetCategoriesDelegate, SetSpendingLimitDelegate{
 
     // Dependencies
     var budgetToCreate : Budget?
@@ -24,31 +25,42 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, CreateBudg
     
     init(navigationController: UINavigationController){
         self.navigationController = navigationController
-        
+
     }
     
     func start(){
         print("onboarding flow started")
-        let vc = StartPageViewController()
+        var view = WelcomeView()
+        view.coordinator = self
+        let vc = UIHostingController(rootView: view)
+        self.navigationController.navigationBar.prefersLargeTitles = true
+        vc.title = "TESTING"
+        vc.navigationController?.setNavigationBarHidden(true, animated: false)
         self.navigationController.pushViewController(vc, animated: false)
-        vc.coordinator = self
+        
     }
     
     func continueToOnboarding() {
         print("Contionue to onboarding")
         let newBudget = DataManager().createNewBudget()
-        let newBudgetPresentor = CreateBudgetFormPresentor(budget: newBudget, callToActionMessage: "Continue")
-        self.currentPresentor = newBudgetPresentor
-        newBudgetPresentor.coordinator = self
-        let NewBudgetVC = self.currentPresentor?.configure()
-        let ContainerVC = ContainerViewController(title: "Create a Budget", vc: NewBudgetVC!)
-        self.navigationController.pushViewController(ContainerVC, animated: true)
+        self.budgetToCreate = newBudget
+        continueToPlaid()
     }
     
-    func budgetSubmitted(budget: Budget, sender: CreateBudgetFormPresentor) {
+    func loadIncomeScreen(){
+
+        let presentor = EnterIncomePresentor(budget: self.budgetToCreate!)
+        presentor.coordinator = self
+        let vc = presentor.configure()
+        
+        self.navigationController.pushViewController(vc, animated: true)
+    }
+    
+    
+    func incomeSubmitted(budget: Budget, sender: EnterIncomePresentor) {
         
         if budget.isAmountEmpty(){
-            sender.enterErroState()
+            print("Budget is empty!")
         }
         else{
             
@@ -63,8 +75,9 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, CreateBudg
         presentor.coordinator = self
         self.currentPresentor = presentor
         let setSavingsVC = presentor.configure()
-        let ContainerVC = ContainerViewController(title: "Set a Savings Target", vc: setSavingsVC)
-        self.navigationController.pushViewController(ContainerVC, animated: true)
+        self.navigationController.isNavigationBarHidden = true
+        self.navigationController.pushViewController(setSavingsVC, animated: true)
+        setSavingsVC.navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     func savingsSubmitted(budget: Budget, sender: SetSavingsPresentor){
@@ -98,12 +111,13 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, CreateBudg
     }
     
     func finishedSettingLimits(){
-        continueToPlaid()
+        onboardingComplete()
     }
     
     func continueToPlaid(){
-        let vc = PlaidViewController()
-        vc.coordinator = self
+        var view = ConnectToBankView()
+        view.coordinator = self
+        let vc = UIHostingController(rootView: view)
         self.navigationController.pushViewController(vc, animated: true)
     }
     
@@ -113,6 +127,7 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, CreateBudg
         presentor.coordinator = self
         self.currentPresentor = presentor
         let linkVC = presentor.configure()
+        linkVC.modalPresentationStyle = .fullScreen
         self.navigationController.present(linkVC, animated: true)
         
     }
@@ -128,6 +143,10 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, CreateBudg
             print("link dismissed")
             
         })
+    }
+    
+    func plaidIsConnected(){
+        loadIncomeScreen()
     }
     
     func onboardingComplete(){

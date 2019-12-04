@@ -8,25 +8,36 @@
 
 import Foundation
 import UIKit
+import SwiftUI
+
+enum LoadingAccountsViewState{
+    case Loading
+    case Success
+    case Failure
+}
+
+class LoadingAccountsViewData : ObservableObject{
+    @Published var viewState = LoadingAccountsViewState.Loading
+}
 
 class LoadingAccountsPresentor : Presentor {
     
-    var viewController : LoadingAccountsViewController?
+    var view : LoadingAccountsView?
     var coordinator : OnboardingFlowCoordinator?
     var attempts = 0
     let plaid  = PlaidConnection()
+    var viewData = LoadingAccountsViewData()
     
 
     
     func configure() -> UIViewController {
-        let vc = LoadingAccountsViewController()
-        self.viewController = vc
-        self.viewController!.presentor = self
-        return self.viewController!
+        let view = LoadingAccountsView(presentor: self, viewData: self.viewData)
+        let vc = UIHostingController(rootView: view)
+        return vc
     }
     
     func viewWillLoad(){
-        viewController?.enterLoadingState()
+        self.viewData.viewState = LoadingAccountsViewState.Loading
         pullInAccountData()
     }
     
@@ -64,7 +75,7 @@ class LoadingAccountsPresentor : Presentor {
         DispatchQueue.main.async {
             switch result {
             case .failure(let error):
-                self.viewController?.enterErrorState()
+                self.viewData.viewState = LoadingAccountsViewState.Failure
                 print(error)
             case .success(let dataResult):
                 PlaidProccessor().saveAccessToken(response: dataResult)
@@ -86,17 +97,17 @@ class LoadingAccountsPresentor : Presentor {
                         self.startTransactionsPull()
                     }
                     else{
-                        self.viewController?.enterErrorState()
+                        self.viewData.viewState = LoadingAccountsViewState.Failure
                         print(error)
                     }
                 }
                 else{
-                    self.viewController?.enterErrorState()
+                    self.viewData.viewState = LoadingAccountsViewState.Failure
                     print(error)
                 }
             case .success(let dataResult):
                 PlaidProccessor().aggregate(response: dataResult)
-                self.viewController?.enterSuccessState()
+                self.viewData.viewState = LoadingAccountsViewState.Success
             
             }
         }
@@ -105,7 +116,7 @@ class LoadingAccountsPresentor : Presentor {
     
     func userPressedContinue(){
         
-        self.coordinator?.onboardingComplete()
+        self.coordinator?.plaidIsConnected()
         
     }
     

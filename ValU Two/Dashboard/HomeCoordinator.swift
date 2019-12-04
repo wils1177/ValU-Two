@@ -24,6 +24,7 @@ class HomeCoordinator: Coordinator{
         self.navigationController = navigationController
         
         self.budget = try? DataManager().getBudget()
+        self.navigationController.setNavigationBarHidden(true, animated: false)
     }
     
     func start(){

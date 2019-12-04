@@ -26,7 +26,7 @@ class HomePresentor : Presentor {
     
     func configure() -> UIViewController {
         
-        let vc = UIHostingController(rootView: SwiftUITestView(viewData: self.generateViewData()))
+        let vc = UIHostingController(rootView: SwiftUIHomeView())
         return vc
 
     }
