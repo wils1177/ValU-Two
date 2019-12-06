@@ -51,6 +51,101 @@
 				</dict>
 			</array>
 		</dict>
+		<dict>
+			<key>name</key>
+			<string>Shops</string>
+			<key>contains</key>
+			<array>
+				<string>Shops</string>
+			</array>
+			<key>subCategories</key>
+			<array>
+				<dict>
+					<key>name</key>
+					<string>Clothing and Accessories</string>
+					<key>contains</key>
+					<array>
+						<string>Shops</string>
+						<string>Clothing and Accessories</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Computers</string>
+					<key>contains</key>
+					<array>
+						<string>Shops</string>
+						<string>Computers and Electronics
+Computers and Electronics
+Computers and Electronics</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Groceries</string>
+					<key>contains</key>
+					<array>
+						<string>Shops</string>
+						<string>Supermarkets and Groceries</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Malls</string>
+					<key>contains</key>
+					<array>
+						<string>Shops</string>
+						<string>Shopping Centers and Malls</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>All Shops</string>
+					<key>contains</key>
+					<array>
+						<string>Shops</string>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Payments</string>
+			<key>contains</key>
+			<array>
+				<string>Payment</string>
+			</array>
+			<key>subCategories</key>
+			<array>
+				<dict>
+					<key>name</key>
+					<string>Rent</string>
+					<key>contains</key>
+					<array>
+						<string>Payment</string>
+						<string>Rent</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Loans</string>
+					<key>contains</key>
+					<array>
+						<string>Payment</string>
+						<string>Loan</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Credit Card Payments</string>
+					<key>contains</key>
+					<array>
+						<string>Payment</string>
+						<string>Credit Card</string>
+					</array>
+				</dict>
+			</array>
+		</dict>
 	</array>
 </dict>
 </plist>

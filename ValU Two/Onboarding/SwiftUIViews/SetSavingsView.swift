@@ -78,7 +78,6 @@ struct SetSavingsView: View {
                         .onChanged({ value in
                             self.sliderPosition = value.location.y
                             self.presentor?.sliderMoved(sliderVal: (Float((value.location.y + g.size.height/2) / g.size.height)))
-                            print("HERE:")
                             
                         }))
                         
@@ -96,6 +95,7 @@ struct SetSavingsView: View {
             Spacer()
             
             Button(action: {
+                self.presentor?.userPressedContinue()
             }){
                 HStack{
                     Spacer()

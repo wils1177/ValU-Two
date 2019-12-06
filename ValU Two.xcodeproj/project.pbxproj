@@ -52,8 +52,14 @@
 		4743EAA622B6DE470046D6EA /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4743EAA522B6DE470046D6EA /* AppCoordinator.swift */; };
 		4743EAA822B6E1020046D6EA /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4743EAA722B6E1020046D6EA /* Coordinator.swift */; };
 		4743EAC122BC4AA90046D6EA /* OnboardingFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4743EABB22BC4AA90046D6EA /* OnboardingFlowCoordinator.swift */; };
+		4749EC21239A06CC000AFC40 /* SetLimitsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4749EC20239A06CC000AFC40 /* SetLimitsView.swift */; };
+		4749EC23239A07BC000AFC40 /* LimitSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4749EC22239A07BC000AFC40 /* LimitSliderView.swift */; };
+		4749EC25239A0A20000AFC40 /* SpendingLimitSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4749EC24239A0A20000AFC40 /* SpendingLimitSummaryView.swift */; };
+		4764A88F23973C3D002E17BE /* SelectCategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4764A88E23973C3D002E17BE /* SelectCategoriesView.swift */; };
+		4764A89123974BCA002E17BE /* CategoryButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4764A89023974BCA002E17BE /* CategoryButtonView.swift */; };
 		476E00AA2380839C00540E96 /* SetSavingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 476E00A92380839C00540E96 /* SetSavingsView.swift */; };
 		4774311922C70C0200FBA11B /* PlaidLinkPresentor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4774311822C70C0200FBA11B /* PlaidLinkPresentor.swift */; };
+		47835B932398AD8C00F11093 /* CategoryCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47835B922398AD8C00F11093 /* CategoryCardView.swift */; };
 		4795A61322D110B400292E8F /* EnterIncomePresentor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4795A61022D110B300292E8F /* EnterIncomePresentor.swift */; };
 		4795A61422D110B400292E8F /* BudgetCategoriesPresentor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4795A61122D110B300292E8F /* BudgetCategoriesPresentor.swift */; };
 		4795A61522D110B400292E8F /* SetSavingsPresentor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4795A61222D110B300292E8F /* SetSavingsPresentor.swift */; };
@@ -152,8 +158,14 @@
 		4743EAA522B6DE470046D6EA /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		4743EAA722B6E1020046D6EA /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		4743EABB22BC4AA90046D6EA /* OnboardingFlowCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingFlowCoordinator.swift; sourceTree = "<group>"; };
+		4749EC20239A06CC000AFC40 /* SetLimitsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetLimitsView.swift; sourceTree = "<group>"; };
+		4749EC22239A07BC000AFC40 /* LimitSliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LimitSliderView.swift; sourceTree = "<group>"; };
+		4749EC24239A0A20000AFC40 /* SpendingLimitSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpendingLimitSummaryView.swift; sourceTree = "<group>"; };
+		4764A88E23973C3D002E17BE /* SelectCategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCategoriesView.swift; sourceTree = "<group>"; };
+		4764A89023974BCA002E17BE /* CategoryButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryButtonView.swift; sourceTree = "<group>"; };
 		476E00A92380839C00540E96 /* SetSavingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetSavingsView.swift; sourceTree = "<group>"; };
 		4774311822C70C0200FBA11B /* PlaidLinkPresentor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaidLinkPresentor.swift; sourceTree = "<group>"; };
+		47835B922398AD8C00F11093 /* CategoryCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCardView.swift; sourceTree = "<group>"; };
 		4795A61022D110B300292E8F /* EnterIncomePresentor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnterIncomePresentor.swift; sourceTree = "<group>"; };
 		4795A61122D110B300292E8F /* BudgetCategoriesPresentor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BudgetCategoriesPresentor.swift; sourceTree = "<group>"; };
 		4795A61222D110B300292E8F /* SetSavingsPresentor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetSavingsPresentor.swift; sourceTree = "<group>"; };
@@ -242,7 +254,13 @@
 			children = (
 				472E6690237F914C00A03655 /* EnterIncomeView.swift */,
 				472E66942380672A00A03655 /* ConnectToBankView.swift */,
+				4749EC20239A06CC000AFC40 /* SetLimitsView.swift */,
+				4749EC22239A07BC000AFC40 /* LimitSliderView.swift */,
+				4749EC24239A0A20000AFC40 /* SpendingLimitSummaryView.swift */,
+				4764A88E23973C3D002E17BE /* SelectCategoriesView.swift */,
+				47835B922398AD8C00F11093 /* CategoryCardView.swift */,
 				476E00A92380839C00540E96 /* SetSavingsView.swift */,
+				4764A89023974BCA002E17BE /* CategoryButtonView.swift */,
 				472E669623806A3300A03655 /* LoadingAccountsView.swift */,
 				472E6698238077E700A03655 /* AccountsAreLoadingView.swift */,
 				472E669A238078A700A03655 /* AccountsLoadedView.swift */,
@@ -736,8 +754,10 @@
 				473D08BB232451FA004C24A9 /* Transaction+CoreDataClass.swift in Sources */,
 				47EED5BB2377657C0052A211 /* HomeViewController.swift in Sources */,
 				4795A61422D110B400292E8F /* BudgetCategoriesPresentor.swift in Sources */,
+				4764A89123974BCA002E17BE /* CategoryButtonView.swift in Sources */,
 				472E6699238077E700A03655 /* AccountsAreLoadingView.swift in Sources */,
 				473D089F231D9049004C24A9 /* LoadingAccountsViewController.swift in Sources */,
+				4749EC21239A06CC000AFC40 /* SetLimitsView.swift in Sources */,
 				476E00AA2380839C00540E96 /* SetSavingsView.swift in Sources */,
 				47EED5C623777BAB0052A211 /* HomeViewZeroStateViewController.swift in Sources */,
 				472E669D2380790300A03655 /* CouldNotLoadAccountsView.swift in Sources */,
@@ -761,6 +781,7 @@
 				47EED5C823778B920052A211 /* SwiftUITestView.swift in Sources */,
 				4743EAA822B6E1020046D6EA /* Coordinator.swift in Sources */,
 				47CB3D3D237D051E00BB499F /* SwiftUISavingsCardView.swift in Sources */,
+				47835B932398AD8C00F11093 /* CategoryCardView.swift in Sources */,
 				47969B1B237A293E00489B72 /* SwiftUIHomeView.swift in Sources */,
 				473D08CB23245203004C24A9 /* SpendingCategory+CoreDataProperties.swift in Sources */,
 				473D089D231D9019004C24A9 /* LoadingAccountsPresentor.swift in Sources */,
@@ -776,6 +797,9 @@
 				473D08AB232451EC004C24A9 /* PlaidParsing.swift in Sources */,
 				473D08B8232451FA004C24A9 /* Location+CoreDataClass.swift in Sources */,
 				473D08CC23245203004C24A9 /* ItemData+CoreDataProperties.swift in Sources */,
+				4749EC23239A07BC000AFC40 /* LimitSliderView.swift in Sources */,
+				4764A88F23973C3D002E17BE /* SelectCategoriesView.swift in Sources */,
+				4749EC25239A0A20000AFC40 /* SpendingLimitSummaryView.swift in Sources */,
 				473D08B6232451FA004C24A9 /* Budget+CoreDataClass.swift in Sources */,
 				473D08C923245203004C24A9 /* Category+CoreDataProperties.swift in Sources */,
 				4795A61B22D110C000292E8F /* StartPageViewController.swift in Sources */,

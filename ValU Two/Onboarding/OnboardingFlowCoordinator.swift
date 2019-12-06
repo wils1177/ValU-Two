@@ -89,10 +89,9 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, SetSavings
     func continueToBudgetCategories(){
         print("Contine to Budget Categories")
         let presentor = BudgetCardsPresentor(budget : self.budgetToCreate!)
-        presentor.coordinator = self
         let vc = presentor.configure()
-        let ContainerVC = ContainerViewController(title: "Select your budget categories", vc: vc)
-        self.navigationController.pushViewController(ContainerVC, animated: true)
+        presentor.coordinator = self
+        self.navigationController.pushViewController(vc, animated: true)
     }
     
     func categoriesSubmitted(){
@@ -102,12 +101,12 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, SetSavings
     func contionueToSetSpendingLimits(){
         print("Continue to Set Spending Limits")
         
-        let presentor = SetSpendingPresentor(spendingCategories: self.budgetToCreate!.spendingCategories!)
-        presentor.coordinator = self
-        let vc = presentor.configure()
+        //let presentor = SetSpendingPresentor(spendingCategories: self.budgetToCreate!.spendingCategories!)
+        //presentor.coordinator = self
+        //let vc = presentor.configure()
         
-        let ContainerVC = ContainerViewController(title: "Set spending limits", vc: vc)
-        self.navigationController.pushViewController(ContainerVC, animated: true)
+        let vc = UIHostingController(rootView: SetLimitsView())
+        self.navigationController.pushViewController(vc, animated: true)
     }
     
     func finishedSettingLimits(){

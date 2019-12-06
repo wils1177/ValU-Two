@@ -8,16 +8,16 @@
 
 import Foundation
 import UIKit
+import SwiftUI
 
-struct BudgetCategoryViewModel {
+struct BudgetCategoryViewData : Hashable {
     let sectionTitle : String
     let categories : [String]
 }
 
-class BudgetCardsPresentor : NSObject, UITableViewDelegate, CardsPresentor {
+class BudgetCardsPresentor : Presentor {
     
-    var cardsVC : CardViewController?
-    var viewModels : [BudgetCategoryViewModel]?
+    var viewData : [BudgetCategoryViewData]?
     var categoryList : CategoryList?
     var selectedCategoryNames = [String]()
     var budget : Budget
@@ -26,22 +26,20 @@ class BudgetCardsPresentor : NSObject, UITableViewDelegate, CardsPresentor {
 
     init (budget: Budget){
         self.budget = budget
-        super.init()
-        viewModels = generateViewModels()
+        self.viewData = generateViewModels()
     }
 
     func configure() -> UIViewController {
         
-        self.cardsVC = CardViewController(nibName: "BudgetCategories", bundle: nil)
-        self.cardsVC?.presentor = self
-        return cardsVC!
+        let cardsVC = UIHostingController(rootView: SelectCategoriesView(presentor: self, viewData: self.viewData!))
+        return cardsVC
     }
     
-    func generateViewModels() -> [BudgetCategoryViewModel]{
+    func generateViewModels() -> [BudgetCategoryViewData]{
         
         let categoryData = CategoriesData()
         self.categoryList = categoryData.getCategoriesList()
-        var viewModels = [BudgetCategoryViewModel]()
+        var viewData = [BudgetCategoryViewData]()
         
         for category in self.categoryList!.categories{
             let sectionTitle = category.name
@@ -54,26 +52,31 @@ class BudgetCardsPresentor : NSObject, UITableViewDelegate, CardsPresentor {
                 
             }
             
-            viewModels.append(BudgetCategoryViewModel(sectionTitle: sectionTitle, categories: subCategoryTitles))
+            viewData.append(BudgetCategoryViewData(sectionTitle: sectionTitle, categories: subCategoryTitles))
             
         }
         
-        return viewModels
+        return viewData
     }
     
-    func setupTableView(){
+    func selectedCategoryName(name:String){
         
-        self.cardsVC?.tableView?.dataSource = self
-        self.cardsVC?.tableView?.delegate = self
-        self.cardsVC?.tableView?.register(CategoryTableViewCell.self, forCellReuseIdentifier: "categoryCell")
-        self.cardsVC?.tableView?.allowsMultipleSelection = true
-        self.cardsVC?.tableView?.allowsMultipleSelectionDuringEditing = true
+        self.selectedCategoryNames.append(name)
         
     }
+    
+    func deSelectedCategoryName(name:String){
+        self.selectedCategoryNames.removeAll { $0 == name }
+    }
+    
+
     
     func submit(){
         
+        
         var newSpendingCategoriesList = [SpendingCategory]()
+        self.budget.spendingCategories = NSOrderedSet(array: newSpendingCategoriesList)
+        
         for name in self.selectedCategoryNames{
             let category = self.categoryList?.getCategoryByName(name: name)
             let newSpendingCategory = DataManager().createNewSpendingCategory(categoryEntry: category!)
@@ -92,48 +95,5 @@ class BudgetCardsPresentor : NSObject, UITableViewDelegate, CardsPresentor {
 
 }
 
-extension BudgetCardsPresentor : UITableViewDataSource {
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return viewModels!.count
-    }
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return viewModels![section].sectionTitle
-    }
-    
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModels![section].categories.count
-    }
-    
-    
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "categoryCell" , for: indexPath) as! CategoryTableViewCell
-        
-        let section = indexPath.section
-        cell.textLabel?.text = viewModels![section].categories[indexPath.row]
-        
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let section = indexPath.section
-        let name = viewModels![section].categories[indexPath.row]
-        self.selectedCategoryNames.append(name)
-    }
-    
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        let section = indexPath.section
-        let name = viewModels![section].categories[indexPath.row]
-        self.selectedCategoryNames.removeAll { $0 == name }
-    }
-    
-    
-    
-    
-    
-    
-}
+
 

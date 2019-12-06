@@ -54,10 +54,17 @@ class SetSavingsPresentor : Presentor {
         
         let amount = Float(self.budget.amount)
         let percentage = self.budget.savingsPercent
-        let spendingAmount = String(Int(amount * (1-percentage)))
-        let savingsAmount = String(Int((amount * percentage)))
         
-        let viewData = SetSavingsViewData(savingsAmount: savingsAmount, spendingAmount: spendingAmount, savingsPercentage: percentage)
+        let spendingAmount = amount * (1-percentage)
+        let savingsAmount = amount * percentage
+        
+        let roundedSpendingAmount = roundToTens(x: spendingAmount)
+        let roundedSavingsAmount = roundToTens(x: savingsAmount)
+        
+        let spendingAmountText = String(roundedSpendingAmount)
+        let savingsAmountText = String(roundedSavingsAmount)
+        
+        let viewData = SetSavingsViewData(savingsAmount: savingsAmountText, spendingAmount: spendingAmountText, savingsPercentage: percentage)
         
         
         return viewData
@@ -80,4 +87,14 @@ class SetSavingsPresentor : Presentor {
         
         //self.coordinator?.savingsSubmitted(budget: self.budget, sender: self)
     }
+    
+    func userPressedContinue(){
+        self.coordinator?.savingsSubmitted(budget: self.budget, sender: self)
+    }
+    
+    
+    func roundToTens(x : Float) -> Int {
+        return 10 * Int(round(x / 10.0))
+    }
+    
 }
