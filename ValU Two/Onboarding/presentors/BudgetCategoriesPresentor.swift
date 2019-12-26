@@ -82,6 +82,14 @@ class BudgetCardsPresentor : Presentor {
             let newSpendingCategory = DataManager().createNewSpendingCategory(categoryEntry: category!)
             newSpendingCategoriesList.append(newSpendingCategory)
         }
+        
+        
+        //Create 'Other' category
+        let otherCategory = CategoryEntry(name: "Other", contains: [String](), subCategories: [CategoryEntry]())
+        let otherSpendingCategory = DataManager().createNewSpendingCategory(categoryEntry: otherCategory)
+        //otherSpendingCategory.limit = self.budget.getAmountAvailable()
+        newSpendingCategoriesList.append(otherSpendingCategory)
+        
                 
         for category in newSpendingCategoriesList{
             self.budget.addToSpendingCategories(category)

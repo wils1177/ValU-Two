@@ -24,7 +24,6 @@ class LoadingAccountsPresentor : Presentor {
     
     var view : LoadingAccountsView?
     var coordinator : OnboardingFlowCoordinator?
-    var attempts = 0
     let plaid  = PlaidConnection()
     var viewData = LoadingAccountsViewData()
     
@@ -38,7 +37,9 @@ class LoadingAccountsPresentor : Presentor {
     
     func viewWillLoad(){
         self.viewData.viewState = LoadingAccountsViewState.Loading
-        pullInAccountData()
+        NotificationCenter.default.addObserver(self, selector: #selector(startTransactionsPull(_:)), name: .initialUpdate, object: nil)
+        self.pullInAccountData()
+
     }
     
     func pullInAccountData(){
@@ -52,23 +53,15 @@ class LoadingAccountsPresentor : Presentor {
         try? plaid.exchangePublicForAccessToken(dispatch: dispatchA, completion: self.tokenExchangeFinished(result:))
         
         
-        dispatchA.notify(queue: .main){
-            
-            self.startTransactionsPull()
+    }
     
-        }
+    @objc func startTransactionsPull(_ notification:Notification){
         
+        
+        try? self.plaid.getTransactions(completion: self.transactionsPullFinished(result:))
         
     }
     
-    func startTransactionsPull(){
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 12.0){
-            print("getting transactions...")
-            self.attempts = self.attempts + 1
-            try? self.plaid.getTransactions(completion: self.transactionsPullFinished(result:))
-        }
-    }
     
     func tokenExchangeFinished(result: Result<Data, Error>){
         
@@ -90,21 +83,8 @@ class LoadingAccountsPresentor : Presentor {
         DispatchQueue.main.async {
             switch result {
             case .failure(let error):
-                
-                if case PlaidConnectionError.BadRequest = error{
-                    //Ping up until 15 times for transaction data to be ready
-                    if self.attempts < 15{
-                        self.startTransactionsPull()
-                    }
-                    else{
-                        self.viewData.viewState = LoadingAccountsViewState.Failure
-                        print(error)
-                    }
-                }
-                else{
-                    self.viewData.viewState = LoadingAccountsViewState.Failure
-                    print(error)
-                }
+                self.viewData.viewState = LoadingAccountsViewState.Failure
+                print(error)
             case .success(let dataResult):
                 PlaidProccessor().aggregate(response: dataResult)
                 self.viewData.viewState = LoadingAccountsViewState.Success
@@ -113,6 +93,8 @@ class LoadingAccountsPresentor : Presentor {
         }
         
     }
+    
+
     
     func userPressedContinue(){
         

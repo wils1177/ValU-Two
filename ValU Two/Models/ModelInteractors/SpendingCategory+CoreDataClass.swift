@@ -18,6 +18,8 @@ public class SpendingCategory: NSManagedObject {
         self.init(entity: entity!, insertInto: context)
         
         self.category = Category(categoryEntry: categoryEntry, context: context)
+        self.limit = 0.0
+        self.amountSpent = 0.0
         
         
     }

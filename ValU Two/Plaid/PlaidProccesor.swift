@@ -9,6 +9,11 @@
 import Foundation
 import SwiftKeychainWrapper
 import CoreData
+import Firebase
+
+enum PlaidUserDefaultKeys: String{
+    case incomeReadyKey = "IncomeReadyFor:"
+}
 
 class PlaidProccessor{
     
@@ -22,6 +27,13 @@ class PlaidProccessor{
             let accessTokenString = tokenResponse.accessToken
             let saveSuccessful: Bool = KeychainWrapper.standard.set(accessTokenString, forKey: "access_token")
             print(saveSuccessful)
+            
+            submitItemToServer(itemID: tokenResponse.itemId)
+            
+            //Create a key for tracking whether we've recieved a webhook for the income product being ready
+            let incomeItemKey = PlaidUserDefaultKeys.incomeReadyKey.rawValue + tokenResponse.itemId
+            UserDefaults.standard.set(false, forKey: incomeItemKey)
+
             
         } catch (let err) {
             print(err.localizedDescription)
@@ -66,6 +78,22 @@ class PlaidProccessor{
         
     }
     
+    
+    func aggregateIncome(response: Data){
+        let decoder = JSONDecoder()
+        
+        do {
+               let parsedResponse = try decoder.decode(IncomeResponse.self, from: response)
+            self.proccessIncome(response: parsedResponse.income)
+               print(parsedResponse)
+        
+               
+           } catch (let err) {
+               print("error aggregating income:")
+               print(err)
+           }
+    }
+    
     func proccessAccounts(response: [AccountJSON]){
         
         
@@ -105,13 +133,39 @@ class PlaidProccessor{
         
     }
     
+    
+    
     func processItem(response : ItemJSON){
         
         let dataManager = DataManager()
         dataManager.saveItem(item: response)
-
+        dataManager.saveDatabase()        
+        
+    }
+    
+    func proccessIncome(response: IncomeJSON){
+        let dataManager = DataManager()
+        dataManager.saveIncome(income: response)
         dataManager.saveDatabase()
     }
+    
+    
+    func submitItemToServer(itemID: String){
+        
+        let token = Messaging.messaging().fcmToken!
+        
+        //Configure the remote storeage with firebase
+        let db = Firestore.firestore()
+        db.collection("items").document(itemID).setData(["clientId" : token]){ err in
+            if let err = err {
+                print("Error adding document: \(err)")
+            } else {
+                print("Document added with ID: \(itemID)")
+            }
+        }
+        
+    }
+
 
 
 }

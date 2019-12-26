@@ -10,83 +10,145 @@ import Foundation
 import UIKit
 import SwiftUI
 
-class SetSpendingPresentor : NSObject, UITableViewDelegate, Presentor, CardsPresentor {
+class ViewCategory : ObservableObject, Hashable {
+
+    var name : String
+    @Published var limit : String
+    
+    init(name: String, limit: String) {
+        self.name = name
+        self.limit = limit
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
+
+    }
+    
+    static func == (lhs: ViewCategory, rhs: ViewCategory) -> Bool {
+        return lhs.name == rhs.name && lhs.limit == rhs.limit
+    }
+}
+
+class SetLimitsViewData : ObservableObject{
+    
+    @Published var leftToSpend : String
+    var categoryPercentages : [ViewCategory]
+    
+    init(leftToSpend : String, categoryPercentages : [ViewCategory]){
+        self.leftToSpend = leftToSpend
+        self.categoryPercentages = categoryPercentages
+    }
+    
+}
+
+class SetSpendingPresentor : Presentor {
     
     
-    
-    let spendingCategories : NSOrderedSet
+    var viewData : SetLimitsViewData?
+    let budget : Budget
     var coordinator : OnboardingFlowCoordinator?
-    var vc : SetSpendingLimitViewController?
     
-    init(spendingCategories : NSOrderedSet){
-        
-        self.spendingCategories = spendingCategories
+    init(budget : Budget){
+        self.budget = budget
+        self.viewData = generateViewData()
     }
     
     func configure() -> UIViewController {
         
-        self.vc = SetSpendingLimitViewController(nibName: "SetSpendingLimits", bundle: nil)
-        self.vc!.presentor = self
-        return self.vc!
+        let vc = UIHostingController(rootView: SetLimitsView(presentor: self, viewData: self.viewData!))
+        return vc
     }
     
-    func setupTableView(){
-        
-        self.vc!.tableView!.dataSource = self
-        self.vc!.tableView!.delegate = self
-        self.vc!.tableView!.register(UINib(nibName: "SpendingLimitCell", bundle: nil), forCellReuseIdentifier: "spendingLimitCell")
-        
-    }
     
     func submit() {
         self.coordinator?.finishedSettingLimits()
     }
     
-    @objc func textFieldDidChange(field: UITextField){
+    func generateViewData() -> SetLimitsViewData{
         
+        let available = self.budget.getAmountAvailable()
         
-        let amount = field.text
-        if CharacterSet.decimalDigits.isSuperset(of: CharacterSet(charactersIn: amount!)) && (amount! != "") {
-            print("amount field did change")
-            let newLimit = Float(amount!)
-            let categoryIndex = field.tag
-            updateSpendingLimit(newLimit: newLimit!, categoryIndex: categoryIndex)
+        var categoryPercentages = [ViewCategory]()
+        var spent : Float = 0.0
+        for case let spendingCategory as SpendingCategory in self.budget.spendingCategories!{
+            let name = spendingCategory.category?.name
+            let viewCategory = ViewCategory(name : name!, limit: String(roundToTens(x: spendingCategory.limit)))
+            categoryPercentages.append(viewCategory)
+            
+            
+            spent = spent + spendingCategory.limit
+            
+            
         }
-
+        
+        let leftToSpend = roundToTens(x: available) - roundToTens(x: spent)
+        
+        return SetLimitsViewData(leftToSpend: String(leftToSpend), categoryPercentages: categoryPercentages)
         
     }
     
-    func updateSpendingLimit(newLimit : Float, categoryIndex: Int){
-        
-        let spendingCategory = self.spendingCategories[categoryIndex] as! SpendingCategory
-        spendingCategory.limit = newLimit
+    
+    func textFieldChanged(categoryName: String, newValue: String){
         
     }
+    
+    
+    func incrementCategory(categoryName: String, incrementAmount: Int){
+        
+        let available = Int(self.budget.getAmountAvailable())
+        print("ayy")
+        //First, we check to see if check to see if there is money left to spend
+        if (Int(self.viewData!.leftToSpend)! - incrementAmount) >= 0{
+            
+            // Save the new budget limit
+            for case let spendingCategory as SpendingCategory in self.budget.spendingCategories!{
+            
+                if spendingCategory.category?.name == categoryName{
+                    let newLimit = Int(spendingCategory.limit) + incrementAmount
+                    
+                    if newLimit >= 0{
+                        print("decrementing the limit")
+                        spendingCategory.limit = Float(newLimit)
+                    }
+                    
+                }
+            }
+            
+            //Update the View Data
+            let newViewData = generateViewData()
+            self.viewData?.leftToSpend = newViewData.leftToSpend
+            
+            for category in self.viewData!.categoryPercentages{
+                if category.name == categoryName{
+                    let newLimit = Int(category.limit)! + incrementAmount
+                    if newLimit >= 0 {
+                        category.limit = String(Int(category.limit)! + incrementAmount)
+                    }
+                    
+                }
+            }
+            
+        }
+        else{
+            print("you can't increment a category like that!!")
+        }
+        
+        
+
+        
+    }
+      
+    
+    func roundToTens(x : Float) -> Int {
+        return 10 * Int(round(x / 10.0))
+    }
+    
+    
+    
     
     
     
 }
 
-extension SetSpendingPresentor : UITableViewDataSource {
-    
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.spendingCategories.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "spendingLimitCell" , for: indexPath) as! SetSpendingLimitCell
-        let spendingCategory = self.spendingCategories[indexPath.row] as! SpendingCategory
-        cell.categoryNameLabel.text = spendingCategory.category?.name
-        
-        // Add a function that will be called everytime that the user updates the amount text field
-        cell.amountTextFeild.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-        cell.amountTextFeild.tag = indexPath.row
-        
-        //cell.delegate = self
-        
-        return cell
-    }
-    
 
-}

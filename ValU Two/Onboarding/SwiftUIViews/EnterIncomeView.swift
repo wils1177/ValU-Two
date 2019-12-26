@@ -25,26 +25,32 @@ struct EnterIncomeView: View {
             
             
             VStack{
-                Text("Here is a lot of text about entering yout incomr and why").lineLimit(nil).multilineTextAlignment(.center).padding()
+                Text("Here is a lot of text about entering yout income and why").lineLimit(nil).multilineTextAlignment(.center).padding()
                 
                 
                 
             }.padding()
             
-            Spacer()
             VStack{
-                TextField("Your Income", text: $viewData.incomeAmountText).textFieldStyle(PlainTextFieldStyle()).font(.title).multilineTextAlignment(.center)
-                .padding()
                 
-                Button(action: {
-                    
-                }){
-                    ZStack{
-                        Text("Guess for me!").font(.subheadline).foregroundColor(.white).bold().padding()
-                    }.background(Color(.purple)).cornerRadius(30).shadow(radius: 10).padding()
-                    
-                }
+                
+                CustomInputTextField(text: $viewData.incomeAmountText).frame(width: 40, height: 30).padding()
+                .padding(.horizontal)
+                    .frame(maxHeight: 32)
+                
+                
             }
+            Spacer()
+            
+            IncomeStateView(presentor: self.presentor, viewData: self.viewData)
+
+            
+            
+            
+            
+            
+            
+            
             Spacer()
             
             

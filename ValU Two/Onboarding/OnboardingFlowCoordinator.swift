@@ -12,6 +12,7 @@ import SwiftUI
 
 
 
+
 class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, SetSavingsViewDelegate, PlaidLinkDelegate, BudgetCategoriesDelegate, SetSpendingLimitDelegate{
 
     // Dependencies
@@ -45,6 +46,7 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, SetSavings
         let newBudget = DataManager().createNewBudget()
         self.budgetToCreate = newBudget
         continueToPlaid()
+
     }
     
     func loadIncomeScreen(){
@@ -101,11 +103,10 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, SetSavings
     func contionueToSetSpendingLimits(){
         print("Continue to Set Spending Limits")
         
-        //let presentor = SetSpendingPresentor(spendingCategories: self.budgetToCreate!.spendingCategories!)
-        //presentor.coordinator = self
-        //let vc = presentor.configure()
+        let presentor = SetSpendingPresentor(budget: self.budgetToCreate!)
+        presentor.coordinator = self
+        let vc = presentor.configure()
         
-        let vc = UIHostingController(rootView: SetLimitsView())
         self.navigationController.pushViewController(vc, animated: true)
     }
     

@@ -10,18 +10,45 @@ import Foundation
 import UIKit
 import SwiftUI
 
+enum LoadingIncomeViewState{
+    case Loading
+    case Success
+    case Failure
+    case Initial
+}
+
+class IncomeStreamViewData : Hashable{
+    let name : String
+    let monthlyAmount: String
+    
+    init(name: String, monthlyAmount : String){
+        self.name = name
+        self.monthlyAmount = monthlyAmount
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
+        hasher.combine(monthlyAmount)
+
+    }
+    
+    static func == (lhs: IncomeStreamViewData, rhs: IncomeStreamViewData) -> Bool {
+        return lhs.name == rhs.name && lhs.monthlyAmount == rhs.monthlyAmount
+    }
+}
+
 class EnterIncomeViewData : ObservableObject {
     
     let timeFrameIndex : Int
+    var incomeStreams = [IncomeStreamViewData]()
     @Published var incomeAmountText : String
+    @Published var viewState = LoadingIncomeViewState.Initial
     
     init(timeFrameIndex: Int, incomeAmountText : String){
         self.incomeAmountText = incomeAmountText
         self.timeFrameIndex = timeFrameIndex
     }
-    
-    
-    
+     
 }
 
 class EnterIncomePresentor : Presentor {
@@ -31,9 +58,14 @@ class EnterIncomePresentor : Presentor {
     var viewData : EnterIncomeViewData?
     let budget : Budget
     var coordinator : OnboardingFlowCoordinator?
+    let plaid  = PlaidConnection()
+    let dataManager = DataManager()
     
     init(budget : Budget){
         self.budget = budget
+        
+        
+
     }
     
     func configure() -> UIViewController {
@@ -76,6 +108,39 @@ class EnterIncomePresentor : Presentor {
         
     }
     
+    func userRequestedIncome(){
+        
+        //Set the view to be in the loading state
+        self.viewData?.viewState = LoadingIncomeViewState.Loading
+        
+        // Only setting up one notification observer for the webhook
+        // TODO: This will be refactored once we support multiple items
+        NotificationCenter.default.addObserver(self, selector: #selector(recievedIncomeWebhook(_:)), name: .incomeReady, object: nil)
+        
+        do{
+            //Get all the items we might want to check for income streams
+            let items = try dataManager.getItems()
+            
+            for item in items{
+                
+                //Check if we've already gotten the PRODUCT_READY webhook
+                let itemId = item.itemId ?? ""
+                let incomeItemKey = PlaidUserDefaultKeys.incomeReadyKey.rawValue + itemId
+                print(incomeItemKey)
+                if UserDefaults.standard.object(forKey: incomeItemKey) as! Bool == true{
+                    startIncomePull()
+                }
+                
+            }
+        }
+        //If something goes wrong, we change the view to the failure state
+        catch{
+            self.viewData?.viewState = LoadingIncomeViewState.Failure
+        }
+        
+        
+    }
+    
     func viewDataToBudget(viewData: EnterIncomeViewData) -> Budget{
         
         
@@ -89,9 +154,65 @@ class EnterIncomePresentor : Presentor {
         return self.budget
     }
     
-    //func enterErroState(){
-    //    self.budgetFormVC?.enterErrorState()
-    //}
+    
+    @objc func recievedIncomeWebhook(_ notification:Notification){
+        
+        startIncomePull()
+        
+    }
+    
+    func startIncomePull(){
+        print("getting income...")
+        //TODO: Handle each of these errors!
+        try? dataManager.deleteIncomeData()
+        try? self.plaid.getIncome(completion: self.incomePullFinished(result:))
+    }
+    
+    func incomePullFinished(result: Result<Data, Error>){
+        
+        DispatchQueue.main.async {
+            switch result {
+            case .success(let dataResult):
+                    print("income success")
+                    
+                    
+                    //TODO: This should be a try/catch
+                    PlaidProccessor().aggregateIncome(response: dataResult)
+                    self.displayIncomeStreams()
+            case .failure(let error):
+                    self.viewData?.viewState = LoadingIncomeViewState.Failure
+                    print(error)
+            }
+        }
+        
+    }
+    
+    func displayIncomeStreams(){
+        
+        do{
+            // Collect all the income streams and display them
+            let incomes = try dataManager.getIncomeData()
+            
+            for income in incomes{
+                for case let incomeStream as IncomeStreamData in income.incomeStreams ?? NSSet() {
+                    let incomeStreamViewData = IncomeStreamViewData(name: incomeStream.name ?? "IncomeStream", monthlyAmount: String(incomeStream.monthlyIncome))
+                    self.viewData?.incomeStreams.append(incomeStreamViewData)
+                }
+            }
+            
+            self.viewData?.viewState = LoadingIncomeViewState.Success
+            
+        }
+        //If something goes wrong, we change the view to the failure state
+        catch{
+            self.viewData?.viewState = LoadingIncomeViewState.Failure
+        }
+        
+        
+        
+        
+    }
+
     
     
 }

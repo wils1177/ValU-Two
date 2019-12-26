@@ -19,7 +19,7 @@ public class ItemData: NSManagedObject {
         
         self.error = item.error
         self.institutionId = item.institutionId
-        self.itemId = item.institutionId
+        self.itemId = item.itemId
         
     }
     

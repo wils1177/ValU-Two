@@ -15,6 +15,7 @@ enum PlaidURLs{
     case GetCategories
     case TokenExchange
     case GetTransactions
+    case GetIncome
 }
 
 enum PlaidConnectionError: Error {
@@ -49,6 +50,7 @@ class PlaidConnection{
         self.URLdict[PlaidURLs.TokenExchange] = URL(string : (rootURL + "/item/public_token/exchange"))!
         self.URLdict[PlaidURLs.GetTransactions] = URL(string : (rootURL + "/transactions/get"))!
         self.URLdict[PlaidURLs.GetAccounts] = URL(string : (rootURL + "/accounts/get"))!
+        self.URLdict[PlaidURLs.GetIncome] = URL(string : (rootURL + "/income/get"))!
 
 
     }
@@ -100,6 +102,22 @@ class PlaidConnection{
          
     }
     
+    func getIncome(completion : @escaping (Result<Data, Error>) -> ()) throws{
+        
+        let URL = PlaidURLs.GetIncome
+        let keys = getAPIKeys()
+        
+        guard let accessToken: String = KeychainWrapper.standard.string(forKey: "access_token") else{
+            print("Error: missing access Token")
+            throw PlaidConnectionError.AccessTokenNotFound
+        }
+        
+        let json: [String: Any] = ["client_id" : keys.clientID, "secret" : keys.clientSecret, "access_token" : accessToken]
+        
+        try postRequest(url: URL, jsonBody: json, completion: completion, dispatch: nil)
+        
+    }
+    
     
     
     
@@ -126,7 +144,8 @@ class PlaidConnection{
                 //Check if it was a 200 response code or not
                 if let httpResponse = response as? HTTPURLResponse {
                     if httpResponse.statusCode != 200{
-                            
+                        let myJSON = String(data: dataResponse!, encoding: String.Encoding.utf8)
+                        print(myJSON)
                         completion(Result.failure(PlaidConnectionError.BadRequest))
 
                         

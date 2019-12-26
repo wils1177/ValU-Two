@@ -9,36 +9,34 @@
 import SwiftUI
 
 struct SpendingLimitSummaryView: View {
+    
+    var leftToSpend : String
+    
+    init(leftToSpend: String){
+        self.leftToSpend = leftToSpend
+
+    }
+    
     var body: some View {
         VStack{
             HStack{
-                Text("0$").font(.largeTitle).foregroundColor(.white).bold()
-                Text("Spent Out Of").font(.headline).foregroundColor(.white).bold()
-                Text("3500$").font(.largeTitle).foregroundColor(.white).bold()
-            }.padding(.top).padding(.leading).padding(.trailing)
-            
-            ZStack{
-                
-
-                HStack{
-                    Rectangle().frame(height: 5).foregroundColor(Color(.white))
-                    
-                    }.cornerRadius(10).padding(.horizontal).shadow(radius: 20)
-                
-                HStack{
-                    Rectangle().frame(width: 120, height: 5).foregroundColor(Color(.red))
-                    Spacer()
-                }.cornerRadius(1).padding(.horizontal)
-                
-                
-                
+                Spacer()
+                VStack{
+                    Text("$" + self.leftToSpend).font(.system(size: 50)).foregroundColor(.white).bold().padding()
+                    Text("Left to Spend").font(.subheadline).foregroundColor(.white).bold()
+                }
+                Spacer()
             }.padding(.bottom)
+            
+            
         }.background(Color(.black)).cornerRadius(20).shadow(radius: 20)
     }
 }
 
+
 struct SpendingLimitSummaryView_Previews: PreviewProvider {
     static var previews: some View {
-        SpendingLimitSummaryView()
+        SpendingLimitSummaryView(leftToSpend: "5000")
     }
 }
+

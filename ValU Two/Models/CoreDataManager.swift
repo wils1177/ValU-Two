@@ -12,6 +12,7 @@ import CoreData
 enum DataManagerErrors: Error {
     case NoBudgetFound
     case NoTransactionsFound
+    case NoItemsFound
 }
 
 class DataManager {
@@ -51,6 +52,10 @@ class DataManager {
         
         ItemData(item: item, context: self.context)
 
+    }
+    
+    func saveIncome(income: IncomeJSON){
+        IncomeData(income: income, incomeStreams: income.incomeStreams, context: context)
     }
     
 
@@ -117,6 +122,44 @@ class DataManager {
         
     }
     
+    func getItems() throws -> [ItemData]{
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "ItemData")
+        
+        do{
+            let result = try context.fetch(request) as! [ItemData]
+            return result
+        }
+        catch{
+           print("Failed to fetch Items")
+            throw DataManagerErrors.NoItemsFound
+        }
+    }
+    
+    func getIncomeData() throws -> [IncomeData]{
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "IncomeData")
+        
+        do{
+            let result = try context.fetch(request) as! [IncomeData]
+            return result
+        }
+        catch{
+           print("Failed to fetch Income Data")
+            throw DataManagerErrors.NoItemsFound
+        }
+    }
+    
+    func deleteIncomeData() throws{
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "IncomeData")
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+
+        do {
+            let result = try context.execute(deleteRequest)
+        } catch let error as NSError {
+            // TODO: handle the error
+            print("Could not delete the income data")
+        }
+    }
+    
     func saveDatabase(){
         
         // Save the CoreData database
@@ -125,7 +168,7 @@ class DataManager {
             print("successfully saved to database")
         }
         catch{
-            print("could not save new accounts to database")
+            print("ERROR: could not save to database")
         }
         
     }

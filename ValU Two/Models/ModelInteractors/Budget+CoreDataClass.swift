@@ -56,6 +56,12 @@ public class Budget: NSManagedObject {
         
     }
     
+    func getAmountAvailable() -> Float {
+        return self.amount * (1 - self.savingsPercent)
+    }
+    
+
+    
     func calculateAmountSpent() -> Double{
         
         do{

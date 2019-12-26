@@ -11,10 +11,54 @@ import Foundation
 
 struct TokenExchangeResponse : Codable {
     let accessToken : String
+    let itemId : String
     
     enum CodingKeys : String, CodingKey {
         case accessToken =  "access_token"
+        case itemId =  "item_id"
     }
+}
+
+struct IncomeResponse : Codable {
+    //let item : ItemJSON
+    let income : IncomeJSON
+    
+    enum CodingKeys : String, CodingKey {
+        //case item =  "item"
+        case income = "income"
+    }
+    
+}
+
+struct IncomeJSON : Codable {
+    let incomeStreams : [IncomeStreamsJSON]
+    let lastYearIncome : Double
+    let lastYearIncomeBeforeTax : Double
+    let projectedIncome : Double
+    let projectedIncomeBeforeTax : Double
+    
+    enum CodingKeys : String, CodingKey {
+        case incomeStreams =  "income_streams"
+        case lastYearIncome =  "last_year_income"
+        case lastYearIncomeBeforeTax = "last_year_income_before_tax"
+        case projectedIncome = "projected_yearly_income"
+        case projectedIncomeBeforeTax = "projected_yearly_income_before_tax"
+    }
+}
+
+struct IncomeStreamsJSON : Codable{
+    let confidence : Float
+    let days : Int
+    let monthlyIncome : Double
+    let name : String
+    
+    enum CodingKeys : String, CodingKey {
+        case confidence =  "confidence"
+        case days = "days"
+        case monthlyIncome = "monthly_income"
+        case name = "name"
+    }
+    
 }
 
 
