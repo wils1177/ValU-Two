@@ -20,6 +20,7 @@ public class SpendingCategory: NSManagedObject {
         self.category = Category(categoryEntry: categoryEntry, context: context)
         self.limit = 0.0
         self.amountSpent = 0.0
+        self.initialThirtyDaysSpent = 0.0
         
         
     }

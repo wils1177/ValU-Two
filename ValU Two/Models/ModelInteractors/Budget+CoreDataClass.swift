@@ -25,15 +25,6 @@ public class Budget: NSManagedObject {
         return calculation
     }
     
-    func isAmountEmpty() -> Bool {
-        if self.amount == nil {
-            return true
-        }
-        else{
-            return false
-        }
-    }
-    
     
     func setTimeFrame(timeFrame: TimeFrame) {
         
@@ -62,24 +53,32 @@ public class Budget: NSManagedObject {
     
 
     
-    func calculateAmountSpent() -> Double{
+    func calculateAmountSpent() -> Float{
         
         do{
             print(startDate)
-            let transactions = try DataManager().getTransactions(startDate: self.startDate!)
-            var amountSpent : Double = 0
+            let transactions = try DataManager().getTransactions(startDate: self.startDate!, endDate: self.endDate!)
+            var amountSpent : Float = 0
             
             for transaction in transactions{
-                amountSpent = amountSpent + transaction.amount
+                
+                if transaction.amount > 0{
+                    amountSpent = amountSpent + Float(transaction.amount)
+                }
+                
             }
             return amountSpent
         }
         catch{
             return 0.0
         }
+     
+    }
+    
+    func updateSpendingAmounts(){
         
-        
-        
+        let transactionProccesor = TransactionProccessor()
+        transactionProccesor.initilizeSpendingCategoryAmounts(spendingCategories: self.spendingCategories?.array as! [SpendingCategory], startDate: self.startDate!, endDate: self.endDate!)
         
     }
     

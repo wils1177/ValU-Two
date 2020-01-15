@@ -2,7 +2,7 @@
 //  SpendingCategory+CoreDataProperties.swift
 //  
 //
-//  Created by Clayton Wilson on 9/7/19.
+//  Created by Clayton Wilson on 12/26/19.
 //
 //
 
@@ -18,6 +18,7 @@ extension SpendingCategory {
 
     @NSManaged public var amountSpent: Float
     @NSManaged public var limit: Float
+    @NSManaged public var initialThirtyDaysSpent: Float
     @NSManaged public var category: Category?
 
 }

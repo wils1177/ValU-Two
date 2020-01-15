@@ -2,7 +2,7 @@
 //  Category+CoreDataProperties.swift
 //  
 //
-//  Created by Clayton Wilson on 9/7/19.
+//  Created by Clayton Wilson on 1/12/20.
 //
 //
 
@@ -16,8 +16,9 @@ extension Category {
         return NSFetchRequest<Category>(entityName: "Category")
     }
 
-    @NSManaged public var name: String?
     @NSManaged public var contains: [String]?
+    @NSManaged public var name: String?
+    @NSManaged public var icon: String?
     @NSManaged public var subCategories: NSSet?
 
 }

@@ -7,6 +7,8 @@
 		<dict>
 			<key>name</key>
 			<string>Food and Drink</string>
+			<key>icon</key>
+			<string>🍔</string>
 			<key>contains</key>
 			<array>
 				<string>Food and Drink</string>
@@ -16,6 +18,8 @@
 				<dict>
 					<key>name</key>
 					<string>Bar</string>
+					<key>icon</key>
+					<string>🍷</string>
 					<key>contains</key>
 					<array>
 						<string>Food and Drink</string>
@@ -25,6 +29,8 @@
 				<dict>
 					<key>name</key>
 					<string>Breweries</string>
+					<key>icon</key>
+					<string>🍺</string>
 					<key>contains</key>
 					<array>
 						<string>Food and Drink</string>
@@ -33,7 +39,9 @@
 				</dict>
 				<dict>
 					<key>name</key>
-					<string>Restaurants</string>
+					<string>All Restaurants</string>
+					<key>icon</key>
+					<string>🥣</string>
 					<key>contains</key>
 					<array>
 						<string>Food and Drink</string>
@@ -42,11 +50,47 @@
 				</dict>
 				<dict>
 					<key>name</key>
+					<string>Fast Food Restaraunts</string>
+					<key>icon</key>
+					<string>🍟</string>
+					<key>contains</key>
+					<array>
+						<string>Food and Drink</string>
+						<string>Restaurants</string>
+						<string>Fast Food</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Coffee Shops</string>
+					<key>icon</key>
+					<string>☕️</string>
+					<key>contains</key>
+					<array>
+						<string>Food and Drink</string>
+						<string>Restaurants</string>
+						<string>Coffee Shop</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
 					<string>Other Nightlife</string>
+					<key>icon</key>
+					<string>🥂</string>
 					<key>contains</key>
 					<array>
 						<string>Food and Drink</string>
 						<string>Nightlife</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>All Food and Drink</string>
+					<key>icon</key>
+					<string>🍔</string>
+					<key>contains</key>
+					<array>
+						<string>Food and Drink</string>
 					</array>
 				</dict>
 			</array>
@@ -54,6 +98,8 @@
 		<dict>
 			<key>name</key>
 			<string>Shops</string>
+			<key>icon</key>
+			<string>🛍️</string>
 			<key>contains</key>
 			<array>
 				<string>Shops</string>
@@ -63,6 +109,8 @@
 				<dict>
 					<key>name</key>
 					<string>Clothing and Accessories</string>
+					<key>icon</key>
+					<string>👚</string>
 					<key>contains</key>
 					<array>
 						<string>Shops</string>
@@ -72,6 +120,8 @@
 				<dict>
 					<key>name</key>
 					<string>Computers</string>
+					<key>icon</key>
+					<string>🖥️</string>
 					<key>contains</key>
 					<array>
 						<string>Shops</string>
@@ -83,6 +133,8 @@ Computers and Electronics</string>
 				<dict>
 					<key>name</key>
 					<string>Groceries</string>
+					<key>icon</key>
+					<string>🛒</string>
 					<key>contains</key>
 					<array>
 						<string>Shops</string>
@@ -92,6 +144,8 @@ Computers and Electronics</string>
 				<dict>
 					<key>name</key>
 					<string>Malls</string>
+					<key>icon</key>
+					<string>🏬</string>
 					<key>contains</key>
 					<array>
 						<string>Shops</string>
@@ -101,9 +155,55 @@ Computers and Electronics</string>
 				<dict>
 					<key>name</key>
 					<string>All Shops</string>
+					<key>icon</key>
+					<string>🛍️</string>
 					<key>contains</key>
 					<array>
 						<string>Shops</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Automotive Shopping</string>
+					<key>icon</key>
+					<string>🏎️</string>
+					<key>contains</key>
+					<array>
+						<string>Shops</string>
+						<string>Automotive</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Beauty Products</string>
+					<key>icon</key>
+					<string>💄</string>
+					<key>contains</key>
+					<array>
+						<string>Shops</string>
+						<string>Beauty Products</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Bookstores</string>
+					<key>icon</key>
+					<string>📚</string>
+					<key>contains</key>
+					<array>
+						<string>Shops</string>
+						<string>Bookstores</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Department Stores</string>
+					<key>icon</key>
+					<string>🏬</string>
+					<key>contains</key>
+					<array>
+						<string>Shops</string>
+						<string>Department Stores</string>
 					</array>
 				</dict>
 			</array>
@@ -111,6 +211,8 @@ Computers and Electronics</string>
 		<dict>
 			<key>name</key>
 			<string>Payments</string>
+			<key>icon</key>
+			<string>💳</string>
 			<key>contains</key>
 			<array>
 				<string>Payment</string>
@@ -120,6 +222,8 @@ Computers and Electronics</string>
 				<dict>
 					<key>name</key>
 					<string>Rent</string>
+					<key>icon</key>
+					<string>🏡</string>
 					<key>contains</key>
 					<array>
 						<string>Payment</string>
@@ -129,6 +233,8 @@ Computers and Electronics</string>
 				<dict>
 					<key>name</key>
 					<string>Loans</string>
+					<key>icon</key>
+					<string>💵</string>
 					<key>contains</key>
 					<array>
 						<string>Payment</string>
@@ -138,10 +244,267 @@ Computers and Electronics</string>
 				<dict>
 					<key>name</key>
 					<string>Credit Card Payments</string>
+					<key>icon</key>
+					<string>💳</string>
 					<key>contains</key>
 					<array>
 						<string>Payment</string>
 						<string>Credit Card</string>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Travel &amp; Transportation</string>
+			<key>icon</key>
+			<string>🚆</string>
+			<key>contains</key>
+			<array>
+				<string>Travel</string>
+			</array>
+			<key>subCategories</key>
+			<array>
+				<dict>
+					<key>name</key>
+					<string>Ride Share</string>
+					<key>icon</key>
+					<string>🚗</string>
+					<key>contains</key>
+					<array>
+						<string>Travel</string>
+						<string>Car Service</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Gas Stations</string>
+					<key>icon</key>
+					<string>⛽</string>
+					<key>contains</key>
+					<array>
+						<string>Travel</string>
+						<string>Gas Stations</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Public Transit</string>
+					<key>icon</key>
+					<string>🚆</string>
+					<key>contains</key>
+					<array>
+						<string>Travel</string>
+						<string>Public Transportation Services</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Parking</string>
+					<key>icon</key>
+					<string>🚆</string>
+					<key>contains</key>
+					<array>
+						<string>Travel</string>
+						<string>Parking</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Flights</string>
+					<key>icon</key>
+					<string>🛫</string>
+					<key>contains</key>
+					<array>
+						<string>Travel</string>
+						<string>Airlines and Aviation Services</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>All Travel</string>
+					<key>icon</key>
+					<string>🛫</string>
+					<key>contains</key>
+					<array>
+						<string>Travel</string>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Utilities</string>
+			<key>icon</key>
+			<string>🔧</string>
+			<key>contains</key>
+			<array>
+				<string>Service</string>
+				<string>Utilities</string>
+			</array>
+			<key>subCategories</key>
+			<array>
+				<dict>
+					<key>name</key>
+					<string>Water</string>
+					<key>icon</key>
+					<string>🚰</string>
+					<key>contains</key>
+					<array>
+						<string>Service</string>
+						<string>Utilities</string>
+						<string>Water</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Gas</string>
+					<key>icon</key>
+					<string>🛢️</string>
+					<key>contains</key>
+					<array>
+						<string>Service</string>
+						<string>Utilities</string>
+						<string>Gas</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Electric</string>
+					<key>icon</key>
+					<string>🔌</string>
+					<key>contains</key>
+					<array>
+						<string>Service</string>
+						<string>Utilities</string>
+						<string>Electric</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Heating</string>
+					<key>icon</key>
+					<string>🥵</string>
+					<key>contains</key>
+					<array>
+						<string>Service</string>
+						<string>Utilities</string>
+						<string>Heating, Ventilating, and Air Conditioning</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Waste</string>
+					<key>icon</key>
+					<string>🗑️</string>
+					<key>contains</key>
+					<array>
+						<string>Service</string>
+						<string>Utilities</string>
+						<string>Sanitary and Waste Management</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>All Utilities</string>
+					<key>icon</key>
+					<string>🔧</string>
+					<key>contains</key>
+					<array>
+						<string>Service</string>
+						<string>Utilities</string>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Services</string>
+			<key>icon</key>
+			<string>🛎️</string>
+			<key>contains</key>
+			<array>
+				<string>Service</string>
+			</array>
+			<key>subCategories</key>
+			<array>
+				<dict>
+					<key>name</key>
+					<string>Cable</string>
+					<key>icon</key>
+					<string>📺</string>
+					<key>contains</key>
+					<array>
+						<string>Service</string>
+						<string>Cable</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Cleaning</string>
+					<key>icon</key>
+					<string>🧹</string>
+					<key>contains</key>
+					<array>
+						<string>Service</string>
+						<string>Cleaning</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Insurance</string>
+					<key>icon</key>
+					<string>📝</string>
+					<key>contains</key>
+					<array>
+						<string>Service</string>
+						<string>Insurance</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Internet
+Internet</string>
+					<key>icon</key>
+					<string>🌐</string>
+					<key>contains</key>
+					<array>
+						<string>Service</string>
+						<string>Internet Services</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Subscription Services</string>
+					<key>icon</key>
+					<string>🌐</string>
+					<key>contains</key>
+					<array>
+						<string>Service</string>
+						<string>Subscription</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Phone</string>
+					<key>icon</key>
+					<string>🌐</string>
+					<key>contains</key>
+					<array>
+						<string>Service</string>
+						<string>Telecommunication Services</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Hair Care</string>
+					<key>icon</key>
+					<string>👱‍♀️</string>
+					<key>contains</key>
+					<array>
+						<string>Service</string>
+						<string>Personal Care</string>
+						<string>Hair Salons and Barbers</string>
 					</array>
 				</dict>
 			</array>

@@ -19,9 +19,18 @@ public class Category: NSManagedObject {
         
         self.name = categoryEntry.name
         self.contains = categoryEntry.contains
+        self.icon = categoryEntry.icon
         
         if let subCategories = categoryEntry.subCategories{
-            self.subCategories = NSSet(array: subCategories)
+            
+            var subCategoryList = [Category]()
+            
+            for subCategory in subCategories{
+                let newCategory = Category(categoryEntry: subCategory, context: context)
+                subCategoryList.append(newCategory)
+            }
+            
+            self.subCategories = NSSet(array: subCategoryList)
         }
         
         

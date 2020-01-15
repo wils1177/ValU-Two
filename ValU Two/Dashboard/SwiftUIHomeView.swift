@@ -8,7 +8,14 @@
 
 import SwiftUI
 
-struct SwiftUIHomeView: View {
+struct HomeView: View {
+    
+    var viewModel: HomeViewModel
+    
+    init(viewModel: HomeViewModel){
+        self.viewModel = viewModel
+    }
+    
     var body: some View {
         
         ScrollView(.vertical, content: {
@@ -22,7 +29,7 @@ struct SwiftUIHomeView: View {
                         
                     }){
                         ZStack{
-                            Image(uiImage: UIImage(systemName: "bell")!).padding().background(Color(.white)).cornerRadius(50).shadow(radius: 3)
+                            Image(uiImage: UIImage(systemName: "gear")!).padding().background(Color(.white)).cornerRadius(50).shadow(radius: 3)
                         }.padding(.trailing, 30)
                         
                     }
@@ -30,9 +37,8 @@ struct SwiftUIHomeView: View {
                     
                     
                 }
-                SwiftUITestView(viewData: BudgetCardViewData(income: "$1000.00", spent: "$339.00"))
-                SwiftUIBudgetView()
-                SwiftUISavingsCardView()
+                BudgetCardView(viewModel: self.viewModel.viewData!.budgetCardViewModel)
+                SpendingCardView(viewModel: self.viewModel.viewData!.spendingCardViewModel)
                 SwiftUIAccountsView()
                 Spacer()
                 
@@ -40,16 +46,17 @@ struct SwiftUIHomeView: View {
             }
             
             
-        }).padding().padding().padding(.bottom, 68)
+        })
         
         
         
         
     }
 }
-
+/*
 struct SwiftUIHomeView_Previews: PreviewProvider {
     static var previews: some View {
         SwiftUIHomeView()
     }
 }
+*/

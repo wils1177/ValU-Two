@@ -61,14 +61,9 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, SetSavings
     
     func incomeSubmitted(budget: Budget, sender: EnterIncomePresentor) {
         
-        if budget.isAmountEmpty(){
-            print("Budget is empty!")
-        }
-        else{
-            
-            self.budgetToCreate = budget
-            continueToSetSavings()
-        }
+        self.budgetToCreate = budget
+        continueToSetSavings()
+    
     }
     
     func continueToSetSavings(){

@@ -114,7 +114,7 @@ struct SetSavingsView: View {
 
 struct SetSavingsView_Previews: PreviewProvider {
     static var previews: some View {
-        SetSavingsView(presentor: nil, viewData: SetSavingsViewData(savingsAmount: "$500", spendingAmount: "$500", savingsPercentage: 0.5))
+        SetSavingsView(presentor: nil, viewData: SetSavingsViewData(savingsAmount: "500", spendingAmount: "500", savingsPercentage: 0.5))
     }
 }
 

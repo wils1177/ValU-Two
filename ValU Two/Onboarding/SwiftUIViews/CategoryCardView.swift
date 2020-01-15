@@ -54,14 +54,23 @@ struct CategoryCardView: View {
           
           HStack{
             
-            Text("🍿").font(.largeTitle)
+            Text(self.viewData.icon).font(.largeTitle)
             Text(self.viewData.sectionTitle).font(.title).fontWeight(.bold)
             Spacer()
             //CategoryButtonView(text: "Add Section")
             }
             
+                HStack{
+                    Text("You've spent " + self.viewData.amountSpent + " in the last 30 days")
+                    Spacer()
+                }
+                
+                
+            
           
           }.padding()
+            
+            
             
             ForEach(self.buttonArray, id: \.self){ row in
                 
@@ -87,6 +96,6 @@ struct CategoryCardView: View {
 
 struct CategoryCardView_Previews: PreviewProvider {
     static var previews: some View {
-        CategoryCardView(presentor: nil, viewData: BudgetCategoryViewData(sectionTitle: "test", categories: ["hi", "hello"]))
+        CategoryCardView(presentor: nil, viewData: BudgetCategoryViewData(sectionTitle: "test", icon: "H", amountSpent: "50", categories: ["hi", "hello"]))
     }
 }

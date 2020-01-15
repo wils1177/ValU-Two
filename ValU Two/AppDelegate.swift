@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 import Firebase
 import UserNotifications
+import SwiftUI
 //import FirebaseFirestoreSwift
 
 @UIApplicationMain
@@ -22,13 +23,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        let tabBarController = DashboardTabBarController()
-        coordinator = AppCoordinator(rootViewController: tabBarController)
+        let dashboardPresentor = DashboardViewModel()
+        let rootView = dashboardPresentor.configure() as! UIHostingController<DashboardTabView>
+        coordinator = AppCoordinator(rootViewController: rootView)
         coordinator?.start()
-        tabBarController.parentCoordinator = coordinator
+        dashboardPresentor.coordinator = coordinator
         
         window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = tabBarController
+        window?.rootViewController = rootView
         window?.makeKeyAndVisible()
         
         UINavigationBar.appearance().tintColor = .black

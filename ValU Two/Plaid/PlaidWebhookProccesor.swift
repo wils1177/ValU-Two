@@ -24,6 +24,9 @@ class PlaidWebhookProccesor{
             UserDefaults.standard.set(true, forKey: incomeItemKey)
             NotificationCenter.default.post(name: .incomeReady, object: nil)
         }
+        else if webhookCode == "DEFAULT_UPDATE"{
+            print("Proccessing Default Update Webhook")
+        }
         
         
         

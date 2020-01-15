@@ -46,7 +46,7 @@ struct LoadingAccountsView: View {
                 AccountsLoadedView(presentor: self.presentor)
             }
             else{
-                CouldNotLoadAccountsView()
+                CouldNotLoadView(errorMessage: "Could Not Load Accounts. Please Try Again.")
             }
         }
         else{

@@ -26,6 +26,8 @@ struct SetLimitsView: View {
         
             VStack{
                 
+                ZStack{
+                
                 ScrollView(){
                     SpendingLimitSummaryView(leftToSpend: self.viewData.leftToSpend).padding()
                     
@@ -35,6 +37,32 @@ struct SetLimitsView: View {
                 
                     
                 }.navigationBarTitle(Text("Balance Budget"))
+                
+                
+                HStack{
+                    Spacer()
+                    VStack{
+                    Spacer()
+                    Button(action: {
+                        self.presentor?.submit()
+                    }){
+                        
+                        HStack{
+                            
+                            ZStack{
+                                Text("Done").font(.subheadline).foregroundColor(.black).bold().padding()
+                                
+                                
+                                
+                            }
+                            
+                        }.background(LinearGradient(gradient:  Gradient(colors: [.white, .white]), startPoint: .topTrailing, endPoint: .center)).cornerRadius(30).shadow(radius: 20).padding()
+                        
+                        
+                    }
+                    }
+                }
+                }
                 
             }
         
@@ -62,10 +90,10 @@ struct Background<Content: View>: View {
     }
 }
 
-/*
+
 struct SetLimitsView_Previews: PreviewProvider {
     static var previews: some View {
-        SetLimitsView()
+        SetLimitsView(presentor: nil, viewData: SetLimitsViewData(leftToSpend: "500", categoryPercentages: [ViewCategory(name: "hi", limit: "400", lastThirtyDaysSpent: "459")]))
     }
 }
-*/
+

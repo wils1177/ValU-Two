@@ -76,7 +76,7 @@ struct LimitSliderView: View {
             }.padding(.horizontal)
             
             HStack{
-                Text("You spent $200 in the last month").font(.body).padding(.bottom)
+                Text("You spent $" + viewCategory.lastThirtyDaysSpent +  " in the last month").font(.body).padding(.bottom)
                 Spacer()
             }.padding(.horizontal)
             
@@ -90,7 +90,7 @@ struct LimitSliderView: View {
 
 struct LimitSliderView_Previews: PreviewProvider {
     static var previews: some View {
-        LimitSliderView(presentor: nil, viewCategory: ViewCategory(name: "testing", limit: "500"))
+        LimitSliderView(presentor: nil, viewCategory: ViewCategory(name: "testing", limit: "500", lastThirtyDaysSpent: "300"))
     }
 }
 

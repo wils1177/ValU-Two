@@ -106,10 +106,26 @@ class DataManager {
         
     }
     
-    func getTransactions(startDate: Date) throws -> [Transaction]{
+    func getTransactions(startDate: Date, endDate: Date) throws -> [Transaction]{
         
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Transaction")
-        request.predicate = NSPredicate(format: "date > %@", startDate as NSDate)
+        request.predicate = NSPredicate(format: "(date > %@) AND (date <= %@)", startDate as NSDate, endDate as NSDate)
+        
+        do{
+            let result = try context.fetch(request) as! [Transaction]
+            return result
+        }
+        catch{
+           print("Failed to fetch transactions")
+            throw DataManagerErrors.NoTransactionsFound
+        }
+        
+    }
+    
+    func getTransactions(category: Category) throws -> [Transaction]{
+        
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Transaction")
+        request.predicate = NSPredicate(format: "category.name == %@", category.name!)
         
         do{
             let result = try context.fetch(request) as! [Transaction]

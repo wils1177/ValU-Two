@@ -57,7 +57,6 @@ class PlaidConnection{
     
     func exchangePublicForAccessToken(dispatch: DispatchGroup, completion : @escaping (Result<Data, Error>) -> ()) throws{
         
-        print("how about this??")
         let URL = PlaidURLs.TokenExchange
         let keys = getAPIKeys()
         

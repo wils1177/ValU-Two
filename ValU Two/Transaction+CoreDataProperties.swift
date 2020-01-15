@@ -2,7 +2,7 @@
 //  Transaction+CoreDataProperties.swift
 //  
 //
-//  Created by Clayton Wilson on 11/10/19.
+//  Created by Clayton Wilson on 1/12/20.
 //
 //
 
@@ -24,5 +24,6 @@ extension Transaction {
     @NSManaged public var plaidCategories: [String]?
     @NSManaged public var transactionId: String?
     @NSManaged public var location: Location?
+    @NSManaged public var category: Category?
 
 }

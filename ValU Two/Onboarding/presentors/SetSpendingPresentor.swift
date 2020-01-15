@@ -13,11 +13,13 @@ import SwiftUI
 class ViewCategory : ObservableObject, Hashable {
 
     var name : String
+    var lastThirtyDaysSpent : String
     @Published var limit : String
     
-    init(name: String, limit: String) {
+    init(name: String, limit: String, lastThirtyDaysSpent: String) {
         self.name = name
         self.limit = limit
+        self.lastThirtyDaysSpent = lastThirtyDaysSpent
     }
     
     func hash(into hasher: inout Hasher) {
@@ -67,30 +69,38 @@ class SetSpendingPresentor : Presentor {
     
     func generateViewData() -> SetLimitsViewData{
         
-        let available = self.budget.getAmountAvailable()
         
         var categoryPercentages = [ViewCategory]()
-        var spent : Float = 0.0
         for case let spendingCategory as SpendingCategory in self.budget.spendingCategories!{
             let name = spendingCategory.category?.name
-            let viewCategory = ViewCategory(name : name!, limit: String(roundToTens(x: spendingCategory.limit)))
+            let lastThirtyDaysSpent = spendingCategory.initialThirtyDaysSpent
+            let viewCategory = ViewCategory(name : name!, limit: String(roundToTens(x: spendingCategory.limit)), lastThirtyDaysSpent: String(lastThirtyDaysSpent))
             categoryPercentages.append(viewCategory)
-            
-            
-            spent = spent + spendingCategory.limit
-            
             
         }
         
-        let leftToSpend = roundToTens(x: available) - roundToTens(x: spent)
+        let leftToSpend = calculateLeftToSpend()
         
         return SetLimitsViewData(leftToSpend: String(leftToSpend), categoryPercentages: categoryPercentages)
         
     }
     
+    func calculateLeftToSpend() -> Int{
+    
+        let available = self.budget.getAmountAvailable()
+        
+        var spent : Float = 0.0
+        for case let spendingCategory as SpendingCategory in self.budget.spendingCategories!{
+            spent = spent + spendingCategory.limit
+        }
+        
+        let leftToSpend = roundToTens(x: available) - roundToTens(x: spent)
+        return leftToSpend
+    }
+    
     
     func textFieldChanged(categoryName: String, newValue: String){
-        
+        //TODO: Actually write this function ):
     }
     
     
@@ -116,8 +126,7 @@ class SetSpendingPresentor : Presentor {
             }
             
             //Update the View Data
-            let newViewData = generateViewData()
-            self.viewData?.leftToSpend = newViewData.leftToSpend
+            self.viewData?.leftToSpend = String(calculateLeftToSpend())
             
             for category in self.viewData!.categoryPercentages{
                 if category.name == categoryName{

@@ -9,51 +9,48 @@
 import SwiftUI
 
 
-struct SwiftUITestView: View {
+struct BudgetCardView: View {
     
-    let viewData : BudgetCardViewData
+    let viewModel : BudgetCardViewModel
     
-    init(viewData : BudgetCardViewData){
-        self.viewData = viewData
+    init(viewModel : BudgetCardViewModel){
+        self.viewModel = viewModel
     }
     
     var body: some View {
         
         VStack{
-        VStack(alignment: .leading) {
+        VStack() {
             HStack{
-                Text("Budget").font(.title).fontWeight(.bold)
+                Text(self.viewModel.viewData.title).font(.title).fontWeight(.bold)
                 Spacer()
+                Image(systemName: "pencil.circle")
             }
-
+            
             HStack{
-                Text("Income").font(.subheadline).fontWeight(.bold)
-                    Spacer()
-                Text(self.viewData.income).font(.subheadline).fontWeight(.bold)
+                Text("Spent this month").font(.headline).fontWeight(.bold)
+                Spacer()
+                Text(self.viewModel.viewData.spent).font(.system(size: 20)).fontWeight(.bold)
                 
-            }
+                
+            }.padding(.top)
+
+                
+            
             HStack{
-                Text("Spent").font(.subheadline).fontWeight(.bold)
-                    Spacer()
-                Text(self.viewData.spent).font(.subheadline).fontWeight(.bold)
+                Text("Remaning").font(.headline).fontWeight(.bold)
+                Spacer()
+                Text(self.viewModel.viewData.remaining).font(.system(size: 20)).fontWeight(.bold)
+                
+                
+                    
+                
                 
             }
             
-             HStack{
-                 
-                 //Image(systemName: "gamecontroller")
-                 ZStack(alignment: .leading){
-                 
-                    Capsule().frame(width: 320, height: 30).foregroundColor(.gray).cornerRadius(15)
-                     
-                     
-                     Capsule().frame(width: 170, height: 30).foregroundColor(.clear)
-                         .background(LinearGradient(gradient:  Gradient(colors: [.red, .orange]), startPoint: .topTrailing, endPoint: .center)).cornerRadius(15)
-
-                     
-                 }
-             }
-            }.padding().background(Color(.white)).cornerRadius(20).padding().shadow(radius: 20)
+            
+            ProgressBarView(percentage: self.viewModel.viewData.percentage, color: Color(.orange))
+        }.padding().background(Color(.white)).cornerRadius(10).shadow(radius: 20).padding(.leading).padding(.trailing).padding(.bottom)
         
         
         }
@@ -62,13 +59,14 @@ struct SwiftUITestView: View {
     }
 }
 
+/*
 #if DEBUG
-struct SwiftUITestView_Previews: PreviewProvider {
+struct BudgetCardView_Previews: PreviewProvider {
     static var previews: some View {
-        SwiftUITestView(viewData: BudgetCardViewData(income: "$1000.00", spent: "$339.00"))
+        BudgetCardView(viewData: BudgetCardViewData(remaining: "500", spent: "500", percentage: CGFloat(0.5)))
     }
 }
 #endif
-
+*/
 
 

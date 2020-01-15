@@ -100,6 +100,6 @@ struct SelectCategoriesView: View {
 
 struct SelectCategoriesView_Previews: PreviewProvider {
     static var previews: some View {
-        SelectCategoriesView(presentor: nil, viewData: [BudgetCategoryViewData(sectionTitle: "test", categories: ["what", "no"])])
+        SelectCategoriesView(presentor: nil, viewData: [BudgetCategoryViewData(sectionTitle: "test", icon: "T", amountSpent: "$50.0", categories: ["what", "no"])])
     }
 }

@@ -9,28 +9,37 @@
 import SwiftUI
 
 struct SwiftUIAccountCardView: View {
+    
+    let account : AccountViewData
+    
+    init(account: AccountViewData){
+        self.account = account
+    }
+    
     var body: some View {
         VStack(alignment: .leading){
-            Text("MSUFCU")
+            Text(account.name)
             Spacer().frame(height: 40)
 
             
             HStack{
-                Text("$5000.00").font(.headline).fontWeight(.bold)
+                Text("$" + account.balance).font(.headline).fontWeight(.bold)
             }
             HStack{
-               Text("  XXXX 1234").font(.footnote)
+                Text("XXXX" + account.mask).font(.footnote)
                Spacer().frame(width: 60)
             }
             
             
         }.padding().background(LinearGradient(gradient:  Gradient(colors: [.orange, .yellow]), startPoint: .topTrailing, endPoint: .center))
-            .cornerRadius(20).padding().shadow(radius: 10)
+            .cornerRadius(20).padding(.leading).padding(.trailing).shadow(radius: 5)
     }
 }
 
+/*
 struct SwiftUIAccountCardView_Previews: PreviewProvider {
     static var previews: some View {
         SwiftUIAccountCardView()
     }
 }
+*/

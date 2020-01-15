@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 protocol Presentor {
     func configure() -> UIViewController

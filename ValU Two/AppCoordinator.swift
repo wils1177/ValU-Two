@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import SwiftUI
 
 class AppCoordinator: Coordinator{
     
@@ -16,12 +17,12 @@ class AppCoordinator: Coordinator{
     
     // Member Variables
     var childCoordinators = [Coordinator]()
-    let tabBarController : DashboardTabBarController
+    let rootController : UIHostingController<DashboardTabView>
     let userDefaults = UserDefaults.standard
     
     
-    init(rootViewController: DashboardTabBarController){
-        self.tabBarController = rootViewController
+    init(rootViewController: UIHostingController<DashboardTabView>){
+        self.rootController = rootViewController
         
     }
     
@@ -47,7 +48,7 @@ class AppCoordinator: Coordinator{
         print("Starting Onboarding Flow")
         let nav = UINavigationController()
         nav.modalPresentationStyle = .fullScreen
-        self.tabBarController.present(nav, animated: false)
+        self.rootController.present(nav, animated: false)
         let onboardingCoordinator = OnboardingFlowCoordinator(navigationController: nav)
         onboardingCoordinator.parent = self
         childCoordinators.append(onboardingCoordinator)
@@ -69,8 +70,11 @@ class AppCoordinator: Coordinator{
             }
         }
         
-        self.tabBarController.setUpViews()
-        
+        //Redraw the View
+        let model = DashboardViewModel()
+        let updatedView = model.configure() as! UIHostingController<DashboardTabView>
+        self.rootController.rootView = updatedView.rootView
+                
     }
     
     

@@ -9,6 +9,9 @@
 import SwiftUI
 
 struct SwiftUIAccountsView: View {
+    
+    var viewModel = AccountsViewModel()
+    
     var body: some View {
         VStack{
             HStack{
@@ -17,17 +20,21 @@ struct SwiftUIAccountsView: View {
                 
             }
             
+            
+            
         
             // statuses
             ScrollView(.horizontal, content: {
+                
                 HStack(spacing: 0) {
-                    SwiftUIAccountCardView()
-                    SwiftUIAccountCardView()
-                    SwiftUIAccountCardView()
+                    ForEach(self.viewModel.accountViewData, id: \.self){ account in
+                        
+                        SwiftUIAccountCardView(account: account)
+
+                        
+                    }
                 }
-                .padding()
             })
-            .frame(height: 140)
             
             
             
