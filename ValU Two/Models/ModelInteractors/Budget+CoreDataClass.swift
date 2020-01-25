@@ -17,7 +17,84 @@ enum TimeFrame: Int32 {
 @objc(Budget)
 public class Budget: NSManagedObject {
     
-
+    
+    convenience init(context: NSManagedObjectContext){
+        
+        print("creating budget")
+        let entity = NSEntityDescription.entity(forEntityName: "Budget", in: context)
+        self.init(entity: entity!, insertInto: context)
+        self.active = true
+        self.spent = 0.0
+        setTimeFrame(timeFrame: TimeFrame.monthly)
+        self.generateSpendingCategories()
+        
+    }
+    
+    func generateSpendingCategories(){
+        
+        let categoryData = CategoriesData()
+        let categoryList = categoryData.getCategoriesList()
+        
+        //Create a spending category for ALL categoryies
+        createSpendingCategory(categories: categoryList.categories)
+        
+    }
+    
+    func getSubSpendingCategories() -> [SpendingCategory]{
+        
+        var categoriesToReturn = [SpendingCategory]()
+        
+        for case let category as SpendingCategory in self.spendingCategories!{
+            
+            if category.subSpendingCategories != nil{
+                for case let subCategory as SpendingCategory in category.subSpendingCategories!{
+                    categoriesToReturn.append(subCategory)
+                }
+            }
+            
+        }
+        
+        return categoriesToReturn
+    }
+    
+    func getAllSpendingCategories() -> [SpendingCategory]{
+        
+        var categoriesToReturn = [SpendingCategory]()
+        
+        for case let category as SpendingCategory in self.spendingCategories!{
+            
+            categoriesToReturn.append(category)
+            
+            if category.subSpendingCategories != nil{
+                for case let subCategory as SpendingCategory in category.subSpendingCategories!{
+                    categoriesToReturn.append(subCategory)
+                }
+            }
+            
+        }
+        
+        return categoriesToReturn
+        
+    }
+    
+    func createSpendingCategory(categories: [CategoryEntry]){
+        
+        for category in categories{
+            
+            let newSpendingCategory = DataManager().createNewSpendingCategory(categoryEntry: category)
+            self.addToSpendingCategories(newSpendingCategory)
+            
+            if category.subCategories != nil{
+                for subCategory in category.subCategories!{
+                    let newSpendingSubCategory = DataManager().createNewSpendingCategory(categoryEntry: subCategory)
+                    newSpendingCategory.addToSubSpendingCategories(newSpendingSubCategory)
+                }
+            }
+            
+        }
+        
+    }
+        
     
     func calculateSavingsAmount(percentageOfAmount: Float) -> Float{
         var calculation = percentageOfAmount * self.amount
@@ -51,36 +128,6 @@ public class Budget: NSManagedObject {
         return self.amount * (1 - self.savingsPercent)
     }
     
-
-    
-    func calculateAmountSpent() -> Float{
-        
-        do{
-            print(startDate)
-            let transactions = try DataManager().getTransactions(startDate: self.startDate!, endDate: self.endDate!)
-            var amountSpent : Float = 0
-            
-            for transaction in transactions{
-                
-                if transaction.amount > 0{
-                    amountSpent = amountSpent + Float(transaction.amount)
-                }
-                
-            }
-            return amountSpent
-        }
-        catch{
-            return 0.0
-        }
-     
-    }
-    
-    func updateSpendingAmounts(){
-        
-        let transactionProccesor = TransactionProccessor()
-        transactionProccesor.initilizeSpendingCategoryAmounts(spendingCategories: self.spendingCategories?.array as! [SpendingCategory], startDate: self.startDate!, endDate: self.endDate!)
-        
-    }
     
     
 

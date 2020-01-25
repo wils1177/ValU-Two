@@ -8,43 +8,19 @@
 
 import SwiftUI
 
-struct CategoryCardView: View {
-    var buttonArray = [[String]]()
+struct CategoryCardView<Model>: HasButtonRows, View where Model: CategoryListViewModel {
+    var buttonArray = [[CategoryButton]]()
     
     var viewData : BudgetCategoryViewData
-    var presentor : BudgetCardsPresentor?
+    var presentor : Model?
     
-    init(presentor: BudgetCardsPresentor?, viewData: BudgetCategoryViewData){
+    init(presentor: Model?, viewData: BudgetCategoryViewData){
         self.viewData = viewData
-        self.buttonArray = generateButtonArray()
+        self.buttonArray = generateButtonArray(buttonList: self.viewData.categories)
         self.presentor = presentor
     }
     
-    func generateButtonArray() -> [[String]]{
-            
-        var charCount = 0
-        var all = [[String]]()
-        var row = [String]()
-        for name in self.viewData.categories {
-            
-            charCount = charCount + name.count
-            
-            if charCount >= 29{
-                all.append(row)
-                row = [String]()
-                charCount = name.count
-            }
-            
-            
-            row.append(name)
-            
-            
-        }
-        
-        all.append(row)
-        return all
-        
-    }
+    
     
     
     var body: some View {
@@ -78,7 +54,7 @@ struct CategoryCardView: View {
                     
                 ForEach(row, id: \.self){button in
                     
-                    CategoryButtonView(presentor: self.presentor, text: button)
+                    CategoryButtonView(presentor: self.presentor!, button: button)
                     
                 }
                     
@@ -94,8 +70,33 @@ struct CategoryCardView: View {
     }
 }
 
-struct CategoryCardView_Previews: PreviewProvider {
-    static var previews: some View {
-        CategoryCardView(presentor: nil, viewData: BudgetCategoryViewData(sectionTitle: "test", icon: "H", amountSpent: "50", categories: ["hi", "hello"]))
+extension HasButtonRows{
+    func generateButtonArray(buttonList: [CategoryButton]) -> [[CategoryButton]]{
+            
+        var charCount = 1
+        var all = [[CategoryButton]]()
+        var row = [CategoryButton]()
+        for category in buttonList {
+            
+            charCount = charCount + category.name.count
+            
+            if charCount >= 34{
+                all.append(row)
+                row = [CategoryButton]()
+                charCount = category.name.count
+            }
+            
+            
+            row.append(category)
+            
+            
+        }
+        
+        all.append(row)
+        return all
+        
     }
 }
+
+
+

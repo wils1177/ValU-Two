@@ -18,38 +18,23 @@ struct HomeView: View {
     
     var body: some View {
         
-        ScrollView(.vertical, content: {
-            VStack(alignment: .leading){
-                HStack{
-                    Text("Hello Clay").font(.largeTitle).fontWeight(.heavy).padding()
+        NavigationView{
+            
+            ScrollView(.vertical, content: {
+                VStack(alignment: .leading){
+                    
+                    BudgetCardView(viewModel: self.viewModel.viewData!.budgetCardViewModel).padding(.top)
+                    SpendingCardView(viewModel: self.viewModel.viewData!.spendingCardViewModel)
+                    SwiftUIAccountsView()
                     Spacer()
                     
                     
-                    Button(action: {
-                        
-                    }){
-                        ZStack{
-                            Image(uiImage: UIImage(systemName: "gear")!).padding().background(Color(.white)).cornerRadius(50).shadow(radius: 3)
-                        }.padding(.trailing, 30)
-                        
-                    }
-                    
-                    
-                    
                 }
-                BudgetCardView(viewModel: self.viewModel.viewData!.budgetCardViewModel)
-                SpendingCardView(viewModel: self.viewModel.viewData!.spendingCardViewModel)
-                SwiftUIAccountsView()
-                Spacer()
                 
                 
-            }
+            }).navigationBarTitle("ValU Two")
             
-            
-        })
-        
-        
-        
+        }
         
     }
 }

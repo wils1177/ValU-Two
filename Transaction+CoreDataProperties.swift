@@ -2,7 +2,7 @@
 //  Transaction+CoreDataProperties.swift
 //  
 //
-//  Created by Clayton Wilson on 1/12/20.
+//  Created by Clayton Wilson on 1/17/20.
 //
 //
 
@@ -24,6 +24,23 @@ extension Transaction {
     @NSManaged public var plaidCategories: [String]?
     @NSManaged public var transactionId: String?
     @NSManaged public var location: Location?
-    @NSManaged public var category: Category?
+    @NSManaged public var categoryMatches: NSSet?
+
+}
+
+// MARK: Generated accessors for categoryMatches
+extension Transaction {
+
+    @objc(addCategoryMatchesObject:)
+    @NSManaged public func addToCategoryMatches(_ value: Category)
+
+    @objc(removeCategoryMatchesObject:)
+    @NSManaged public func removeFromCategoryMatches(_ value: Category)
+
+    @objc(addCategoryMatches:)
+    @NSManaged public func addToCategoryMatches(_ values: NSSet)
+
+    @objc(removeCategoryMatches:)
+    @NSManaged public func removeFromCategoryMatches(_ values: NSSet)
 
 }

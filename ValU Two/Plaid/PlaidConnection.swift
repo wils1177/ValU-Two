@@ -36,7 +36,6 @@ struct Keys : Codable{
 
 class PlaidConnection{
     
-    var proccessor : PlaidProccessor
     var rootURL = "https://sandbox.plaid.com"
     var URLdict : [PlaidURLs : URL]
     
@@ -45,7 +44,6 @@ class PlaidConnection{
 
     
     init(){
-        self.proccessor = PlaidProccessor()
         self.URLdict = [PlaidURLs.GetCategories : URL(string : (rootURL + "/categories/get"))!]
         self.URLdict[PlaidURLs.TokenExchange] = URL(string : (rootURL + "/item/public_token/exchange"))!
         self.URLdict[PlaidURLs.GetTransactions] = URL(string : (rootURL + "/transactions/get"))!
@@ -75,7 +73,7 @@ class PlaidConnection{
 
 
     
-    func getTransactions(completion : @escaping (Result<Data, Error>) -> ()) throws{
+    func getTransactions(startDate: Date, endDate: Date, completion : @escaping (Result<Data, Error>) -> ()) throws{
         
         let URL = PlaidURLs.GetTransactions
         let keys = getAPIKeys()
@@ -85,15 +83,15 @@ class PlaidConnection{
             throw PlaidConnectionError.AccessTokenNotFound
         }
         
-        let calendar = Calendar.current
-        let currentDate = Date()
-        let startDate = calendar.date(byAdding: .month, value: -1, to: currentDate)
         let format = DateFormatter()
         format.dateFormat = "yyyy-MM-dd"
-        let formattedStartDate = format.string(from: startDate!)
-        let formattedCurrentDate = format.string(from: currentDate)
+        let formattedStartDate = format.string(from: startDate)
+        let formattedEndDate = format.string(from: endDate)
         
-        let json: [String: Any] = ["client_id" : keys.clientID, "secret" : keys.clientSecret, "access_token" : accessToken, "start_date" : formattedStartDate, "end_date" : formattedCurrentDate]
+        print(startDate)
+        print(endDate)
+        
+        let json: [String: Any] = ["client_id" : keys.clientID, "secret" : keys.clientSecret, "access_token" : accessToken, "start_date" : formattedStartDate, "end_date" : formattedEndDate]
         
             
         try postRequest(url: URL, jsonBody: json, completion: completion, dispatch: nil)

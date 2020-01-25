@@ -41,7 +41,7 @@ struct DashboardTabView: View {
             }
             
             // 5
-            TransactionList(viewModel: TransactionsListViewModel())
+            TransactionsTabView()
                 .tabItem {
                     VStack {
                         Image(systemName: "2.circle")
@@ -57,7 +57,7 @@ struct DashboardTabView: View {
                     }
             }.tag(3)
             
-        }.onAppear {
+        }.edgesIgnoringSafeArea(.top).onAppear {
             self.viewModel.viewAppeared()
         }
     }

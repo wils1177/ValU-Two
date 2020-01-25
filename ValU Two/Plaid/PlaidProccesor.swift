@@ -17,6 +17,14 @@ enum PlaidUserDefaultKeys: String{
 
 class PlaidProccessor{
     
+    var spendingCategories : [SpendingCategory]
+    var budget : Budget
+    
+    init(budget: Budget){
+        self.budget = budget
+        self.spendingCategories = budget.getSubSpendingCategories()
+    }
+    
     
     // Save the access token securly to the device's KeyChain
     func saveAccessToken(response : Data){
@@ -42,7 +50,7 @@ class PlaidProccessor{
     }
     
     //Save the public token to the devices keychain
-    func savePublicToken(publicToken: String){
+    static func savePublicToken(publicToken: String){
         
         let saveSuccessful: Bool = KeychainWrapper.standard.set(publicToken, forKey: "public_token")
         print(saveSuccessful)
@@ -53,21 +61,27 @@ class PlaidProccessor{
      Takes in Plaid JSON response
      Parses and saves trasnsactions response to CoreData
     */
-    func aggregate(response: Data){
+    func aggregate(response: Data, isInitial: Bool = true){
    
         let decoder = JSONDecoder()
         
         do {
             let parsedResponse = try decoder.decode(TransactionsResponse.self, from: response)
             
-            proccessAccounts(response: parsedResponse.accounts)
+            if isInitial{
+                proccessAccounts(response: parsedResponse.accounts)
+            }
+            
             
             //check to make sure there are some transactions before proccessing
             if parsedResponse.trasactions != nil{
                 proccessTransactions(response: parsedResponse.trasactions!)
             }
             
-            processItem(response: parsedResponse.item)
+            if isInitial{
+                processItem(response: parsedResponse.item)
+            }
+            
      
             
         } catch (let err) {
@@ -122,13 +136,19 @@ class PlaidProccessor{
             
             for account in dataManager.getAccounts(){
                 if account.accountId == transaction.accountId{
-                    dataManager.saveTransaction(transaction: transaction)
+                    
+                    let newTransaction = dataManager.saveTransaction(transaction: transaction)
+                        
+                    TransactionProccessor(budget: self.budget).proccessTransactionToCategory(transaction: newTransaction, spendingCategories: self.spendingCategories)
+
+                    
+                    
                 }
             }
 
         }
         
-        dataManager.saveDatabase()
+        
 
         
     }

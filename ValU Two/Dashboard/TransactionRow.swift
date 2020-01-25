@@ -11,6 +11,7 @@ import SwiftUI
 struct TransactionRow: View {
     
     var viewModel : TransactionViewData
+    @State var showingDetail = false
     
     init(viewModel : TransactionViewData){
         self.viewModel = viewModel
@@ -18,14 +19,17 @@ struct TransactionRow: View {
     
     var body: some View {
         HStack{
+
             Button(action: {
                 print("clicked the category button")
+                self.showingDetail.toggle()
             }){
             ZStack{
                 
-                //Rectangle().frame(width: 60, height: 60).foregroundColor(.clear).cornerRadius(10).shadow(radius: 3)
                 Text(viewModel.icon).font(.largeTitle)
             }
+            }.buttonStyle(BorderlessButtonStyle()).sheet(isPresented: $showingDetail) {
+                EditCategoriesView(viewModel: EditCategoryViewModel(transaction: self.viewModel.rawTransaction), onDismiss: {self.showingDetail = false})
             }
 
             VStack{
@@ -56,14 +60,10 @@ struct TransactionRow: View {
                 
             }.frame(maxWidth: 70)
 
-        }.padding().background(Color(.white)).cornerRadius(10).shadow(radius: 5).padding(.leading).padding(.trailing).padding(7)
+        }.padding().background(Color(.white)).cornerRadius(10).shadow(radius: 5).padding(3)
     }
 }
 
 
-struct TransactionRow_Previews: PreviewProvider {
-    static var previews: some View {
-        TransactionRow(viewModel: TransactionViewData(name: "Poop fealldkjafsdlkfjaklsdjf", amount: "$50.00", category: "test", date: "34/4523", icon: "5"))
-    }
-}
+
 

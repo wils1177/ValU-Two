@@ -13,6 +13,31 @@ protocol Presentor {
     func configure() -> UIViewController
 }
 
+protocol ViewModel{
+    func generateViewData()
+}
+
+protocol CategoryListViewModel: UserSubmitViewModel{
+    var viewData: [BudgetCategoryViewData] { get set }
+    var selectedCategoryNames : [String] {get set}
+    var spendingCategories : [SpendingCategory]{get set}
+    
+    func deSelectedCategoryName(name:String)
+    func selectedCategoryName(name:String)
+}
+
+protocol HasButtonRows {
+    
+    var buttonArray : [[CategoryButton]]{ get set }
+    
+    func generateButtonArray(buttonList: [CategoryButton]) ->[[CategoryButton]]
+    
+}
+
+protocol UserSubmitViewModel: class, ViewModel{
+    func submit()
+}
+
 
 protocol StartPageViewDelegate {
     func continueToOnboarding()

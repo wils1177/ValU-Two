@@ -30,7 +30,7 @@ class BudgetCardViewModel {
     func generateViewData() -> BudgetCardViewData{
         
         let available = self.budget.getAmountAvailable()
-        let spendValue = self.budget.calculateAmountSpent()
+        let spendValue = self.budget.spent
 
         let remaining = "$" + String(format: "%.2f", (available - spendValue))
         let spent = "$" + String(format: "%.2f", spendValue)

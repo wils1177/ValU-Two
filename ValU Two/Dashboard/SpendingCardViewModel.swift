@@ -9,6 +9,7 @@
 import Foundation
 
 import SwiftUI
+import CoreData
 
 class SpendingCategoryViewData: Hashable{
     var percentage : CGFloat = CGFloat(0.0)
@@ -52,24 +53,32 @@ class SpendingCardViewModel {
         self.viewData = generateViewData()
     }
     
+
+    
     func generateViewData() -> SpendingCardViewData{
         
         var categories = [SpendingCategoryViewData]()
-        for case let spendingCategory as SpendingCategory in self.budget.spendingCategories!{
+        let spendingCategories = self.budget.getSubSpendingCategories()
+        for spendingCategory in spendingCategories{
             
-            let name = (spendingCategory.category?.name)!
-            let spent = spendingCategory.amountSpent
-            let limit = spendingCategory.limit
-            let icon = spendingCategory.category!.icon ?? "❓"
-            var percentage = Float(0.0)
-            if limit > 0.0 && spent > 0.0{
-                percentage = spent / limit
+            if spendingCategory.selected{
+                
+                let name = (spendingCategory.category?.name)!
+                var spent = spendingCategory.amountSpent
+                let limit = spendingCategory.limit
+                let icon = spendingCategory.category!.icon ?? "❓"
+                var percentage = Float(0.0)
+                if limit > 0.0 && spent > 0.0{
+                    percentage = spent / limit
+                }
+                
+                
+                
+                let categoryViewData = SpendingCategoryViewData(percentage: CGFloat(percentage), spent: String(format: "$%.02f", spent), limit: String(limit), name: name, icon: icon)
+                categories.append(categoryViewData)
             }
             
             
-            
-            let categoryViewData = SpendingCategoryViewData(percentage: CGFloat(percentage), spent: String(spent), limit: String(limit), name: name, icon: icon)
-            categories.append(categoryViewData)
         }
         
         

@@ -19,6 +19,7 @@
         <attribute name="amount" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="endDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="savingsPercent" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="spent" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="timeFrame" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="spendingCategories" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="SpendingCategory"/>
@@ -27,7 +28,9 @@
         <attribute name="contains" optional="YES" attributeType="Transformable" customClassName="[String]"/>
         <attribute name="icon" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="spendingCategory" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SpendingCategory" inverseName="category" inverseEntity="SpendingCategory"/>
         <relationship name="subCategories" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Category"/>
+        <relationship name="transactions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Transaction" inverseName="categoryMatches" inverseEntity="Transaction"/>
     </entity>
     <entity name="IncomeData" representedClassName="IncomeData" syncable="YES">
         <attribute name="lastYearBeforeIncomeTax" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -62,7 +65,9 @@
         <attribute name="amountSpent" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="initialThirtyDaysSpent" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="limit" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Category"/>
+        <attribute name="selected" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Category" inverseName="spendingCategory" inverseEntity="Category"/>
+        <relationship name="subSpendingCategories" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SpendingCategory"/>
     </entity>
     <entity name="Transaction" representedClassName="Transaction" syncable="YES">
         <attribute name="accountId" optional="YES" attributeType="String"/>
@@ -72,8 +77,13 @@
         <attribute name="pending" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="plaidCategories" optional="YES" attributeType="Transformable" customClassName="[String]"/>
         <attribute name="transactionId" optional="YES" attributeType="String"/>
-        <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Category"/>
+        <relationship name="categoryMatches" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Category" inverseName="transactions" inverseEntity="Category"/>
         <relationship name="location" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Location"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="transactionId"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
     <entity name="User" representedClassName="User" syncable="YES">
         <relationship name="accounts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="AccountData"/>
@@ -82,13 +92,13 @@
     <elements>
         <element name="AccountData" positionX="-63" positionY="-18" width="128" height="150"/>
         <element name="BalanceData" positionX="199.73046875" positionY="222.078125" width="128" height="88"/>
-        <element name="Budget" positionX="-261" positionY="153" width="128" height="148"/>
-        <element name="Category" positionX="-270" positionY="144" width="128" height="103"/>
+        <element name="Budget" positionX="-261" positionY="153" width="128" height="163"/>
+        <element name="Category" positionX="-270" positionY="144" width="128" height="133"/>
         <element name="IncomeData" positionX="-279" positionY="135" width="128" height="118"/>
         <element name="IncomeStreamData" positionX="-270" positionY="144" width="128" height="103"/>
         <element name="ItemData" positionX="-342.16796875" positionY="193.79296875" width="128" height="105"/>
         <element name="Location" positionX="-483.3671875" positionY="444.94140625" width="128" height="165"/>
-        <element name="SpendingCategory" positionX="-279" positionY="135" width="128" height="103"/>
+        <element name="SpendingCategory" positionX="-279" positionY="135" width="128" height="133"/>
         <element name="Transaction" positionX="408.94921875" positionY="482.421875" width="128" height="178"/>
         <element name="User" positionX="-243" positionY="171" width="128" height="75"/>
     </elements>

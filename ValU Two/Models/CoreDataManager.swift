@@ -13,6 +13,7 @@ enum DataManagerErrors: Error {
     case NoBudgetFound
     case NoTransactionsFound
     case NoItemsFound
+    case DuplicateTransaction
 }
 
 class DataManager {
@@ -27,6 +28,7 @@ class DataManager {
     
     func createNewBudget() -> Budget {
         let newBudget = Budget(context: self.context)
+        saveDatabase()
         return newBudget
     }
     
@@ -42,9 +44,12 @@ class DataManager {
         
     }
     
-    func saveTransaction(transaction: TransactionJSON){
-        
-        Transaction(transaction: transaction, context: self.context)
+    func saveTransaction(transaction: TransactionJSON) -> Transaction{
+        print(transaction.name)
+        let transaction = Transaction(transaction: transaction, context: self.context)
+        self.saveDatabase()
+        return transaction
+
     
     }
     
@@ -122,14 +127,32 @@ class DataManager {
         
     }
     
-    func getTransactions(category: Category) throws -> [Transaction]{
-        
+    func getTransactions(predicate: NSPredicate) throws -> [Transaction]{
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Transaction")
-        request.predicate = NSPredicate(format: "category.name == %@", category.name!)
-        
+        request.predicate = predicate
         do{
             let result = try context.fetch(request) as! [Transaction]
             return result
+        }
+        catch{
+           print("Failed to fetch transactions")
+            throw DataManagerErrors.NoTransactionsFound
+        }
+    }
+    
+
+    
+    
+
+    
+    func fetchMostRecentTransactionDate() throws -> Date{
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Transaction")
+        request.fetchLimit = 1
+        request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
+        
+        do{
+            let result = try context.fetch(request) as! [Transaction]
+            return result.first!.date!
         }
         catch{
            print("Failed to fetch transactions")
@@ -169,7 +192,7 @@ class DataManager {
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
 
         do {
-            let result = try context.execute(deleteRequest)
+            _ = try context.execute(deleteRequest)
         } catch let error as NSError {
             // TODO: handle the error
             print("Could not delete the income data")
@@ -187,6 +210,10 @@ class DataManager {
             print("ERROR: could not save to database")
         }
         
+    }
+    
+    func discardChanges(){
+        self.context.undo()
     }
     
 }

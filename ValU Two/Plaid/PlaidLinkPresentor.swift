@@ -41,8 +41,7 @@ extension PlaidLinkViewPresentor : PLKPlaidLinkViewDelegate
         PLKPlaidLinkViewController, didSucceedWithPublicToken publicToken:
         String, metadata: [String : Any]?) {
         
-            let proccessor = PlaidProccessor()
-            proccessor.savePublicToken(publicToken: publicToken)
+            PlaidProccessor.savePublicToken(publicToken: publicToken)
             self.coordinator?.plaidLinkSuccess(sender : self)
         
  

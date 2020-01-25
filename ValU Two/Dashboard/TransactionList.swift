@@ -25,21 +25,30 @@ struct TransactionList: View {
     
     var body: some View {
         
-        VStack{
-            HStack{
-                Text("Transactions").font(.largeTitle).bold()
-                Spacer()
-            }.padding()
-            
-            
-            ScrollView(){
-                ForEach(self.viewModel.viewData, id: \.self){ transaction in
-                    TransactionRow(viewModel: transaction)
+        
+        
+            VStack{
+                
+                if self.viewModel.transactions.count > 0{
+                    List(self.viewModel.viewData, id: \.self) { transaction in
+                        
+                        NavigationLink(destination: WelcomeView()){
+                            TransactionRow(viewModel: transaction)
+                        }
+                        
+                    }
+                }
+                else{
+                    CouldNotLoadView(errorMessage: "There are no transactions here yet")
                 }
                 
+                
+                
+                
             }
-            
-        }
+        
+        
+        
         
     }
 }

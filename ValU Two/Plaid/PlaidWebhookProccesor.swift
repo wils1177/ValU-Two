@@ -26,8 +26,49 @@ class PlaidWebhookProccesor{
         }
         else if webhookCode == "DEFAULT_UPDATE"{
             print("Proccessing Default Update Webhook")
+            DataManager().saveDatabase()
+            initiateDefaultUpdatePull()
         }
         
+        
+        
+    }
+    
+    
+    func initiateDefaultUpdatePull(){
+        
+        let today = Date()
+        var mostRecentTransaction = Calendar.current.date(byAdding: .day, value: -30, to: today)
+        
+        do{
+            mostRecentTransaction = try DataManager().fetchMostRecentTransactionDate()
+        }
+        catch{
+            print("Could NOT get the most recent trasnsaction, falling back to 30 days")
+        }
+
+
+        let plaidConnection = PlaidConnection()
+        
+        try? plaidConnection.getTransactions(startDate: mostRecentTransaction!, endDate: today, completion: self.defatulUpdatePullFinished(result:))
+        
+    }
+
+    
+    
+    func defatulUpdatePullFinished(result: Result<Data, Error>){
+    
+        
+        DispatchQueue.main.async {
+            switch result {
+            case .failure(let error):
+                print(error)
+            case .success(let dataResult):
+                //Todo : Try-Catch this 
+                let budget = try? DataManager().getBudget()
+                PlaidProccessor(budget: budget!).aggregate(response: dataResult, isInitial: false)
+            }
+        }
         
         
     }

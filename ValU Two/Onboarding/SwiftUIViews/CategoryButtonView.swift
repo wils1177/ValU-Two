@@ -8,14 +8,13 @@
 
 import SwiftUI
 
-struct CategoryButtonView: View {
+struct CategoryButtonView<Model>: View where Model: CategoryListViewModel {
     
-    var categoryName: String
-    @State var selected : Bool = false
-    var presentor : BudgetCardsPresentor?
+    @ObservedObject var button : CategoryButton
+    var presentor : Model
     
     func getButtonColor() -> Color {
-        if selected{
+        if button.selected{
             
             return .green
         }
@@ -25,31 +24,32 @@ struct CategoryButtonView: View {
     }
     
     func editCategory(){
-        if selected{
-            self.presentor?.selectedCategoryName(name: self.categoryName)
+        let originalName = self.button.name
+        if button.selected{
+            self.presentor.selectedCategoryName(name: originalName)
         }
         else{
-            self.presentor?.deSelectedCategoryName(name: self.categoryName)
+            self.presentor.deSelectedCategoryName(name: originalName)
         }
     }
     
-    init(presentor: BudgetCardsPresentor?, text: String){
-        self.categoryName = text
+    init(presentor: Model, button: CategoryButton ){
         self.presentor = presentor
+        self.button = button
     }
     
     
     var body: some View {
         
         Button(action: {
-            self.selected.toggle()
+            self.button.selected.toggle()
             self.editCategory()
             
         }){
             HStack{
                 
                 
-            Text(categoryName).font(.footnote).foregroundColor(.white).padding()
+                Text(button.icon + button.name).font(.footnote).foregroundColor(.white).padding()
                 
                 
             }.background(self.getButtonColor()).cornerRadius(20).shadow(radius: 10)
@@ -58,8 +58,4 @@ struct CategoryButtonView: View {
     
 }
 
-struct CategoryButtonView_Previews: PreviewProvider {
-    static var previews: some View {
-        CategoryButtonView(presentor: nil, text: "Breweries")
-    }
-}
+

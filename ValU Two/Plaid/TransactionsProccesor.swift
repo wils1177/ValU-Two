@@ -14,11 +14,18 @@ enum SpendingCategoryNames: String{
 
 class TransactionProccessor{
     let dataManager = DataManager()
+    let budget : Budget
     
-    func updateInitialThiryDaysSpent(spendingCategories: [SpendingCategory]){
+    init(budget: Budget){
+        self.budget = budget
+    }
+    
+    func updateInitialThiryDaysSpent(){
         
         let today = Date()
         let thirtyDaysAgo = Calendar.current.date(byAdding: .day, value: -30, to: today)
+        
+        let spendingCategories = self.budget.getAllSpendingCategories()
 
         do{
             let transactions = try dataManager.getTransactions(startDate: thirtyDaysAgo!, endDate: today)
@@ -44,12 +51,6 @@ class TransactionProccessor{
     
     func initilizeSpendingCategoryAmounts(spendingCategories: [SpendingCategory], startDate: Date, endDate: Date){
         
-        //Reset previous calculation on spending categoies
-        for spendingCategory in spendingCategories{
-            spendingCategory.amountSpent = 0.0
-        }
-        
-        
         do{
             let transactions = try dataManager.getTransactions(startDate: startDate, endDate: endDate)
             for transaction in transactions{
@@ -62,25 +63,27 @@ class TransactionProccessor{
   
     }
     
+    
     func proccessTransactionToCategory(transaction: Transaction, spendingCategories: [SpendingCategory]){
-        let matches = matchTransactionToSpendingCategory(transaction: transaction, spendingCategories: spendingCategories)
         
-        var largestDepth = 0
-        for match in matches{
+        if transaction.transactionId != nil && isWithinBudgetDates(transactionDate: transaction.date!){
+            let matches = matchTransactionToSpendingCategory(transaction: transaction, spendingCategories: spendingCategories)
             
-            // We will update the amount for EVERY match
-            match.amountSpent = match.amountSpent + Float(transaction.amount)
-            
-            // We will update the assigned category for the most specific category available
-            let categoryArray = match.category!.contains ?? [String]()
-            let categoryDepth = categoryArray.count
-            if categoryDepth > largestDepth{
-                transaction.category = match.category
-                largestDepth = (match.category?.contains!.count)!
+            for match in matches{
+                
+                // We will update the amount for EVERY match
+                match.amountSpent = match.amountSpent + Float(transaction.amount)
+                transaction.addToCategoryMatches(match.category!)
+            }
+                
+            //ToDO: Filter to only add to budget that transaction is within the dates of the budget
+            if transaction.amount > 0{
+                self.budget.spent = self.budget.spent + (Float(transaction.amount))
             }
             
+                 
+            dataManager.saveDatabase()
         }
-        
         
         
     }
@@ -97,23 +100,25 @@ class TransactionProccessor{
             if categoryLabels.isSubset(of: transactionCategoryLabels){
                 matches.append(spendingCateogory)
             }
+            
         }
-        print("what the frick")
-        //If we fail, the 'other' category will be the match
-        if matches.count == 0{
-            print("1")
-            for spendingCateogory in spendingCategories{
-                print("2")
-                if spendingCateogory.category?.name == SpendingCategoryNames.other.rawValue{
-                    print("is this being hit???")
-                    matches.append(spendingCateogory)
-                }
-            }
-        }
+        
+        
         
         return matches
         
     }
+    
+    func isWithinBudgetDates(transactionDate: Date) -> Bool{
+        
+        let startDate = self.budget.startDate!
+        let endDate = self.budget.endDate!
+        
+        return (startDate ... endDate).contains(transactionDate)
+        
+    }
+    
+
     
     
     

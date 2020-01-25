@@ -10,12 +10,10 @@ import SwiftUI
 
 struct SelectCategoriesView: View {
     
-    var viewData : [BudgetCategoryViewData]
-    var presentor : BudgetCardsPresentor?
+    var viewModel : BudgetCardsPresentor
 
-    init(presentor: BudgetCardsPresentor?, viewData: [BudgetCategoryViewData]){
-        self.viewData = viewData
-        self.presentor = presentor
+    init(viewModel: BudgetCardsPresentor){
+        self.viewModel = viewModel
     }
     
 
@@ -44,9 +42,7 @@ struct SelectCategoriesView: View {
                         Text("Go ahead and pick some budget categories, ya nut!").bold().lineLimit(nil).multilineTextAlignment(.center).foregroundColor(.white).padding()
                         }.padding()
                     
-                    ForEach(self.viewData, id: \.self){ cardData in
-                        CategoryCardView(presentor: self.presentor, viewData: cardData)
-                    }
+                    CategoryCardListView<BudgetCardsPresentor>(viewModel: self.viewModel)
                     
                 }
             })
@@ -56,27 +52,7 @@ struct SelectCategoriesView: View {
                     VStack{
                     Spacer()
                     
-                        HStack{
-                            Spacer()
-                            Button(action: {
-                                self.presentor?.submit()
-                            }){
-                                
-                                HStack{
-                                    
-                                    ZStack{
-                                        Text("Done").font(.subheadline).foregroundColor(.black).bold().padding()
-                                        
-                                        
-                                        
-                                    }
-                                    
-                                }.background(LinearGradient(gradient:  Gradient(colors: [.white, .white]), startPoint: .topTrailing, endPoint: .center)).cornerRadius(30).shadow(radius: 20).padding()
-                                
-                                
-                            }
-                            
-                        }
+                        DoneButtonView(viewModel: self.viewModel)
                         
                         
                     }
@@ -98,8 +74,3 @@ struct SelectCategoriesView: View {
     }
 }
 
-struct SelectCategoriesView_Previews: PreviewProvider {
-    static var previews: some View {
-        SelectCategoriesView(presentor: nil, viewData: [BudgetCategoryViewData(sectionTitle: "test", icon: "T", amountSpent: "$50.0", categories: ["what", "no"])])
-    }
-}

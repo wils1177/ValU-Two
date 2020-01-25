@@ -63,8 +63,7 @@ class EnterIncomePresentor : Presentor {
     
     init(budget : Budget){
         self.budget = budget
-        
-        
+    
 
     }
     
@@ -143,9 +142,6 @@ class EnterIncomePresentor : Presentor {
     
     func viewDataToBudget(viewData: EnterIncomeViewData) -> Budget{
         
-        
-        self.budget.setTimeFrame(timeFrame: TimeFrame.monthly)
-        
         let amount = Float(viewData.incomeAmountText)
         
         self.budget.amount = amount!
@@ -177,7 +173,7 @@ class EnterIncomePresentor : Presentor {
                     
                     
                     //TODO: This should be a try/catch
-                    PlaidProccessor().aggregateIncome(response: dataResult)
+                    PlaidProccessor(budget: self.budget).aggregateIncome(response: dataResult)
                     self.displayIncomeStreams()
             case .failure(let error):
                     self.viewData?.viewState = LoadingIncomeViewState.Failure

@@ -21,8 +21,17 @@ public class SpendingCategory: NSManagedObject {
         self.limit = 0.0
         self.amountSpent = 0.0
         self.initialThirtyDaysSpent = 0.0
+        self.selected = false
         
         
+    }
+    
+    func reCalculateAmountSpent(){
+        
+        self.amountSpent = 0.0
+        for transaction in category!.transactions?.allObjects as! [Transaction]{
+            self.amountSpent += Float(transaction.amount)
+        }
     }
 
 }

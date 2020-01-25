@@ -26,6 +26,11 @@ class LoadingAccountsPresentor : Presentor {
     var coordinator : OnboardingFlowCoordinator?
     let plaid  = PlaidConnection()
     var viewData = LoadingAccountsViewData()
+    let budget : Budget
+    
+    init(budget: Budget){
+        self.budget = budget
+    }
     
 
     
@@ -57,8 +62,13 @@ class LoadingAccountsPresentor : Presentor {
     
     @objc func startTransactionsPull(_ notification:Notification){
         
+        let calendar = Calendar.current
+        let currentDate = Date()
+        let startDate = calendar.date(byAdding: .month, value: -1, to: currentDate)
+        let endDate = currentDate
         
-        try? self.plaid.getTransactions(completion: self.transactionsPullFinished(result:))
+        //Todo: Handle this failing
+        try? self.plaid.getTransactions(startDate: startDate!, endDate: endDate, completion: self.transactionsPullFinished(result:))
         
     }
     
@@ -71,7 +81,7 @@ class LoadingAccountsPresentor : Presentor {
                 self.viewData.viewState = LoadingAccountsViewState.Failure
                 print(error)
             case .success(let dataResult):
-                PlaidProccessor().saveAccessToken(response: dataResult)
+                PlaidProccessor(budget: self.budget).saveAccessToken(response: dataResult)
 
             }
         }
@@ -86,7 +96,8 @@ class LoadingAccountsPresentor : Presentor {
                 self.viewData.viewState = LoadingAccountsViewState.Failure
                 print(error)
             case .success(let dataResult):
-                PlaidProccessor().aggregate(response: dataResult)
+                PlaidProccessor(budget: self.budget).aggregate(response: dataResult)
+                TransactionProccessor(budget: self.budget).updateInitialThiryDaysSpent()
                 self.viewData.viewState = LoadingAccountsViewState.Success
             
             }

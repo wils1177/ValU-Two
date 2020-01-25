@@ -80,13 +80,7 @@ class SetSavingsPresentor : Presentor {
         self.viewData?.savingsPercentage = newViewData.savingsPercentage
     }
     
-    func updateBudget(){
-        
-        //let newPercent = self.setSavingsVC?.savingsSlider.value
-        //self.budget.savingsPercent = newPercent!
-        
-        //self.coordinator?.savingsSubmitted(budget: self.budget, sender: self)
-    }
+
     
     func userPressedContinue(){
         self.coordinator?.savingsSubmitted(budget: self.budget, sender: self)

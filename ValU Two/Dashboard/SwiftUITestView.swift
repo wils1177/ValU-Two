@@ -20,7 +20,6 @@ struct BudgetCardView: View {
     var body: some View {
         
         VStack{
-        VStack() {
             HStack{
                 Text(self.viewModel.viewData.title).font(.title).fontWeight(.bold)
                 Spacer()
@@ -42,18 +41,20 @@ struct BudgetCardView: View {
                 Spacer()
                 Text(self.viewModel.viewData.remaining).font(.system(size: 20)).fontWeight(.bold)
                 
-                
-                    
-                
-                
             }
             
             
-            ProgressBarView(percentage: self.viewModel.viewData.percentage, color: Color(.orange))
+            
+            
+            
+            NavigationLink(destination: TransactionList(viewModel: TransactionsListViewModel())) {
+               ProgressBarView(percentage: self.viewModel.viewData.percentage, color: Color(.orange))
+            }.buttonStyle(PlainButtonStyle())
+            
+            
         }.padding().background(Color(.white)).cornerRadius(10).shadow(radius: 20).padding(.leading).padding(.trailing).padding(.bottom)
         
         
-        }
         
         
     }

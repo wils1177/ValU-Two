@@ -71,11 +71,14 @@ class SetSpendingPresentor : Presentor {
         
         
         var categoryPercentages = [ViewCategory]()
-        for case let spendingCategory as SpendingCategory in self.budget.spendingCategories!{
-            let name = spendingCategory.category?.name
-            let lastThirtyDaysSpent = spendingCategory.initialThirtyDaysSpent
-            let viewCategory = ViewCategory(name : name!, limit: String(roundToTens(x: spendingCategory.limit)), lastThirtyDaysSpent: String(lastThirtyDaysSpent))
-            categoryPercentages.append(viewCategory)
+        for spendingCategory in self.budget.getSubSpendingCategories(){
+            if spendingCategory.selected{
+                let name = spendingCategory.category?.name
+                let lastThirtyDaysSpent = spendingCategory.initialThirtyDaysSpent
+                let viewCategory = ViewCategory(name : name!, limit: String(roundToTens(x: spendingCategory.limit)), lastThirtyDaysSpent: String(lastThirtyDaysSpent))
+                categoryPercentages.append(viewCategory)
+            }
+            
             
         }
         
@@ -112,17 +115,21 @@ class SetSpendingPresentor : Presentor {
         if (Int(self.viewData!.leftToSpend)! - incrementAmount) >= 0{
             
             // Save the new budget limit
-            for case let spendingCategory as SpendingCategory in self.budget.spendingCategories!{
+            for spendingCategory in self.budget.getSubSpendingCategories(){
             
-                if spendingCategory.category?.name == categoryName{
-                    let newLimit = Int(spendingCategory.limit) + incrementAmount
-                    
-                    if newLimit >= 0{
-                        print("decrementing the limit")
-                        spendingCategory.limit = Float(newLimit)
+                if spendingCategory.selected{
+                    if spendingCategory.category?.name == categoryName{
+                        let newLimit = Int(spendingCategory.limit) + incrementAmount
+                        
+                        if newLimit >= 0{
+                            print("decrementing the limit")
+                            spendingCategory.limit = Float(newLimit)
+                        }
+                        
                     }
-                    
                 }
+                
+                
             }
             
             //Update the View Data

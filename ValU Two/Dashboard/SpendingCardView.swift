@@ -27,25 +27,15 @@ struct SpendingCardView: View {
                 Text(self.viewModel.viewData.cardTitle).font(.title).fontWeight(.bold)
                 Spacer()
             }.padding(.bottom)
-
-            VStack{
                 
-                ForEach(self.viewModel.viewData.categories, id: \.self){ category in
-                    
-                    VStack{
-                        HStack{
-                            Text(category.icon).font(.headline).fontWeight(.bold).lineLimit(1)
-                            Text(category.name).font(.headline).fontWeight(.bold).lineLimit(1)
-                            Spacer()
-                            Text(category.spent).font(.headline).fontWeight(.bold).lineLimit(1)
-                        }
-                        ProgressBarView(percentage: category.percentage, color: Color(.purple))
-                        
-                    }
-                    
-
-                    
-                }
+            
+            
+            ForEach(self.viewModel.viewData.categories, id: \.self){ category in
+                
+                NavigationLink(destination: TransactionList(viewModel: TransactionsListViewModel(categoryName: category.name))){
+                    SpendingCategoryView(viewData: category)
+                }.buttonStyle(PlainButtonStyle())
+                
                 
             }
             

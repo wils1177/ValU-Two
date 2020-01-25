@@ -129,7 +129,7 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, SetSavings
     
     func plaidLinkSuccess(sender: PlaidLinkViewPresentor){
         
-        let presentor = LoadingAccountsPresentor()
+        let presentor = LoadingAccountsPresentor(budget : self.budgetToCreate!)
         presentor.coordinator = self
         let vc = presentor.configure()
         
