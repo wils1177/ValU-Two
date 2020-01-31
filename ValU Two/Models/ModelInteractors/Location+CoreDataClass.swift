@@ -14,6 +14,7 @@ public class Location: NSManagedObject{
     
     convenience init(location : LocationJSON, context: NSManagedObjectContext!){
         
+        print(location)
         let entity = NSEntityDescription.entity(forEntityName: "Location", in: context)
         self.init(entity: entity!, insertInto: context)
         

@@ -32,7 +32,29 @@ struct AccountsAreLoadingView: View {
             }
                 .padding()
             Text("Loading Accounts...")
+            
+            
+            Button(action: {
+                self.presentor?.transactionPull()
+            }){
+                
+                HStack{
+                    
+                    ZStack{
+                        Text("Done Hack").font(.subheadline).foregroundColor(.black).bold().padding()
+                        
+                        
+                        
+                    }
+                    
+                }
+                
+                
+            }
             }.navigationBarTitle(Text("")).navigationBarHidden(true)
+        
+        
+
     }
 }
 

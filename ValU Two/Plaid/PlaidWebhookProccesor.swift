@@ -24,6 +24,11 @@ class PlaidWebhookProccesor{
             UserDefaults.standard.set(true, forKey: incomeItemKey)
             NotificationCenter.default.post(name: .incomeReady, object: nil)
         }
+        else if webhookCode == "HISTORICAL_UPDATE"{
+                print("Proccessing Histocial Update Webhook")
+                DataManager().saveDatabase()
+                historicalUpdatePull()
+        }
         else if webhookCode == "DEFAULT_UPDATE"{
             print("Proccessing Default Update Webhook")
             DataManager().saveDatabase()
@@ -32,6 +37,18 @@ class PlaidWebhookProccesor{
         
         
         
+    }
+    
+    func historicalUpdatePull(){
+        let today = Date()
+        var mostRecentTransaction = Calendar.current.date(byAdding: .day, value: -60, to: today)
+        
+        
+
+
+        let plaidConnection = PlaidConnection()
+        
+        try? plaidConnection.getTransactions(startDate: mostRecentTransaction!, endDate: today, completion: self.defatulUpdatePullFinished(result:))
     }
     
     
@@ -81,4 +98,5 @@ class PlaidWebhookProccesor{
 extension Notification.Name {
     static let initialUpdate = Notification.Name("initialUpdate")
     static let incomeReady = Notification.Name("incomeReady")
+    static let modelUpdate = Notification.Name("modelUpdate")
 }

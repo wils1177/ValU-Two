@@ -19,12 +19,15 @@ struct ProgressBarView: View {
         self.color = color
     }
     
-    func getColor() -> Color {
+    func getColor() -> LinearGradient {
         if self.percentage >= 1.0{
-            return Color(.red)
+            return LinearGradient(gradient:  Gradient(colors: [.orange, .red]), startPoint: .topTrailing, endPoint: .center)
+        }
+        else if self.percentage < 1.0 && self.percentage > 0.75{
+            return LinearGradient(gradient:  Gradient(colors: [.yellow, .orange]), startPoint: .topTrailing, endPoint: .center)
         }
         else{
-            return self.color
+            return LinearGradient(gradient:  Gradient(colors: [.green, .yellow]), startPoint: .topTrailing, endPoint: .center)
         }
     }
     
@@ -43,10 +46,10 @@ struct ProgressBarView: View {
             
             ZStack(alignment: .leading){
             
-                Rectangle().frame(width: self.width, height: 15).foregroundColor(Color(.gray)).cornerRadius(10)
+                Rectangle().frame(width: self.width, height: 21).foregroundColor(Color(red: 0.9, green: 0.9, blue: 0.9)).cornerRadius(10)
                 
                 
-                Rectangle().frame(width: self.width * self.getPercentage(), height: 15).foregroundColor(.clear)
+                Rectangle().frame(width: self.width * self.getPercentage(), height: 21).foregroundColor(.clear)
                     .background(self.getColor()).cornerRadius(10)
 
                 

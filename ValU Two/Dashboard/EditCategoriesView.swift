@@ -13,6 +13,8 @@ struct EditCategoriesView: View {
     @ObservedObject var viewModel : EditCategoryViewModel
     var onDismiss: () -> ()
     
+    @State var saveRule = true
+    
     init(viewModel : EditCategoryViewModel, onDismiss: @escaping () -> ()){
         self.viewModel = viewModel
         self.onDismiss = onDismiss
@@ -32,15 +34,28 @@ struct EditCategoriesView: View {
                 }.padding(.top).padding(.top)
                 
                 
+                
+                
                 ScrollView(){
                     HStack{
                         Text("You can select multiple cateogire for your transaction to count towards!").font(.headline).bold().padding()
                         Spacer()
                     }.padding(.bottom)
+                    
+                    
+                    HStack{
+                        Toggle(isOn: $saveRule) {
+                            Text("Remember for similar transactions")
+                        }.padding()
+                    }
+                    
+                    
+                    
+                    
                     CurrentlySelectedCategoriesView(viewModel: viewModel).padding(.bottom)
                     CategoryCardListView(viewModel: viewModel)
                     }
-            }.background(LinearGradient(gradient:  Gradient(colors: [.orange, .purple]), startPoint: .topTrailing, endPoint: .center))
+            }.background(LinearGradient(gradient:  Gradient(colors: [.blue, .white]), startPoint: .topTrailing, endPoint: .center))
             
             
             HStack{

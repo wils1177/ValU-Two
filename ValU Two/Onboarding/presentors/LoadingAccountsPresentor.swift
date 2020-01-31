@@ -62,6 +62,13 @@ class LoadingAccountsPresentor : Presentor {
     
     @objc func startTransactionsPull(_ notification:Notification){
         
+        self.transactionPull()
+        
+    }
+    
+    
+    func transactionPull(){
+        
         let calendar = Calendar.current
         let currentDate = Date()
         let startDate = calendar.date(byAdding: .month, value: -1, to: currentDate)

@@ -77,6 +77,7 @@ class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, Observa
         }
         
         DataManager().saveDatabase()
+        NotificationCenter.default.post(name: .modelUpdate, object: nil)
         
     }
     

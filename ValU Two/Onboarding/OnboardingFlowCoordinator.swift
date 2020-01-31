@@ -43,8 +43,17 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, SetSavings
     
     func continueToOnboarding() {
         print("Contionue to onboarding")
-        let newBudget = DataManager().createNewBudget()
-        self.budgetToCreate = newBudget
+        
+        
+        let existingBudget = try? DataManager().getBudget()
+        if existingBudget == nil{
+            self.budgetToCreate = DataManager().createNewBudget()
+        }
+        else{
+            self.budgetToCreate = existingBudget
+        }
+        
+        
         continueToPlaid()
 
     }

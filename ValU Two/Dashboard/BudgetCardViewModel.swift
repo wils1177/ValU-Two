@@ -32,14 +32,14 @@ class BudgetCardViewModel {
         let available = self.budget.getAmountAvailable()
         let spendValue = self.budget.spent
 
-        let remaining = "$" + String(format: "%.2f", (available - spendValue))
-        let spent = "$" + String(format: "%.2f", spendValue)
+        let remaining = "$" + String(Int(round(available - spendValue)))
+        let spent = "$" + String(Int(round(spendValue)))
         let percentage = CGFloat(spendValue / available)
         let now = Date()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "LLLL"
         let nameOfMonth = dateFormatter.string(from: now)
-        let title = nameOfMonth + " Budget"
+        let title = nameOfMonth
         
         return BudgetCardViewData(remaining: remaining, spent: spent, title: title, percentage: percentage)
     }

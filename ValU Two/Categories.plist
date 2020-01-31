@@ -6,7 +6,7 @@
 	<array>
 		<dict>
 			<key>name</key>
-			<string>Food and Drink</string>
+			<string>Eat &amp; Drink</string>
 			<key>icon</key>
 			<string>🍔</string>
 			<key>contains</key>
@@ -39,7 +39,7 @@
 				</dict>
 				<dict>
 					<key>name</key>
-					<string>All Restaurants</string>
+					<string>Restaurants</string>
 					<key>icon</key>
 					<string>🥣</string>
 					<key>contains</key>
@@ -50,7 +50,7 @@
 				</dict>
 				<dict>
 					<key>name</key>
-					<string>Fast Food Restaraunts</string>
+					<string>Fast Food</string>
 					<key>icon</key>
 					<string>🍟</string>
 					<key>contains</key>
@@ -62,7 +62,7 @@
 				</dict>
 				<dict>
 					<key>name</key>
-					<string>Coffee Shops</string>
+					<string>Coffee</string>
 					<key>icon</key>
 					<string>☕️</string>
 					<key>contains</key>
@@ -74,7 +74,7 @@
 				</dict>
 				<dict>
 					<key>name</key>
-					<string>Other Nightlife</string>
+					<string>Nightlife</string>
 					<key>icon</key>
 					<string>🥂</string>
 					<key>contains</key>
@@ -85,7 +85,7 @@
 				</dict>
 				<dict>
 					<key>name</key>
-					<string>All Food and Drink</string>
+					<string>All Eat &amp; Drink</string>
 					<key>icon</key>
 					<string>🍔</string>
 					<key>contains</key>
@@ -108,7 +108,7 @@
 			<array>
 				<dict>
 					<key>name</key>
-					<string>Clothing and Accessories</string>
+					<string>Clothing</string>
 					<key>icon</key>
 					<string>👚</string>
 					<key>contains</key>
@@ -164,7 +164,7 @@ Computers and Electronics</string>
 				</dict>
 				<dict>
 					<key>name</key>
-					<string>Automotive Shopping</string>
+					<string>Car Shops</string>
 					<key>icon</key>
 					<string>🏎️</string>
 					<key>contains</key>
@@ -175,7 +175,7 @@ Computers and Electronics</string>
 				</dict>
 				<dict>
 					<key>name</key>
-					<string>Beauty Products</string>
+					<string>Beauty</string>
 					<key>icon</key>
 					<string>💄</string>
 					<key>contains</key>
@@ -197,7 +197,7 @@ Computers and Electronics</string>
 				</dict>
 				<dict>
 					<key>name</key>
-					<string>Department Stores</string>
+					<string>Department</string>
 					<key>icon</key>
 					<string>🏬</string>
 					<key>contains</key>
@@ -243,7 +243,7 @@ Computers and Electronics</string>
 				</dict>
 				<dict>
 					<key>name</key>
-					<string>Credit Card Payments</string>
+					<string>Credit Card</string>
 					<key>icon</key>
 					<string>💳</string>
 					<key>contains</key>
@@ -256,7 +256,7 @@ Computers and Electronics</string>
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Travel &amp; Transportation</string>
+			<string>Travel</string>
 			<key>icon</key>
 			<string>🚆</string>
 			<key>contains</key>
@@ -475,7 +475,7 @@ Internet</string>
 				</dict>
 				<dict>
 					<key>name</key>
-					<string>Subscription Services</string>
+					<string>Subscriptions</string>
 					<key>icon</key>
 					<string>🌐</string>
 					<key>contains</key>

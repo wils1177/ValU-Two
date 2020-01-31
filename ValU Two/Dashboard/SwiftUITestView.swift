@@ -25,31 +25,48 @@ struct BudgetCardView: View {
                 Spacer()
                 Image(systemName: "pencil.circle")
             }
-            
             HStack{
-                Text("Spent this month").font(.headline).fontWeight(.bold)
-                Spacer()
-                Text(self.viewModel.viewData.spent).font(.system(size: 20)).fontWeight(.bold)
                 
-                
-            }.padding(.top)
+                HStack{
+                    
+                    //Spacer()
+                    VStack{
+                        Text(self.viewModel.viewData.spent).font(.system(size: 28)).fontWeight(.bold)
+                        Text("Spent").font(.headline).fontWeight(.bold).foregroundColor(Color(.gray))
+                    }
+                    
+                    
+                }.padding(.leading).padding(.leading)
 
-                
-            
-            HStack{
-                Text("Remaning").font(.headline).fontWeight(.bold)
                 Spacer()
-                Text(self.viewModel.viewData.remaining).font(.system(size: 20)).fontWeight(.bold)
                 
-            }
+                HStack{
+                    
+                    
+                    VStack{
+                        //Spacer()
+                        Text(self.viewModel.viewData.remaining).font(.system(size: 28)).fontWeight(.bold)
+                        Text("Remaning").font(.headline).fontWeight(.bold).foregroundColor(Color(.gray))
+                        
+                    }
+                    
+                    
+                }.padding(.trailing).padding(.trailing)
+                
+            }.padding(.bottom)
+            
+            
             
             
             
             
             
             NavigationLink(destination: TransactionList(viewModel: TransactionsListViewModel())) {
-               ProgressBarView(percentage: self.viewModel.viewData.percentage, color: Color(.orange))
+                ProgressBarView(percentage: self.viewModel.viewData.percentage, color: Color(.black))
             }.buttonStyle(PlainButtonStyle())
+            
+            
+            
             
             
         }.padding().background(Color(.white)).cornerRadius(10).shadow(radius: 20).padding(.leading).padding(.trailing).padding(.bottom)

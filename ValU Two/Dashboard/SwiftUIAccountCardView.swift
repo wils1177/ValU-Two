@@ -31,7 +31,7 @@ struct SwiftUIAccountCardView: View {
             }
             
             
-        }.padding().background(LinearGradient(gradient:  Gradient(colors: [.orange, .yellow]), startPoint: .topTrailing, endPoint: .center))
+        }.padding().background(LinearGradient(gradient:  Gradient(colors: [.purple, .orange]), startPoint: .topTrailing, endPoint: .center))
             .cornerRadius(20).padding(.leading).padding(.trailing).shadow(radius: 5)
     }
 }

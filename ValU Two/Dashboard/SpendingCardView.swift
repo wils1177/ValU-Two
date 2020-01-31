@@ -10,9 +10,10 @@ import SwiftUI
 
 struct SpendingCardView: View {
     
-    var viewModel : SpendingCardViewModel
+    @ObservedObject var viewModel : SpendingCardViewModel
     
     init(viewModel : SpendingCardViewModel){
+        //print("Spending Card init")
         self.viewModel = viewModel
     }
     
@@ -28,11 +29,18 @@ struct SpendingCardView: View {
                 Spacer()
             }.padding(.bottom)
                 
-            
+            HStack{
+                //Text(self.viewModel.viewData.cardTitle).font(.title).fontWeight(.bold)
+                Text("Category").font(.headline).foregroundColor(Color(.gray))
+                Spacer()
+                Text("Spent").font(.headline).foregroundColor(Color(.gray))
+                Text("Budeted").font(.headline).foregroundColor(Color(.gray))
+            }
+            Divider()
             
             ForEach(self.viewModel.viewData.categories, id: \.self){ category in
                 
-                NavigationLink(destination: TransactionList(viewModel: TransactionsListViewModel(categoryName: category.name))){
+                NavigationLink(destination: TransactionList(categoryName: category.name)){
                     SpendingCategoryView(viewData: category)
                 }.buttonStyle(PlainButtonStyle())
                 
@@ -43,10 +51,7 @@ struct SpendingCardView: View {
             
             }.padding()
             
-            HStack{
-                Image(systemName: "tortoise")
-                Spacer()
-            }.padding()
+            
             
 
             }.background(Color(.white)).cornerRadius(10).shadow(radius: 10).padding(.leading).padding(.trailing)
@@ -55,10 +60,6 @@ struct SpendingCardView: View {
     }
 }
 
-/*
-struct SwiftUIBudgetView_Previews: PreviewProvider {
-    static var previews: some View {
-        SpendingCardView()
-    }
-}
-*/
+
+
+

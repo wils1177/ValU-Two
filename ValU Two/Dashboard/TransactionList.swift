@@ -10,17 +10,33 @@ import SwiftUI
 
 struct TransactionList: View {
     
-    var viewModel : TransactionsListViewModel
+    @ObservedObject var viewModel : TransactionsListViewModel
     
-    init(viewModel: TransactionsListViewModel) {
+    var showSummary = false
+    
+    init(viewModel: TransactionsListViewModel, showSummary: Bool = false) {
         
         self.viewModel = viewModel
+        self.showSummary = showSummary
         
         // To remove only extra separators below the list:
         UITableView.appearance().tableFooterView = UIView()
 
         // To remove all separators including the actual ones:
         UITableView.appearance().separatorStyle = .none
+    }
+    
+    
+    init(categoryName: String){
+        
+        self.viewModel = TransactionsListViewModel(categoryName: categoryName)
+        
+        // To remove only extra separators below the list:
+        UITableView.appearance().tableFooterView = UIView()
+
+        // To remove all separators including the actual ones:
+        UITableView.appearance().separatorStyle = .none
+        
     }
     
     var body: some View {
@@ -30,11 +46,30 @@ struct TransactionList: View {
             VStack{
                 
                 if self.viewModel.transactions.count > 0{
+                    
+                    
+                    
                     List(self.viewModel.viewData, id: \.self) { transaction in
                         
-                        NavigationLink(destination: WelcomeView()){
-                            TransactionRow(viewModel: transaction)
+                        VStack{
+                            
+                            if transaction.idx == 0 && self.showSummary{
+                                SpendingSummaryView()
+                            }
+                            
+                            NavigationLink(destination: TransactionDetailView(transaction: transaction.rawTransaction)){
+                                
+                                VStack{
+                                    
+                                    TransactionRow(viewModel: transaction)
+                                }
+                                
+                            }
+                            
                         }
+                        
+                        
+                        
                         
                     }
                 }

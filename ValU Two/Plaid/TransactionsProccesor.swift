@@ -15,9 +15,11 @@ enum SpendingCategoryNames: String{
 class TransactionProccessor{
     let dataManager = DataManager()
     let budget : Budget
+    var transactionRules : [TransactionRule]
     
-    init(budget: Budget){
+    init(budget: Budget, transactionRules: [TransactionRule] = [TransactionRule]()){
         self.budget = budget
+        self.transactionRules = transactionRules
     }
     
     func updateInitialThiryDaysSpent(){
@@ -87,6 +89,20 @@ class TransactionProccessor{
         
         
     }
+    
+    func checkForExistingMatches(transaction: Transaction, spendingCategories: [SpendingCategory]){
+        
+        for rule in self.transactionRules{
+            if rule.name == transaction.name!{
+                //ToDO fill in transaction rule assignment here.
+            }
+        }
+        
+        
+    }
+    
+    
+    
     
     func matchTransactionToSpendingCategory(transaction: Transaction, spendingCategories: [SpendingCategory]) -> [SpendingCategory]{
         

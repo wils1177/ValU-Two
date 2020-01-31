@@ -164,11 +164,11 @@ class PlaidConnection{
                     dispatch?.leave()
                 }
                 
-                //do {
-                //    let jsonObject = try JSONSerialization.jsonObject(with: data!, options: []) as? [String:AnyObject]
-                //   print(jsonObject) // This will print the below json.
-                //}
-                //catch{}
+                do {
+                    let jsonObject = try JSONSerialization.jsonObject(with: data!, options: []) as? [String:AnyObject]
+                   print(jsonObject) // This will print the below json.
+                }
+                catch{}
                 
                 //Response result
                 

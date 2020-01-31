@@ -13,19 +13,28 @@ struct SpendingCategoryView: View {
     var viewData: SpendingCategoryViewData
     
     init(viewData : SpendingCategoryViewData){
+        print("Im drawing the spending category now")
+        print(viewData.name)
+        print(viewData.spent)
         self.viewData = viewData
     }
     
     var body: some View {
         VStack{
-            HStack{
-                Text(viewData.icon).font(.headline).fontWeight(.bold).lineLimit(1)
-                Text(viewData.name).font(.headline).fontWeight(.bold).lineLimit(1)
-                Spacer()
-                Text(viewData.spent).font(.headline).fontWeight(.bold).lineLimit(1)
-            }
-            ProgressBarView(percentage: viewData.percentage, color: Color(.purple))
             
+            
+            HStack{
+                
+                BudgetCategoryIconView(icon: viewData.icon, percentage: viewData.percentage)
+                Text(viewData.name).font(.headline).lineLimit(1)
+                Spacer()
+                Text(viewData.spent).font(.headline).lineLimit(1)
+                Text(viewData.limit).font(.headline).lineLimit(1)
+                
+            }
+            Divider()
+            
+
         }
     }
 }

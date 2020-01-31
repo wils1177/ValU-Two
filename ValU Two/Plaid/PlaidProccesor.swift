@@ -19,10 +19,17 @@ class PlaidProccessor{
     
     var spendingCategories : [SpendingCategory]
     var budget : Budget
+    var transactionRules = [TransactionRule]()
     
     init(budget: Budget){
         self.budget = budget
         self.spendingCategories = budget.getSubSpendingCategories()
+        
+        do{
+            self.transactionRules =  try DataManager().getTransactionRules()
+        }catch{
+            self.transactionRules = [TransactionRule]()
+        }
     }
     
     
@@ -139,7 +146,7 @@ class PlaidProccessor{
                     
                     let newTransaction = dataManager.saveTransaction(transaction: transaction)
                         
-                    TransactionProccessor(budget: self.budget).proccessTransactionToCategory(transaction: newTransaction, spendingCategories: self.spendingCategories)
+                    TransactionProccessor(budget: self.budget, transactionRules: self.transactionRules).proccessTransactionToCategory(transaction: newTransaction, spendingCategories: self.spendingCategories)
 
                     
                     

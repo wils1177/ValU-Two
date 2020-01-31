@@ -174,6 +174,18 @@ class DataManager {
         }
     }
     
+    func getTransactionRules() throws -> [TransactionRule]{
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "TransactionRule")
+        do{
+            let result = try context.fetch(request) as! [TransactionRule]
+            return result
+        }
+        catch{
+           print("Failed to fetch Transaction Rules")
+            throw DataManagerErrors.NoItemsFound
+        }
+    }
+    
     func getIncomeData() throws -> [IncomeData]{
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "IncomeData")
         

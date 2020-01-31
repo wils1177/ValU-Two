@@ -43,19 +43,27 @@ struct SpendingCardViewData{
     var categories : [SpendingCategoryViewData] = [SpendingCategoryViewData]()
 }
 
-class SpendingCardViewModel {
+class SpendingCardViewModel: ObservableObject {
     
     var budget : Budget
-    var viewData = SpendingCardViewData()
+    @Published var viewData = SpendingCardViewData()
     
     init(budget: Budget){
         self.budget = budget
-        self.viewData = generateViewData()
+        generateViewData()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(update(_:)), name: .modelUpdate, object: nil)
     }
+    
+    @objc func update(_ notification:Notification){
+           print("Spending Card Update Triggered")
+           generateViewData()
+           
+       }
     
 
     
-    func generateViewData() -> SpendingCardViewData{
+    func generateViewData(){
         
         var categories = [SpendingCategoryViewData]()
         let spendingCategories = self.budget.getSubSpendingCategories()
@@ -74,7 +82,7 @@ class SpendingCardViewModel {
                 
                 
                 
-                let categoryViewData = SpendingCategoryViewData(percentage: CGFloat(percentage), spent: String(format: "$%.02f", spent), limit: String(limit), name: name, icon: icon)
+                let categoryViewData = SpendingCategoryViewData(percentage: CGFloat(percentage), spent: "$" + String(Int(round(spent))), limit: "$" + String(Int(round(limit))), name: name, icon: icon)
                 categories.append(categoryViewData)
             }
             
@@ -82,8 +90,8 @@ class SpendingCardViewModel {
         }
         
         
-        let cardName = "Spending"
-        return SpendingCardViewData(cardTitle: cardName, categories: categories)
+        let cardName = "Budget"
+        self.viewData = SpendingCardViewData(cardTitle: cardName, categories: categories)
         
     
     }

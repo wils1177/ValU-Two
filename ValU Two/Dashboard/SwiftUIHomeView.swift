@@ -11,6 +11,7 @@ import SwiftUI
 struct HomeView: View {
     
     var viewModel: HomeViewModel
+    @State var showingDetail = false
     
     init(viewModel: HomeViewModel){
         self.viewModel = viewModel
@@ -26,13 +27,30 @@ struct HomeView: View {
                     BudgetCardView(viewModel: self.viewModel.viewData!.budgetCardViewModel).padding(.top)
                     SpendingCardView(viewModel: self.viewModel.viewData!.spendingCardViewModel)
                     SwiftUIAccountsView()
+                    
                     Spacer()
                     
                     
                 }
                 
                 
-            }).navigationBarTitle("ValU Two")
+            }).navigationBarTitle("ValU Two").navigationBarItems(trailing:
+                
+                Button(action: {
+                    print("clicked the category button")
+                    self.showingDetail.toggle()
+                }){
+                ZStack{
+                    
+                    Image(systemName: "person.crop.circle").imageScale(.large)
+                }
+                }.buttonStyle(BorderlessButtonStyle()).sheet(isPresented: $showingDetail) {
+                    SettingsView()
+                }
+                
+                
+                
+            )
             
         }
         
