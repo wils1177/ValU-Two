@@ -10,7 +10,14 @@ import SwiftUI
 
 struct SettingsView: View {
     
-    var viewModel = SettingsViewModel()
+    @ObservedObject var viewModel = SettingsViewModel()
+    @State private var showLink = false
+    @State var loadingAccounts = false
+    var linkWrapper : PlaidLinkWrapper?
+    
+    init(){
+        self.linkWrapper = PlaidLinkWrapper(viewModel: self.viewModel)
+    }
     
     var body: some View {
         NavigationView{
@@ -20,21 +27,33 @@ struct SettingsView: View {
                 
                 
                 Section(header: Text("Institutions")) {
-                    HStack{
-                        Text("hey")
-                        Spacer()
-                        Button(action: {
-                            print("do nothing")
-                        }) {
-                            Image(systemName: "trash")
+                    
+                    ForEach(self.viewModel.viewData, id: \.self){ item in
+                        HStack{
+                            Text(item.name)
+                            Spacer()
+                            Button(action: {
+                                print("do nothing")
+                            }) {
+                                Image(systemName: "trash")
+                            }
                         }
                     }
+                    
+                    
                     HStack{
+                        
                         Button(action: {
-                            print("do nothing")
+                            self.showLink = true
                         }) {
                             Text("Connect More Accounts")
-                        }
+                        }.sheet(isPresented: self.$showLink,
+                        onDismiss: {
+                            self.showLink = false
+                            self.linkWrapper?.dismissLink()
+                        }, content: {
+                            self.linkWrapper
+                            })
                         Spacer()
                     }
                 }

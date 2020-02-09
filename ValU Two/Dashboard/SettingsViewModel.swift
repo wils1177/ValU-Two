@@ -7,13 +7,32 @@
 //
 
 import Foundation
+import LinkKit
 
-class SettingsViewModel{
+struct ItemViewData: Hashable{
+    var name : String
+}
+
+class SettingsViewModel: ObservableObject{
+    
+    var loadingAccountsPresentor : LoadingAccountsPresentor?
+    var budget : Budget?
     
     var dataManager = DataManager()
-    var items : [ItemData]?
+    @Published var items : [ItemData]?
+    var viewData = [ItemViewData]()
     
     init(){
+        
+        self.budget = try? dataManager.getBudget()
+       updateView()
+        
+    }
+    
+    func updateView(){
+        
+        self.viewData = [ItemViewData]()
+        self.items = [ItemData]()
         
         do{
             self.items = try dataManager.getItems()
@@ -22,6 +41,24 @@ class SettingsViewModel{
             self.items = [ItemData]()
         }
         
+        
+        
+        generateViewData()
+        
     }
+    
+    func generateViewData(){
+        
+        for item in self.items!{
+            
+            let name = UserDefaults.standard.value(forKey: PlaidUserDefaultKeys.institutionId.rawValue + item.institutionId!) as! String
+            
+            self.viewData.append(ItemViewData(name:name))
+            
+        }
+        
+    }
+    
+
     
 }

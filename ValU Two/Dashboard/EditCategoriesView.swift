@@ -44,7 +44,7 @@ struct EditCategoriesView: View {
                     
                     
                     HStack{
-                        Toggle(isOn: $saveRule) {
+                        Toggle(isOn: $viewModel.saveRule) {
                             Text("Remember for similar transactions")
                         }.padding()
                     }

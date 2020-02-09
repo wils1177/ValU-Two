@@ -33,7 +33,6 @@
 		473D08BD232451FA004C24A9 /* User+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08B4232451FA004C24A9 /* User+CoreDataClass.swift */; };
 		473D08BE232451FA004C24A9 /* SpendingCategory+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08B5232451FA004C24A9 /* SpendingCategory+CoreDataClass.swift */; };
 		473D08CA23245203004C24A9 /* Location+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08C123245203004C24A9 /* Location+CoreDataProperties.swift */; };
-		473D08CC23245203004C24A9 /* ItemData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08C323245203004C24A9 /* ItemData+CoreDataProperties.swift */; };
 		473D08CE23245203004C24A9 /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08C523245203004C24A9 /* User+CoreDataProperties.swift */; };
 		473D08D023245203004C24A9 /* AccountData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08C723245203004C24A9 /* AccountData+CoreDataProperties.swift */; };
 		473D08D123245203004C24A9 /* BalanceData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08C823245203004C24A9 /* BalanceData+CoreDataProperties.swift */; };
@@ -130,6 +129,9 @@
 		475D20C523E3C608001B7A0F /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475D20C423E3C608001B7A0F /* SettingsViewModel.swift */; };
 		475D20C623E3C608001B7A0F /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475D20C423E3C608001B7A0F /* SettingsViewModel.swift */; };
 		475D20C723E3C608001B7A0F /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475D20C423E3C608001B7A0F /* SettingsViewModel.swift */; };
+		475D20C923E54C9F001B7A0F /* ItemData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475D20C823E54C9F001B7A0F /* ItemData+CoreDataProperties.swift */; };
+		475D20CA23E54C9F001B7A0F /* ItemData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475D20C823E54C9F001B7A0F /* ItemData+CoreDataProperties.swift */; };
+		475D20CB23E54CA0001B7A0F /* ItemData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475D20C823E54C9F001B7A0F /* ItemData+CoreDataProperties.swift */; };
 		4764A88F23973C3D002E17BE /* SelectCategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4764A88E23973C3D002E17BE /* SelectCategoriesView.swift */; };
 		4764A89123974BCA002E17BE /* CategoryButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4764A89023974BCA002E17BE /* CategoryButtonView.swift */; };
 		476E00AA2380839C00540E96 /* SetSavingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 476E00A92380839C00540E96 /* SetSavingsView.swift */; };
@@ -153,6 +155,9 @@
 		47B589F923CA780D00BF52AB /* SpendingCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B589F723CA780D00BF52AB /* SpendingCardViewModel.swift */; };
 		47B589FA23CA780D00BF52AB /* SpendingCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B589F723CA780D00BF52AB /* SpendingCardViewModel.swift */; };
 		47B9DE1A22D945C000434F4A /* CategoriesData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B9DE1922D945C000434F4A /* CategoriesData.swift */; };
+		47BA523323E5EEFD005AB73F /* PlaidLinkWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BA523223E5EEFD005AB73F /* PlaidLinkWrapper.swift */; };
+		47BA523423E5EEFD005AB73F /* PlaidLinkWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BA523223E5EEFD005AB73F /* PlaidLinkWrapper.swift */; };
+		47BA523523E5EEFD005AB73F /* PlaidLinkWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BA523223E5EEFD005AB73F /* PlaidLinkWrapper.swift */; };
 		47BE457222C00DBC00FB9A31 /* PlaidProccesor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BE456F22C00DBC00FB9A31 /* PlaidProccesor.swift */; };
 		47BE457322C00DBC00FB9A31 /* PlaidConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BE457022C00DBC00FB9A31 /* PlaidConnection.swift */; };
 		47C7266123AB247E00E64136 /* IncomeStreamData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C7266023AB247E00E64136 /* IncomeStreamData+CoreDataProperties.swift */; };
@@ -176,7 +181,6 @@
 		47E4009B23BA7AA50050A21D /* IncomeStreamData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C7266023AB247E00E64136 /* IncomeStreamData+CoreDataProperties.swift */; };
 		47E4009C23BA7AA50050A21D /* IncomeData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C7266223AB248100E64136 /* IncomeData+CoreDataProperties.swift */; };
 		47E4009E23BA7AA50050A21D /* Location+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08C123245203004C24A9 /* Location+CoreDataProperties.swift */; };
-		47E400A123BA7AA50050A21D /* ItemData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08C323245203004C24A9 /* ItemData+CoreDataProperties.swift */; };
 		47E400A223BA7AA50050A21D /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08C523245203004C24A9 /* User+CoreDataProperties.swift */; };
 		47E400A423BA7AA50050A21D /* AccountData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08C723245203004C24A9 /* AccountData+CoreDataProperties.swift */; };
 		47E400A523BA7AA50050A21D /* BalanceData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08C823245203004C24A9 /* BalanceData+CoreDataProperties.swift */; };
@@ -240,7 +244,6 @@
 		47E4013D23BA7B8E0050A21D /* IncomeStreamData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C7266023AB247E00E64136 /* IncomeStreamData+CoreDataProperties.swift */; };
 		47E4013E23BA7B8E0050A21D /* IncomeData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C7266223AB248100E64136 /* IncomeData+CoreDataProperties.swift */; };
 		47E4014023BA7B8E0050A21D /* Location+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08C123245203004C24A9 /* Location+CoreDataProperties.swift */; };
-		47E4014323BA7B8E0050A21D /* ItemData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08C323245203004C24A9 /* ItemData+CoreDataProperties.swift */; };
 		47E4014423BA7B8E0050A21D /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08C523245203004C24A9 /* User+CoreDataProperties.swift */; };
 		47E4014623BA7B8E0050A21D /* AccountData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08C723245203004C24A9 /* AccountData+CoreDataProperties.swift */; };
 		47E4014723BA7B8E0050A21D /* BalanceData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473D08C823245203004C24A9 /* BalanceData+CoreDataProperties.swift */; };
@@ -354,7 +357,6 @@
 		473D08B4232451FA004C24A9 /* User+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "User+CoreDataClass.swift"; sourceTree = "<group>"; };
 		473D08B5232451FA004C24A9 /* SpendingCategory+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SpendingCategory+CoreDataClass.swift"; sourceTree = "<group>"; };
 		473D08C123245203004C24A9 /* Location+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Location+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		473D08C323245203004C24A9 /* ItemData+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ItemData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		473D08C523245203004C24A9 /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "User+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		473D08C723245203004C24A9 /* AccountData+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AccountData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		473D08C823245203004C24A9 /* BalanceData+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BalanceData+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -394,6 +396,7 @@
 		4749EC24239A0A20000AFC40 /* SpendingLimitSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpendingLimitSummaryView.swift; sourceTree = "<group>"; };
 		475D20C023E3BFD9001B7A0F /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		475D20C423E3C608001B7A0F /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		475D20C823E54C9F001B7A0F /* ItemData+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ItemData+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		4764A88E23973C3D002E17BE /* SelectCategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCategoriesView.swift; sourceTree = "<group>"; };
 		4764A89023974BCA002E17BE /* CategoryButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryButtonView.swift; sourceTree = "<group>"; };
 		476E00A92380839C00540E96 /* SetSavingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetSavingsView.swift; sourceTree = "<group>"; };
@@ -409,6 +412,7 @@
 		47B589F123C14C4700BF52AB /* BudgetCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetCardViewModel.swift; sourceTree = "<group>"; };
 		47B589F723CA780D00BF52AB /* SpendingCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpendingCardViewModel.swift; sourceTree = "<group>"; };
 		47B9DE1922D945C000434F4A /* CategoriesData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesData.swift; sourceTree = "<group>"; };
+		47BA523223E5EEFD005AB73F /* PlaidLinkWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaidLinkWrapper.swift; sourceTree = "<group>"; };
 		47BE456F22C00DBC00FB9A31 /* PlaidProccesor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaidProccesor.swift; sourceTree = "<group>"; };
 		47BE457022C00DBC00FB9A31 /* PlaidConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaidConnection.swift; sourceTree = "<group>"; };
 		47C7266023AB247E00E64136 /* IncomeStreamData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "IncomeStreamData+CoreDataProperties.swift"; path = "/Users/claytonwilson/Documents/programming_projects.nosync/ValU-Two/ValU Two/Models/CoreDataModels/IncomeStreamData+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
@@ -535,7 +539,7 @@
 				4744B6BB23D16A60003D3826 /* Budget+CoreDataProperties.swift */,
 				473D08C123245203004C24A9 /* Location+CoreDataProperties.swift */,
 				4744B6C723D27D87003D3826 /* Transaction+CoreDataProperties.swift */,
-				473D08C323245203004C24A9 /* ItemData+CoreDataProperties.swift */,
+				475D20C823E54C9F001B7A0F /* ItemData+CoreDataProperties.swift */,
 				473D08C523245203004C24A9 /* User+CoreDataProperties.swift */,
 				473D08C723245203004C24A9 /* AccountData+CoreDataProperties.swift */,
 				473D08C823245203004C24A9 /* BalanceData+CoreDataProperties.swift */,
@@ -657,6 +661,9 @@
 		47EED5A8236F9AAF0052A211 /* Dashboard */ = {
 			isa = PBXGroup;
 			children = (
+				47BA523223E5EEFD005AB73F /* PlaidLinkWrapper.swift */,
+				475D20C423E3C608001B7A0F /* SettingsViewModel.swift */,
+				475D20C023E3BFD9001B7A0F /* SettingsView.swift */,
 				47B589F123C14C4700BF52AB /* BudgetCardViewModel.swift */,
 				4742474623DFAF18003127BC /* TransactionsTabViewModel.swift */,
 				4744B6D323D618C9003D3826 /* TransactionsTabView.swift */,
@@ -679,8 +686,6 @@
 				4744B6A723CBC6B5003D3826 /* TransactionsListViewModel.swift */,
 				4744B69F23CBC104003D3826 /* TransactionRow.swift */,
 				47969B1A237A293E00489B72 /* SwiftUIHomeView.swift */,
-				475D20C023E3BFD9001B7A0F /* SettingsView.swift */,
-				475D20C423E3C608001B7A0F /* SettingsViewModel.swift */,
 				47CB3D3C237D051E00BB499F /* SwiftUISavingsCardView.swift */,
 				47969B1C237A358F00489B72 /* SwiftUIAccountsView.swift */,
 				4744B69B23CAEC63003D3826 /* AccountVsiewModel.swift */,
@@ -995,6 +1000,7 @@
 				4744B69C23CAEC63003D3826 /* AccountVsiewModel.swift in Sources */,
 				4742473723DCF41C003127BC /* TransactionDetailViewModel.swift in Sources */,
 				4744B6E423D9514D003D3826 /* CategoryCardListView.swift in Sources */,
+				47BA523323E5EEFD005AB73F /* PlaidLinkWrapper.swift in Sources */,
 				473D08BC232451FA004C24A9 /* ItemData+CoreDataClass.swift in Sources */,
 				473D0881231CA001004C24A9 /* ValU Two.xcdatamodeld in Sources */,
 				4742473323DCF2EC003127BC /* TransactionDetailView.swift in Sources */,
@@ -1003,6 +1009,7 @@
 				47C7267323ADD04900E64136 /* CustomTextFieldView.swift in Sources */,
 				473D08BD232451FA004C24A9 /* User+CoreDataClass.swift in Sources */,
 				473D08CA23245203004C24A9 /* Location+CoreDataProperties.swift in Sources */,
+				475D20C923E54C9F001B7A0F /* ItemData+CoreDataProperties.swift in Sources */,
 				47C7266323AB248100E64136 /* IncomeData+CoreDataProperties.swift in Sources */,
 				473D08BA232451FA004C24A9 /* Category+CoreDataClass.swift in Sources */,
 				472E669B238078A700A03655 /* AccountsLoadedView.swift in Sources */,
@@ -1031,7 +1038,6 @@
 				4744B6A423CBC560003D3826 /* TransactionList.swift in Sources */,
 				473D08B8232451FA004C24A9 /* Location+CoreDataClass.swift in Sources */,
 				47C7266D23AD872900E64136 /* InitialIncomeView.swift in Sources */,
-				473D08CC23245203004C24A9 /* ItemData+CoreDataProperties.swift in Sources */,
 				47C7266523AB248500E64136 /* IncomeData+CoreDataClass.swift in Sources */,
 				4749EC23239A07BC000AFC40 /* LimitSliderView.swift in Sources */,
 				47B589EA23C1430200BF52AB /* ProgressBarView.swift in Sources */,
@@ -1068,7 +1074,6 @@
 				47E4013D23BA7B8E0050A21D /* IncomeStreamData+CoreDataProperties.swift in Sources */,
 				47E4013E23BA7B8E0050A21D /* IncomeData+CoreDataProperties.swift in Sources */,
 				47E4014023BA7B8E0050A21D /* Location+CoreDataProperties.swift in Sources */,
-				47E4014323BA7B8E0050A21D /* ItemData+CoreDataProperties.swift in Sources */,
 				47E4014423BA7B8E0050A21D /* User+CoreDataProperties.swift in Sources */,
 				47E4014623BA7B8E0050A21D /* AccountData+CoreDataProperties.swift in Sources */,
 				4744B6E523D9514E003D3826 /* CategoryCardListView.swift in Sources */,
@@ -1096,6 +1101,7 @@
 				4742475023E25C2E003127BC /* TransactionRule+CoreDataClass.swift in Sources */,
 				4742475823E25F04003127BC /* TransactionRule+CoreDataProperties.swift in Sources */,
 				47E4015423BA7B8E0050A21D /* PlaidParsing.swift in Sources */,
+				47BA523423E5EEFD005AB73F /* PlaidLinkWrapper.swift in Sources */,
 				47E4015523BA7B8E0050A21D /* PlaidWebhookProccesor.swift in Sources */,
 				4742473C23DD033A003127BC /* SpendingSummaryView.swift in Sources */,
 				4744B6D523D618C9003D3826 /* TransactionsTabView.swift in Sources */,
@@ -1156,6 +1162,7 @@
 				47E4018423BA7B8E0050A21D /* AppDelegate.swift in Sources */,
 				47E4018523BA7B8E0050A21D /* AppCoordinator.swift in Sources */,
 				47E4018623BA7B8E0050A21D /* Protocols.swift in Sources */,
+				475D20CA23E54C9F001B7A0F /* ItemData+CoreDataProperties.swift in Sources */,
 				47E4018923BA7B8E0050A21D /* Coordinator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1174,7 +1181,6 @@
 				47E4009C23BA7AA50050A21D /* IncomeData+CoreDataProperties.swift in Sources */,
 				47E4009E23BA7AA50050A21D /* Location+CoreDataProperties.swift in Sources */,
 				4744B6D623D618C9003D3826 /* TransactionsTabView.swift in Sources */,
-				47E400A123BA7AA50050A21D /* ItemData+CoreDataProperties.swift in Sources */,
 				47B589F423C14C4700BF52AB /* BudgetCardViewModel.swift in Sources */,
 				47E400A223BA7AA50050A21D /* User+CoreDataProperties.swift in Sources */,
 				4744B6DA23D692FD003D3826 /* EditCategoriesView.swift in Sources */,
@@ -1203,6 +1209,7 @@
 				4742473923DCF41C003127BC /* TransactionDetailViewModel.swift in Sources */,
 				4744B6E623D9514E003D3826 /* CategoryCardListView.swift in Sources */,
 				47E400B223BA7AA50050A21D /* PlaidParsing.swift in Sources */,
+				47BA523523E5EEFD005AB73F /* PlaidLinkWrapper.swift in Sources */,
 				47E400B323BA7AA50050A21D /* PlaidWebhookProccesor.swift in Sources */,
 				4742473523DCF2EC003127BC /* TransactionDetailView.swift in Sources */,
 				47E400B423BA7AA50050A21D /* PlaidProccesor.swift in Sources */,
@@ -1210,6 +1217,7 @@
 				47E400B723BA7AA50050A21D /* TransactionsProccesor.swift in Sources */,
 				47E400B823BA7AA50050A21D /* EnterIncomeView.swift in Sources */,
 				47E400B923BA7AA50050A21D /* IncomeStateView.swift in Sources */,
+				475D20CB23E54CA0001B7A0F /* ItemData+CoreDataProperties.swift in Sources */,
 				47E400BA23BA7AA50050A21D /* IncomeLoadedVIew.swift in Sources */,
 				47E400BB23BA7AA50050A21D /* LoadingAccountsView.swift in Sources */,
 				47E400BC23BA7AA50050A21D /* CustomTextFieldView.swift in Sources */,

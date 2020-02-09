@@ -53,10 +53,10 @@ class PredicateBuilder{
         let now = Date() // Current date
         let lastWeek = Calendar.current.date(byAdding: dateComponents, to: now)
         
-        let comp: DateComponents = Calendar.current.dateComponents([.year, .month], from: Date())
-        let startOfMonth = Calendar.current.date(from: comp)
+        dateComponents.setValue(-30, for: .day); // +1 day
+        let monthAgo = Calendar.current.date(byAdding: dateComponents, to: now)
         
-        return NSPredicate(format: "(date >= %@) AND (date < %@)", startOfMonth! as NSDate, lastWeek! as NSDate)
+        return NSPredicate(format: "(date >= %@) AND (date < %@)", monthAgo! as NSDate, lastWeek! as NSDate)
         
     }
     

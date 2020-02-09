@@ -63,6 +63,11 @@ class DataManager {
         IncomeData(income: income, incomeStreams: income.incomeStreams, context: context)
     }
     
+    func saveTransactionRule(name: String, amountOverride: Float, categoryOverride: [Category]) -> TransactionRule{
+        return TransactionRule(name: name, amountOverride: amountOverride, categoryOverride: categoryOverride, context: self.context)
+        
+    }
+    
 
     
     func getAccounts() -> [AccountData]{
@@ -174,8 +179,28 @@ class DataManager {
         }
     }
     
+    func getTransactionRules(name: String) throws -> TransactionRule?{
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "TransactionRule")
+        request.predicate = NSPredicate(format: "name == %@", name)
+
+        do{
+            let result = try context.fetch(request) as! [TransactionRule]
+            if result.count == 1{
+                return result[0]
+            }
+            else{
+                return nil
+            }
+        }
+        catch{
+           print("Failed to fetch Transaction Rules")
+            throw DataManagerErrors.NoItemsFound
+        }
+    }
+    
     func getTransactionRules() throws -> [TransactionRule]{
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "TransactionRule")
+
         do{
             let result = try context.fetch(request) as! [TransactionRule]
             return result
@@ -224,8 +249,8 @@ class DataManager {
         
     }
     
-    func discardChanges(){
-        self.context.undo()
-    }
+    //func discardChanges(){
+    //    self.context.undo()
+    //}
     
 }

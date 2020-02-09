@@ -68,18 +68,25 @@ class TransactionProccessor{
     
     func proccessTransactionToCategory(transaction: Transaction, spendingCategories: [SpendingCategory]){
         
-        if transaction.transactionId != nil && isWithinBudgetDates(transactionDate: transaction.date!){
+        if transaction.transactionId != nil{
+            
+            //checkForExistingMatches(transaction: transaction, spendingCategories: spendingCategories)
+            
             let matches = matchTransactionToSpendingCategory(transaction: transaction, spendingCategories: spendingCategories)
             
             for match in matches{
                 
                 // We will update the amount for EVERY match
-                match.amountSpent = match.amountSpent + Float(transaction.amount)
+                if isWithinBudgetDates(transactionDate: transaction.date!){
+                    match.amountSpent = match.amountSpent + Float(transaction.amount)
+                }
+                
                 transaction.addToCategoryMatches(match.category!)
             }
                 
             //ToDO: Filter to only add to budget that transaction is within the dates of the budget
-            if transaction.amount > 0{
+            if transaction.amount > 0 && isWithinBudgetDates(transactionDate: transaction.date!){
+                
                 self.budget.spent = self.budget.spent + (Float(transaction.amount))
             }
             
@@ -90,13 +97,21 @@ class TransactionProccessor{
         
     }
     
-    func checkForExistingMatches(transaction: Transaction, spendingCategories: [SpendingCategory]){
+    func checkForRuleMatches(transaction: Transaction, spendingCategories: [SpendingCategory]) -> Bool{
         
+        var matches = [SpendingCategory]()
         for rule in self.transactionRules{
             if rule.name == transaction.name!{
                 //ToDO fill in transaction rule assignment here.
+                
+                for spendingCategory in spendingCategories{
+                    
+                }
+                
+                transaction.categoryMatches = rule.categoriesOverride
             }
         }
+        return false
         
         
     }

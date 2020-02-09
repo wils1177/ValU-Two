@@ -25,6 +25,7 @@ struct LoadingAccountsView: View {
     }
     
     private func isSuccessfull(for state: LoadingAccountsViewState) -> Bool {
+        print("rejigging view")
         switch state {
         case .Loading: return false
         case .Success: return true
@@ -43,6 +44,7 @@ struct LoadingAccountsView: View {
         
         if isDoneLoading(for: $viewData.viewState.wrappedValue){
             if isSuccessfull(for: $viewData.viewState.wrappedValue){
+                //WelcomeView()
                 AccountsLoadedView(presentor: self.presentor)
             }
             else{

@@ -13,6 +13,9 @@ import Firebase
 
 enum PlaidUserDefaultKeys: String{
     case incomeReadyKey = "IncomeReadyFor:"
+    case publicTokenKey = "public_token"
+    case accessTokenKey = "AccessTokenFor:"
+    case institutionId = "istitutionId-"
 }
 
 class PlaidProccessor{
@@ -34,32 +37,38 @@ class PlaidProccessor{
     
     
     // Save the access token securly to the device's KeyChain
-    func saveAccessToken(response : Data){
+    func saveAccessToken(response : Data) -> String{
         
         let decoder = JSONDecoder()
         do {
             let tokenResponse = try decoder.decode(TokenExchangeResponse.self, from: response)
             let accessTokenString = tokenResponse.accessToken
-            let saveSuccessful: Bool = KeychainWrapper.standard.set(accessTokenString, forKey: "access_token")
+            let itemId = tokenResponse.itemId
+            let saveSuccessful: Bool = KeychainWrapper.standard.set(accessTokenString, forKey: PlaidUserDefaultKeys.accessTokenKey.rawValue + itemId)
             print(saveSuccessful)
             
-            submitItemToServer(itemID: tokenResponse.itemId)
+            submitItemToServer(itemID: itemId)
             
             //Create a key for tracking whether we've recieved a webhook for the income product being ready
             let incomeItemKey = PlaidUserDefaultKeys.incomeReadyKey.rawValue + tokenResponse.itemId
             UserDefaults.standard.set(false, forKey: incomeItemKey)
+            return itemId
 
             
         } catch (let err) {
             print(err.localizedDescription)
+            return ""
         }
+        
+        
 
     }
     
     //Save the public token to the devices keychain
-    static func savePublicToken(publicToken: String){
+    static func savePublicToken(publicToken: String, institutionName: String, institutionId : String){
         
-        let saveSuccessful: Bool = KeychainWrapper.standard.set(publicToken, forKey: "public_token")
+        let saveSuccessful: Bool = KeychainWrapper.standard.set(publicToken, forKey: PlaidUserDefaultKeys.publicTokenKey.rawValue)
+        UserDefaults.standard.set(institutionName, forKey: PlaidUserDefaultKeys.institutionId.rawValue + institutionId)
         print(saveSuccessful)
     }
     
@@ -145,7 +154,6 @@ class PlaidProccessor{
                 if account.accountId == transaction.accountId{
                     
                     let newTransaction = dataManager.saveTransaction(transaction: transaction)
-                        
                     TransactionProccessor(budget: self.budget, transactionRules: self.transactionRules).proccessTransactionToCategory(transaction: newTransaction, spendingCategories: self.spendingCategories)
 
                     

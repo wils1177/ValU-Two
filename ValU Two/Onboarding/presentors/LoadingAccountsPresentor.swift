@@ -23,13 +23,16 @@ class LoadingAccountsViewData : ObservableObject{
 class LoadingAccountsPresentor : Presentor {
     
     var view : LoadingAccountsView?
-    var coordinator : OnboardingFlowCoordinator?
+    var coordinator : plaidIsConnectedDelegate?
     let plaid  = PlaidConnection()
+    let plaidProccesor : PlaidProccessor
     var viewData = LoadingAccountsViewData()
     let budget : Budget
+    var itemId : String?
     
     init(budget: Budget){
         self.budget = budget
+        self.plaidProccesor = PlaidProccessor(budget: self.budget)
     }
     
 
@@ -49,13 +52,13 @@ class LoadingAccountsPresentor : Presentor {
     
     func pullInAccountData(){
         
-        let dispatchA = DispatchGroup()
+        //let dispatchA = DispatchGroup()
 
         
-        dispatchA.enter()
+        //dispatchA.enter()
         
         print("Exchanging public token...")
-        try? plaid.exchangePublicForAccessToken(dispatch: dispatchA, completion: self.tokenExchangeFinished(result:))
+        try? plaid.exchangePublicForAccessToken(completion: self.tokenExchangeFinished(result:))
         
         
     }
@@ -75,7 +78,7 @@ class LoadingAccountsPresentor : Presentor {
         let endDate = currentDate
         
         //Todo: Handle this failing
-        try? self.plaid.getTransactions(startDate: startDate!, endDate: endDate, completion: self.transactionsPullFinished(result:))
+        try? self.plaid.getTransactions(itemId: self.itemId!, startDate: startDate!, endDate: endDate, completion: self.transactionsPullFinished(result:))
         
     }
     
@@ -88,7 +91,7 @@ class LoadingAccountsPresentor : Presentor {
                 self.viewData.viewState = LoadingAccountsViewState.Failure
                 print(error)
             case .success(let dataResult):
-                PlaidProccessor(budget: self.budget).saveAccessToken(response: dataResult)
+                self.itemId = self.plaidProccesor.saveAccessToken(response: dataResult)
 
             }
         }
@@ -103,10 +106,11 @@ class LoadingAccountsPresentor : Presentor {
                 self.viewData.viewState = LoadingAccountsViewState.Failure
                 print(error)
             case .success(let dataResult):
-                PlaidProccessor(budget: self.budget).aggregate(response: dataResult)
+                self.plaidProccesor.aggregate(response: dataResult)
                 TransactionProccessor(budget: self.budget).updateInitialThiryDaysSpent()
                 self.viewData.viewState = LoadingAccountsViewState.Success
-            
+                print("hey")
+                print("ho")
             }
         }
         
@@ -116,6 +120,7 @@ class LoadingAccountsPresentor : Presentor {
     
     func userPressedContinue(){
         
+        print("plaid is connected")
         self.coordinator?.plaidIsConnected()
         
     }

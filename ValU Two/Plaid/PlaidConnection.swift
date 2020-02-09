@@ -53,19 +53,19 @@ class PlaidConnection{
 
     }
     
-    func exchangePublicForAccessToken(dispatch: DispatchGroup, completion : @escaping (Result<Data, Error>) -> ()) throws{
+    func exchangePublicForAccessToken(completion : @escaping (Result<Data, Error>) -> ()) throws{
         
         let URL = PlaidURLs.TokenExchange
         let keys = getAPIKeys()
         
-        guard let publicKey: String = KeychainWrapper.standard.string(forKey: "public_token") else{
+        guard let publicKey: String = KeychainWrapper.standard.string(forKey: PlaidUserDefaultKeys.publicTokenKey.rawValue) else{
             print("Error: missing access Token")
             throw PlaidConnectionError.AccessTokenNotFound
         }
         
         let json: [String: Any] = ["client_id" : keys.clientID, "secret" : keys.clientSecret, "public_token" : publicKey]
         
-        try postRequest(url: URL, jsonBody: json, completion: completion, dispatch: dispatch)
+        try postRequest(url: URL, jsonBody: json, completion: completion)
         
         
     }
@@ -73,12 +73,12 @@ class PlaidConnection{
 
 
     
-    func getTransactions(startDate: Date, endDate: Date, completion : @escaping (Result<Data, Error>) -> ()) throws{
+    func getTransactions(itemId: String, startDate: Date, endDate: Date, completion : @escaping (Result<Data, Error>) -> ()) throws{
         
         let URL = PlaidURLs.GetTransactions
         let keys = getAPIKeys()
         
-        guard let accessToken: String = KeychainWrapper.standard.string(forKey: "access_token") else{
+        guard let accessToken: String = KeychainWrapper.standard.string(forKey: PlaidUserDefaultKeys.accessTokenKey.rawValue + itemId) else{
             print("Error: missing access Token")
             throw PlaidConnectionError.AccessTokenNotFound
         }
@@ -99,12 +99,12 @@ class PlaidConnection{
          
     }
     
-    func getIncome(completion : @escaping (Result<Data, Error>) -> ()) throws{
+    func getIncome(itemId: String, completion : @escaping (Result<Data, Error>) -> ()) throws{
         
         let URL = PlaidURLs.GetIncome
         let keys = getAPIKeys()
         
-        guard let accessToken: String = KeychainWrapper.standard.string(forKey: "access_token") else{
+        guard let accessToken: String = KeychainWrapper.standard.string(forKey: PlaidUserDefaultKeys.accessTokenKey.rawValue + itemId) else{
             print("Error: missing access Token")
             throw PlaidConnectionError.AccessTokenNotFound
         }
@@ -166,7 +166,7 @@ class PlaidConnection{
                 
                 do {
                     let jsonObject = try JSONSerialization.jsonObject(with: data!, options: []) as? [String:AnyObject]
-                   print(jsonObject) // This will print the below json.
+                   //print(jsonObject) // This will print the below json.
                 }
                 catch{}
                 

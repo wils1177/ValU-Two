@@ -13,7 +13,7 @@ import SwiftUI
 
 
 
-class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, SetSavingsViewDelegate, PlaidLinkDelegate, BudgetCategoriesDelegate, SetSpendingLimitDelegate{
+class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, SetSavingsViewDelegate, PlaidLinkDelegate, BudgetCategoriesDelegate, SetSpendingLimitDelegate, plaidIsConnectedDelegate{
 
     // Dependencies
     var budgetToCreate : Budget?

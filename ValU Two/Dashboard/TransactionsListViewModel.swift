@@ -61,7 +61,9 @@ class TransactionsListViewModel: ObservableObject{
         }
         catch{
             self.transactions = [Transaction]()
+            
         }
+        //print(self.transactions)
     }
     
     

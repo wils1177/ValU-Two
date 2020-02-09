@@ -16,7 +16,6 @@ class PlaidLinkViewPresentor : UIViewController, Presentor  {
     var linkViewController: PLKPlaidLinkViewController?
     
     func configure() -> UIViewController {
-        
         // With shared configuration from Info.plist
         let linkViewDelegate = self
         self.linkViewController = PLKPlaidLinkViewController(delegate:
@@ -41,9 +40,14 @@ extension PlaidLinkViewPresentor : PLKPlaidLinkViewDelegate
         PLKPlaidLinkViewController, didSucceedWithPublicToken publicToken:
         String, metadata: [String : Any]?) {
         
-            PlaidProccessor.savePublicToken(publicToken: publicToken)
-            self.coordinator?.plaidLinkSuccess(sender : self)
+        print("success In Link Modal")
         
+        let institution = metadata!["institution"] as! [String : String]
+        let name = institution["name"]
+        let institutionId = institution["institution_id"]
+        PlaidProccessor.savePublicToken(publicToken: publicToken, institutionName: name!, institutionId : institutionId!)
+        self.coordinator?.plaidLinkSuccess(sender : self)
+        //linkViewController.dismiss(animated: true, completion: nil)
  
     }
     
@@ -58,6 +62,7 @@ extension PlaidLinkViewPresentor : PLKPlaidLinkViewDelegate
                 print("Exited without any error")
             }
         }
+        linkViewController.dismiss(animated: true, completion: nil)
     }
     
     func linkViewController(_ linkViewController:

@@ -10,9 +10,12 @@ import Foundation
 
 class PlaidWebhookProccesor{
     
+    var itemId : String?
+    
     func consumeWebhookMessage(webhookCode: String, itemId: String){
         
         print(webhookCode)
+        self.itemId = itemId
         
         if webhookCode == "INITIAL_UPDATE"{
             print("posting initial update notification")
@@ -22,7 +25,8 @@ class PlaidWebhookProccesor{
             print("posting income ready notification")
             let incomeItemKey = PlaidUserDefaultKeys.incomeReadyKey.rawValue + itemId
             UserDefaults.standard.set(true, forKey: incomeItemKey)
-            NotificationCenter.default.post(name: .incomeReady, object: nil)
+            //NotificationCenter.default.post(name: .incomeReady, object: nil, userInfo: userInfo)
+            startIncomePull()
         }
         else if webhookCode == "HISTORICAL_UPDATE"{
                 print("Proccessing Histocial Update Webhook")
@@ -48,7 +52,7 @@ class PlaidWebhookProccesor{
 
         let plaidConnection = PlaidConnection()
         
-        try? plaidConnection.getTransactions(startDate: mostRecentTransaction!, endDate: today, completion: self.defatulUpdatePullFinished(result:))
+        try? plaidConnection.getTransactions(itemId : self.itemId!, startDate: mostRecentTransaction!, endDate: today, completion: self.defatulUpdatePullFinished(result:))
     }
     
     
@@ -67,7 +71,7 @@ class PlaidWebhookProccesor{
 
         let plaidConnection = PlaidConnection()
         
-        try? plaidConnection.getTransactions(startDate: mostRecentTransaction!, endDate: today, completion: self.defatulUpdatePullFinished(result:))
+        try? plaidConnection.getTransactions(itemId: self.itemId!, startDate: mostRecentTransaction!, endDate: today, completion: self.defatulUpdatePullFinished(result:))
         
     }
 
@@ -87,6 +91,31 @@ class PlaidWebhookProccesor{
             }
         }
         
+        
+    }
+    
+    func startIncomePull(){
+        print("getting income...")
+        //TODO: Handle each of these errors!
+        try? DataManager().deleteIncomeData()
+        try? PlaidConnection().getIncome(itemId: self.itemId!, completion: self.incomePullFinished(result:))
+    }
+    
+    
+    func incomePullFinished(result: Result<Data, Error>){
+        
+        DispatchQueue.main.async {
+            switch result {
+            case .success(let dataResult):
+                    print("income success")
+                    
+                    let budget = try? DataManager().getBudget()
+                    //TODO: This should be a try/catch
+                    PlaidProccessor(budget: budget!).aggregateIncome(response: dataResult)
+            case .failure(let error):
+                    print(error)
+            }
+        }
         
     }
     

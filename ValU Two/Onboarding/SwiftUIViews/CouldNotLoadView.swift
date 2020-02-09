@@ -24,7 +24,8 @@ struct CouldNotLoadView: View {
             Text(self.errorMessage).font(.title).bold().lineLimit(nil).padding().multilineTextAlignment(.center).padding(.bottom, 70)
             
             Spacer()
-        }
+        }.navigationBarTitle(Text("Welcome"),  displayMode: .large)
+        .navigationBarHidden(true)
         
     }
 }

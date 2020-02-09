@@ -2,7 +2,7 @@
 //  ItemData+CoreDataProperties.swift
 //  
 //
-//  Created by Clayton Wilson on 9/2/19.
+//  Created by Clayton Wilson on 2/1/20.
 //
 //
 
@@ -20,5 +20,6 @@ extension ItemData {
     @NSManaged public var error: String?
     @NSManaged public var institutionId: String?
     @NSManaged public var itemId: String?
+    @NSManaged public var institutionName: String?
 
 }

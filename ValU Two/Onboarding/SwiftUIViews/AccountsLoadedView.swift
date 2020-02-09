@@ -42,7 +42,8 @@ struct AccountsLoadedView: View {
             }
             
             
-        }
+        }.navigationBarTitle(Text("Welcome"),  displayMode: .large)
+        .navigationBarHidden(true)
     }
 }
 

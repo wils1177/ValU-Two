@@ -114,23 +114,23 @@ class EnterIncomePresentor : Presentor {
         
         // Only setting up one notification observer for the webhook
         // TODO: This will be refactored once we support multiple items
-        NotificationCenter.default.addObserver(self, selector: #selector(recievedIncomeWebhook(_:)), name: .incomeReady, object: nil)
+       // NotificationCenter.default.addObserver(self, selector: #selector(recievedIncomeWebhook(_:)), name: .incomeReady, object: nil)
         
         do{
             //Get all the items we might want to check for income streams
             let items = try dataManager.getItems()
             
-            for item in items{
+            //for item in items{
                 
                 //Check if we've already gotten the PRODUCT_READY webhook
-                let itemId = item.itemId ?? ""
-                let incomeItemKey = PlaidUserDefaultKeys.incomeReadyKey.rawValue + itemId
-                print(incomeItemKey)
-                if UserDefaults.standard.object(forKey: incomeItemKey) as! Bool == true{
-                    startIncomePull()
-                }
+                //let itemId = item.itemId ?? ""
+                //let incomeItemKey = PlaidUserDefaultKeys.incomeReadyKey.rawValue + itemId
+                //print(incomeItemKey)
+                //if UserDefaults.standard.object(forKey: incomeItemKey) as! Bool == true{
+               //     startIncomePull()
+               // }
                 
-            }
+            //}
         }
         //If something goes wrong, we change the view to the failure state
         catch{
@@ -151,38 +151,11 @@ class EnterIncomePresentor : Presentor {
     }
     
     
-    @objc func recievedIncomeWebhook(_ notification:Notification){
-        
-        startIncomePull()
-        
-    }
+
     
-    func startIncomePull(){
-        print("getting income...")
-        //TODO: Handle each of these errors!
-        try? dataManager.deleteIncomeData()
-        try? self.plaid.getIncome(completion: self.incomePullFinished(result:))
-    }
     
-    func incomePullFinished(result: Result<Data, Error>){
-        
-        DispatchQueue.main.async {
-            switch result {
-            case .success(let dataResult):
-                    print("income success")
-                    
-                    
-                    //TODO: This should be a try/catch
-                    PlaidProccessor(budget: self.budget).aggregateIncome(response: dataResult)
-                    self.displayIncomeStreams()
-            case .failure(let error):
-                    self.viewData?.viewState = LoadingIncomeViewState.Failure
-                    print(error)
-            }
-        }
-        
-    }
     
+    /*
     func displayIncomeStreams(){
         
         do{
@@ -208,7 +181,7 @@ class EnterIncomePresentor : Presentor {
         
         
     }
-
+ */
     
     
 }

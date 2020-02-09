@@ -17,6 +17,8 @@ protocol ViewModel{
     func generateViewData()
 }
 
+
+
 protocol CategoryListViewModel: UserSubmitViewModel{
     var viewData: [BudgetCategoryViewData] { get set }
     var selectedCategoryNames : [String] {get set}
@@ -38,6 +40,10 @@ protocol UserSubmitViewModel: class, ViewModel{
     func submit()
 }
 
+protocol plaidIsConnectedDelegate{
+    func plaidIsConnected()
+}
+
 
 protocol StartPageViewDelegate {
     func continueToOnboarding()
@@ -54,6 +60,7 @@ protocol BudgetCategoriesDelegate {
 protocol SetSpendingLimitDelegate {
     func finishedSettingLimits()
 }
+
 
 protocol PlaidLinkDelegate {
     func dismissPlaidLink()

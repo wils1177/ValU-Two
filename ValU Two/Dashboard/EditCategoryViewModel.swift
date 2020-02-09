@@ -20,6 +20,7 @@ class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, Observa
     var viewData = [BudgetCategoryViewData]()
     var selectedCategoryNames = [String]()
     var spendingCategories = [SpendingCategory]()
+    var saveRule : Bool = true
     @Published var selectedButtons = [CategoryButton]()
     
     var transaction : Transaction
@@ -41,6 +42,7 @@ class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, Observa
         
     }
     
+    
     func submit() {
         
         // Get rid of any removed categories
@@ -51,7 +53,7 @@ class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, Observa
             }
         }
         
-        //Now add all the additionally selected Categories
+        //Now add all new categories
         for spendingCategory in self.spendingCategories{
             
             let categoryName = spendingCategory.category!.name!
@@ -81,16 +83,40 @@ class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, Observa
         
     }
     
+    func createTransactionRule(){
+        
+        let categories = self.transaction.categoryMatches
+        let name = self.transaction.name
+        
+        do{
+            //Check for existing rule
+            let rule = try DataManager().getTransactionRules(name: name!)
+            if rule != nil{
+                rule!.name = name
+                rule!.categoriesOverride = categories
+            }
+            //If there is no existing rule, just make a new one
+            else{
+                _ = DataManager().saveTransactionRule(name: name!, amountOverride: Float(0.0), categoryOverride: categories?.allObjects as! [Category])
+                
+            }
+            
+        }
+        catch{
+            print("Could not create transaction rule!!")
+        }
+        
+        
+    }
+    
     func selectedCategoryName(name:String){
         
         self.selectedCategoryNames.append(name)
-        //getSelectedButtons()
         
     }
     
     func deSelectedCategoryName(name:String){
         self.selectedCategoryNames.removeAll { $0 == name }
-        //getSelectedButtons()
     }
     
     func getSelectedButtons(){
