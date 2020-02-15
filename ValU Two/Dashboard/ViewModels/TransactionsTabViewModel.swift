@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct TransactionsTabViewData{
     //var spendingSummary : SpendingSummaryViewModel
@@ -31,7 +32,9 @@ struct ListWrapper : Hashable{
     var idx : Int
 }
 
-class TransactionsTabViewModel: ObservableObject{
+class TransactionsTabViewModel: ObservableObject, Presentor{
+    
+    
     
     @Published var transactionsThisWeek : TransactionsListViewModel?
     @Published var transactionsToday : TransactionsListViewModel?
@@ -42,6 +45,11 @@ class TransactionsTabViewModel: ObservableObject{
     init(){
         generateViewData()
         NotificationCenter.default.addObserver(self, selector: #selector(update(_:)), name: .modelUpdate, object: nil)
+    }
+    
+    func configure() -> UIViewController {
+        let vc = UIHostingController(rootView: TransactionsTabView(viewModel: self))
+        return vc
     }
     
     func generateViewData(){

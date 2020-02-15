@@ -73,7 +73,7 @@ class SetSpendingPresentor : Presentor {
         var categoryPercentages = [ViewCategory]()
         for spendingCategory in self.budget.getSubSpendingCategories(){
             if spendingCategory.selected{
-                let name = spendingCategory.category?.name
+                let name = spendingCategory.name
                 let lastThirtyDaysSpent = spendingCategory.initialThirtyDaysSpent
                 let viewCategory = ViewCategory(name : name!, limit: String(roundToTens(x: spendingCategory.limit)), lastThirtyDaysSpent: String(lastThirtyDaysSpent))
                 categoryPercentages.append(viewCategory)
@@ -118,7 +118,7 @@ class SetSpendingPresentor : Presentor {
             for spendingCategory in self.budget.getSubSpendingCategories(){
             
                 if spendingCategory.selected{
-                    if spendingCategory.category?.name == categoryName{
+                    if spendingCategory.name == categoryName{
                         let newLimit = Int(spendingCategory.limit) + incrementAmount
                         
                         if newLimit >= 0{

@@ -16,6 +16,7 @@ enum PlaidURLs{
     case TokenExchange
     case GetTransactions
     case GetIncome
+    case RemoveItem
 }
 
 enum PlaidConnectionError: Error {
@@ -49,6 +50,8 @@ class PlaidConnection{
         self.URLdict[PlaidURLs.GetTransactions] = URL(string : (rootURL + "/transactions/get"))!
         self.URLdict[PlaidURLs.GetAccounts] = URL(string : (rootURL + "/accounts/get"))!
         self.URLdict[PlaidURLs.GetIncome] = URL(string : (rootURL + "/income/get"))!
+        self.URLdict[PlaidURLs.RemoveItem] = URL(string : (rootURL + "/item/remove"))!
+        
 
 
     }
@@ -103,6 +106,23 @@ class PlaidConnection{
         
         let URL = PlaidURLs.GetIncome
         let keys = getAPIKeys()
+        
+        guard let accessToken: String = KeychainWrapper.standard.string(forKey: PlaidUserDefaultKeys.accessTokenKey.rawValue + itemId) else{
+            print("Error: missing access Token")
+            throw PlaidConnectionError.AccessTokenNotFound
+        }
+        
+        let json: [String: Any] = ["client_id" : keys.clientID, "secret" : keys.clientSecret, "access_token" : accessToken]
+        
+        try postRequest(url: URL, jsonBody: json, completion: completion, dispatch: nil)
+        
+    }
+    
+    func removeItem(itemId: String, completion : @escaping (Result<Data, Error>) -> ()) throws{
+        
+        let URL = PlaidURLs.RemoveItem
+        let keys = getAPIKeys()
+        
         
         guard let accessToken: String = KeychainWrapper.standard.string(forKey: PlaidUserDefaultKeys.accessTokenKey.rawValue + itemId) else{
             print("Error: missing access Token")

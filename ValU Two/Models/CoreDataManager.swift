@@ -38,15 +38,16 @@ class DataManager {
         return newSpendingCategory
     }
     
-    func saveAccount(account : AccountJSON){
+    func saveAccount(account : AccountJSON, itemId: String){
         
-        AccountData(account: account, context: self.context)
+        AccountData(account: account, itemId: itemId, context: self.context)
         
     }
     
-    func saveTransaction(transaction: TransactionJSON) -> Transaction{
+    func saveTransaction(transaction: TransactionJSON, itemId: String) -> Transaction{
         print(transaction.name)
-        let transaction = Transaction(transaction: transaction, context: self.context)
+        print(transaction.date)
+        let transaction = Transaction(transaction: transaction, itemId: itemId, context: self.context)
         self.saveDatabase()
         return transaction
 
@@ -54,7 +55,7 @@ class DataManager {
     }
     
     func saveItem(item: ItemJSON){
-        
+        print("creating a brand new item")
         ItemData(item: item, context: self.context)
 
     }
@@ -63,7 +64,7 @@ class DataManager {
         IncomeData(income: income, incomeStreams: income.incomeStreams, context: context)
     }
     
-    func saveTransactionRule(name: String, amountOverride: Float, categoryOverride: [Category]) -> TransactionRule{
+    func saveTransactionRule(name: String, amountOverride: Float, categoryOverride: [String]) -> TransactionRule{
         return TransactionRule(name: name, amountOverride: amountOverride, categoryOverride: categoryOverride, context: self.context)
         
     }
@@ -233,6 +234,24 @@ class DataManager {
         } catch let error as NSError {
             // TODO: handle the error
             print("Could not delete the income data")
+        }
+    }
+    
+    func deleteEntity(predicate: NSPredicate, entityName: String) throws{
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
+        request.predicate = predicate
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: request)
+        deleteRequest.resultType = NSBatchDeleteRequestResultType.resultTypeObjectIDs
+        
+        do {
+            let result = try context.execute(deleteRequest) as? NSBatchDeleteResult
+            let objectIDArray = result?.result as? [NSManagedObjectID]
+            let changes = [NSDeletedObjectsKey : objectIDArray]
+            NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes as [AnyHashable : Any], into: [context])
+        } catch let error as NSError {
+            // TODO: handle the error
+            print("Could not delete the Entity:")
+            print(entityName)
         }
     }
     

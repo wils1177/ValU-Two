@@ -75,8 +75,8 @@ class SpendingSummaryViewModel : ObservableObject{
             var total = Float(0.0)
             for spendingCategory in spendingCategories{
                 
-                let name = spendingCategory.category!.name!
-                let icon = spendingCategory.category!.icon!
+                let name = spendingCategory.name!
+                let icon = spendingCategory.icon!
                 let amount = spendingCategory.amountSpent
                 let amountString = "$" + String(Int(round(spendingCategory.amountSpent)))
                 total = total + amount

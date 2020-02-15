@@ -29,7 +29,6 @@ class PredicateBuilder{
         
         dateComponents.setValue(-7, for: .day); // +1 day
         let lastWeek = Calendar.current.date(byAdding: dateComponents, to: now)
-        
         return NSPredicate(format: "(date >= %@) AND (date < %@)", lastWeek! as NSDate, yesterday! as NSDate)
         
             
@@ -64,6 +63,12 @@ class PredicateBuilder{
     func generateCategoryPredicate(categoryName: String) -> NSPredicate{
         return NSPredicate(format: "(name == %@)", categoryName as String)
     }
+    
+    func generateItemPredicate(itemId: String) -> NSPredicate{
+        return NSPredicate(format: "(itemId == %@)", itemId as String)
+    }
+    
+
     
 }
 

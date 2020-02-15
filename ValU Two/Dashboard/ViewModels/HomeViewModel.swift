@@ -16,27 +16,41 @@ struct HomeViewData{
     var spendingCardViewModel : SpendingCardViewModel
 }
 
-class HomeViewModel{
+class HomeViewModel: ObservableObject{
     
     
     var budget : Budget
-    var viewData : HomeViewData?
+    @Published var viewData : HomeViewData?
+    var coordinator : HomeTabCoordinator?
     
     init(budget : Budget){
         self.budget = budget
-        self.viewData = generateViewData()
+        generateViewData()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(update(_:)), name: .modelUpdate, object: nil)
+        
     }
     
-    func generateViewData()-> HomeViewData{
+    @objc func update(_ notification:Notification){
+        print("Spending Card Update Triggered")
+        generateViewData()
+        
+    }
+    
+    func generateViewData(){
         
         let budgetcardViewModel = BudgetCardViewModel(budget: self.budget)        
         let spendingCardViewModel = SpendingCardViewModel(budget: self.budget)
         
         let viewData = HomeViewData(budgetCardViewModel: budgetcardViewModel, spendingCardViewModel: spendingCardViewModel)
         
-        return viewData
+        self.viewData = viewData
 
     
+    }
+    
+    func clickedSettingsButton(){
+        self.coordinator?.settingsClicked()
     }
     
 }

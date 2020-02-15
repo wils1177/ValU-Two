@@ -63,7 +63,7 @@ protocol SetSpendingLimitDelegate {
 
 
 protocol PlaidLinkDelegate {
-    func dismissPlaidLink()
+    func dismissPlaidLink(sender: PlaidLinkViewPresentor)
     func plaidLinkSuccess(sender : PlaidLinkViewPresentor)
 }
 

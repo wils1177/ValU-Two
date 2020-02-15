@@ -70,9 +70,13 @@ class TransactionProccessor{
         
         if transaction.transactionId != nil{
             
-            //checkForExistingMatches(transaction: transaction, spendingCategories: spendingCategories)
-            
-            let matches = matchTransactionToSpendingCategory(transaction: transaction, spendingCategories: spendingCategories)
+            // First, we will see if there any matches based on existign rules
+            var matches = checkForRuleMatches(transaction: transaction, spendingCategories: spendingCategories)
+            // If there are no matches from existing rules, match on default logic 
+            if matches.count == 0{
+
+                matches = matchTransactionToSpendingCategory(transaction: transaction, spendingCategories: spendingCategories)
+            }
             
             for match in matches{
                 
@@ -81,7 +85,7 @@ class TransactionProccessor{
                     match.amountSpent = match.amountSpent + Float(transaction.amount)
                 }
                 
-                transaction.addToCategoryMatches(match.category!)
+                transaction.addToCategoryMatches(match)
             }
                 
             //ToDO: Filter to only add to budget that transaction is within the dates of the budget
@@ -95,23 +99,27 @@ class TransactionProccessor{
         }
         
         
+        
+        
     }
     
-    func checkForRuleMatches(transaction: Transaction, spendingCategories: [SpendingCategory]) -> Bool{
+    func checkForRuleMatches(transaction: Transaction, spendingCategories: [SpendingCategory]) -> [SpendingCategory]{
         
         var matches = [SpendingCategory]()
         for rule in self.transactionRules{
             if rule.name == transaction.name!{
-                //ToDO fill in transaction rule assignment here.
                 
                 for spendingCategory in spendingCategories{
-                    
+                    for ruleCategory in rule.categories!{
+                        if spendingCategory.name == ruleCategory{
+                            matches.append(spendingCategory)
+                        }
+                    }
                 }
                 
-                transaction.categoryMatches = rule.categoriesOverride
             }
         }
-        return false
+        return matches
         
         
     }
@@ -123,9 +131,11 @@ class TransactionProccessor{
         
         var matches = [SpendingCategory]()
         
+        
+        
         //Try to match the category and transaction labels
         for spendingCateogory in spendingCategories{
-            let categoryLabels:Set<String> = Set(spendingCateogory.category!.contains!)
+            let categoryLabels:Set<String> = Set(spendingCateogory.contains!)
             let transactionCategoryLabels:Set<String> = Set(transaction.plaidCategories!)
             
             if categoryLabels.isSubset(of: transactionCategoryLabels){
@@ -133,6 +143,8 @@ class TransactionProccessor{
             }
             
         }
+        
+        
         
         
         

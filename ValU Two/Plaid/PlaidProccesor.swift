@@ -43,6 +43,7 @@ class PlaidProccessor{
         do {
             let tokenResponse = try decoder.decode(TokenExchangeResponse.self, from: response)
             let accessTokenString = tokenResponse.accessToken
+            print(tokenResponse)
             let itemId = tokenResponse.itemId
             let saveSuccessful: Bool = KeychainWrapper.standard.set(accessTokenString, forKey: PlaidUserDefaultKeys.accessTokenKey.rawValue + itemId)
             print(saveSuccessful)
@@ -52,6 +53,7 @@ class PlaidProccessor{
             //Create a key for tracking whether we've recieved a webhook for the income product being ready
             let incomeItemKey = PlaidUserDefaultKeys.incomeReadyKey.rawValue + tokenResponse.itemId
             UserDefaults.standard.set(false, forKey: incomeItemKey)
+            print("Retgurning ItemId:" + itemId)
             return itemId
 
             
@@ -85,13 +87,13 @@ class PlaidProccessor{
             let parsedResponse = try decoder.decode(TransactionsResponse.self, from: response)
             
             if isInitial{
-                proccessAccounts(response: parsedResponse.accounts)
+                proccessAccounts(response: parsedResponse.accounts, itemId: parsedResponse.item.itemId)
             }
             
             
             //check to make sure there are some transactions before proccessing
             if parsedResponse.trasactions != nil{
-                proccessTransactions(response: parsedResponse.trasactions!)
+                proccessTransactions(response: parsedResponse.trasactions!, itemId: parsedResponse.item.itemId)
             }
             
             if isInitial{
@@ -124,7 +126,7 @@ class PlaidProccessor{
            }
     }
     
-    func proccessAccounts(response: [AccountJSON]){
+    func proccessAccounts(response: [AccountJSON], itemId: String){
         
         
         let dataManager = DataManager()
@@ -133,7 +135,7 @@ class PlaidProccessor{
             
             if account.subType == "checking" || account.subType == "credit card"{
                 
-                dataManager.saveAccount(account: account)
+                dataManager.saveAccount(account: account, itemId: itemId)
                 
             }
             
@@ -144,7 +146,7 @@ class PlaidProccessor{
     }
     
     // Saves only transactions that are under an aggregated account
-    func proccessTransactions(response: [TransactionJSON]){
+    func proccessTransactions(response: [TransactionJSON], itemId: String){
         
         let dataManager = DataManager()
         
@@ -153,7 +155,8 @@ class PlaidProccessor{
             for account in dataManager.getAccounts(){
                 if account.accountId == transaction.accountId{
                     
-                    let newTransaction = dataManager.saveTransaction(transaction: transaction)
+                    let newTransaction = dataManager.saveTransaction(transaction: transaction, itemId: itemId)
+
                     TransactionProccessor(budget: self.budget, transactionRules: self.transactionRules).proccessTransactionToCategory(transaction: newTransaction, spendingCategories: self.spendingCategories)
 
                     
@@ -171,7 +174,7 @@ class PlaidProccessor{
     
     
     func processItem(response : ItemJSON){
-        
+        print("Proccessing a New Item")
         let dataManager = DataManager()
         dataManager.saveItem(item: response)
         dataManager.saveDatabase()        

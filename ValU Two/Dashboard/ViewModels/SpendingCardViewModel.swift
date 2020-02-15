@@ -71,10 +71,10 @@ class SpendingCardViewModel: ObservableObject {
             
             if spendingCategory.selected{
                 
-                let name = (spendingCategory.category?.name)!
+                let name = (spendingCategory.name)!
                 var spent = spendingCategory.amountSpent
                 let limit = spendingCategory.limit
-                let icon = spendingCategory.category!.icon ?? "❓"
+                let icon = spendingCategory.icon ?? "❓"
                 var percentage = Float(0.0)
                 if limit > 0.0 && spent > 0.0{
                     percentage = spent / limit

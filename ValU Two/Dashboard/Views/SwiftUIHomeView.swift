@@ -10,8 +10,7 @@ import SwiftUI
 
 struct HomeView: View {
     
-    var viewModel: HomeViewModel
-    @State var showingDetail = false
+    @ObservedObject var viewModel: HomeViewModel
     
     init(viewModel: HomeViewModel){
         self.viewModel = viewModel
@@ -34,18 +33,17 @@ struct HomeView: View {
                 }
                 
                 
-            }).navigationBarTitle("ValU Two").navigationBarItems(trailing:
+            })
+                
+                .navigationBarTitle("ValU Two").navigationBarItems(trailing:
                 
                 Button(action: {
-                    print("clicked the category button")
-                    self.showingDetail.toggle()
+                    self.viewModel.clickedSettingsButton()
                 }){
                 ZStack{
                     
                     Image(systemName: "person.crop.circle").imageScale(.large)
                 }
-                }.buttonStyle(BorderlessButtonStyle()).sheet(isPresented: $showingDetail) {
-                    SettingsView()
                 }
                 
                 

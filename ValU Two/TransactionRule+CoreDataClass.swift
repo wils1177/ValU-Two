@@ -13,16 +13,14 @@ import CoreData
 public class TransactionRule: NSManagedObject {
     
     
-    convenience init(name : String, amountOverride: Float? = nil, categoryOverride: [Category]? = nil,  context: NSManagedObjectContext!){
+    convenience init(name : String, amountOverride: Float? = nil, categoryOverride: [String]? = nil,  context: NSManagedObjectContext!){
         
         let entity = NSEntityDescription.entity(forEntityName: "TransactionRule", in: context)
         self.init(entity: entity!, insertInto: context)
         
         self.name = name
         self.amountOverride = 0.0
-        if categoryOverride != nil{
-            self.categoriesOverride?.addingObjects(from: categoryOverride!)
-        }
+        self.categories = categoryOverride
         
     }
     

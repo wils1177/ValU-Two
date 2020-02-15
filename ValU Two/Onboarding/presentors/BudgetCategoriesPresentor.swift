@@ -66,7 +66,7 @@ class BudgetCardsPresentor : Presentor, CategoryListViewModel, UserSubmitViewMod
         
         for subCategory in self.budget.getSubSpendingCategories(){
             if subCategory.selected{
-                self.selectedCategoryNames.append(subCategory.category!.name!)
+                self.selectedCategoryNames.append(subCategory.name!)
             }
         }
         
@@ -87,7 +87,7 @@ class BudgetCardsPresentor : Presentor, CategoryListViewModel, UserSubmitViewMod
                  
                  for case let subSpendingCategory as SpendingCategory in spendingCategory.subSpendingCategories!{
                      
-                    if self.selectedCategoryNames.contains(subSpendingCategory.category!.name!){
+                    if self.selectedCategoryNames.contains(subSpendingCategory.name!){
                         subSpendingCategory.selected = true
                     }
                     else{
@@ -113,7 +113,7 @@ extension CategoryListViewModel{
     func getSpendingCategories(){
         do{
             let budget = try DataManager().getBudget()
-            self.spendingCategories = budget!.spendingCategories!.array as! [SpendingCategory]
+            self.spendingCategories = budget!.getParentSpendingCategories()
         }
         catch{
             print("Could not get spending catoegires from budget:!")
@@ -139,11 +139,10 @@ extension CategoryListViewModel{
         
         for spendingCategory in self.spendingCategories{
             
-            let category = spendingCategory.category!
                         
-            let sectionTitle = category.name!
+            let sectionTitle = spendingCategory.name!
             var subCategories = [CategoryButton]()
-            let icon = category.icon ?? "❓"
+            let icon = spendingCategory.icon ?? "❓"
             
             let amountSpent = spendingCategory.initialThirtyDaysSpent
             let amountSpentString = String(format: "$%.02f", amountSpent)
@@ -152,9 +151,8 @@ extension CategoryListViewModel{
                 
                 for case let subSpendingCategory as SpendingCategory in spendingCategory.subSpendingCategories!{
                     
-                    let subCategory = subSpendingCategory.category!
-                    let name = subCategory.name!
-                    let icon = subCategory.icon!
+                    let name = subSpendingCategory.name!
+                    let icon = subSpendingCategory.icon!
                     var selectedDefault = false
                     
                     if self.selectedCategoryNames.contains(name){

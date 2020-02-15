@@ -30,6 +30,8 @@ struct PlaidLinkWrapper: UIViewControllerRepresentable{
         
     }
     
+
+    
     func dismissLink(){
         linkModal.dismiss(animated: true)
     }
@@ -46,8 +48,10 @@ struct PlaidLinkWrapper: UIViewControllerRepresentable{
     }
     
     func updateUIViewController(_ pageViewController: UINavigationController, context: Context) {
-        print("update is being called for some reason")
     }
+    
+    
+    
 
     
 
@@ -56,32 +60,32 @@ struct PlaidLinkWrapper: UIViewControllerRepresentable{
                 
         
         var parent: PlaidLinkWrapper
-        var presentor: LoadingAccountsPresentor
         
                 
         init(_ parent: PlaidLinkWrapper, presentor: LoadingAccountsPresentor) {
             
             self.parent = parent
-            self.presentor = presentor
             super.init()
             presentor.coordinator = self
             
         }
         
         func plaidIsConnected() {
-            NotificationCenter.default.post(name: .modelUpdate, object: nil)
-            self.parent.navController.dismiss(animated: true)
+            //NotificationCenter.default.post(name: .modelUpdate, object: nil)
+            self.parent.linkModal.dismiss(animated: true)
+            self.parent.navController.dismiss(animated: false)
             self.parent.settingsViewModel.updateView()
+            self.parent.loadingAccountsPresentor.coordinator = nil
         }
         
-        func dismissPlaidLink() {
+        func dismissPlaidLink(sender: PlaidLinkViewPresentor) {
             self.parent.navController.dismiss(animated: true)
         }
         
         func plaidLinkSuccess(sender: PlaidLinkViewPresentor) {
             print("plaid success")
             
-            let vc = self.presentor.configure()
+            let vc = self.parent.loadingAccountsPresentor.configure()
             parent.navController.pushViewController(vc, animated: true)
             
             

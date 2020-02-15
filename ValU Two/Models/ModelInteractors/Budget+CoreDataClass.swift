@@ -40,6 +40,25 @@ public class Budget: NSManagedObject {
         
     }
     
+    func createSpendingCategory(categories: [CategoryEntry]){
+        
+        for category in categories{
+            
+            let newSpendingCategory = DataManager().createNewSpendingCategory(categoryEntry: category)
+            self.addToSpendingCategories(newSpendingCategory)
+            
+            if category.subCategories != nil{
+                for subCategory in category.subCategories!{
+                    let newSpendingSubCategory = DataManager().createNewSpendingCategory(categoryEntry: subCategory)
+                    newSpendingCategory.addToSubSpendingCategories(newSpendingSubCategory)
+                    newSpendingSubCategory.budget = self
+                }
+            }
+            
+        }
+        
+    }
+    
     func getSubSpendingCategories() -> [SpendingCategory]{
         
         var categoriesToReturn = [SpendingCategory]()
@@ -55,6 +74,22 @@ public class Budget: NSManagedObject {
         }
         
         return categoriesToReturn
+    }
+    
+    func getParentSpendingCategories() -> [SpendingCategory]{
+        
+        var categoriesToReturn = [SpendingCategory]()
+        
+        for case let category as SpendingCategory in self.spendingCategories!{
+            
+            if category.subSpendingCategories != nil && category.subSpendingCategories!.count > 0{
+                categoriesToReturn.append(category)
+            }
+            
+        }
+        
+        return categoriesToReturn
+        
     }
     
     func getAllSpendingCategories() -> [SpendingCategory]{
@@ -77,23 +112,7 @@ public class Budget: NSManagedObject {
         
     }
     
-    func createSpendingCategory(categories: [CategoryEntry]){
-        
-        for category in categories{
-            
-            let newSpendingCategory = DataManager().createNewSpendingCategory(categoryEntry: category)
-            self.addToSpendingCategories(newSpendingCategory)
-            
-            if category.subCategories != nil{
-                for subCategory in category.subCategories!{
-                    let newSpendingSubCategory = DataManager().createNewSpendingCategory(categoryEntry: subCategory)
-                    newSpendingCategory.addToSubSpendingCategories(newSpendingSubCategory)
-                }
-            }
-            
-        }
-        
-    }
+    
         
     
     func calculateSavingsAmount(percentageOfAmount: Float) -> Float{
@@ -126,6 +145,15 @@ public class Budget: NSManagedObject {
     
     func getAmountAvailable() -> Float {
         return self.amount * (1 - self.savingsPercent)
+    }
+    
+    func updateAmountSpent(){
+        print("updating the amount spent")
+        self.spent = 0.0
+        let spendingCategories = getSubSpendingCategories()
+        for category in spendingCategories{
+            category.reCalculateAmountSpent()
+        }
     }
     
     

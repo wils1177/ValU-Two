@@ -13,7 +13,7 @@ import CoreData
 public class Transaction: NSManagedObject {
     
 
-    convenience init(transaction: TransactionJSON, context: NSManagedObjectContext!){
+    convenience init(transaction: TransactionJSON, itemId: String, context: NSManagedObjectContext!){
         
         let entity = NSEntityDescription.entity(forEntityName: "Transaction", in: context)
         self.init(entity: entity!, insertInto: context)
@@ -26,15 +26,19 @@ public class Transaction: NSManagedObject {
         self.pending = transaction.pending
         self.transactionId = transaction.transactionId
         self.plaidCategories = transaction.plaidCategories
+        self.itemId = itemId
+        self.categoryMatches = NSSet(array: [SpendingCategory]())
         
     }
     
     func getDate(dateString : String) -> Date? {
+        print(dateString)
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "YYYY-MM-DD"
-        dateFormatter.timeZone = TimeZone.current
-        dateFormatter.locale = Locale.current
-        return dateFormatter.date(from: dateString)
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let date = dateFormatter.date(from:dateString)!
+    
+        
+        return date
     }
 
     

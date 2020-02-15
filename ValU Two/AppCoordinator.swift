@@ -17,11 +17,11 @@ class AppCoordinator: Coordinator{
     
     // Member Variables
     var childCoordinators = [Coordinator]()
-    let rootController : UIHostingController<DashboardTabView>
+    let rootController : MainTabBarController
     let userDefaults = UserDefaults.standard
     
     
-    init(rootViewController: UIHostingController<DashboardTabView>){
+    init(rootViewController: MainTabBarController){
         self.rootController = rootViewController
         
     }
@@ -70,10 +70,12 @@ class AppCoordinator: Coordinator{
             }
         }
         
+        self.rootController.setupViews()
+        
         //Redraw the View
-        let model = DashboardViewModel()
-        let updatedView = model.configure() as! UIHostingController<DashboardTabView>
-        self.rootController.rootView = updatedView.rootView
+        //let model = DashboardViewModel()
+        //let updatedView = model.configure() as! UIHostingController<DashboardTabView>
+        //self.rootController.rootView = updatedView.rootView
                 
     }
     

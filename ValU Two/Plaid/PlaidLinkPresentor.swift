@@ -62,7 +62,7 @@ extension PlaidLinkViewPresentor : PLKPlaidLinkViewDelegate
                 print("Exited without any error")
             }
         }
-        linkViewController.dismiss(animated: true, completion: nil)
+        self.coordinator?.dismissPlaidLink(sender: self)
     }
     
     func linkViewController(_ linkViewController:

@@ -12,7 +12,7 @@ import CoreData
 @objc(AccountData)
 public class AccountData: NSManagedObject{
     
-    convenience init(account : AccountJSON, context: NSManagedObjectContext!){
+    convenience init(account : AccountJSON, itemId: String, context: NSManagedObjectContext!){
         
         let entity = NSEntityDescription.entity(forEntityName: "AccountData", in: context)
         self.init(entity: entity!, insertInto: context)
@@ -24,6 +24,7 @@ public class AccountData: NSManagedObject{
         self.officialName = account.officialName
         self.type = account.type
         self.subType = account.subType
+        self.itemId = itemId
         
         
     }

@@ -23,11 +23,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        let dashboardPresentor = DashboardViewModel()
-        let rootView = dashboardPresentor.configure() as! UIHostingController<DashboardTabView>
+        //let dashboardPresentor = DashboardViewModel()
+        let rootView = MainTabBarController()
         coordinator = AppCoordinator(rootViewController: rootView)
         coordinator?.start()
-        dashboardPresentor.coordinator = coordinator
+        rootView.parentCoordinator = coordinator
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = rootView

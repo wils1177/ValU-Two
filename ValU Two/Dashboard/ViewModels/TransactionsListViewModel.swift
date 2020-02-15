@@ -70,8 +70,15 @@ class TransactionsListViewModel: ObservableObject{
     func fetchTransactions(categoryName: String){
         self.transactions = [Transaction]()
         for spendingCategory in self.budget!.getSubSpendingCategories(){
-            if spendingCategory.category!.name == categoryName{
-                self.transactions = spendingCategory.category!.transactions?.allObjects as! [Transaction]
+            if spendingCategory.name == categoryName{
+                
+                let categoryTransactions = spendingCategory.transactions?.allObjects as! [Transaction]
+                //Only display the transactions that are within the budget dates
+                for transaction in categoryTransactions{
+                    if isWithinBudgetDates(transactionDate: transaction.date!){
+                        self.transactions.append(transaction)
+                    }
+                }
             }
         }
         
@@ -89,12 +96,16 @@ class TransactionsListViewModel: ObservableObject{
      func generateViewData(){
         var idx = 0
         for transaction in self.transactions{
+            
+            
+            
             let name = transaction.name
             let amount = String(format: "$%.02f", transaction.amount)
-            let categoryMatches = transaction.categoryMatches!.allObjects as! [Category]
+            let categoryMatches = transaction.categoryMatches!.allObjects as! [SpendingCategory]
             let categoryMatch = getDeepestCategoryMatch(categories: categoryMatches)
             let category = categoryMatch?.name ?? "Other"
             let executionDate = transaction.date!
+
             let icon = categoryMatch?.icon ?? "❓"
             let df = DateFormatter()
             df.dateFormat = "MM-dd"
@@ -126,7 +137,7 @@ class TransactionsListViewModel: ObservableObject{
     }
     
     
-    func getDeepestCategoryMatch(categories: [Category]) -> Category?{
+    func getDeepestCategoryMatch(categories: [SpendingCategory]) -> SpendingCategory?{
         
         var match = categories.first
         var depth = 0
@@ -139,6 +150,15 @@ class TransactionsListViewModel: ObservableObject{
             }
         }
         return match
+        
+    }
+    
+    func isWithinBudgetDates(transactionDate: Date) -> Bool{
+        
+        let startDate = self.budget!.startDate!
+        let endDate = self.budget!.endDate!
+        
+        return (startDate ... endDate).contains(transactionDate)
         
     }
     

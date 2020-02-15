@@ -33,19 +33,33 @@ class LoadingAccountsPresentor : Presentor {
     init(budget: Budget){
         self.budget = budget
         self.plaidProccesor = PlaidProccessor(budget: self.budget)
+        
+        //print("add new observer")
+        NotificationCenter.default.addObserver(self, selector: #selector(startTransactionsPull(_:)), name: .initialUpdate, object: nil)
     }
+    
+    deinit{
+        //print("Dellocate the LoadingAccounts Presentor")
+        NotificationCenter.default.removeObserver(self, name: .initialUpdate, object: nil)
+    }
+    
+    
     
 
     
     func configure() -> UIViewController {
         let view = LoadingAccountsView(presentor: self, viewData: self.viewData)
         let vc = UIHostingController(rootView: view)
+        self.viewData.viewState = LoadingAccountsViewState.Loading
+        
+        
+        
         return vc
     }
     
     func viewWillLoad(){
         self.viewData.viewState = LoadingAccountsViewState.Loading
-        NotificationCenter.default.addObserver(self, selector: #selector(startTransactionsPull(_:)), name: .initialUpdate, object: nil)
+        
         self.pullInAccountData()
 
     }
@@ -64,18 +78,20 @@ class LoadingAccountsPresentor : Presentor {
     }
     
     @objc func startTransactionsPull(_ notification:Notification){
-        
+        print("starting transaction pull:")
+        print(self)
         self.transactionPull()
         
     }
     
     
     func transactionPull(){
-        
+        //print("can you tell me how often?")
         let calendar = Calendar.current
         let currentDate = Date()
         let startDate = calendar.date(byAdding: .month, value: -1, to: currentDate)
         let endDate = currentDate
+
         
         //Todo: Handle this failing
         try? self.plaid.getTransactions(itemId: self.itemId!, startDate: startDate!, endDate: endDate, completion: self.transactionsPullFinished(result:))
@@ -92,7 +108,7 @@ class LoadingAccountsPresentor : Presentor {
                 print(error)
             case .success(let dataResult):
                 self.itemId = self.plaidProccesor.saveAccessToken(response: dataResult)
-
+                print("itemId officially set")
             }
         }
         
@@ -109,8 +125,7 @@ class LoadingAccountsPresentor : Presentor {
                 self.plaidProccesor.aggregate(response: dataResult)
                 TransactionProccessor(budget: self.budget).updateInitialThiryDaysSpent()
                 self.viewData.viewState = LoadingAccountsViewState.Success
-                print("hey")
-                print("ho")
+
             }
         }
         

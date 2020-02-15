@@ -17,7 +17,9 @@ public class SpendingCategory: NSManagedObject {
         let entity = NSEntityDescription.entity(forEntityName: "SpendingCategory", in: context)
         self.init(entity: entity!, insertInto: context)
         
-        self.category = Category(categoryEntry: categoryEntry, context: context)
+        self.name  = categoryEntry.name
+        self.icon = categoryEntry.icon
+        self.contains = categoryEntry.contains
         self.limit = 0.0
         self.amountSpent = 0.0
         self.initialThirtyDaysSpent = 0.0
@@ -27,11 +29,32 @@ public class SpendingCategory: NSManagedObject {
     }
     
     func reCalculateAmountSpent(){
-        
+        print("is this part occuring")
         self.amountSpent = 0.0
-        for transaction in category!.transactions?.allObjects as! [Transaction]{
-            self.amountSpent += Float(transaction.amount)
+        for transaction in self.transactions?.allObjects as! [Transaction]{
+            print(transaction.name)
+            print(transaction.date)
+            print(transaction.amount)
+            if isWithinBudgetDates(transactionDate: transaction.date!){
+                if transaction.amount > 0{
+                    self.budget!.spent = self.budget!.spent + Float(transaction.amount)
+                    self.amountSpent  = self.amountSpent +  Float(transaction.amount)
+                }
+                
+                
+            }
+            
         }
+        print(self.amountSpent)
+    }
+    
+    func isWithinBudgetDates(transactionDate: Date) -> Bool{
+        
+        let startDate = self.budget!.startDate!
+        let endDate = self.budget!.endDate!
+        
+        return (startDate ... endDate).contains(transactionDate)
+        
     }
 
 }

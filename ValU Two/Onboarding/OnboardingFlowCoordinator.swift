@@ -167,10 +167,13 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, SetSavings
 
     }
     
-    func dismissPlaidLink() {
-        print("NOT IMPLEMENTED DISMISS ON PLAID LINK")
+    func dismissPlaidLink(sender: PlaidLinkViewPresentor) {
+        
+        sender.linkViewController?.dismiss(animated: true, completion: {
+            print("link dismissed")
+        })
+
     }
-    
 
     
     

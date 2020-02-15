@@ -36,7 +36,7 @@ class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, Observa
     
     func setupInitialSelectedCategories(){
         
-        for category in self.transaction.categoryMatches?.allObjects as! [Category]{
+        for category in self.transaction.categoryMatches?.allObjects as! [SpendingCategory]{
             self.selectedCategoryNames.append(category.name!)
         }
         
@@ -46,7 +46,7 @@ class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, Observa
     func submit() {
         
         // Get rid of any removed categories
-        let transactionCategoryList = self.transaction.categoryMatches?.allObjects as! [Category]
+        let transactionCategoryList = self.transaction.categoryMatches?.allObjects as! [SpendingCategory]
         for category in transactionCategoryList{
             if !selectedCategoryNames.contains(category.name!){
                 self.transaction.removeFromCategoryMatches(category)
@@ -56,19 +56,17 @@ class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, Observa
         //Now add all new categories
         for spendingCategory in self.spendingCategories{
             
-            let categoryName = spendingCategory.category!.name!
-            let category = spendingCategory.category
+            let categoryName = spendingCategory.name!
             
             if self.selectedCategoryNames.contains(categoryName){
-                self.transaction.addToCategoryMatches(category!)
+                self.transaction.addToCategoryMatches(spendingCategory)
             }
             
             for subSpendingCategory in spendingCategory.subSpendingCategories?.allObjects as! [SpendingCategory]{
-                let categoryName = subSpendingCategory.category!.name!
-                let category = subSpendingCategory.category
+                let categoryName = subSpendingCategory.name!
                 
                 if self.selectedCategoryNames.contains(categoryName){
-                    self.transaction.addToCategoryMatches(category!)
+                    self.transaction.addToCategoryMatches(subSpendingCategory)
                 }
                 
                 subSpendingCategory.reCalculateAmountSpent()
@@ -79,13 +77,21 @@ class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, Observa
         }
         
         DataManager().saveDatabase()
+        
+        if saveRule{
+            createTransactionRule()
+        }
+        
         NotificationCenter.default.post(name: .modelUpdate, object: nil)
         
     }
     
     func createTransactionRule(){
         
-        let categories = self.transaction.categoryMatches
+        var categories = [String]()
+        for category in transaction.categoryMatches?.allObjects as! [SpendingCategory]{
+            categories.append(category.name!)
+        }
         let name = self.transaction.name
         
         do{
@@ -93,11 +99,11 @@ class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, Observa
             let rule = try DataManager().getTransactionRules(name: name!)
             if rule != nil{
                 rule!.name = name
-                rule!.categoriesOverride = categories
+                rule!.categories = categories
             }
             //If there is no existing rule, just make a new one
             else{
-                _ = DataManager().saveTransactionRule(name: name!, amountOverride: Float(0.0), categoryOverride: categories?.allObjects as! [Category])
+                _ = DataManager().saveTransactionRule(name: name!, amountOverride: Float(0.0), categoryOverride: categories)
                 
             }
             
