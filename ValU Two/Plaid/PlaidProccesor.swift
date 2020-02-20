@@ -18,7 +18,8 @@ enum PlaidUserDefaultKeys: String{
     case institutionId = "istitutionId-"
 }
 
-class PlaidProccessor{
+class PlaidProccessor: BudgetDateFindable{
+    
     
     var spendingCategories : [SpendingCategory]
     var budget : Budget
@@ -156,6 +157,8 @@ class PlaidProccessor{
                 if account.accountId == transaction.accountId{
                     
                     let newTransaction = dataManager.saveTransaction(transaction: transaction, itemId: itemId)
+                    
+                    
 
                     TransactionProccessor(budget: self.budget, transactionRules: self.transactionRules).proccessTransactionToCategory(transaction: newTransaction, spendingCategories: self.spendingCategories)
 

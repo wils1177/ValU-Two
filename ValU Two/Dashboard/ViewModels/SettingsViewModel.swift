@@ -19,7 +19,7 @@ class SettingsViewModel: ObservableObject, Presentor{
     
     var loadingAccountsPresentor : LoadingAccountsPresentor?
     var budget : Budget?
-    var coordinator : HomeTabCoordinator?
+    var coordinator : SettingsFlowCoordinator?
     
     var dataManager = DataManager()
     @Published var items : [ItemData]?

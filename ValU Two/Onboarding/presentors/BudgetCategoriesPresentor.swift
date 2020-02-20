@@ -47,7 +47,7 @@ class BudgetCardsPresentor : Presentor, CategoryListViewModel, UserSubmitViewMod
     var spendingCategories = [SpendingCategory]()
     
     var coordinator : BudgetCategoriesDelegate?
-    var budget : Budget
+    var budget : Budget?
     
 
     init (budget: Budget){
@@ -64,7 +64,7 @@ class BudgetCardsPresentor : Presentor, CategoryListViewModel, UserSubmitViewMod
     
     func setupInitialSelectedCategories(){
         
-        for subCategory in self.budget.getSubSpendingCategories(){
+        for subCategory in self.budget!.getSubSpendingCategories(){
             if subCategory.selected{
                 self.selectedCategoryNames.append(subCategory.name!)
             }
@@ -111,14 +111,7 @@ class BudgetCardsPresentor : Presentor, CategoryListViewModel, UserSubmitViewMod
 extension CategoryListViewModel{
     
     func getSpendingCategories(){
-        do{
-            let budget = try DataManager().getBudget()
-            self.spendingCategories = budget!.getParentSpendingCategories()
-        }
-        catch{
-            print("Could not get spending catoegires from budget:!")
-            self.spendingCategories = [SpendingCategory]()
-        }
+        self.spendingCategories = budget!.getParentSpendingCategories()
     }
     
     

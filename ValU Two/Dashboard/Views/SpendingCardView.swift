@@ -15,6 +15,8 @@ struct SpendingCardView: View {
     init(viewModel : SpendingCardViewModel){
         //print("Spending Card init")
         self.viewModel = viewModel
+        
+        
     }
     
     
@@ -40,9 +42,15 @@ struct SpendingCardView: View {
             
             ForEach(self.viewModel.viewData.categories, id: \.self){ category in
                 
-                NavigationLink(destination: TransactionList(categoryName: category.name)){
+                Button(action: {
+                    self.viewModel.coordinator!.showCategory(categoryName: category.name)
+                }){
+                ZStack{
+                    
                     SpendingCategoryView(viewData: category)
+                }
                 }.buttonStyle(PlainButtonStyle())
+                
                 
                 
             }

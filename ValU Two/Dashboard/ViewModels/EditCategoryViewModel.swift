@@ -15,23 +15,33 @@ struct EditCategoryViewData{
     
 }
 
-class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, ObservableObject {
+class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, ObservableObject, Presentor {
+    
+    var coordinator: TransactionRowDelegate?
     
     var viewData = [BudgetCategoryViewData]()
     var selectedCategoryNames = [String]()
     var spendingCategories = [SpendingCategory]()
     var saveRule : Bool = true
+    var budget : Budget?
     @Published var selectedButtons = [CategoryButton]()
     
     var transaction : Transaction
 
-    init(transaction: Transaction){
+    init(transaction: Transaction, budget: Budget){
         self.transaction = transaction
+        self.budget = budget
         getSpendingCategories()
         setupInitialSelectedCategories()
         generateViewData()
         getSelectedButtons()
         
+    }
+    
+
+    
+    func configure() -> UIViewController {
+        return UIHostingController(rootView: EditCategoriesView(viewModel: self))
     }
     
     func setupInitialSelectedCategories(){
@@ -44,6 +54,7 @@ class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, Observa
     
     
     func submit() {
+        
         
         // Get rid of any removed categories
         let transactionCategoryList = self.transaction.categoryMatches?.allObjects as! [SpendingCategory]
@@ -69,21 +80,23 @@ class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, Observa
                     self.transaction.addToCategoryMatches(subSpendingCategory)
                 }
                 
-                subSpendingCategory.reCalculateAmountSpent()
             }
             
-            spendingCategory.reCalculateAmountSpent()
+            
             
         }
         
-        DataManager().saveDatabase()
+        self.budget?.updateAmountSpent()
         
         if saveRule{
             createTransactionRule()
         }
+        DataManager().saveDatabase()
+
         
         NotificationCenter.default.post(name: .modelUpdate, object: nil)
-        
+        coordinator?.dismissEditCategory()
+
     }
     
     func createTransactionRule(){

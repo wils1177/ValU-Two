@@ -27,18 +27,6 @@ struct TransactionList: View {
     }
     
     
-    init(categoryName: String){
-        
-        self.viewModel = TransactionsListViewModel(categoryName: categoryName)
-        
-        // To remove only extra separators below the list:
-        UITableView.appearance().tableFooterView = UIView()
-
-        // To remove all separators including the actual ones:
-        UITableView.appearance().separatorStyle = .none
-        
-    }
-    
     var body: some View {
         
         
@@ -56,15 +44,13 @@ struct TransactionList: View {
                             if transaction.idx == 0 && self.showSummary{
                                 SpendingSummaryView()
                             }
-                            
-                            NavigationLink(destination: TransactionDetailView(transaction: transaction.rawTransaction)){
                                 
                                 VStack{
                                     
-                                    TransactionRow(viewModel: transaction)
+                                    TransactionRow(coordinator: self.viewModel.coordinator!, viewData: transaction)
                                 }
                                 
-                            }
+                            
                             
                         }
                         
@@ -74,7 +60,7 @@ struct TransactionList: View {
                     }
                 }
                 else{
-                    CouldNotLoadView(errorMessage: "There are no transactions here yet")
+                    EmptyState(errorMessage: "There are no transactions here yet")
                 }
                 
                 

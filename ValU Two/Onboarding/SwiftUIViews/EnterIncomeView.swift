@@ -43,12 +43,6 @@ struct EnterIncomeView: View {
             Spacer()
             
             //IncomeStateView(presentor: self.presentor, viewData: self.viewData)
-
-            
-            
-            
-            
-            
             
             
             Spacer()

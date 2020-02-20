@@ -17,12 +17,19 @@ protocol ViewModel{
     func generateViewData()
 }
 
+protocol BudgetDateFindable{
+    var budget : Budget {get set}
+    
+    func isWithinBudgetDates(transactionDate: Date) -> Bool
+}
+
 
 
 protocol CategoryListViewModel: UserSubmitViewModel{
     var viewData: [BudgetCategoryViewData] { get set }
     var selectedCategoryNames : [String] {get set}
     var spendingCategories : [SpendingCategory]{get set}
+    var budget : Budget? {get set}
     
     func deSelectedCategoryName(name:String)
     func selectedCategoryName(name:String)
@@ -70,4 +77,27 @@ protocol PlaidLinkDelegate {
 protocol CardsPresentor : Presentor{
     func setupTableView()
     func submit()
+}
+
+protocol TransactionRowDelegate: class {
+    func showEditCategory(transaction: Transaction)
+    func dismissEditCategory()
+    
+    var navigationController : UINavigationController{ get set }
+    var presentorStack : [Presentor]{ get set }
+    var budget: Budget{ get set }
+}
+
+
+extension BudgetDateFindable{
+    
+    func isWithinBudgetDates(transactionDate: Date) -> Bool{
+        
+        let startDate = self.budget.startDate
+        let endDate = self.budget.endDate
+        
+        return (startDate! ... endDate!).contains(transactionDate)
+        
+    }
+    
 }

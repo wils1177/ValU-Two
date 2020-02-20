@@ -10,14 +10,20 @@ import SwiftUI
 
 struct TransactionsTabView: View {
     
-    @ObservedObject var viewModel = TransactionsTabViewModel()
+    @ObservedObject var viewModel : TransactionsTabViewModel
+    
+    init(viewModel: TransactionsTabViewModel){
+        self.viewModel = viewModel
+        
+        // To remove only extra separators below the list:
+        UITableView.appearance().tableFooterView = UIView()
+
+               // To remove all separators including the actual ones:
+        UITableView.appearance().separatorStyle = .none
+    }
     
     var body: some View {
-        NavigationView{
             
-            
-            //TransactionList(viewModel: TransactionsListViewModel())
-            //SpendingSummaryView().padding(.leading).padding(.trailing)
             
             List(self.viewModel.rows!, id: \.self) { row in
                 
@@ -32,9 +38,8 @@ struct TransactionsTabView: View {
                     
                 }
                 else{
-                    NavigationLink(destination: TransactionDetailView(transaction: row.transactionRow!.rawTransaction)){
-                        TransactionRow(viewModel : row.transactionRow!)
-                    }
+                        TransactionRow(coordinator: self.viewModel.coordinator!, viewData : row.transactionRow!)
+                    
                     
                 }
                 
@@ -101,14 +106,10 @@ struct TransactionsTabView: View {
                 
             
                 
-            }
+            
             
         //}
     }
 }
 
-struct TransactionsTabView_Previews: PreviewProvider {
-    static var previews: some View {
-        TransactionsTabView()
-    }
-}
+

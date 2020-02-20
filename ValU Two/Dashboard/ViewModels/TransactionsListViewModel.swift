@@ -8,6 +8,8 @@
 
 import Foundation
 import CoreData
+import UIKit
+import SwiftUI
 
 struct TransactionViewData: Hashable {
     var name : String = ""
@@ -20,16 +22,17 @@ struct TransactionViewData: Hashable {
     
 }
 
-class TransactionsListViewModel: ObservableObject{
+class TransactionsListViewModel: ObservableObject, Presentor{
     
     @Published var transactions = [Transaction]()
     let dataManager = DataManager()
     @Published var viewData = [TransactionViewData]()
-    var budget : Budget?
+    var budget : Budget
+    var coordinator: TransactionRowDelegate?
     
-    init(){
+    init(budget: Budget){
         //ToDo: Try-Catch this
-        self.budget = try? dataManager.getBudget()
+        self.budget = budget
         fetchTransactionsForBudget()
         generateViewData()
         
@@ -38,19 +41,51 @@ class TransactionsListViewModel: ObservableObject{
         
     }
     
-    init(categoryName: String){
-        self.budget = try? dataManager.getBudget()
-        fetchTransactions(categoryName: categoryName)
+    init(budget: Budget, categoryName: String){
+        self.budget = budget
+        if categoryName != names.otherCategoryName.rawValue{
+            fetchTransactions(categoryName: categoryName)
+        }
+        else{
+            fetchOtherTransactions()
+        }
+        
         generateViewData()
         NotificationCenter.default.addObserver(self, selector: #selector(update(_:)), name: .modelUpdate, object: nil)
     }
     
-    init(predicate: NSPredicate){
-        self.budget = try? dataManager.getBudget()
+    init(budget: Budget, predicate: NSPredicate){
+        self.budget = budget
         fetchTransactions(predicate: predicate)
         generateViewData()
         NotificationCenter.default.addObserver(self, selector: #selector(update(_:)), name: .modelUpdate, object: nil)
         
+        
+    }
+    
+    func configure() -> UIViewController {
+        return UIHostingController(rootView: TransactionList(viewModel: self))
+    }
+    
+    func fetchOtherTransactions(){
+        
+        fetchTransactionsForBudget()
+        var foundSelected = false
+        var otherTransactions = [Transaction]()
+        for transaction in self.transactions{
+            foundSelected = false
+            for match in transaction.categoryMatches?.allObjects as! [SpendingCategory]{
+                if match.selected == true{
+                    foundSelected = true
+                }
+            }
+            
+            if !foundSelected{
+                otherTransactions.append(transaction)
+            }
+        }
+        
+        self.transactions = otherTransactions
         
     }
     
@@ -69,7 +104,7 @@ class TransactionsListViewModel: ObservableObject{
     
     func fetchTransactions(categoryName: String){
         self.transactions = [Transaction]()
-        for spendingCategory in self.budget!.getSubSpendingCategories(){
+        for spendingCategory in self.budget.getSubSpendingCategories(){
             if spendingCategory.name == categoryName{
                 
                 let categoryTransactions = spendingCategory.transactions?.allObjects as! [Transaction]
@@ -87,7 +122,6 @@ class TransactionsListViewModel: ObservableObject{
     
     
     @objc func update(_ notification:Notification){
-        print("Update Triggered")
         self.viewData.removeAll()
         generateViewData()
         
@@ -120,8 +154,8 @@ class TransactionsListViewModel: ObservableObject{
         
         self.transactions.removeAll()
         if budget != nil{
-            let startDate = self.budget?.startDate
-            let endDate = self.budget?.endDate
+            let startDate = self.budget.startDate
+            let endDate = self.budget.endDate
             
             do{
                 self.transactions = try dataManager.getTransactions(startDate: startDate!, endDate: endDate!)
@@ -155,10 +189,16 @@ class TransactionsListViewModel: ObservableObject{
     
     func isWithinBudgetDates(transactionDate: Date) -> Bool{
         
-        let startDate = self.budget!.startDate!
-        let endDate = self.budget!.endDate!
+        let startDate = self.budget.startDate!
+        let endDate = self.budget.endDate!
         
         return (startDate ... endDate).contains(transactionDate)
+        
+    }
+    
+    func userClickedEditCategory(transaction: Transaction){
+        
+        self.coordinator?.showEditCategory(transaction: transaction)
         
     }
     

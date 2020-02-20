@@ -13,9 +13,6 @@ struct SpendingCategoryView: View {
     var viewData: SpendingCategoryViewData
     
     init(viewData : SpendingCategoryViewData){
-        print("Im drawing the spending category now")
-        print(viewData.name)
-        print(viewData.spent)
         self.viewData = viewData
     }
     

@@ -12,9 +12,10 @@ enum SpendingCategoryNames: String{
     case other = "Other"
 }
 
-class TransactionProccessor{
+class TransactionProccessor: BudgetDateFindable{    
+    
     let dataManager = DataManager()
-    let budget : Budget
+    var budget : Budget
     var transactionRules : [TransactionRule]
     
     init(budget: Budget, transactionRules: [TransactionRule] = [TransactionRule]()){
@@ -88,10 +89,17 @@ class TransactionProccessor{
                 transaction.addToCategoryMatches(match)
             }
                 
-            //ToDO: Filter to only add to budget that transaction is within the dates of the budget
+            //Filter to only add to budget that transaction is within the dates of the budget
             if transaction.amount > 0 && isWithinBudgetDates(transactionDate: transaction.date!){
+                transaction.budget = self.budget
                 
+                if matches.count == 0{
+                    self.budget.otherSpent = self.budget.otherSpent + Float(transaction.amount)
+                    
+                }
                 self.budget.spent = self.budget.spent + (Float(transaction.amount))
+               
+                
             }
             
                  
@@ -132,7 +140,6 @@ class TransactionProccessor{
         var matches = [SpendingCategory]()
         
         
-        
         //Try to match the category and transaction labels
         for spendingCateogory in spendingCategories{
             let categoryLabels:Set<String> = Set(spendingCateogory.contains!)
@@ -140,11 +147,10 @@ class TransactionProccessor{
             
             if categoryLabels.isSubset(of: transactionCategoryLabels){
                 matches.append(spendingCateogory)
+                
             }
             
         }
-        
-        
         
         
         
@@ -152,14 +158,7 @@ class TransactionProccessor{
         
     }
     
-    func isWithinBudgetDates(transactionDate: Date) -> Bool{
-        
-        let startDate = self.budget.startDate!
-        let endDate = self.budget.endDate!
-        
-        return (startDate ... endDate).contains(transactionDate)
-        
-    }
+    
     
 
     

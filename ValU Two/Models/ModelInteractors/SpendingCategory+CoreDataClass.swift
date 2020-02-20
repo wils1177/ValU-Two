@@ -29,15 +29,11 @@ public class SpendingCategory: NSManagedObject {
     }
     
     func reCalculateAmountSpent(){
-        print("is this part occuring")
         self.amountSpent = 0.0
         for transaction in self.transactions?.allObjects as! [Transaction]{
-            print(transaction.name)
-            print(transaction.date)
-            print(transaction.amount)
+
             if isWithinBudgetDates(transactionDate: transaction.date!){
                 if transaction.amount > 0{
-                    self.budget!.spent = self.budget!.spent + Float(transaction.amount)
                     self.amountSpent  = self.amountSpent +  Float(transaction.amount)
                 }
                 
@@ -45,7 +41,6 @@ public class SpendingCategory: NSManagedObject {
             }
             
         }
-        print(self.amountSpent)
     }
     
     func isWithinBudgetDates(transactionDate: Date) -> Bool{

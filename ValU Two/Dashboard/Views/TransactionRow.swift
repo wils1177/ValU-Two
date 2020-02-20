@@ -10,11 +10,13 @@ import SwiftUI
 
 struct TransactionRow: View {
     
-    var viewModel : TransactionViewData
+    var coordinator : TransactionRowDelegate
+    var viewData : TransactionViewData
     @State var showingDetail = false
     
-    init(viewModel : TransactionViewData){
-        self.viewModel = viewModel
+    init(coordinator: TransactionRowDelegate, viewData :TransactionViewData){
+        self.coordinator = coordinator
+        self.viewData = viewData
     }
     
     var body: some View {
@@ -22,23 +24,21 @@ struct TransactionRow: View {
 
             Button(action: {
                 print("clicked the category button")
-                self.showingDetail.toggle()
+                self.coordinator.showEditCategory(transaction: self.viewData.rawTransaction)
             }){
             ZStack{
                 
-                Text(viewModel.icon).font(.largeTitle)
+                Text(viewData.icon).font(.largeTitle)
             }
-            }.buttonStyle(BorderlessButtonStyle()).sheet(isPresented: $showingDetail) {
-                EditCategoriesView(viewModel: EditCategoryViewModel(transaction: self.viewModel.rawTransaction), onDismiss: {self.showingDetail = false})
-            }
+            }.buttonStyle(BorderlessButtonStyle())
 
             VStack{
                 HStack{
-                    Text(viewModel.name).font(.headline).bold().lineLimit(1)
+                    Text(viewData.name).font(.headline).bold().lineLimit(1)
                     Spacer()
                 }
                 HStack{
-                    Text(viewModel.category).font(.subheadline)
+                    Text(viewData.category).font(.subheadline)
                     Spacer()
                 }
                 
@@ -49,12 +49,12 @@ struct TransactionRow: View {
             VStack{
                 HStack{
                     Spacer()
-                    Text(viewModel.amount).font(.headline).bold().lineLimit(1)
+                    Text(viewData.amount).font(.headline).bold().lineLimit(1)
                     
                 }
                 HStack{
                     Spacer()
-                    Text(viewModel.date).font(.subheadline).lineLimit(1)
+                    Text(viewData.date).font(.subheadline).lineLimit(1)
                     
                 }
                 

@@ -2,7 +2,7 @@
 //  Budget+CoreDataProperties.swift
 //  
 //
-//  Created by Clayton Wilson on 1/16/20.
+//  Created by Clayton Wilson on 2/16/20.
 //
 //
 
@@ -20,10 +20,13 @@ extension Budget {
     @NSManaged public var amount: Float
     @NSManaged public var endDate: Date?
     @NSManaged public var savingsPercent: Float
+    @NSManaged public var spent: Float
     @NSManaged public var startDate: Date?
     @NSManaged public var timeFrame: Int32
-    @NSManaged public var spent: Float
+    @NSManaged public var otherSpent: Float
+    @NSManaged public var inflow: Float
     @NSManaged public var spendingCategories: NSOrderedSet?
+    @NSManaged public var transactions: NSSet?
 
 }
 
@@ -59,5 +62,22 @@ extension Budget {
 
     @objc(removeSpendingCategories:)
     @NSManaged public func removeFromSpendingCategories(_ values: NSOrderedSet)
+
+}
+
+// MARK: Generated accessors for transactions
+extension Budget {
+
+    @objc(addTransactionsObject:)
+    @NSManaged public func addToTransactions(_ value: Transaction)
+
+    @objc(removeTransactionsObject:)
+    @NSManaged public func removeFromTransactions(_ value: Transaction)
+
+    @objc(addTransactions:)
+    @NSManaged public func addToTransactions(_ values: NSSet)
+
+    @objc(removeTransactions:)
+    @NSManaged public func removeFromTransactions(_ values: NSSet)
 
 }

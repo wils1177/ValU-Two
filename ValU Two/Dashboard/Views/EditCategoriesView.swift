@@ -11,13 +11,11 @@ import SwiftUI
 struct EditCategoriesView: View {
     
     @ObservedObject var viewModel : EditCategoryViewModel
-    var onDismiss: () -> ()
     
     @State var saveRule = true
     
-    init(viewModel : EditCategoryViewModel, onDismiss: @escaping () -> ()){
+    init(viewModel : EditCategoryViewModel){
         self.viewModel = viewModel
-        self.onDismiss = onDismiss
     }
     
     var body: some View {
@@ -64,7 +62,6 @@ struct EditCategoriesView: View {
                 Spacer()
                 Button(action: {
                     self.viewModel.submit()
-                    self.onDismiss()
                 }){
                     
                     HStack{

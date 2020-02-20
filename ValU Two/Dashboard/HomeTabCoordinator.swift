@@ -9,32 +9,34 @@
 import Foundation
 import SwiftUI
 
-class HomeTabCoordinator : Coordinator, PlaidLinkDelegate, plaidIsConnectedDelegate{
+class HomeTabCoordinator : Coordinator, TransactionRowDelegate{
     
+
     var childCoordinators = [Coordinator]()
-    var homeView : UIViewController?
     var navigationController = UINavigationController()
-    var budget: Budget?
     var presentorStack = [Presentor]()
+    var settingsCoordinator : SettingsFlowCoordinator?
+    var budget: Budget
     
-    init(){
+    
+    init(budget: Budget){
+        self.budget = budget
         
     }
     
     
     func start() {
         
-        self.budget = try? DataManager().getBudget()
-        if budget == nil{
-            self.homeView = UIHostingController(rootView: CouldNotLoadView(errorMessage: "No Budget Found!"))
-        }
-        else{
-            let homePresentor = HomeViewModel(budget: budget!)
-            homePresentor.coordinator = self
-            self.homeView = UIHostingController(rootView: HomeView(viewModel: homePresentor))
-        }
+        let homePresentor = HomeViewModel(budget: budget)
+        homePresentor.coordinator = self
+        self.presentorStack.append(homePresentor)
         
-        self.homeView?.tabBarItem = UITabBarItem(tabBarSystemItem: .contacts, tag: 0)
+        let homeView = homePresentor.configure()
+        
+        self.navigationController.navigationBar.prefersLargeTitles = true
+        
+        self.navigationController.tabBarItem = UITabBarItem(tabBarSystemItem: .contacts, tag: 0)
+        self.navigationController.pushViewController(homeView, animated: false)
         
     }
     
@@ -44,67 +46,55 @@ class HomeTabCoordinator : Coordinator, PlaidLinkDelegate, plaidIsConnectedDeleg
     
     func showSettings(){
         
-        let presentor = SettingsViewModel(budget: self.budget!)
-        presentor.coordinator = self
-        let vc = presentor.configure()
-        self.navigationController.pushViewController(vc, animated: false)
-        self.navigationController.modalPresentationStyle = .fullScreen
-        self.homeView?.present(self.navigationController, animated: true)
-        self.presentorStack.append(presentor)
-        
-    }
-    
-    func showPlaidLink(){
-        
-        let presentor = PlaidLinkViewPresentor()
-        presentor.coordinator = self
-        let vc = presentor.configure()
-        vc.modalPresentationStyle = .fullScreen
-        self.navigationController.present(vc, animated: true)
-        self.presentorStack.append(presentor)
-        
-    }
-    
-    func dismissPlaidLink(sender: PlaidLinkViewPresentor) {
-        
-        sender.linkViewController?.dismiss(animated: true, completion: {
-            print("link dismissed")
-        })
-        
-        _ = self.presentorStack.popLast()
+        self.settingsCoordinator = SettingsFlowCoordinator(budget: self.budget)
+        self.settingsCoordinator?.parent = self
+        self.settingsCoordinator?.start()
+        self.navigationController.present(self.settingsCoordinator!.navigationController, animated: true)
         
 
-    }
-    
-    func plaidLinkSuccess(sender: PlaidLinkViewPresentor) {
         
-        let presentor = LoadingAccountsPresentor(budget: self.budget!)
-        presentor.coordinator = self
-        let vc = presentor.configure()
-        self.navigationController.pushViewController(vc, animated: false)
-        
-        sender.linkViewController?.dismiss(animated: true, completion: {
-            print("link dismissed")
-            
-        })
-        _ = self.presentorStack.popLast()
-        
-    }
-    
-    func plaidIsConnected() {
-        self.navigationController.popViewController(animated: true)
-        let settingsPresentor = self.presentorStack.last as? SettingsViewModel
-        settingsPresentor?.updateView()
-        self.budget?.updateAmountSpent()
     }
     
     func dismissSettings(){
         
-        self.navigationController.dismiss(animated: true)
-        self.navigationController = UINavigationController()
-        _ = self.presentorStack.popLast()
+        self.settingsCoordinator = nil
+        
+    }
+    
+    func showCategory(categoryName: String){
+        
+        let presentor = TransactionsListViewModel(budget: self.budget, categoryName: categoryName)
+        presentor.coordinator = self
+        let vc = presentor.configure()
+        
+        self.navigationController.pushViewController(vc, animated: true)
         
     }
     
     
+    
+    
 }
+
+extension TransactionRowDelegate{
+    
+    func showEditCategory(transaction: Transaction) {
+        
+        let presentor = EditCategoryViewModel(transaction: transaction, budget: self.budget)
+        self.presentorStack.append(presentor)
+        presentor.coordinator = self
+        let vc = presentor.configure()
+        self.navigationController.present(vc, animated: true)
+        
+    }
+    
+
+    
+    func dismissEditCategory() {
+        self.presentorStack.popLast()
+        self.navigationController.dismiss(animated: true)
+    }
+    
+}
+
+

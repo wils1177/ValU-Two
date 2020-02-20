@@ -95,6 +95,7 @@ class DataManager {
         
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Budget")
         request.predicate = NSPredicate(format: "active == true")
+        request.shouldRefreshRefetchedObjects = true
         
         do {
             let result = try context.fetch(request) as! [Budget]
@@ -105,6 +106,26 @@ class DataManager {
                 return nil
             }
             
+            
+        } catch {
+            
+            print("Failed to fetch budget")
+            throw DataManagerErrors.NoBudgetFound
+            
+            
+        }
+        
+        
+    }
+    
+    func getPastBudgets() throws -> [Budget]{
+        
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Budget")
+        request.predicate = NSPredicate(format: "active != true")
+        
+        do {
+            let result = try context.fetch(request) as! [Budget]
+            return result
             
         } catch {
             
@@ -266,6 +287,10 @@ class DataManager {
             print("ERROR: could not save to database")
         }
         
+    }
+    
+    func refresh(object: NSManagedObject){
+        self.context.refresh(object, mergeChanges: true)
     }
     
     //func discardChanges(){

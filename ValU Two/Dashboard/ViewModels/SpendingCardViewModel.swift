@@ -11,12 +11,17 @@ import Foundation
 import SwiftUI
 import CoreData
 
+enum names : String{
+    case otherCategoryName = "Not Budgeted"
+}
+
 class SpendingCategoryViewData: Hashable{
     var percentage : CGFloat = CGFloat(0.0)
     var spent : String = ""
     var limit : String = ""
     var name : String = ""
     var icon : String = "🍔"
+    var id = UUID()
     
     init(percentage: CGFloat, spent: String, limit: String, name: String, icon: String) {
         self.percentage = percentage
@@ -33,7 +38,7 @@ class SpendingCategoryViewData: Hashable{
     }
     
     static func == (lhs: SpendingCategoryViewData, rhs: SpendingCategoryViewData) -> Bool {
-        return lhs.name == rhs.name && lhs.limit == rhs.limit
+        return lhs.name == rhs.name && lhs.limit == rhs.limit && rhs.id == lhs.id
     }
     
 }
@@ -46,6 +51,7 @@ struct SpendingCardViewData{
 class SpendingCardViewModel: ObservableObject {
     
     var budget : Budget
+    var coordinator: HomeTabCoordinator?
     @Published var viewData = SpendingCardViewData()
     
     init(budget: Budget){
@@ -56,10 +62,16 @@ class SpendingCardViewModel: ObservableObject {
     }
     
     @objc func update(_ notification:Notification){
-           print("Spending Card Update Triggered")
-           generateViewData()
-           
-       }
+        print("Spending Card Update Triggered")
+        let dataManager = DataManager()
+        dataManager.context.refreshAllObjects()
+        
+        
+        //generateViewData()
+        self.viewData = SpendingCardViewData()
+        self.generateViewData()
+        
+    }
     
 
     
@@ -67,27 +79,48 @@ class SpendingCardViewModel: ObservableObject {
         
         var categories = [SpendingCategoryViewData]()
         let spendingCategories = self.budget.getSubSpendingCategories()
+        var spendingCategoryLimitTotal = 0.0
+        var selectedSpentTotal = 0.0
+        
         for spendingCategory in spendingCategories{
             
+            if spendingCategory.name == "Breweries"{
+                print(spendingCategory.name)
+                print(spendingCategory.amountSpent)
+            }
+            
             if spendingCategory.selected{
-                
                 let name = (spendingCategory.name)!
-                var spent = spendingCategory.amountSpent
+                let spent = spendingCategory.amountSpent
+                selectedSpentTotal = selectedSpentTotal + Double(spent)
                 let limit = spendingCategory.limit
+                spendingCategoryLimitTotal = spendingCategoryLimitTotal + Double(limit)
                 let icon = spendingCategory.icon ?? "❓"
                 var percentage = Float(0.0)
                 if limit > 0.0 && spent > 0.0{
                     percentage = spent / limit
                 }
-                
-                
-                
+                    
+                    
+                    
                 let categoryViewData = SpendingCategoryViewData(percentage: CGFloat(percentage), spent: "$" + String(Int(round(spent))), limit: "$" + String(Int(round(limit))), name: name, icon: icon)
-                categories.append(categoryViewData)
+                    categories.append(categoryViewData)
             }
-            
+                
             
         }
+        
+        let otherName = names.otherCategoryName.rawValue
+        let otherLimit = self.budget.getAmountAvailable() - Float(spendingCategoryLimitTotal)
+        let otherIcon = "🔸"
+        var otherPercentage = Float(0.0)
+        let otherSpentTotal = self.budget.calculateOtherSpent()
+        if otherLimit > 0.0 && otherSpentTotal > 0.0{
+            otherPercentage = Float(otherSpentTotal) / otherLimit
+        }
+        
+        let categoryViewData = SpendingCategoryViewData(percentage: CGFloat(otherPercentage), spent: "$" + String(Int(round(otherSpentTotal))), limit: "$" + String(Int(round(otherLimit))), name: otherName, icon: otherIcon)
+        categories.append(categoryViewData)
         
         
         let cardName = "Budget"
@@ -95,6 +128,12 @@ class SpendingCardViewModel: ObservableObject {
         
     
     }
+    
+
+    
+    
+    
+    
     
     
     

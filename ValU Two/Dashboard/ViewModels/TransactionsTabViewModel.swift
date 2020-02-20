@@ -39,10 +39,13 @@ class TransactionsTabViewModel: ObservableObject, Presentor{
     @Published var transactionsThisWeek : TransactionsListViewModel?
     @Published var transactionsToday : TransactionsListViewModel?
     @Published var transactionsThisMonth : TransactionsListViewModel?
+    var budget : Budget
+    var coordinator : TransactionsTabCoordinator?
     
     var rows : [ListWrapper]?
     
-    init(){
+    init(budget: Budget){
+        self.budget = budget
         generateViewData()
         NotificationCenter.default.addObserver(self, selector: #selector(update(_:)), name: .modelUpdate, object: nil)
     }
@@ -56,9 +59,12 @@ class TransactionsTabViewModel: ObservableObject, Presentor{
         
         let spendingSummary = SpendingSummaryViewModel()
         
-        self.transactionsToday = TransactionsListViewModel(predicate: PredicateBuilder().generateTodayPredicate())
-        self.transactionsThisWeek = TransactionsListViewModel(predicate: PredicateBuilder().generateThisWeekPredicate())
-        self.transactionsThisMonth = TransactionsListViewModel(predicate: PredicateBuilder().generateEarlierThisMonthPredicate())
+        self.transactionsToday = TransactionsListViewModel(budget: self.budget, predicate: PredicateBuilder().generateTodayPredicate())
+        self.transactionsToday?.coordinator = self.coordinator
+        self.transactionsThisWeek = TransactionsListViewModel(budget: self.budget, predicate: PredicateBuilder().generateThisWeekPredicate())
+        self.transactionsThisWeek?.coordinator = self.coordinator
+        self.transactionsThisMonth = TransactionsListViewModel(budget: self.budget, predicate: PredicateBuilder().generateEarlierThisMonthPredicate())
+        self.transactionsThisMonth?.coordinator = self.coordinator
         
         self.rows = [ListWrapper]()
         var idx = 0
@@ -123,6 +129,8 @@ class TransactionsTabViewModel: ObservableObject, Presentor{
         
         
     }
+    
+    
     
     @objc func update(_ notification:Notification){
         print("Update Triggered")

@@ -12,8 +12,12 @@ import SwiftUI
 class MainTabBarController: UITabBarController {
     
     var parentCoordinator : AppCoordinator?
-    let homeTabCoordinator = HomeTabCoordinator()
-    let transactionTabCoordinator = TransactionsTabCoordinator()
+    var homeTabCoordinator : HomeTabCoordinator?
+    var historyTabCoordinator : HistoryTabCoordinator?
+    var transactionTabCoordinator : TransactionsTabCoordinator?
+    
+    
+    var budget: Budget?
 
 
     
@@ -42,9 +46,28 @@ class MainTabBarController: UITabBarController {
     
     func setupViews(){
         
-        self.homeTabCoordinator.start()
-        self.transactionTabCoordinator.start()
-        viewControllers = [self.homeTabCoordinator.homeView!, self.transactionTabCoordinator.view!]
+        self.budget = try? DataManager().getBudget()
+        
+        if self.budget == nil{
+            let vc = UIHostingController(rootView: CouldNotLoadView(errorMessage: "Could not Load Budget! Sorry!"))
+            viewControllers = [vc]
+        }
+        else{
+            self.homeTabCoordinator = HomeTabCoordinator(budget: self.budget!)
+            self.transactionTabCoordinator = TransactionsTabCoordinator(budget: self.budget!)
+            self.historyTabCoordinator = HistoryTabCoordinator(budget: self.budget!)
+            
+            self.homeTabCoordinator?.start()
+            self.transactionTabCoordinator?.start()
+            self.historyTabCoordinator?.start()
+            
+            
+            viewControllers = [self.homeTabCoordinator!.navigationController, self.transactionTabCoordinator!.navigationController, self.historyTabCoordinator!.navigationController]
+        }
+        
+        
+        
+        
         
     }
     

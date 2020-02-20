@@ -35,6 +35,8 @@ public class Budget: NSManagedObject {
         let categoryData = CategoriesData()
         let categoryList = categoryData.getCategoriesList()
         
+
+        
         //Create a spending category for ALL categoryies
         createSpendingCategory(categories: categoryList.categories)
         
@@ -150,10 +152,45 @@ public class Budget: NSManagedObject {
     func updateAmountSpent(){
         print("updating the amount spent")
         self.spent = 0.0
+        calculateSpendTotal()
         let spendingCategories = getSubSpendingCategories()
         for category in spendingCategories{
             category.reCalculateAmountSpent()
         }
+        print("finished updating the amount spent")
+    }
+    
+    func calculateSpendTotal(){
+        
+        for transaction in self.transactions?.allObjects as! [Transaction]{
+            if transaction.amount > 0{
+                self.spent = self.spent + Float(transaction.amount)
+            }
+            
+        }
+   
+    }
+    
+    func calculateOtherSpent() -> Double{
+        
+        var otherTotal = 0.0
+        for transaction in self.transactions?.allObjects as! [Transaction]{
+            
+            var isSelected = false
+            for match in transaction.categoryMatches?.allObjects as! [SpendingCategory]{
+                if match.selected{
+                    isSelected = true
+                }
+            }
+            
+            if !isSelected && transaction.amount > 0{
+                otherTotal = otherTotal + transaction.amount
+            }
+            
+        }
+        
+        return otherTotal
+        
     }
     
     
