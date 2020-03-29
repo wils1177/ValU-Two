@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct CategoryButtonView<Model>: View where Model: CategoryListViewModel {
+struct CategoryButtonView<Model>: View where Model: CategorySelecter {
     
     @ObservedObject var button : CategoryButton
     var presentor : Model
@@ -52,7 +52,7 @@ struct CategoryButtonView<Model>: View where Model: CategoryListViewModel {
                 Text(button.icon + button.name).font(.footnote).foregroundColor(.white).padding()
                 
                 
-            }.background(self.getButtonColor()).cornerRadius(20).shadow(radius: 10)
+            }.background(self.getButtonColor()).cornerRadius(20).shadow(radius: 5)
     }
 }
     

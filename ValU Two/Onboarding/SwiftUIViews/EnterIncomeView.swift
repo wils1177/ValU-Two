@@ -33,8 +33,7 @@ struct EnterIncomeView: View {
             
             VStack{
                 
-                
-                CustomInputTextField(text: $viewData.incomeAmountText).frame(width: 40, height: 30).padding()
+                CustomInputTextField(text: $viewData.incomeAmountText, placeHolderText: "Your Income", textSize: .systemFont(ofSize: 28), alignment: .center, delegate: nil, key: nil)
                 .padding(.horizontal)
                     .frame(maxHeight: 32)
                 

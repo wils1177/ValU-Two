@@ -23,16 +23,24 @@ protocol BudgetDateFindable{
     func isWithinBudgetDates(transactionDate: Date) -> Bool
 }
 
-
-
-protocol CategoryListViewModel: UserSubmitViewModel{
-    var viewData: [BudgetCategoryViewData] { get set }
+protocol CategorySelecter: class{
     var selectedCategoryNames : [String] {get set}
     var spendingCategories : [SpendingCategory]{get set}
     var budget : Budget? {get set}
     
     func deSelectedCategoryName(name:String)
     func selectedCategoryName(name:String)
+    func submit()
+    
+}
+
+protocol CategoryListViewModel: UserSubmitViewModel, CategorySelecter{
+    var viewData: [BudgetCategoryViewData] { get set }
+       
+}
+
+protocol KeyboardDelegate{
+    func onKeyBoardSet(text : String, key: String?)
 }
 
 protocol HasButtonRows {
@@ -87,6 +95,36 @@ protocol TransactionRowDelegate: class {
     var presentorStack : [Presentor]{ get set }
     var budget: Budget{ get set }
 }
+
+protocol IncomeCoordinator: Coordinator {
+    
+    var budget : Budget? {get set}
+    
+    
+    func loadIncomeScreen()
+    func incomeSubmitted(budget: Budget, sender: EnterIncomePresentor)
+}
+
+protocol BudgetEditor {
+    
+    func editIncome()
+    func editBudget()
+    func editSavings()
+    func dismiss()
+    
+    var coordinator : BudgetEditableCoordinator? {get set}
+    var viewData : EditBudgetViewData? {get set}
+    
+}
+
+protocol BudgetEditableCoordinator: IncomeCoordinator, SetSavingsViewDelegate, SetSpendingLimitDelegate{
+    func editBudgetCategories()
+    func continueToSetSavings()
+    func setMonth()
+    func dimiss()
+}
+
+
 
 
 extension BudgetDateFindable{

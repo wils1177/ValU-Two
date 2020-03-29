@@ -35,6 +35,7 @@ class PlaidWebhookProccesor{
         }
         else if webhookCode == "DEFAULT_UPDATE"{
             print("Proccessing Default Update Webhook")
+            BudgetCopyer().checkIfBudgetIsOutdated()
             DataManager().saveDatabase()
             initiateDefaultUpdatePull()
         }

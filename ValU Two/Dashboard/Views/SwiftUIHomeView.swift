@@ -34,20 +34,24 @@ struct HomeView: View {
                 
             })
                 
-                .navigationBarTitle("ValU Two").navigationBarItems(trailing:
-                
-                Button(action: {
+                .navigationBarTitle("ValU Two").navigationBarItems(leading: Button(action: {
+                    self.viewModel.clickedEdit()
+                }){
+                ZStack{
+                    
+                    Image(systemName: "pencil.and.outline").imageScale(.large)
+                }
+                },
+                                                                   
+                                                                   
+                trailing: Button(action: {
                     self.viewModel.clickedSettingsButton()
                 }){
                 ZStack{
                     
                     Image(systemName: "person.crop.circle").imageScale(.large)
                 }
-                }
-                
-                
-                
-            )
+                })
             
         
         

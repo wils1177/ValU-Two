@@ -12,10 +12,6 @@ struct LimitSliderView: View {
     
     @State var sliderPosition = CGFloat(0.0)
     
-    //var categoryName : String
-    //var percentage : Float
-    //var amount : String
-    
     @ObservedObject var viewCategory : ViewCategory
     
     var presentor : SetSpendingPresentor?

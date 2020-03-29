@@ -10,13 +10,19 @@ import SwiftUI
 
 struct HistoryEntryView: View {
     
+    var viewData : HistoryEntryViewData
+        
+    init(viewData : HistoryEntryViewData){
+        self.viewData = viewData
+    }
     
+
     
     
     var body: some View {
         VStack{
             HStack{
-                Text("Month").font(.title).fontWeight(.bold)
+                Text(self.viewData.title).font(.title).fontWeight(.bold)
                 Spacer()
             }
             HStack{
@@ -25,7 +31,7 @@ struct HistoryEntryView: View {
                     
                     //Spacer()
                     VStack{
-                        Text("$500").font(.system(size: 28)).fontWeight(.bold)
+                        Text(self.viewData.spent).font(.system(size: 28)).fontWeight(.bold)
                         Text("Spent").font(.headline).fontWeight(.bold).foregroundColor(Color(.gray))
                     }
                     
@@ -39,7 +45,7 @@ struct HistoryEntryView: View {
                     
                     VStack{
                         //Spacer()
-                        Text("$1000").font(.system(size: 28)).fontWeight(.bold)
+                        Text(self.viewData.remaining).font(.system(size: 28)).fontWeight(.bold)
                         Text("Saved").font(.headline).fontWeight(.bold).foregroundColor(Color(.gray))
                         
                     }
@@ -47,28 +53,20 @@ struct HistoryEntryView: View {
                     
                 }.padding(.trailing).padding(.trailing).padding(.top)
                 
-            }.padding(.bottom)
+            }
+            
+        
+            
+            ProgressBarView(percentage: self.viewData.percentage, color: Color(.black))
+            SpendingCardDropDownView(viewData: self.viewData.spendingCardViewData)
             
             
             
             
             
             
-            
-            
-            ProgressBarView(percentage: 0.5, color: Color(.black))
-            
-            
-            
-            
-            
-            
-        }.padding().background(Color(.white)).cornerRadius(10).shadow(radius: 20).padding(.leading).padding(.trailing).padding(.bottom)
+        }.padding().background(Color(.white)).cornerRadius(10).shadow(radius: 8).padding(.leading).padding(.trailing).padding(.bottom)
     }
 }
 
-struct HistoryEntryView_Previews: PreviewProvider {
-    static var previews: some View {
-        HistoryEntryView()
-    }
-}
+

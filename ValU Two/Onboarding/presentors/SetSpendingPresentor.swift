@@ -48,12 +48,16 @@ class SetSpendingPresentor : Presentor {
     
     
     var viewData : SetLimitsViewData?
+    var leftToSpend : Int?
     let budget : Budget
     var coordinator : OnboardingFlowCoordinator?
     
     init(budget : Budget){
         self.budget = budget
-        self.viewData = generateViewData()
+        
+        calculateLeftToSpend()
+        generateViewData()
+        
     }
     
     func configure() -> UIViewController {
@@ -67,7 +71,7 @@ class SetSpendingPresentor : Presentor {
         self.coordinator?.finishedSettingLimits()
     }
     
-    func generateViewData() -> SetLimitsViewData{
+    func generateViewData(){
         
         
         var categoryPercentages = [ViewCategory]()
@@ -82,13 +86,11 @@ class SetSpendingPresentor : Presentor {
             
         }
         
-        let leftToSpend = calculateLeftToSpend()
-        
-        return SetLimitsViewData(leftToSpend: String(leftToSpend), categoryPercentages: categoryPercentages)
+        self.viewData =  SetLimitsViewData(leftToSpend: String(self.leftToSpend!), categoryPercentages: categoryPercentages)
         
     }
     
-    func calculateLeftToSpend() -> Int{
+    func calculateLeftToSpend(){
     
         let available = self.budget.getAmountAvailable()
         
@@ -97,8 +99,7 @@ class SetSpendingPresentor : Presentor {
             spent = spent + spendingCategory.limit
         }
         
-        let leftToSpend = roundToTens(x: available) - roundToTens(x: spent)
-        return leftToSpend
+        self.leftToSpend = roundToTens(x: available) - roundToTens(x: spent)
     }
     
     
@@ -110,9 +111,8 @@ class SetSpendingPresentor : Presentor {
     func incrementCategory(categoryName: String, incrementAmount: Int){
         
         let available = Int(self.budget.getAmountAvailable())
-        print("ayy")
         //First, we check to see if check to see if there is money left to spend
-        if (Int(self.viewData!.leftToSpend)! - incrementAmount) >= 0{
+        if (self.leftToSpend! - incrementAmount) >= 0{
             
             // Save the new budget limit
             for spendingCategory in self.budget.getSubSpendingCategories(){
@@ -133,17 +133,7 @@ class SetSpendingPresentor : Presentor {
             }
             
             //Update the View Data
-            self.viewData?.leftToSpend = String(calculateLeftToSpend())
-            
-            for category in self.viewData!.categoryPercentages{
-                if category.name == categoryName{
-                    let newLimit = Int(category.limit)! + incrementAmount
-                    if newLimit >= 0 {
-                        category.limit = String(Int(category.limit)! + incrementAmount)
-                    }
-                    
-                }
-            }
+            generateViewData()
             
         }
         else{

@@ -2,7 +2,7 @@
 //  Budget+CoreDataProperties.swift
 //  
 //
-//  Created by Clayton Wilson on 2/16/20.
+//  Created by Clayton Wilson on 3/23/20.
 //
 //
 
@@ -19,12 +19,14 @@ extension Budget {
     @NSManaged public var active: Bool
     @NSManaged public var amount: Float
     @NSManaged public var endDate: Date?
+    @NSManaged public var inflow: Float
+    @NSManaged public var onboardingStatus: String?
+    @NSManaged public var otherSpent: Float
     @NSManaged public var savingsPercent: Float
     @NSManaged public var spent: Float
     @NSManaged public var startDate: Date?
     @NSManaged public var timeFrame: Int32
-    @NSManaged public var otherSpent: Float
-    @NSManaged public var inflow: Float
+    @NSManaged public var id: UUID?
     @NSManaged public var spendingCategories: NSOrderedSet?
     @NSManaged public var transactions: NSSet?
 

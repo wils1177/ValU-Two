@@ -64,6 +64,10 @@ class HomeViewModel: ObservableObject, Presentor{
     func clickedSettingsButton(){
         self.coordinator?.settingsClicked()
     }
+    
+    func clickedEdit(){
+        self.coordinator?.editClicked()
+    }
 
     
 }

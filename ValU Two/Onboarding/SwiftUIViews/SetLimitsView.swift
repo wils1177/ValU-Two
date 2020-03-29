@@ -16,6 +16,12 @@ struct SetLimitsView: View {
     init(presentor: SetSpendingPresentor?, viewData: SetLimitsViewData){
         self.presentor = presentor
         self.viewData = viewData
+        
+        // To remove only extra separators below the list:
+        UITableView.appearance().tableFooterView = UIView()
+
+        // To remove all separators including the actual ones:
+        UITableView.appearance().separatorStyle = .none
     }
     
     private func endEditing() {
@@ -26,49 +32,42 @@ struct SetLimitsView: View {
         
             VStack{
                 
+                
                 ZStack{
                 
-                ScrollView(){
-                    SpendingLimitSummaryView(leftToSpend: self.viewData.leftToSpend).padding()
                     
-                    ForEach(self.viewData.categoryPercentages, id: \.self){ category in
+                    
+                    List(self.viewData.categoryPercentages, id: \.self){ category in
                         LimitSliderView(presentor: self.presentor, viewCategory: category).padding(.bottom).padding(.horizontal)
                     }
                 
-                    
-                }.navigationBarTitle(Text("Balance Budget"))
+                }
                 
+            }.navigationBarTitle(Text("Balance Budget")).navigationBarItems(trailing:
+            
+            Button(action: {
+                self.presentor?.submit()
+            })
+            {
                 
                 HStack{
-                    Spacer()
-                    VStack{
-                    Spacer()
-                    Button(action: {
-                        self.presentor?.submit()
-                    }){
-                        
-                        HStack{
-                            
-                            ZStack{
-                                Text("Done").font(.subheadline).foregroundColor(.black).bold().padding()
-                                
-                                
-                                
-                            }
-                            
-                        }.background(LinearGradient(gradient:  Gradient(colors: [.white, .white]), startPoint: .topTrailing, endPoint: .center)).cornerRadius(30).shadow(radius: 20).padding()
-                        
-                        
+                    
+                    ZStack{
+                        Text("Done").font(.subheadline).foregroundColor(.black).bold().padding()
+ 
                     }
-                    }
-                }
+                    
                 }
                 
-            }
+                
+            })
+            
         
         
     }
+    
 }
+
 
 extension UIApplication {
     func endEditing() {

@@ -10,7 +10,21 @@ import Foundation
 import CoreData
 
 @objc(SpendingCategory)
-public class SpendingCategory: NSManagedObject {
+public class SpendingCategory: NSManagedObject, NSCopying {
+    
+    
+    public func copy(with zone: NSZone? = nil) -> Any {
+        let newSpendingCategory = DataManager().createNewSpendingCategory()
+        newSpendingCategory.name = self.name
+        newSpendingCategory.icon = self.icon
+        newSpendingCategory.contains = self.contains
+        newSpendingCategory.limit = self.limit
+        newSpendingCategory.amountSpent = self.amountSpent
+        newSpendingCategory.initialThirtyDaysSpent = self.initialThirtyDaysSpent
+        newSpendingCategory.selected = self.selected
+        return newSpendingCategory
+    }
+    
     
     convenience init(categoryEntry: CategoryEntry, context: NSManagedObjectContext!){
         
@@ -25,6 +39,13 @@ public class SpendingCategory: NSManagedObject {
         self.initialThirtyDaysSpent = 0.0
         self.selected = false
         
+        
+    }
+    
+    convenience init(context: NSManagedObjectContext){
+        
+        let entity = NSEntityDescription.entity(forEntityName: "SpendingCategory", in: context)
+        self.init(entity: entity!, insertInto: context)
         
     }
     

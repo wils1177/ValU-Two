@@ -19,6 +19,7 @@ class AppCoordinator: Coordinator{
     var childCoordinators = [Coordinator]()
     let rootController : MainTabBarController
     let userDefaults = UserDefaults.standard
+    var navigationController = UINavigationController()
     
     
     init(rootViewController: MainTabBarController){

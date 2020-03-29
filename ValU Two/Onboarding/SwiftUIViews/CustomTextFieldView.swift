@@ -15,28 +15,57 @@ struct CustomInputTextField : UIViewRepresentable {
 
     @Binding var text: String
 
-    let textField = UITextField(frame: CGRect(x:0, y:0, width: 100, height: 32)) // just any
+    let textField = UITextField(frame: .zero) // just any
+    
+    let placeHolderText : String
+    let alignment : NSTextAlignment
+    var textSize : UIFont
+    var delegate : KeyboardDelegate?
+    var key : String?
+    var button1 : UIBarButtonItem?
+    var button2 : UIBarButtonItem?
+    var button3 : UIBarButtonItem?
+    
+    init(text: Binding<String>, placeHolderText:String, textSize: UIFont, alignment : NSTextAlignment, delegate : KeyboardDelegate?, key : String?){
+        self.placeHolderText = placeHolderText
+        self.alignment = alignment
+        self._text = text
+        self.textSize = textSize
+        self.delegate = delegate
+        self.key = key
+    }
     
 
     func makeUIView(context: UIViewRepresentableContext<CustomInputTextField>) -> UITextField {
         textField.keyboardType = UIKeyboardType.numberPad
-        textField.placeholder = "Your Income"
-        textField.font = .systemFont(ofSize: 28)
-        textField.textAlignment = .center
+        textField.placeholder = self.placeHolderText
+        textField.font = self.textSize
+        textField.textAlignment = self.alignment
+        textField.adjustsFontForContentSizeCategory = true
+
+        
+        textField.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        textField.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return textField
     }
 
     func updateUIView(_ uiView: UITextField, context: UIViewRepresentableContext<CustomInputTextField>) {
         self.textField.text = text
     }
-
-    func makeCoordinator() -> CustomInputTextField.Coordinator {
-        let coordinator = Coordinator(self)
-
-        // configure a toolbar with a Done button
+    
+    
+    func makeToolBar(coordinator : KeyCoordinator){
+        
+        
         let toolbar = UIToolbar()
         toolbar.setItems([
             // just moves the Done item to the right
+            UIBarButtonItem(
+              title: self.text
+              , style: UIBarButtonItem.Style.plain
+                , target: coordinator
+                , action: nil
+            ),
             UIBarButtonItem(
                 barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace
                 , target: nil
@@ -48,54 +77,56 @@ struct CustomInputTextField : UIViewRepresentable {
                 , target: coordinator
                 , action: #selector(coordinator.onSet)
             )
+              
             ]
             , animated: true
         )
         toolbar.barStyle = UIBarStyle.default
         toolbar.sizeToFit()
-
         textField.inputAccessoryView = toolbar
+    }
+
+    func makeCoordinator() -> CustomInputTextField.KeyCoordinator {
+        let coordinator = KeyCoordinator(self)
+        makeToolBar(coordinator: coordinator)
         return coordinator
     }
 
     typealias UIViewType = UITextField
 
-    class Coordinator: NSObject {
+    class KeyCoordinator: NSObject {
         let owner: CustomInputTextField
         private var subscriber: AnyCancellable
+        private var otherSubscriber : AnyCancellable
 
         init(_ owner: CustomInputTextField) {
             self.owner = owner
-            subscriber = NotificationCenter.default.publisher(for: UITextField.textDidChangeNotification, object: owner.textField)
-                .sink(receiveValue: { _ in
-                    owner.$text.wrappedValue = owner.textField.text ?? ""
+            
+            
+            otherSubscriber = NotificationCenter.default.publisher(for: UITextField.textDidEndEditingNotification, object: owner.textField)
+                .sink(receiveValue: {_ in
+                    
+                    // Trigger the action to the delegate
+                    owner.delegate?.onKeyBoardSet(text: owner.text, key: owner.key)
                 })
+            
+            subscriber = NotificationCenter.default.publisher(for: UITextField.textDidChangeNotification, object: owner.textField)
+            .sink(receiveValue: { _ in
+                owner.$text.wrappedValue = owner.textField.text ?? ""
+           })
+           
         }
+        
+        
 
         @objc fileprivate func onSet() {
             owner.textField.resignFirstResponder()
+            
+            // Trigger the action to the delegate
+            owner.delegate?.onKeyBoardSet(text: owner.text, key: owner.key)
         }
 
     }
 }
 
-struct DemoCustomKeyboardInput : View {
 
-    @State var email:String = ""
-
-    var body: some View {
-        VStack{
-            CustomInputTextField(text: $email).frame(width: 40, height: 30)
-                .padding(.horizontal)
-                .frame(maxHeight: 32).keyboardType(.numberPad)
-            Divider()
-            Text("Entered text: \(email)")
-        }
-    }
-}
-
-struct DemoCustomKeyboardInput_Previews: PreviewProvider {
-    static var previews: some View {
-        DemoCustomKeyboardInput()
-    }
-}

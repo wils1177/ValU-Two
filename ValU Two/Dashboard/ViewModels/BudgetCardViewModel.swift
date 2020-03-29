@@ -43,5 +43,7 @@ class BudgetCardViewModel {
         
         return BudgetCardViewData(remaining: remaining, spent: spent, title: title, percentage: percentage)
     }
+    
+    
 
 }

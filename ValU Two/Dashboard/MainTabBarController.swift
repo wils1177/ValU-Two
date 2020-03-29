@@ -13,7 +13,7 @@ class MainTabBarController: UITabBarController {
     
     var parentCoordinator : AppCoordinator?
     var homeTabCoordinator : HomeTabCoordinator?
-    var historyTabCoordinator : HistoryTabCoordinator?
+    var historyTabCoordinator : BudgetsTabCoordinator?
     var transactionTabCoordinator : TransactionsTabCoordinator?
     
     
@@ -48,14 +48,16 @@ class MainTabBarController: UITabBarController {
         
         self.budget = try? DataManager().getBudget()
         
-        if self.budget == nil{
+        if self.budget == nil || UserDefaults.standard.object(forKey: "UserOnboarded") == nil{
+            print("Not onboarded Yet")
             let vc = UIHostingController(rootView: CouldNotLoadView(errorMessage: "Could not Load Budget! Sorry!"))
             viewControllers = [vc]
         }
         else{
+            print("User Is Onboarded")
             self.homeTabCoordinator = HomeTabCoordinator(budget: self.budget!)
             self.transactionTabCoordinator = TransactionsTabCoordinator(budget: self.budget!)
-            self.historyTabCoordinator = HistoryTabCoordinator(budget: self.budget!)
+            self.historyTabCoordinator = BudgetsTabCoordinator(budget: self.budget!)
             
             self.homeTabCoordinator?.start()
             self.transactionTabCoordinator?.start()

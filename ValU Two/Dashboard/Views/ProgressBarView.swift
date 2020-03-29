@@ -35,6 +35,9 @@ struct ProgressBarView: View {
         if self.percentage >= CGFloat(1.0){
             return CGFloat(1.0)
         }
+        else if self.percentage == 0.0 {
+            return CGFloat(0.05)
+        }
         else{
             return self.percentage
         }
@@ -46,11 +49,11 @@ struct ProgressBarView: View {
             
             ZStack(alignment: .leading){
             
-                Rectangle().frame(width: self.width, height: 21).foregroundColor(Color(red: 0.9, green: 0.9, blue: 0.9)).cornerRadius(10)
+                Rectangle().frame(width: self.width, height: 8).foregroundColor(Color(red: 0.9, green: 0.9, blue: 0.9)).cornerRadius(5)
                 
                 
-                Rectangle().frame(width: self.width * self.getPercentage(), height: 21).foregroundColor(.clear)
-                    .background(self.getColor()).cornerRadius(10)
+                Rectangle().frame(width: self.width * self.getPercentage(), height: 8).foregroundColor(.clear)
+                    .background(self.getColor()).cornerRadius(5)
 
                 
             }

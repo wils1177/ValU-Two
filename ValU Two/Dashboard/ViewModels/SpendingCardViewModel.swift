@@ -84,6 +84,7 @@ class SpendingCardViewModel: ObservableObject {
         
         for spendingCategory in spendingCategories{
             
+            print(spendingCategory.name)
             if spendingCategory.name == "Breweries"{
                 print(spendingCategory.name)
                 print(spendingCategory.amountSpent)

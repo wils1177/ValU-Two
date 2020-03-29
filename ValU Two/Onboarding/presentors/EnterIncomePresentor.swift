@@ -57,14 +57,14 @@ class EnterIncomePresentor : Presentor {
     var view : EnterIncomeView?
     var viewData : EnterIncomeViewData?
     let budget : Budget
-    var coordinator : OnboardingFlowCoordinator?
+    var coordinator : IncomeCoordinator?
     let plaid  = PlaidConnection()
     let dataManager = DataManager()
     
     init(budget : Budget){
         self.budget = budget
     
-
+        
     }
     
     func configure() -> UIViewController {
@@ -144,9 +144,7 @@ class EnterIncomePresentor : Presentor {
         
         let amount = Float(viewData.incomeAmountText)
         
-        self.budget.amount = amount!
-        self.budget.active = true
-        
+        self.budget.amount = amount!        
         return self.budget
     }
     

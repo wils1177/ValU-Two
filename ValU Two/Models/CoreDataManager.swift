@@ -38,6 +38,12 @@ class DataManager {
         return newSpendingCategory
     }
     
+    func createNewSpendingCategory() -> SpendingCategory {
+        
+        let newSpendingCategory = SpendingCategory(context: context)
+        return newSpendingCategory
+    }
+    
     func saveAccount(account : AccountJSON, itemId: String){
         
         AccountData(account: account, itemId: itemId, context: self.context)
@@ -103,6 +109,7 @@ class DataManager {
                 return result[0]
             }
             else{
+                print("too many active budgets!!!")
                 return nil
             }
             
@@ -118,10 +125,10 @@ class DataManager {
         
     }
     
-    func getPastBudgets() throws -> [Budget]{
+    func getBudgets(predicate: NSPredicate) throws -> [Budget]{
         
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Budget")
-        request.predicate = NSPredicate(format: "active != true")
+        request.predicate = predicate
         
         do {
             let result = try context.fetch(request) as! [Budget]

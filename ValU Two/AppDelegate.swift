@@ -23,6 +23,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
+        //Checks if a new budget needs to be generate or not
+        //BudgetCopyer().checkIfBudgetIsOutdated()
+        
         //let dashboardPresentor = DashboardViewModel()
         let rootView = MainTabBarController()
         coordinator = AppCoordinator(rootViewController: rootView)

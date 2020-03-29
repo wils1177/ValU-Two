@@ -48,11 +48,13 @@ class BudgetCardsPresentor : Presentor, CategoryListViewModel, UserSubmitViewMod
     
     var coordinator : BudgetCategoriesDelegate?
     var budget : Budget?
+    var delegate : CategoryPickerPresentor?
     
 
     init (budget: Budget){
         self.budget = budget
         getSpendingCategories()
+        setupInitialSelectedCategories()
         generateViewData()
     }
 
@@ -66,6 +68,7 @@ class BudgetCardsPresentor : Presentor, CategoryListViewModel, UserSubmitViewMod
         
         for subCategory in self.budget!.getSubSpendingCategories(){
             if subCategory.selected{
+                
                 self.selectedCategoryNames.append(subCategory.name!)
             }
         }
@@ -73,14 +76,7 @@ class BudgetCardsPresentor : Presentor, CategoryListViewModel, UserSubmitViewMod
     }
     
     
-    
-    
-    
-    
-
-    
     func submit(){
-        
         for spendingCategory in self.spendingCategories{
             
              if spendingCategory.subSpendingCategories != nil{
@@ -100,12 +96,32 @@ class BudgetCardsPresentor : Presentor, CategoryListViewModel, UserSubmitViewMod
             
         }
         
-        self.coordinator?.categoriesSubmitted()
+        DataManager().saveDatabase()
+        self.delegate?.submit()
         
     }
     
     
+    
+    
 
+}
+
+extension CategorySelecter{
+    
+    
+    func selectedCategoryName(name:String){
+        
+        self.selectedCategoryNames.append(name)
+        submit()
+        
+    }
+    
+    func deSelectedCategoryName(name:String){
+        self.selectedCategoryNames.removeAll { $0 == name }
+        submit()
+    }
+    
 }
 
 extension CategoryListViewModel{
@@ -114,16 +130,6 @@ extension CategoryListViewModel{
         self.spendingCategories = budget!.getParentSpendingCategories()
     }
     
-    
-    func selectedCategoryName(name:String){
-        
-        self.selectedCategoryNames.append(name)
-        
-    }
-    
-    func deSelectedCategoryName(name:String){
-        self.selectedCategoryNames.removeAll { $0 == name }
-    }
     
     func generateViewData(){
         

@@ -40,6 +40,19 @@ class HomeTabCoordinator : Coordinator, TransactionRowDelegate{
         
     }
     
+    func editClicked(){
+        showEdit()
+    }
+    
+    func showEdit(){
+        let editCoordinator = EditCoordiantor(budget: self.budget)
+        self.childCoordinators.append(editCoordinator)
+        editCoordinator.parent = self
+        editCoordinator.start()
+        self.navigationController.present(editCoordinator.navigationController, animated: true)
+        
+    }
+    
     func settingsClicked(){
         showSettings()
     }
@@ -58,6 +71,12 @@ class HomeTabCoordinator : Coordinator, TransactionRowDelegate{
     func dismissSettings(){
         
         self.settingsCoordinator = nil
+        
+    }
+    
+    func dismissEdit(){
+        
+        self.childCoordinators.popLast()
         
     }
     

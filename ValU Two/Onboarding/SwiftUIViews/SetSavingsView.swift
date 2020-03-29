@@ -10,13 +10,12 @@ import SwiftUI
 
 struct SetSavingsView: View {
     
-    @State var sliderPosition = CGFloat(0.0)
     @ObservedObject var viewData : SetSavingsViewData
     var presentor : SetSavingsPresentor?
     
     func getHeight(viewHeight : CGFloat) -> CGFloat{
         
-        let height = (viewHeight / 2) + sliderPosition
+        let height = (viewHeight / 2) + (CGFloat(self.$viewData.savingsPercentage.wrappedValue) * viewHeight) - (viewHeight/2)
         return height
         
     }
@@ -25,7 +24,7 @@ struct SetSavingsView: View {
     init(presentor: SetSavingsPresentor?, viewData: SetSavingsViewData){
         self.viewData = viewData
         self.presentor = presentor
-        
+                
     }
     
     
@@ -33,10 +32,7 @@ struct SetSavingsView: View {
 
 
         VStack{
-            
- 
-    
-            
+
             VStack{
                 
                 GeometryReader {g in
@@ -76,8 +72,8 @@ struct SetSavingsView: View {
                 
                         .gesture(DragGesture()
                         .onChanged({ value in
-                            self.sliderPosition = value.location.y
                             self.presentor?.sliderMoved(sliderVal: (Float((value.location.y + g.size.height/2) / g.size.height)))
+                            print((Float((value.location.y + g.size.height/2) / g.size.height)))
                             
                         }))
                         
@@ -100,7 +96,7 @@ struct SetSavingsView: View {
                 HStack{
                     Spacer()
                     ZStack{
-                        Text("Continue").font(.subheadline).foregroundColor(.white).bold().padding()
+                        Text("Confirm").font(.subheadline).foregroundColor(.white).bold().padding()
                     }
                     Spacer()
                 }.background(LinearGradient(gradient:  Gradient(colors: [.black, .black]), startPoint: .topTrailing, endPoint: .center)).cornerRadius(30).shadow(radius: 10).padding()

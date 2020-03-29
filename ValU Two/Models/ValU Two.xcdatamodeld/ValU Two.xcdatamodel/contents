@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15508" systemVersion="19B88" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19D76" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="AccountData" representedClassName="AccountData" syncable="YES">
         <attribute name="accountId" optional="YES" attributeType="String"/>
         <attribute name="itemId" optional="YES" attributeType="String"/>
@@ -19,7 +19,9 @@
         <attribute name="active" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="amount" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="endDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="inflow" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="onboardingStatus" optional="YES" attributeType="String"/>
         <attribute name="otherSpent" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="savingsPercent" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="spent" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -100,7 +102,7 @@
     <elements>
         <element name="AccountData" positionX="-63" positionY="-18" width="128" height="163"/>
         <element name="BalanceData" positionX="199.73046875" positionY="222.078125" width="128" height="88"/>
-        <element name="Budget" positionX="-428.38671875" positionY="78.9453125" width="128" height="208"/>
+        <element name="Budget" positionX="-428.38671875" positionY="78.9453125" width="128" height="238"/>
         <element name="IncomeData" positionX="-893.58984375" positionY="-73.421875" width="128" height="118"/>
         <element name="IncomeStreamData" positionX="-661.88671875" positionY="111.8828125" width="128" height="103"/>
         <element name="ItemData" positionX="-733.26171875" positionY="443.62109375" width="128" height="118"/>

@@ -13,14 +13,16 @@ import SwiftUI
 
 
 
-class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, SetSavingsViewDelegate, PlaidLinkDelegate, BudgetCategoriesDelegate, SetSpendingLimitDelegate, plaidIsConnectedDelegate{
+class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, SetSavingsViewDelegate, PlaidLinkDelegate, BudgetCategoriesDelegate, SetSpendingLimitDelegate, plaidIsConnectedDelegate, IncomeCoordinator{
+    
 
     // Dependencies
-    var budgetToCreate : Budget?
+    var budget : Budget?
     
     var childCoordinators = [Coordinator]()
     weak var parent: AppCoordinator?
-    let navigationController : UINavigationController
+    var navigationController : UINavigationController
+    var onboardingSummaryPresentor : OnboardingSummaryPresentor?
     var currentPresentor : Presentor?
     
     
@@ -30,14 +32,34 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, SetSavings
     }
     
     func start(){
+        
+        
+        
         print("onboarding flow started")
-        var view = WelcomeView()
-        view.coordinator = self
-        let vc = UIHostingController(rootView: view)
+        
+        
         self.navigationController.navigationBar.prefersLargeTitles = true
-        vc.title = "TESTING"
-        vc.navigationController?.setNavigationBarHidden(true, animated: false)
-        self.navigationController.pushViewController(vc, animated: false)
+        
+        
+        let existingBudget = try? DataManager().getBudget()
+        if existingBudget == nil{
+            self.budget = DataManager().createNewBudget()
+            self.budget?.active = true
+            var view = WelcomeView()
+            view.coordinator = self
+            let vc = UIHostingController(rootView: view)
+            vc.navigationController?.setNavigationBarHidden(true, animated: false)
+            self.navigationController.pushViewController(vc, animated: false)
+        }
+        else{
+            self.budget = existingBudget
+            self.onboardingSummaryPresentor = OnboardingSummaryPresentor(budget: self.budget!)
+            self.onboardingSummaryPresentor!.coordinator = self
+            let vc = self.onboardingSummaryPresentor!.configure()
+            self.navigationController.pushViewController(vc, animated: false)
+        }
+        
+        
         
     }
     
@@ -45,39 +67,23 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, SetSavings
         print("Contionue to onboarding")
         
         
-        let existingBudget = try? DataManager().getBudget()
-        if existingBudget == nil{
-            self.budgetToCreate = DataManager().createNewBudget()
-        }
-        else{
-            self.budgetToCreate = existingBudget
-        }
-        
-        
-        continueToPlaid()
+        showSummary()
 
     }
     
-    func loadIncomeScreen(){
-
-        let presentor = EnterIncomePresentor(budget: self.budgetToCreate!)
-        presentor.coordinator = self
-        let vc = presentor.configure()
-        
+    func showSummary(){
+        self.onboardingSummaryPresentor = OnboardingSummaryPresentor(budget: self.budget!)
+        self.onboardingSummaryPresentor!.coordinator = self
+        let vc = self.onboardingSummaryPresentor!.configure()
         self.navigationController.pushViewController(vc, animated: true)
-    }
-    
-    
-    func incomeSubmitted(budget: Budget, sender: EnterIncomePresentor) {
         
-        self.budgetToCreate = budget
-        continueToSetSavings()
-    
     }
+    
+
     
     func continueToSetSavings(){
         print("Contine to Set Savings Screen")
-        let presentor = SetSavingsPresentor(budget: self.budgetToCreate!)
+        let presentor = SetSavingsPresentor(budget: self.budget!)
         presentor.coordinator = self
         self.currentPresentor = presentor
         let setSavingsVC = presentor.configure()
@@ -87,18 +93,42 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, SetSavings
     }
     
     func savingsSubmitted(budget: Budget, sender: SetSavingsPresentor){
-        self.budgetToCreate = budget
-        continueToBudgetCategories()
+        self.budget = budget
+        self.onboardingSummaryPresentor?.generateViewData()
+        self.navigationController.popViewController(animated: true)
+        DataManager().saveDatabase()
         
     }
     
     func continueToBudgetCategories(){
         print("Contine to Budget Categories")
-        let presentor = BudgetCardsPresentor(budget : self.budgetToCreate!)
+        
+        let presentor = BudgetBalancerPresentor(budget: self.budget!)
         let vc = presentor.configure()
         presentor.coordinator = self
+        
         self.navigationController.pushViewController(vc, animated: true)
     }
+    
+    func loadIncomeScreen(){
+
+        let presentor = EnterIncomePresentor(budget: self.budget!)
+        presentor.coordinator = self
+        let vc = presentor.configure()
+        
+        self.navigationController.pushViewController(vc, animated: true)
+    }
+    
+
+    func incomeSubmitted(budget: Budget, sender: EnterIncomePresentor) {
+        
+        self.budget = budget
+        self.onboardingSummaryPresentor?.generateViewData()
+        self.navigationController.popViewController(animated: true)
+        DataManager().saveDatabase()
+    
+    }
+
     
     func categoriesSubmitted(){
         contionueToSetSpendingLimits()
@@ -107,7 +137,7 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, SetSavings
     func contionueToSetSpendingLimits(){
         print("Continue to Set Spending Limits")
         
-        let presentor = SetSpendingPresentor(budget: self.budgetToCreate!)
+        let presentor = SetSpendingPresentor(budget: self.budget!)
         presentor.coordinator = self
         let vc = presentor.configure()
         
@@ -138,7 +168,7 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, SetSavings
     
     func plaidLinkSuccess(sender: PlaidLinkViewPresentor){
         
-        let presentor = LoadingAccountsPresentor(budget : self.budgetToCreate!)
+        let presentor = LoadingAccountsPresentor(budget : self.budget!)
         presentor.coordinator = self
         let vc = presentor.configure()
         
@@ -150,14 +180,16 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, SetSavings
     }
     
     func plaidIsConnected(){
-        loadIncomeScreen()
+        self.onboardingSummaryPresentor?.generateViewData()
+        self.navigationController.popViewController(animated: false)
+        self.navigationController.popViewController(animated: true)
     }
     
     func onboardingComplete(){
         
         print("onboarding finished")
         
-        self.parent?.currentBudget = self.budgetToCreate
+        self.parent?.currentBudget = self.budget
         self.parent?.onboardingComplete(self)
         
 
@@ -178,3 +210,5 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, SetSavings
     
     
 }
+
+

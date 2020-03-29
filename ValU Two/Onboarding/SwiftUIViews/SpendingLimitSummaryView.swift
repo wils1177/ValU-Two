@@ -11,32 +11,36 @@ import SwiftUI
 struct SpendingLimitSummaryView: View {
     
     var leftToSpend : String
+    var percentage : Float
     
-    init(leftToSpend: String){
+    init(leftToSpend: String, percentage: Float){
         self.leftToSpend = leftToSpend
-
+        self.percentage = percentage
     }
     
     var body: some View {
         VStack{
             HStack{
                 Spacer()
-                VStack{
-                    Text("$" + self.leftToSpend).font(.system(size: 50)).foregroundColor(.white).bold().padding()
-                    Text("Left to Spend").font(.subheadline).foregroundColor(.white).bold()
-                }
+                Text(self.leftToSpend).font(.system(size: 30)).foregroundColor(.black).bold()
+                
                 Spacer()
-            }.padding(.bottom)
+                
+            }.padding(.horizontal).padding(.top)
+            HStack{
+                Spacer()
+                Text("left to budget").font(.system(size: 17)).foregroundColor(.black)
+                Spacer()
+            }
+            HStack{
+                ProgressBarView(percentage: CGFloat(self.percentage), color: Color(.green)).padding(.bottom)
+            }
             
             
-        }.background(Color(.black)).cornerRadius(20).shadow(radius: 20)
+        }.background(Color(.white))
     }
 }
 
 
-struct SpendingLimitSummaryView_Previews: PreviewProvider {
-    static var previews: some View {
-        SpendingLimitSummaryView(leftToSpend: "5000")
-    }
-}
+
 

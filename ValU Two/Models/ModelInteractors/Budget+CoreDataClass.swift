@@ -14,8 +14,35 @@ enum TimeFrame: Int32 {
     case semiMonthly
 }
 
+enum OnboardingStatus : String{
+    case started = "Started"
+    case bankConnected = "BankConnected"
+    case incomeEntered = "IncomeEntered"
+    case savingsEntered = "SavingsEntered"
+    case completed = "Completed"
+}
+
 @objc(Budget)
-public class Budget: NSManagedObject {
+public class Budget: NSManagedObject, NSCopying {
+    
+    
+    
+    public func copy(with zone: NSZone? = nil) -> Any {
+        let newBudget = DataManager().createNewBudget()
+        newBudget.active = self.active
+        newBudget.amount = self.amount
+        newBudget.endDate = self.endDate
+        newBudget.startDate = self.startDate
+        newBudget.savingsPercent = self.savingsPercent
+        newBudget.timeFrame = self.timeFrame
+        newBudget.inflow = self.inflow
+        newBudget.spent = self.spent
+        newBudget.onboardingStatus = self.onboardingStatus
+        newBudget.id = UUID()
+        
+        return newBudget
+    }
+    
     
     
     convenience init(context: NSManagedObjectContext){
@@ -25,8 +52,11 @@ public class Budget: NSManagedObject {
         self.init(entity: entity!, insertInto: context)
         self.active = true
         self.spent = 0.0
+        self.id = UUID()
+        self.onboardingStatus = OnboardingStatus.started.rawValue
         setTimeFrame(timeFrame: TimeFrame.monthly)
         self.generateSpendingCategories()
+
         
     }
     
@@ -145,9 +175,27 @@ public class Budget: NSManagedObject {
         
     }
     
+    func incrementTimeFrame(){
+        
+        
+        if self.timeFrame == TimeFrame.monthly.rawValue{
+            
+            let newStartDate = Calendar.current.date(byAdding: .month, value: 1, to: self.startDate!)
+            let newEndDate = Calendar.current.date(byAdding: .month, value: 1, to: self.endDate!)
+            
+            self.startDate = newStartDate
+            self.endDate = newEndDate
+            
+        }
+        
+    }
+    
+    
     func getAmountAvailable() -> Float {
         return self.amount * (1 - self.savingsPercent)
     }
+    
+    
     
     func updateAmountSpent(){
         print("updating the amount spent")
@@ -169,6 +217,15 @@ public class Budget: NSManagedObject {
             
         }
    
+    }
+    
+    func deSelectCategory(name: String){
+        let categories = getSubSpendingCategories()
+        for category in categories{
+            if category.name! == name{
+                category.selected.toggle()
+            }
+        }
     }
     
     func calculateOtherSpent() -> Double{

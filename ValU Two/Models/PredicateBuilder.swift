@@ -68,6 +68,20 @@ class PredicateBuilder{
         return NSPredicate(format: "(itemId == %@)", itemId as String)
     }
     
+    func generatePastBudgetPredicate(currentDate: Date) -> NSPredicate{
+        
+        return NSPredicate(format: "active == false AND (endDate <= %@)", currentDate as NSDate)
+    }
+    
+    func generateFutureBudgetPredicate(currentDate: Date) -> NSPredicate{
+        
+        return NSPredicate(format: "active == false AND (startDate > %@)", currentDate as NSDate)
+    }
+    
+    func generateByIdPredicate(id: UUID) -> NSPredicate{
+        return NSPredicate(format: "id == %@", id as CVarArg)
+    }
+    
 
     
 }

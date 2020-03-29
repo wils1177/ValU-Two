@@ -37,7 +37,11 @@ class SetSavingsPresentor : Presentor {
     init (budget : Budget){
         
         self.budget = budget
-        self.budget.savingsPercent = 0.5
+        
+        if self.budget.savingsPercent == Float(0.0){
+            self.budget.savingsPercent = 0.5
+        }
+        
         
     }
     
