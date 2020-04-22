@@ -17,7 +17,6 @@ class BudgetCopyer{
         
         newBudget.spent = Float(0.0)
         newBudget.inflow = Float(0.0)
-        newBudget.otherSpent = Float(0.0)
         
         for newCategory in newBudget.getAllSpendingCategories(){
             
@@ -29,7 +28,7 @@ class BudgetCopyer{
             }
             
             
-            newCategory.amountSpent = Float(0.0)
+            newCategory.spent = Float(0.0)
             newCategory.initialThirtyDaysSpent = Float(0.0)
         }
         

@@ -27,6 +27,7 @@ public class Transaction: NSManagedObject {
         self.transactionId = transaction.transactionId
         self.plaidCategories = transaction.plaidCategories
         self.itemId = itemId
+        self.isHidden = false
         self.categoryMatches = NSSet(array: [SpendingCategory]())
         
     }

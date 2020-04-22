@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19D76" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19E266" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="AccountData" representedClassName="AccountData" syncable="YES">
         <attribute name="accountId" optional="YES" attributeType="String"/>
         <attribute name="itemId" optional="YES" attributeType="String"/>
@@ -21,14 +21,29 @@
         <attribute name="endDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="inflow" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="onboardingStatus" optional="YES" attributeType="String"/>
-        <attribute name="otherSpent" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="repeating" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="savingsPercent" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="spent" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="timeFrame" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="budgetTimeFrame" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="BudgetTimeFrame" inverseName="budget" inverseEntity="BudgetTimeFrame"/>
         <relationship name="spendingCategories" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="SpendingCategory" inverseName="budget" inverseEntity="SpendingCategory"/>
         <relationship name="transactions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Transaction" inverseName="budget" inverseEntity="Transaction"/>
+    </entity>
+    <entity name="BudgetTimeFrame" representedClassName="BudgetTimeFrame" syncable="YES">
+        <attribute name="endDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="timeFrame" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="budget" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Budget" inverseName="budgetTimeFrame" inverseEntity="Budget"/>
+        <relationship name="nextTimeFrame" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="BudgetTimeFrame"/>
+    </entity>
+    <entity name="CategoryMatch" representedClassName="CategoryMatch" syncable="YES">
+        <attribute name="amount" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <relationship name="spendingCategory" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SpendingCategory" inverseName="transactionMatches" inverseEntity="SpendingCategory"/>
+        <relationship name="transaction" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Transaction" inverseName="categoryMatches" inverseEntity="Transaction"/>
     </entity>
     <entity name="IncomeData" representedClassName="IncomeData" syncable="YES">
         <attribute name="lastYearBeforeIncomeTax" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -61,34 +76,48 @@
         <attribute name="storeNumber" optional="YES" attributeType="String"/>
     </entity>
     <entity name="SpendingCategory" representedClassName="SpendingCategory" syncable="YES">
-        <attribute name="amountSpent" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="colorCode" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="contains" optional="YES" attributeType="Transformable" customClassName="[String]"/>
         <attribute name="icon" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="initialThirtyDaysSpent" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="limit" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="selected" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="spent" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <relationship name="budget" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Budget" inverseName="spendingCategories" inverseEntity="Budget"/>
         <relationship name="subSpendingCategories" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SpendingCategory"/>
-        <relationship name="transactions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Transaction" inverseName="categoryMatches" inverseEntity="Transaction"/>
+        <relationship name="transactionMatches" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CategoryMatch" inverseName="spendingCategory" inverseEntity="CategoryMatch"/>
+        <relationship name="transactions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Transaction"/>
     </entity>
     <entity name="Transaction" representedClassName="Transaction" syncable="YES">
         <attribute name="accountId" optional="YES" attributeType="String"/>
         <attribute name="amount" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="isHidden" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="itemId" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="pending" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="plaidCategories" optional="YES" attributeType="Transformable" customClassName="[String]"/>
         <attribute name="transactionId" optional="YES" attributeType="String"/>
         <relationship name="budget" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Budget" inverseName="transactions" inverseEntity="Budget"/>
-        <relationship name="categoryMatches" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SpendingCategory" inverseName="transactions" inverseEntity="SpendingCategory"/>
+        <relationship name="categoryMatches" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CategoryMatch" inverseName="transaction" inverseEntity="CategoryMatch"/>
+        <relationship name="dateCache" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TransactionDateCache" inverseName="transactions" inverseEntity="TransactionDateCache"/>
         <relationship name="location" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Location"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="transactionId"/>
             </uniquenessConstraint>
         </uniquenessConstraints>
+    </entity>
+    <entity name="TransactionDateCache" representedClassName="TransactionDateCache" syncable="YES">
+        <attribute name="endDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="expenses" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="income" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="timeFrame" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="transactions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Transaction" inverseName="dateCache" inverseEntity="Transaction"/>
     </entity>
     <entity name="TransactionRule" representedClassName="TransactionRule" syncable="YES">
         <attribute name="amountOverride" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -102,13 +131,16 @@
     <elements>
         <element name="AccountData" positionX="-63" positionY="-18" width="128" height="163"/>
         <element name="BalanceData" positionX="199.73046875" positionY="222.078125" width="128" height="88"/>
-        <element name="Budget" positionX="-428.38671875" positionY="78.9453125" width="128" height="238"/>
+        <element name="Budget" positionX="-428.38671875" positionY="78.9453125" width="128" height="253"/>
+        <element name="BudgetTimeFrame" positionX="-675" positionY="54" width="128" height="133"/>
+        <element name="CategoryMatch" positionX="-675" positionY="54" width="128" height="103"/>
         <element name="IncomeData" positionX="-893.58984375" positionY="-73.421875" width="128" height="118"/>
         <element name="IncomeStreamData" positionX="-661.88671875" positionY="111.8828125" width="128" height="103"/>
         <element name="ItemData" positionX="-733.26171875" positionY="443.62109375" width="128" height="118"/>
         <element name="Location" positionX="242.25390625" positionY="832.32421875" width="128" height="165"/>
-        <element name="SpendingCategory" positionX="-20.54296875" positionY="178.9375" width="128" height="193"/>
-        <element name="Transaction" positionX="150.31640625" positionY="508.11328125" width="128" height="208"/>
+        <element name="SpendingCategory" positionX="-20.54296875" positionY="178.9375" width="128" height="238"/>
+        <element name="Transaction" positionX="150.31640625" positionY="508.11328125" width="128" height="238"/>
+        <element name="TransactionDateCache" positionX="-684" positionY="45" width="128" height="148"/>
         <element name="TransactionRule" positionX="-353.578125" positionY="-109.52734375" width="128" height="88"/>
         <element name="User" positionX="-549.2578125" positionY="-32.96484375" width="128" height="75"/>
     </elements>

@@ -13,10 +13,24 @@ class PredicateBuilder{
     
 
     
-    func generateInBudgetPredicate(startDate: Date, endDate: Date) -> NSPredicate{
+    func generateInDatesPredicate(startDate: Date, endDate: Date) -> NSPredicate{
         
         return NSPredicate(format: "(date > %@) AND (date <= %@)", startDate as NSDate, endDate as NSDate)
         
+    }
+    
+    func generateInBetweenDatesPredicate(executionDate: Date) -> NSPredicate{
+
+        return NSPredicate(format: "(endDate >= %@) AND (startDate <= %@)", executionDate as NSDate, executionDate as NSDate)
+    }
+    
+    func generateTimeFramePredicate(timeFrame: Int32) -> NSPredicate{
+        return NSPredicate(format: "(timeFrame == %@)", timeFrame as NSNumber)
+   }
+    
+    func generateNegativeAmountPredicate(startDate: Date, endDate: Date) -> NSPredicate{
+        let zero = 0.0
+        return NSPredicate(format: "(amount <= %@) AND (date >= %@) AND (date <= %@)", zero as NSNumber, startDate as NSDate, endDate as NSDate)
     }
     
     func generateThisWeekPredicate() -> NSPredicate{
@@ -33,6 +47,10 @@ class PredicateBuilder{
         
             
     }
+    
+    
+    
+
     
     func generateTodayPredicate() -> NSPredicate{
         
@@ -75,27 +93,19 @@ class PredicateBuilder{
     
     func generateFutureBudgetPredicate(currentDate: Date) -> NSPredicate{
         
-        return NSPredicate(format: "active == false AND (startDate > %@)", currentDate as NSDate)
+        return NSPredicate(format: "startDate > %@", currentDate as NSDate)
     }
     
     func generateByIdPredicate(id: UUID) -> NSPredicate{
         return NSPredicate(format: "id == %@", id as CVarArg)
     }
     
+    func generateByAccountIdPredicate(id: String) -> NSPredicate{
+        return NSPredicate(format: "accountId == %@", id as String)
+    }
+    
 
     
 }
 
-extension Date {
-    var startOfWeek: Date? {
-        let gregorian = Calendar(identifier: .gregorian)
-        guard let sunday = gregorian.date(from: gregorian.dateComponents([.yearForWeekOfYear, .weekOfYear], from: self)) else { return nil }
-        return gregorian.date(byAdding: .day, value: 1, to: sunday)
-    }
 
-    var endOfWeek: Date? {
-        let gregorian = Calendar(identifier: .gregorian)
-        guard let sunday = gregorian.date(from: gregorian.dateComponents([.yearForWeekOfYear, .weekOfYear], from: self)) else { return nil }
-        return gregorian.date(byAdding: .day, value: 7, to: sunday)
-    }
-}

@@ -57,6 +57,7 @@ protocol UserSubmitViewModel: class, ViewModel{
 
 protocol plaidIsConnectedDelegate{
     func plaidIsConnected()
+    func connectMoreAccounts()
 }
 
 
@@ -76,6 +77,11 @@ protocol SetSpendingLimitDelegate {
     func finishedSettingLimits()
 }
 
+protocol BudgetTypeDelegate{
+    func continueToBudgetType()
+    func confirmBudgetType()
+}
+
 
 protocol PlaidLinkDelegate {
     func dismissPlaidLink(sender: PlaidLinkViewPresentor)
@@ -90,6 +96,7 @@ protocol CardsPresentor : Presentor{
 protocol TransactionRowDelegate: class {
     func showEditCategory(transaction: Transaction)
     func dismissEditCategory()
+    func showTransactionDetail(transaction: Transaction)
     
     var navigationController : UINavigationController{ get set }
     var presentorStack : [Presentor]{ get set }
@@ -102,7 +109,7 @@ protocol IncomeCoordinator: Coordinator {
     
     
     func loadIncomeScreen()
-    func incomeSubmitted(budget: Budget, sender: EnterIncomePresentor)
+    func incomeSubmitted(budget: Budget)
 }
 
 protocol BudgetEditor {
@@ -117,11 +124,25 @@ protocol BudgetEditor {
     
 }
 
-protocol BudgetEditableCoordinator: IncomeCoordinator, SetSavingsViewDelegate, SetSpendingLimitDelegate{
-    func editBudgetCategories()
+protocol BudgetEditableCoordinator: IncomeCoordinator, SetSavingsViewDelegate, SetSpendingLimitDelegate, BudgetTypeDelegate{
+    func continueToBudgetCategories()
+    func continueToPlaid()
     func continueToSetSavings()
-    func setMonth()
     func dimiss()
+}
+
+protocol EditBudgetDelegate{
+    func showEdit(budgetToEdit: Budget)
+}
+
+protocol NewBudgetModel: ObservableObject{
+    func generateViewData()
+    func getAction(stage: Int) -> (()->Void)?
+    
+    var currentStep : Int {get set}
+    var budget : Budget {get set}
+    
+    var viewData : OnboardingSummaryViewData? {get set}
 }
 
 

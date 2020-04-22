@@ -10,7 +10,7 @@ import SwiftUI
 
 struct ProgressBarView: View {
     
-    var width = CGFloat(320.0)
+    var width = CGFloat(220.0)
     var percentage : CGFloat
     var color: Color
     
@@ -19,15 +19,15 @@ struct ProgressBarView: View {
         self.color = color
     }
     
-    func getColor() -> LinearGradient {
+    func getColor() -> Color {
         if self.percentage >= 1.0{
-            return LinearGradient(gradient:  Gradient(colors: [.orange, .red]), startPoint: .topTrailing, endPoint: .center)
+            return Color(hue: 0.0, saturation: 0.35, brightness: 1.0)
         }
         else if self.percentage < 1.0 && self.percentage > 0.75{
-            return LinearGradient(gradient:  Gradient(colors: [.yellow, .orange]), startPoint: .topTrailing, endPoint: .center)
+            return Color(hue: 0.167, saturation: 0.35, brightness: 1.0)
         }
         else{
-            return LinearGradient(gradient:  Gradient(colors: [.green, .yellow]), startPoint: .topTrailing, endPoint: .center)
+            return Color(hue: 0.255, saturation: 0.35, brightness: 1.0)
         }
     }
     
@@ -45,19 +45,18 @@ struct ProgressBarView: View {
     
     var body: some View {
         
-        HStack{
             
             ZStack(alignment: .leading){
             
-                Rectangle().frame(width: self.width, height: 8).foregroundColor(Color(red: 0.9, green: 0.9, blue: 0.9)).cornerRadius(5)
+                RoundedRectangle(cornerRadius: 20).frame(width: self.width, height: 8).foregroundColor(Color(red: 0.9, green: 0.9, blue: 0.9))
                 
                 
-                Rectangle().frame(width: self.width * self.getPercentage(), height: 8).foregroundColor(.clear)
-                    .background(self.getColor()).cornerRadius(5)
+                RoundedRectangle(cornerRadius: 20).frame(width: self.width * self.getPercentage(), height: 8).foregroundColor(.clear)
+                    .background(self.getColor())
 
                 
             }
-        }
+        
     }
 }
 

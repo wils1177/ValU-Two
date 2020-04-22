@@ -13,7 +13,11 @@ import SwiftUI
 
 
 
-class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, SetSavingsViewDelegate, PlaidLinkDelegate, BudgetCategoriesDelegate, SetSpendingLimitDelegate, plaidIsConnectedDelegate, IncomeCoordinator{
+class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, SetSavingsViewDelegate, PlaidLinkDelegate, BudgetCategoriesDelegate, SetSpendingLimitDelegate, plaidIsConnectedDelegate, IncomeCoordinator, BudgetTypeDelegate, BudgetEditableCoordinator{
+    
+    
+    
+    
     
 
     // Dependencies
@@ -42,23 +46,22 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, SetSavings
         
         
         let existingBudget = try? DataManager().getBudget()
+        
         if existingBudget == nil{
             self.budget = DataManager().createNewBudget()
             self.budget?.active = true
-            var view = WelcomeView()
-            view.coordinator = self
-            let vc = UIHostingController(rootView: view)
-            vc.navigationController?.setNavigationBarHidden(true, animated: false)
-            self.navigationController.pushViewController(vc, animated: false)
+            
         }
         else{
             self.budget = existingBudget
-            self.onboardingSummaryPresentor = OnboardingSummaryPresentor(budget: self.budget!)
-            self.onboardingSummaryPresentor!.coordinator = self
-            let vc = self.onboardingSummaryPresentor!.configure()
-            self.navigationController.pushViewController(vc, animated: false)
+
         }
         
+        var view = WelcomeView()
+        view.coordinator = self
+        let vc = UIHostingController(rootView: view)
+        vc.navigationController?.setNavigationBarHidden(true, animated: false)
+        self.navigationController.pushViewController(vc, animated: false)
         
         
     }
@@ -76,6 +79,23 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, SetSavings
         self.onboardingSummaryPresentor!.coordinator = self
         let vc = self.onboardingSummaryPresentor!.configure()
         self.navigationController.pushViewController(vc, animated: true)
+        
+    }
+    
+    func continueToBudgetType(){
+        let presentor = BudgetTypePresentor(budget: self.budget!)
+        presentor.coordinator = self
+        let vc = presentor.configure()
+        
+        self.navigationController.pushViewController(vc, animated: true)
+        
+    }
+    
+    func confirmBudgetType() {
+        
+        self.navigationController.popViewController(animated: true)
+        self.onboardingSummaryPresentor?.generateViewData()
+        DataManager().saveDatabase()
         
     }
     
@@ -120,7 +140,7 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, SetSavings
     }
     
 
-    func incomeSubmitted(budget: Budget, sender: EnterIncomePresentor) {
+    func incomeSubmitted(budget: Budget) {
         
         self.budget = budget
         self.onboardingSummaryPresentor?.generateViewData()
@@ -185,6 +205,11 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, SetSavings
         self.navigationController.popViewController(animated: true)
     }
     
+    func connectMoreAccounts(){
+        self.onboardingSummaryPresentor?.generateViewData()
+        self.navigationController.popViewController(animated: true)
+    }
+    
     func onboardingComplete(){
         
         print("onboarding finished")
@@ -206,6 +231,8 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, SetSavings
         })
 
     }
+    
+    
 
     
     

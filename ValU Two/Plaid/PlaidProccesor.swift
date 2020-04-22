@@ -27,7 +27,7 @@ class PlaidProccessor: BudgetDateFindable{
     
     init(budget: Budget){
         self.budget = budget
-        self.spendingCategories = budget.getSubSpendingCategories()
+        self.spendingCategories = CommonUtils.getSubSpendingCategories()
         
         do{
             self.transactionRules =  try DataManager().getTransactionRules()
@@ -62,8 +62,7 @@ class PlaidProccessor: BudgetDateFindable{
             print(err.localizedDescription)
             return ""
         }
-        
-        
+    
 
     }
     

@@ -30,7 +30,6 @@ class AppCoordinator: Coordinator{
     func start(){
                 
         
-        
     }
     
     // This will determine what to show when the dashboard is loaded.

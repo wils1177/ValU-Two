@@ -29,6 +29,10 @@ class TransactionProccessor: BudgetDateFindable{
         let thirtyDaysAgo = Calendar.current.date(byAdding: .day, value: -30, to: today)
         
         let spendingCategories = self.budget.getAllSpendingCategories()
+        
+        for category in spendingCategories{
+            category.initialThirtyDaysSpent = 0.0
+        }
 
         do{
             let transactions = try dataManager.getTransactions(startDate: thirtyDaysAgo!, endDate: today)
@@ -52,54 +56,40 @@ class TransactionProccessor: BudgetDateFindable{
     }
     
     
-    func initilizeSpendingCategoryAmounts(spendingCategories: [SpendingCategory], startDate: Date, endDate: Date){
-        
-        do{
-            let transactions = try dataManager.getTransactions(startDate: startDate, endDate: endDate)
-            for transaction in transactions{
-                proccessTransactionToCategory(transaction: transaction, spendingCategories: spendingCategories)
-            }
-        }
-        catch{
-            print("Could not pull those transactions")
-        }
-  
-    }
-    
-    
     func proccessTransactionToCategory(transaction: Transaction, spendingCategories: [SpendingCategory]){
         
         if transaction.transactionId != nil{
             
+            //First match the amount to the time frame
+            matchToTimeFrame(transaction: transaction)
+            
             // First, we will see if there any matches based on existign rules
-            var matches = checkForRuleMatches(transaction: transaction, spendingCategories: spendingCategories)
+            //var matches = checkForRuleMatches(transaction: transaction, spendingCategories: spendingCategories)
+            var matches = [CategoryMatch]()
+            
             // If there are no matches from existing rules, match on default logic 
             if matches.count == 0{
 
-                matches = matchTransactionToSpendingCategory(transaction: transaction, spendingCategories: spendingCategories)
+                let spendingCategoryMatches = matchTransactionToSpendingCategory(transaction: transaction, spendingCategories: spendingCategories)
+                
+                matches = createCategoryMatches(transaction: transaction, spendingCategories: spendingCategoryMatches)
             }
             
             for match in matches{
                 
-                // We will update the amount for EVERY match
-                if isWithinBudgetDates(transactionDate: transaction.date!){
-                    match.amountSpent = match.amountSpent + Float(transaction.amount)
+                // We will update the amount for EVERY match that's within the budget
+                if CommonUtils.isWithinBudget(transaction: transaction, budget: match.spendingCategory!.budget!){
+                    
+                    match.spendingCategory!.spent = match.spendingCategory!.spent + match.amount
+                    
                 }
                 
                 transaction.addToCategoryMatches(match)
+                match.spendingCategory!.addToTransactions(transaction)
             }
-                
-            //Filter to only add to budget that transaction is within the dates of the budget
-            if transaction.amount > 0 && isWithinBudgetDates(transactionDate: transaction.date!){
-                transaction.budget = self.budget
-                
-                if matches.count == 0{
-                    self.budget.otherSpent = self.budget.otherSpent + Float(transaction.amount)
-                    
-                }
-                self.budget.spent = self.budget.spent + (Float(transaction.amount))
-               
-                
+            
+            if CommonUtils.isWithinBudget(transaction: transaction, budget: self.budget){
+                self.budget.addToTransactions(transaction)
             }
             
                  
@@ -132,9 +122,27 @@ class TransactionProccessor: BudgetDateFindable{
         
     }
     
+    // Gets the most specific category match in the set
+    func getDeepestMatch(spendingCategories: [SpendingCategory]) -> [SpendingCategory]{
+                
+        var match = spendingCategories.first
+        var depth = 0
+        if match != nil{
+            for category in spendingCategories{
+                if category.contains!.count > depth{
+                    match = category
+                    depth = category.contains!.count
+                }
+            }
+            return [match!]
+        }
+        return [SpendingCategory]()
+        
+    }
     
     
     
+    //Determines which categories match a transaction
     func matchTransactionToSpendingCategory(transaction: Transaction, spendingCategories: [SpendingCategory]) -> [SpendingCategory]{
         
         var matches = [SpendingCategory]()
@@ -146,6 +154,8 @@ class TransactionProccessor: BudgetDateFindable{
             let transactionCategoryLabels:Set<String> = Set(transaction.plaidCategories!)
             
             if categoryLabels.isSubset(of: transactionCategoryLabels){
+                
+                // We have a match!
                 matches.append(spendingCateogory)
                 
             }
@@ -153,8 +163,93 @@ class TransactionProccessor: BudgetDateFindable{
         }
         
         
+        let mostSpecifcMatches = getDeepestMatch(spendingCategories: matches)
+        return mostSpecifcMatches
+        
+    }
+    
+    
+    func createCategoryMatches(transaction: Transaction, spendingCategories: [SpendingCategory]) -> [CategoryMatch]{
+        var matches = [CategoryMatch]()
+        
+        for spendingCategory in spendingCategories{
+            let categoryMatch = dataManager.createCategoryMatch(transaction: transaction, category: spendingCategory, amount: Float(transaction.amount))
+            matches.append(categoryMatch)
+        }
         
         return matches
+    }
+    
+    func matchToTimeFrame(transaction: Transaction){
+        
+        let types = [TimeFrame.monthly.rawValue, TimeFrame.weekly.rawValue, TimeFrame.semiMonthly.rawValue]
+
+        do{
+            let query = PredicateBuilder().generateInBetweenDatesPredicate(executionDate: transaction.date!)
+            let timeFrames = try DataManager().getEntity(predicate: query, entityName: "TransactionDateCache") as! [TransactionDateCache]
+            
+            for type in types{
+                
+                var match : TransactionDateCache?
+                
+                //Check for a week level match
+                //var isMatch = false
+                for timeFrame in timeFrames{
+                    print("MATCH FOUND")
+                    if timeFrame.timeFrame == type{
+                        //isMatch = true
+                        match = timeFrame
+                    }
+                }
+                
+                //Now Update the match
+                if match != nil{
+                    match!.addToTransactions(transaction)
+                    if transaction.amount > 0{
+                        match!.expenses = match!.expenses + Float(transaction.amount)
+                    }else{
+                        match!.income = match!.income + Float(transaction.amount)
+                    }
+                }
+                
+            }
+            
+            
+            
+            
+            
+            /*
+            //If there is no existing match, create a new one
+            if !isMatch{
+                print("creating a new entry due to the following date:")
+                print(transaction.date!)
+                print("new entry is: ")
+                print(transaction.date!.startOfWeek!)
+                print("end date would be")
+                print(transaction.date!.endOfWeek!)
+                print("the results count was")
+                print(timeFrames.count)
+                let dateCache = DataManager().createTransactionDateCache(dateFrom: transaction.date!, timeFrame: TimeFrame.weekly.rawValue)
+                match = dateCache
+
+            }
+            */
+            
+            
+            
+            
+            
+            DataManager().saveDatabase()
+            
+            
+        }
+        catch{
+            print("coult not fetch transaction time frames")
+            
+        }
+        
+        
+        
         
     }
     

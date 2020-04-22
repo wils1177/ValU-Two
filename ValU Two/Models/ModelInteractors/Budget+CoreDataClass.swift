@@ -12,6 +12,7 @@ import CoreData
 enum TimeFrame: Int32 {
     case monthly
     case semiMonthly
+    case weekly
 }
 
 enum OnboardingStatus : String{
@@ -23,7 +24,7 @@ enum OnboardingStatus : String{
 }
 
 @objc(Budget)
-public class Budget: NSManagedObject, NSCopying {
+public class Budget: NSManagedObject, NSCopying, Identifiable {
     
     
     
@@ -37,7 +38,8 @@ public class Budget: NSManagedObject, NSCopying {
         newBudget.timeFrame = self.timeFrame
         newBudget.inflow = self.inflow
         newBudget.spent = self.spent
-        newBudget.onboardingStatus = self.onboardingStatus
+        newBudget.name = self.name
+        newBudget.repeating = self.repeating
         newBudget.id = UUID()
         
         return newBudget
@@ -53,9 +55,10 @@ public class Budget: NSManagedObject, NSCopying {
         self.active = true
         self.spent = 0.0
         self.id = UUID()
-        self.onboardingStatus = OnboardingStatus.started.rawValue
+        self.name = "Placeholder"
         setTimeFrame(timeFrame: TimeFrame.monthly)
         self.generateSpendingCategories()
+        
 
         
     }
@@ -78,6 +81,7 @@ public class Budget: NSManagedObject, NSCopying {
             
             let newSpendingCategory = DataManager().createNewSpendingCategory(categoryEntry: category)
             self.addToSpendingCategories(newSpendingCategory)
+
             
             if category.subCategories != nil{
                 for subCategory in category.subCategories!{
@@ -196,27 +200,26 @@ public class Budget: NSManagedObject, NSCopying {
     }
     
     
-    
-    func updateAmountSpent(){
-        print("updating the amount spent")
+    func getAmountSpent() -> Float{
         self.spent = 0.0
-        calculateSpendTotal()
-        let spendingCategories = getSubSpendingCategories()
-        for category in spendingCategories{
-            category.reCalculateAmountSpent()
-        }
-        print("finished updating the amount spent")
-    }
-    
-    func calculateSpendTotal(){
-        
         for transaction in self.transactions?.allObjects as! [Transaction]{
             if transaction.amount > 0{
                 self.spent = self.spent + Float(transaction.amount)
             }
             
         }
-   
+        return self.spent
+    }
+    
+    func updateAmountSpent(){
+        print("updating the amount spent")
+        self.spent = 0.0
+        let spendingCategories = getSubSpendingCategories()
+        for category in spendingCategories{
+            category.reCalculateAmountSpent()
+
+        }
+        print("finished updating the amount spent")
     }
     
     func deSelectCategory(name: String){
@@ -228,27 +231,9 @@ public class Budget: NSManagedObject, NSCopying {
         }
     }
     
-    func calculateOtherSpent() -> Double{
-        
-        var otherTotal = 0.0
-        for transaction in self.transactions?.allObjects as! [Transaction]{
-            
-            var isSelected = false
-            for match in transaction.categoryMatches?.allObjects as! [SpendingCategory]{
-                if match.selected{
-                    isSelected = true
-                }
-            }
-            
-            if !isSelected && transaction.amount > 0{
-                otherTotal = otherTotal + transaction.amount
-            }
-            
-        }
-        
-        return otherTotal
-        
-    }
+    
+    
+
     
     
     

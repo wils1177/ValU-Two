@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:ValU Two/SpendingCategory+CoreDataProperties.swift">
+   </FileRef>
+   <FileRef
       location = "group:ValU Two.xcodeproj">
    </FileRef>
    <FileRef

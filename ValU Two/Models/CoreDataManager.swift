@@ -44,6 +44,18 @@ class DataManager {
         return newSpendingCategory
     }
     
+    func createCategoryMatch(transaction: Transaction, category: SpendingCategory, amount: Float) -> CategoryMatch{
+        return CategoryMatch(transaction: transaction, category: category, amount: amount, context: context)
+    }
+    
+    func createTransactionDateCache(dateFrom : Date, timeFrame: Int32) -> TransactionDateCache{
+        return TransactionDateCache(dateFrom: dateFrom, timeFrame: timeFrame, context: context)
+    }
+    
+    func createBudgetTimeFrame(timeFrame: Int32, startDate: Date, endDate: Date) -> BudgetTimeFrame{
+        return BudgetTimeFrame(context: context, timeframe: timeFrame, startDate: startDate, endDate: endDate)
+    }
+    
     func saveAccount(account : AccountJSON, itemId: String){
         
         AccountData(account: account, itemId: itemId, context: self.context)
@@ -95,6 +107,47 @@ class DataManager {
         }
         
         return accountsToReturn
+    }
+    
+    func getEntity(predicate: NSPredicate, entityName: String) throws -> [Any]{
+        
+        
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
+        request.predicate = predicate
+        
+        do {
+            let result = try context.fetch(request)
+            return result
+            
+        } catch {
+            
+            print("Failed to fetch objects")
+            throw DataManagerErrors.NoBudgetFound
+            
+            
+        }
+        
+        
+    }
+    
+    func getEntity(entityName: String) throws -> [Any]{
+        
+        
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
+        
+        do {
+            let result = try context.fetch(request)
+            return result
+            
+        } catch {
+            
+            print("Failed to fetch objects")
+            throw DataManagerErrors.NoBudgetFound
+            
+            
+        }
+        
+        
     }
     
     func getBudget() throws ->  Budget?{

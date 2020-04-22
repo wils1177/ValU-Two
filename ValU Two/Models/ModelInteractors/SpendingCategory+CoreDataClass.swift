@@ -19,9 +19,10 @@ public class SpendingCategory: NSManagedObject, NSCopying {
         newSpendingCategory.icon = self.icon
         newSpendingCategory.contains = self.contains
         newSpendingCategory.limit = self.limit
-        newSpendingCategory.amountSpent = self.amountSpent
+        newSpendingCategory.spent = self.spent
         newSpendingCategory.initialThirtyDaysSpent = self.initialThirtyDaysSpent
         newSpendingCategory.selected = self.selected
+        newSpendingCategory.id = UUID()
         return newSpendingCategory
     }
     
@@ -32,12 +33,14 @@ public class SpendingCategory: NSManagedObject, NSCopying {
         self.init(entity: entity!, insertInto: context)
         
         self.name  = categoryEntry.name
+        self.id = UUID()
         self.icon = categoryEntry.icon
         self.contains = categoryEntry.contains
         self.limit = 0.0
-        self.amountSpent = 0.0
+        self.spent = 0.0
         self.initialThirtyDaysSpent = 0.0
         self.selected = false
+        self.colorCode = 0
         
         
     }
@@ -49,28 +52,37 @@ public class SpendingCategory: NSManagedObject, NSCopying {
         
     }
     
+    func getAmountSpent() -> Float{
+        reCalculateAmountSpent()
+        return self.spent
+    }
+    
     func reCalculateAmountSpent(){
-        self.amountSpent = 0.0
-        for transaction in self.transactions?.allObjects as! [Transaction]{
-
-            if isWithinBudgetDates(transactionDate: transaction.date!){
-                if transaction.amount > 0{
-                    self.amountSpent  = self.amountSpent +  Float(transaction.amount)
-                }
-                
+        self.spent = 0.0
+        for transactionMatch in self.transactionMatches?.allObjects as! [CategoryMatch]{
+            
+            if CommonUtils.isWithinBudget(transaction: transactionMatch.transaction!, budget: self.budget!){
+                if transactionMatch.amount > 0{
+                    self.spent  = self.spent +  Float(transactionMatch.amount)
+                }  
                 
             }
             
         }
     }
     
-    func isWithinBudgetDates(transactionDate: Date) -> Bool{
+    func isAnyChildSelected() -> Bool {
+        var oneChildSelected = false
+        for child in self.subSpendingCategories?.allObjects as! [SpendingCategory]{
+            if child.selected{
+                oneChildSelected = true
+            }
+        }
         
-        let startDate = self.budget!.startDate!
-        let endDate = self.budget!.endDate!
-        
-        return (startDate ... endDate).contains(transactionDate)
-        
+        return oneChildSelected
     }
+
+    
+
 
 }

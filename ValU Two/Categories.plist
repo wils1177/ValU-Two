@@ -85,7 +85,7 @@
 				</dict>
 				<dict>
 					<key>name</key>
-					<string>All Eat &amp; Drink</string>
+					<string>Misc Eat &amp; Drink</string>
 					<key>icon</key>
 					<string>🍔</string>
 					<key>contains</key>
@@ -154,7 +154,7 @@ Computers and Electronics</string>
 				</dict>
 				<dict>
 					<key>name</key>
-					<string>All Shops</string>
+					<string>Other Shops</string>
 					<key>icon</key>
 					<string>🛍️</string>
 					<key>contains</key>
@@ -274,6 +274,7 @@ Computers and Electronics</string>
 					<array>
 						<string>Travel</string>
 						<string>Car Service</string>
+						<string>Ride Share</string>
 					</array>
 				</dict>
 				<dict>
@@ -322,7 +323,7 @@ Computers and Electronics</string>
 				</dict>
 				<dict>
 					<key>name</key>
-					<string>All Travel</string>
+					<string>Other Travel</string>
 					<key>icon</key>
 					<string>🛫</string>
 					<key>contains</key>
@@ -406,7 +407,7 @@ Computers and Electronics</string>
 				</dict>
 				<dict>
 					<key>name</key>
-					<string>All Utilities</string>
+					<string>Other Utilities</string>
 					<key>icon</key>
 					<string>🔧</string>
 					<key>contains</key>

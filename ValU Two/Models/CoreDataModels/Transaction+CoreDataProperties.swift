@@ -2,7 +2,7 @@
 //  Transaction+CoreDataProperties.swift
 //  
 //
-//  Created by Clayton Wilson on 2/16/20.
+//  Created by Clayton Wilson on 4/2/20.
 //
 //
 
@@ -24,9 +24,10 @@ extension Transaction {
     @NSManaged public var pending: Bool
     @NSManaged public var plaidCategories: [String]?
     @NSManaged public var transactionId: String?
+    @NSManaged public var isHidden: Bool
+    @NSManaged public var budget: Budget?
     @NSManaged public var categoryMatches: NSSet?
     @NSManaged public var location: Location?
-    @NSManaged public var budget: Budget?
 
 }
 
@@ -34,10 +35,10 @@ extension Transaction {
 extension Transaction {
 
     @objc(addCategoryMatchesObject:)
-    @NSManaged public func addToCategoryMatches(_ value: SpendingCategory)
+    @NSManaged public func addToCategoryMatches(_ value: CategoryMatch)
 
     @objc(removeCategoryMatchesObject:)
-    @NSManaged public func removeFromCategoryMatches(_ value: SpendingCategory)
+    @NSManaged public func removeFromCategoryMatches(_ value: CategoryMatch)
 
     @objc(addCategoryMatches:)
     @NSManaged public func addToCategoryMatches(_ values: NSSet)

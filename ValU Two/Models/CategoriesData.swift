@@ -77,3 +77,35 @@ class CategoriesData {
     }
     
 }
+
+
+class SpendingCategoryGenerator {
+    
+    static func setupSpendingCategories(){
+        
+        let categoryData = CategoriesData()
+        let categoryList = categoryData.getCategoriesList()
+        
+        createSpendingCategory(categories: categoryList.categories)
+        
+    }
+    
+    
+    static func createSpendingCategory(categories: [CategoryEntry]){
+        
+        for category in categories{
+            
+            let newSpendingCategory = DataManager().createNewSpendingCategory(categoryEntry: category)
+            
+            if category.subCategories != nil{
+                for subCategory in category.subCategories!{
+                    let newSpendingSubCategory = DataManager().createNewSpendingCategory(categoryEntry: subCategory)
+                    newSpendingCategory.addToSubSpendingCategories(newSpendingSubCategory)
+                }
+            }
+            
+        }
+        
+    }
+    
+}

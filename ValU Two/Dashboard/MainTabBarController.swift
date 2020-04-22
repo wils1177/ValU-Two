@@ -12,8 +12,8 @@ import SwiftUI
 class MainTabBarController: UITabBarController {
     
     var parentCoordinator : AppCoordinator?
-    var homeTabCoordinator : HomeTabCoordinator?
-    var historyTabCoordinator : BudgetsTabCoordinator?
+    var homeTabCoordinator : BudgetsTabCoordinator?
+    var historyTabCoordinator : MoneyTabCoordinator?
     var transactionTabCoordinator : TransactionsTabCoordinator?
     
     
@@ -31,14 +31,13 @@ class MainTabBarController: UITabBarController {
         super.viewDidLoad()
         
 
-
         // Do any additional setup after loading the view.
     }
     
     //The parent coorindator will decide what we load over the dashboard, if anything
     override func viewDidAppear(_ animated: Bool) {
         self.parentCoordinator?.loadDashboard()
-        
+        setupViews()
 
     }
     
@@ -55,9 +54,9 @@ class MainTabBarController: UITabBarController {
         }
         else{
             print("User Is Onboarded")
-            self.homeTabCoordinator = HomeTabCoordinator(budget: self.budget!)
+            self.homeTabCoordinator = BudgetsTabCoordinator(budget: self.budget!)
             self.transactionTabCoordinator = TransactionsTabCoordinator(budget: self.budget!)
-            self.historyTabCoordinator = BudgetsTabCoordinator(budget: self.budget!)
+            self.historyTabCoordinator = MoneyTabCoordinator(budget: self.budget!)
             
             self.homeTabCoordinator?.start()
             self.transactionTabCoordinator?.start()
