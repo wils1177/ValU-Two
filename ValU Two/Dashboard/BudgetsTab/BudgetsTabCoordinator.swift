@@ -9,15 +9,21 @@
 import Foundation
 import SwiftUI
 
-class BudgetsTabCoordinator : Coordinator, TransactionRowDelegate, EditBudgetDelegate{
+class BudgetsTabCoordinator : Coordinator, TransactionRowDelegate, EditBudgetDelegate, SetSpendingLimitDelegate{
+    
+    
+    
+    
+    
+    
+    
     
 
     var childCoordinators = [Coordinator]()
     var navigationController = UINavigationController()
     var presentorStack = [Presentor]()
     var settingsCoordinator : SettingsFlowCoordinator?
-    var budget: Budget
-    
+    var budget : Budget
     
     init(budget: Budget){
         self.budget = budget
@@ -35,7 +41,7 @@ class BudgetsTabCoordinator : Coordinator, TransactionRowDelegate, EditBudgetDel
         
         self.navigationController.navigationBar.prefersLargeTitles = true
         
-        self.navigationController.tabBarItem = UITabBarItem(title: "Budgets", image: UIImage(systemName: "creditcard"), selectedImage: UIImage(named: "tab_icon_seelcted"))
+        self.navigationController.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house"), selectedImage: UIImage(named: "tab_icon_seelcted"))
         self.navigationController.pushViewController(homeView, animated: false)
         
     }
@@ -45,11 +51,14 @@ class BudgetsTabCoordinator : Coordinator, TransactionRowDelegate, EditBudgetDel
     }
     
     func showEdit(budgetToEdit: Budget){
-        let editCoordinator = EditCoordiantor(budget: budgetToEdit)
-        self.childCoordinators.append(editCoordinator)
-        editCoordinator.parent = self
+        let editCoordinator = EditCoordiantor(budget: budgetToEdit, navigationController: self.navigationController)
+        //self.childCoordinators.append(editCoordinator)
+        //editCoordinator.parent = self
         editCoordinator.start()
-        self.navigationController.present(editCoordinator.navigationController, animated: true)
+        
+    }
+    
+    func editBudgets(budget : Budget){
         
     }
     
@@ -87,12 +96,20 @@ class BudgetsTabCoordinator : Coordinator, TransactionRowDelegate, EditBudgetDel
         presentor.coordinator = self
         let vc = presentor.configure()
         
+        
         self.navigationController.pushViewController(vc, animated: true)
         
     }
     
-    func showIncome(){
-        let presentor = TransactionsListViewModel(budget: self.budget, predicate: PredicateBuilder().generateNegativeAmountPredicate(startDate: self.budget.startDate!, endDate: self.budget.endDate!) , title: "Income")
+    func showIncome(transactions: [Transaction]){
+        let presentor = TransactionsListViewModel(budget: self.budget, transactions: transactions , title: "Earned")
+        presentor.coordinator = self
+        let vc = presentor.configure()
+        self.navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func showExpenses(transactions: [Transaction]){
+        let presentor = TransactionsListViewModel(budget: self.budget, transactions: transactions , title: "Spent")
         presentor.coordinator = self
         let vc = presentor.configure()
         self.navigationController.pushViewController(vc, animated: true)
@@ -130,8 +147,44 @@ class BudgetsTabCoordinator : Coordinator, TransactionRowDelegate, EditBudgetDel
         
     }
     
+    func showCashFlow(viewModel: CashFlowViewModel){
+        let view = CashFlowFullScreenView(viewModel: viewModel)
+        let vc = UIHostingController(rootView: view)
+        vc.title = "Cash Flow"
+        self.navigationController.pushViewController(vc, animated: true)
+    }
     
     
+    func showIndvidualBudget(spendingCategory: SpendingCategory){
+        let view = CategoryDetailView(spendingCategory: spendingCategory, coordinator: self)
+        let vc = UIHostingController(rootView: view)
+        vc.title = spendingCategory.name! + " Budget"
+        self.navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func continueToBudgetCategories(){
+
+        let view = BalancerView(budget: self.budget, coordinator: self)
+        let vc = UIHostingController(rootView: view)
+        vc.title = "Set Budget"
+        self.navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func showCategoryDetail(category: SpendingCategory, service: BalanceParentService) {
+        let view = BalanceDetailView(category: category, service: service)
+        let vc = UIHostingController(rootView: view)
+        vc.title = category.name!
+        
+
+        
+        self.navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func finishedSettingLimits() {
+        self.navigationController.popViewController(animated: true)
+        DataManager().saveDatabase()
+    }
+
     
 }
 
@@ -152,7 +205,21 @@ extension TransactionRowDelegate{
         let presentor = TransactionDetailViewModel(transaction: transaction)
         presentor.coordinator = self
         let vc = presentor.configure()
+        
+        self.navigationController.navigationBar.setBackgroundImage(UIImage(color: .systemGroupedBackground), for: .default) //UIImage.init(named: "transparent.png")
+        self.navigationController.navigationBar.shadowImage = UIImage()
+        self.navigationController.navigationBar.isTranslucent = true
+        self.navigationController.view.backgroundColor = .systemGroupedBackground
+
+        
         self.navigationController.pushViewController(vc, animated: true)
+    }
+    
+    
+    func showSplitTransaction(transaction: Transaction){
+        let view = SplitTransactionView()
+        let vc = UIHostingController(rootView: view)
+        self.navigationController.present(vc, animated: true)
     }
     
 
@@ -162,6 +229,20 @@ extension TransactionRowDelegate{
         self.navigationController.dismiss(animated: true)
     }
     
+}
+
+public extension UIImage {
+  public convenience init?(color: UIColor, size: CGSize = CGSize(width: 1, height: 1)) {
+    let rect = CGRect(origin: .zero, size: size)
+    UIGraphicsBeginImageContextWithOptions(rect.size, false, 0.0)
+    color.setFill()
+    UIRectFill(rect)
+    let image = UIGraphicsGetImageFromCurrentImageContext()
+    UIGraphicsEndImageContext()
+
+    guard let cgImage = image?.cgImage else { return nil }
+    self.init(cgImage: cgImage)
+  }
 }
 
 

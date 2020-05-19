@@ -15,7 +15,15 @@ struct LoadedAccountsList: View {
     
     
     var body: some View {
-        SwiftUIAccountsView(accounts: accounts)
+        
+        ScrollView(.horizontal){
+            HStack{
+                ForEach(self.accounts, id: \.self){ account in
+                    SwiftUIAccountCardView(account: account).padding(.horizontal)
+                }.padding(.leading)
+            }
+        }
+
     }
 }
 

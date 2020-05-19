@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-class MoneyTabCoordinator : Coordinator{
+class MoneyTabCoordinator : Coordinator, TransactionRowDelegate{
     
     var childCoordinators = [Coordinator]()
     var navigationController = UINavigationController()
@@ -25,7 +25,7 @@ class MoneyTabCoordinator : Coordinator{
     
     func start() {
         
-        let viewModel = MyMoneyViewModel()
+        let viewModel = MyMoneyViewModel(coordinator: self)
         let vc = viewModel.configure()
 
         self.navigationController.navigationBar.prefersLargeTitles = true
@@ -34,6 +34,13 @@ class MoneyTabCoordinator : Coordinator{
         
         
         
+    }
+    
+    func showAccountDetail(account: AccountData){
+        let view = AccountDetailView(coordinator: self, account: account)
+        let vc = UIHostingController(rootView: view)
+        vc.title = account.name!
+        self.navigationController.pushViewController(vc, animated: true)
     }
     
     

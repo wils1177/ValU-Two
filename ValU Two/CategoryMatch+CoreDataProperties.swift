@@ -2,7 +2,7 @@
 //  CategoryMatch+CoreDataProperties.swift
 //  
 //
-//  Created by Clayton Wilson on 4/12/20.
+//  Created by Clayton Wilson on 5/11/20.
 //
 //
 
@@ -18,6 +18,7 @@ extension CategoryMatch {
 
     @NSManaged public var amount: Float
     @NSManaged public var id: UUID?
+    @NSManaged public var itemId: String?
     @NSManaged public var spendingCategory: SpendingCategory?
     @NSManaged public var transaction: Transaction?
 

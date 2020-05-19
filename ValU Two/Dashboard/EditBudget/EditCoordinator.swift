@@ -11,14 +11,17 @@ import UIKit
 import SwiftUI
 
 class EditCoordiantor : BudgetEditableCoordinator{
+    
+    
 
     var childCoordinators = [Coordinator]()
-    var navigationController = UINavigationController()
+    var navigationController : UINavigationController
     var budget : Budget?
     var parent : BudgetsTabCoordinator?
     
-    init(budget : Budget){
+    init(budget : Budget, navigationController: UINavigationController){
         self.budget = budget
+        self.navigationController = navigationController
         self.navigationController.navigationBar.prefersLargeTitles = true
     }
     
@@ -26,8 +29,9 @@ class EditCoordiantor : BudgetEditableCoordinator{
         let presentor = EditBudgetViewModel(budget: self.budget!)
         presentor.coordinator = self
         let vc = presentor.configure()
+        vc.title = "More"
         
-        self.navigationController.pushViewController(vc, animated: false)
+        self.navigationController.pushViewController(vc, animated: true)
         self.navigationController.modalPresentationStyle = .fullScreen
     }
     
@@ -41,6 +45,8 @@ class EditCoordiantor : BudgetEditableCoordinator{
     func continueToPlaid() {
         
     }
+    
+    
 
     
     
@@ -82,10 +88,10 @@ extension BudgetEditableCoordinator{
     }
     
     func continueToBudgetCategories(){
-        let presentor = BudgetBalancerPresentor(budget: self.budget!)
-        let vc = presentor.configure()
-        presentor.coordinator = self
-        
+
+        let view = BalancerView(budget: self.budget!, coordinator: self)
+        let vc = UIHostingController(rootView: view)
+        vc.title = "Set Budget"
         self.navigationController.pushViewController(vc, animated: true)
     }
     
@@ -111,6 +117,18 @@ extension BudgetEditableCoordinator{
         
     }
     
+
+    
+    func showCategoryDetail(category: SpendingCategory, service: BalanceParentService) {
+        let view = BalanceDetailView(category: category, service: service)
+        let vc = UIHostingController(rootView: view)
+        vc.title = category.name!
+        
+
+        
+        self.navigationController.pushViewController(vc, animated: true)
+    }
+    
     func continueToPlaid() {
         
     }
@@ -119,5 +137,9 @@ extension BudgetEditableCoordinator{
         
     }
 
+    
+}
+
+extension SetSpendingLimitDelegate{
     
 }

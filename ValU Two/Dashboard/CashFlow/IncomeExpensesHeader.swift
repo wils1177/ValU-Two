@@ -12,23 +12,62 @@ struct IncomeExpensesHeader: View {
     
     var viewData : TransactionDateCache
     
-    func makeMoneyString(amount: Float) ->String{
-        "$" + String(Int(round(amount)))
+    func getLabel() -> String{
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM/dd"
+        
+        return dateFormatter.string(from: self.viewData.startDate!)
+        
     }
     
+    
     var body: some View {
-        VStack{
+        
+        VStack(spacing: 0.0){
+            
             HStack{
-                Text(makeMoneyString(amount: viewData.income * -1)).font(.largeTitle).bold().foregroundColor(Color(.systemGreen))
+
+                Button(action: {
+                    //Action
+                    
+                }) {
+                    VStack(alignment: .leading){
+                        HStack{
+                            //Circle().frame(width: 7, height: 7).foregroundColor(Color(.systemGreen))
+                            Text("Income").font(.headline).bold().foregroundColor(Color(.systemGreen))
+                            
+                        }
+                        Text(CommonUtils.makeMoneyString(number: Int(viewData.income * -1))).font(.title).bold()
+                        //Text("Up $400").font(.callout).foregroundColor(Color(.lightGray))
+                    }
+                }.buttonStyle(PlainButtonStyle())
+                
+                Divider().frame(height: 55)
+                
+                Button(action: {
+                    //Action
+                    
+                }) {
+                    VStack(alignment: .leading){
+                        HStack{
+                            //Circle().frame(width: 7, height: 7).foregroundColor(Color(.systemRed))
+                            Text("Expenses").font(.headline).bold().foregroundColor(Color(.systemRed))
+                        }
+                        
+                        Text(CommonUtils.makeMoneyString(number: Int(viewData.expenses))).font(.title).bold()
+                        //Text("Up $400").font(.callout).foregroundColor(Color(.lightGray))
+                    }
+                }.buttonStyle(PlainButtonStyle())
+                
                 Spacer()
-                Text(makeMoneyString(amount: viewData.expenses)).font(.largeTitle).bold().foregroundColor(Color(.systemRed))
-            }.padding(.horizontal).padding(.horizontal, 30).padding(.bottom, 7)
-            HStack{
-                Text("Income").font(.headline).bold().foregroundColor(Color(.gray))
-                Spacer()
-                Text("Expenses").font(.headline).bold().foregroundColor(Color(.gray))
-            }.padding(.horizontal).padding(.horizontal, 30)
+                
+            }
+
         }
+        
+        
+        
+        
     }
 }
 

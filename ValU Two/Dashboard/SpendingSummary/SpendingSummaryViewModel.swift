@@ -38,7 +38,6 @@ class SpendingSummaryViewModel : ObservableObject{
     
     var budget : Budget?
     @Published var viewData = [SpendingSummaryViewData]()
-    var condensed = true
     var buttonText = "See More"
     
     init(){
@@ -53,16 +52,6 @@ class SpendingSummaryViewModel : ObservableObject{
         
     }
     
-    func toggleCondesnsed(){
-        self.condensed.toggle()
-        if self.buttonText == "See More"{
-            self.buttonText = "See Less"
-        }else{
-            self.buttonText = "See More"
-        }
-        
-        self.generateViewData()
-    }
     
     func generateViewData(){
         
@@ -104,12 +93,13 @@ class SpendingSummaryViewModel : ObservableObject{
                 let displayPercent = String(format: "%.0f%%", entry.rawAmount / total * 100)
                 entry.displayPercent = displayPercent
                 entry.percentage = (entry.rawAmount / largest)
+                if entry.percentage! < 0.04{
+                    entry.percentage = 0.04
+                }
             }
             
             self.viewData = self.viewData.sorted(by: { $0.rawAmount > $1.rawAmount })
-            if self.condensed{
-                self.viewData = Array(self.viewData.prefix(5))
-            }
+
             
             
         }

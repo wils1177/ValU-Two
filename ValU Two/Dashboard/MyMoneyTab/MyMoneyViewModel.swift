@@ -13,9 +13,14 @@ class MyMoneyViewModel: Presentor{
     
     var cashFlowViewModel = CashFlowViewModel()
     var accountsModel = AccountsViewModel()
+    var coordinator : MoneyTabCoordinator?
+    
+    init(coordinator :MoneyTabCoordinator){
+        self.coordinator = coordinator
+    }
     
     func configure() -> UIViewController {
-        return UIHostingController(rootView: MyMoneyTabView(viewModel: self))
+        return UIHostingController(rootView: MyMoneyTabView(viewModel: self, coordinator: self.coordinator))
     }
     
 }

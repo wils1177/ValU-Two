@@ -20,67 +20,57 @@ struct EditCategoriesView: View {
     
     var body: some View {
         
-        
-        
-        ZStack{
-            
+        NavigationView{
             VStack{
-                //.padding(.bottom).padding(.bottom)
-                HStack{
-                    Text("Change Category").font(.largeTitle).bold().padding(.leading)
-                    Spacer()
-                }.padding(.top).padding(.top)
-                
-                
-                
-                
-                ScrollView(){
-                    HStack{
-                        Text("You can select multiple cateogire for your transaction to count towards!").font(.headline).bold().padding()
-                        Spacer()
-                    }.padding(.bottom)
-                    
-                    
-                    HStack{
-                        Toggle(isOn: $viewModel.saveRule) {
-                            Text("Remember for similar transactions")
-                        }.padding()
-                    }
-                    
-                    
-                    
-                    
-                    CurrentlySelectedCategoriesView(viewModel: viewModel).padding(.bottom)
-                    CategoryCardListView(viewModel: viewModel)
-                    }
-            }.background(LinearGradient(gradient:  Gradient(colors: [.blue, .white]), startPoint: .topTrailing, endPoint: .center))
-            
-            
-            HStack{
-                Spacer()
-                VStack{
-                Spacer()
-                Button(action: {
-                    self.viewModel.submit()
-                }){
-                    
-                    HStack{
                         
-                        ZStack{
-                            Text("Done").font(.subheadline).foregroundColor(.black).bold().padding()
+                         
+                         List(){
                             
                             
                             
-                        }
-                        
-                    }.background(LinearGradient(gradient:  Gradient(colors: [.white, .white]), startPoint: .topTrailing, endPoint: .center)).cornerRadius(30).shadow(radius: 20).padding()
-                    
-                    
-                }
-                }
-            }
+                             HStack{
+                                
+                                Text("You can select multiple categories for your transaction to count towards!").foregroundColor(Color(.lightGray))
+                                 Spacer()
+                             }.padding(.bottom).padding(.top, 5)
+                            
+                             
+                             
+                             HStack{
+                                Image(systemName: "bookmark").padding(.horizontal, 8)
+                                 Toggle(isOn: $viewModel.saveRule) {
+                                     Text("Remember changes")
+                                 }.padding(.trailing, 5)
+                                }.padding(10).background(Color(.white)).cornerRadius(10)
+                            
+                            HStack{
+                                Text("When selected, ValU will remeber your choices for future transactions with the same name.").font(.footnote).foregroundColor(Color(.lightGray))
+                            }.padding(.horizontal, 10).padding(.bottom, 10)
+                             
+                            if self.viewModel.transaction.categoryMatches!.allObjects.count > 0{
+                                CurrentlySelectedView(transaction: viewModel.transaction, viewModel: self.viewModel)
+                            }
+                            
+                            
+                            ForEach(self.viewModel.spendingCategories, id: \.self){ category in
+                                EditCategoryCard(category: category, viewModel: self.viewModel)
+                            }
+                            
+                             }
+            }.navigationBarTitle("Change Category", displayMode: .large)
+            .navigationBarItems( trailing: Button(action: {
+                                 self.viewModel.submit()
+                             }){
             
+                                 Text("Done").font(.subheadline).foregroundColor(.black).padding(7)
+                                         
+                             })
         }
+        
+            
+        
+        //.background(LinearGradient(gradient:  Gradient(colors: [.blue, .white]), startPoint: .topTrailing, endPoint: .center))
+                
         
         
     }

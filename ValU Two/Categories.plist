@@ -9,6 +9,8 @@
 			<string>Eat &amp; Drink</string>
 			<key>icon</key>
 			<string>🍔</string>
+			<key>colorCode</key>
+			<integer>0</integer>
 			<key>contains</key>
 			<array>
 				<string>Food and Drink</string>
@@ -20,6 +22,8 @@
 					<string>Bar</string>
 					<key>icon</key>
 					<string>🍷</string>
+					<key>colorCode</key>
+					<integer>0</integer>
 					<key>contains</key>
 					<array>
 						<string>Food and Drink</string>
@@ -31,6 +35,8 @@
 					<string>Breweries</string>
 					<key>icon</key>
 					<string>🍺</string>
+					<key>colorCode</key>
+					<integer>0</integer>
 					<key>contains</key>
 					<array>
 						<string>Food and Drink</string>
@@ -42,6 +48,8 @@
 					<string>Restaurants</string>
 					<key>icon</key>
 					<string>🥣</string>
+					<key>colorCode</key>
+					<integer>0</integer>
 					<key>contains</key>
 					<array>
 						<string>Food and Drink</string>
@@ -53,6 +61,8 @@
 					<string>Fast Food</string>
 					<key>icon</key>
 					<string>🍟</string>
+					<key>colorCode</key>
+					<integer>0</integer>
 					<key>contains</key>
 					<array>
 						<string>Food and Drink</string>
@@ -65,6 +75,8 @@
 					<string>Coffee</string>
 					<key>icon</key>
 					<string>☕️</string>
+					<key>colorCode</key>
+					<integer>0</integer>
 					<key>contains</key>
 					<array>
 						<string>Food and Drink</string>
@@ -77,6 +89,8 @@
 					<string>Nightlife</string>
 					<key>icon</key>
 					<string>🥂</string>
+					<key>colorCode</key>
+					<integer>0</integer>
 					<key>contains</key>
 					<array>
 						<string>Food and Drink</string>
@@ -88,6 +102,8 @@
 					<string>Misc Eat &amp; Drink</string>
 					<key>icon</key>
 					<string>🍔</string>
+					<key>colorCode</key>
+					<integer>0</integer>
 					<key>contains</key>
 					<array>
 						<string>Food and Drink</string>
@@ -100,6 +116,8 @@
 			<string>Shops</string>
 			<key>icon</key>
 			<string>🛍️</string>
+			<key>colorCode</key>
+			<integer>1</integer>
 			<key>contains</key>
 			<array>
 				<string>Shops</string>
@@ -111,6 +129,8 @@
 					<string>Clothing</string>
 					<key>icon</key>
 					<string>👚</string>
+					<key>colorCode</key>
+					<integer>1</integer>
 					<key>contains</key>
 					<array>
 						<string>Shops</string>
@@ -122,6 +142,8 @@
 					<string>Computers</string>
 					<key>icon</key>
 					<string>🖥️</string>
+					<key>colorCode</key>
+					<integer>1</integer>
 					<key>contains</key>
 					<array>
 						<string>Shops</string>
@@ -135,6 +157,8 @@ Computers and Electronics</string>
 					<string>Groceries</string>
 					<key>icon</key>
 					<string>🛒</string>
+					<key>colorCode</key>
+					<integer>1</integer>
 					<key>contains</key>
 					<array>
 						<string>Shops</string>
@@ -146,6 +170,8 @@ Computers and Electronics</string>
 					<string>Malls</string>
 					<key>icon</key>
 					<string>🏬</string>
+					<key>colorCode</key>
+					<integer>1</integer>
 					<key>contains</key>
 					<array>
 						<string>Shops</string>
@@ -157,6 +183,8 @@ Computers and Electronics</string>
 					<string>Other Shops</string>
 					<key>icon</key>
 					<string>🛍️</string>
+					<key>colorCode</key>
+					<integer>1</integer>
 					<key>contains</key>
 					<array>
 						<string>Shops</string>
@@ -167,6 +195,8 @@ Computers and Electronics</string>
 					<string>Car Shops</string>
 					<key>icon</key>
 					<string>🏎️</string>
+					<key>colorCode</key>
+					<integer>1</integer>
 					<key>contains</key>
 					<array>
 						<string>Shops</string>
@@ -178,6 +208,8 @@ Computers and Electronics</string>
 					<string>Beauty</string>
 					<key>icon</key>
 					<string>💄</string>
+					<key>colorCode</key>
+					<integer>1</integer>
 					<key>contains</key>
 					<array>
 						<string>Shops</string>
@@ -189,6 +221,8 @@ Computers and Electronics</string>
 					<string>Bookstores</string>
 					<key>icon</key>
 					<string>📚</string>
+					<key>colorCode</key>
+					<integer>1</integer>
 					<key>contains</key>
 					<array>
 						<string>Shops</string>
@@ -200,6 +234,8 @@ Computers and Electronics</string>
 					<string>Department</string>
 					<key>icon</key>
 					<string>🏬</string>
+					<key>colorCode</key>
+					<integer>1</integer>
 					<key>contains</key>
 					<array>
 						<string>Shops</string>
@@ -213,6 +249,8 @@ Computers and Electronics</string>
 			<string>Payments</string>
 			<key>icon</key>
 			<string>💳</string>
+			<key>colorCode</key>
+			<integer>2</integer>
 			<key>contains</key>
 			<array>
 				<string>Payment</string>
@@ -224,6 +262,8 @@ Computers and Electronics</string>
 					<string>Rent</string>
 					<key>icon</key>
 					<string>🏡</string>
+					<key>colorCode</key>
+					<integer>2</integer>
 					<key>contains</key>
 					<array>
 						<string>Payment</string>
@@ -235,6 +275,8 @@ Computers and Electronics</string>
 					<string>Loans</string>
 					<key>icon</key>
 					<string>💵</string>
+					<key>colorCode</key>
+					<integer>2</integer>
 					<key>contains</key>
 					<array>
 						<string>Payment</string>
@@ -246,6 +288,8 @@ Computers and Electronics</string>
 					<string>Credit Card</string>
 					<key>icon</key>
 					<string>💳</string>
+					<key>colorCode</key>
+					<integer>2</integer>
 					<key>contains</key>
 					<array>
 						<string>Payment</string>
@@ -259,6 +303,8 @@ Computers and Electronics</string>
 			<string>Travel</string>
 			<key>icon</key>
 			<string>🚆</string>
+			<key>colorCode</key>
+			<integer>3</integer>
 			<key>contains</key>
 			<array>
 				<string>Travel</string>
@@ -270,6 +316,8 @@ Computers and Electronics</string>
 					<string>Ride Share</string>
 					<key>icon</key>
 					<string>🚗</string>
+					<key>colorCode</key>
+					<integer>3</integer>
 					<key>contains</key>
 					<array>
 						<string>Travel</string>
@@ -282,6 +330,8 @@ Computers and Electronics</string>
 					<string>Gas Stations</string>
 					<key>icon</key>
 					<string>⛽</string>
+					<key>colorCode</key>
+					<integer>3</integer>
 					<key>contains</key>
 					<array>
 						<string>Travel</string>
@@ -293,6 +343,8 @@ Computers and Electronics</string>
 					<string>Public Transit</string>
 					<key>icon</key>
 					<string>🚆</string>
+					<key>colorCode</key>
+					<integer>3</integer>
 					<key>contains</key>
 					<array>
 						<string>Travel</string>
@@ -304,6 +356,8 @@ Computers and Electronics</string>
 					<string>Parking</string>
 					<key>icon</key>
 					<string>🚆</string>
+					<key>colorCode</key>
+					<integer>3</integer>
 					<key>contains</key>
 					<array>
 						<string>Travel</string>
@@ -315,6 +369,8 @@ Computers and Electronics</string>
 					<string>Flights</string>
 					<key>icon</key>
 					<string>🛫</string>
+					<key>colorCode</key>
+					<integer>3</integer>
 					<key>contains</key>
 					<array>
 						<string>Travel</string>
@@ -326,6 +382,8 @@ Computers and Electronics</string>
 					<string>Other Travel</string>
 					<key>icon</key>
 					<string>🛫</string>
+					<key>colorCode</key>
+					<integer>3</integer>
 					<key>contains</key>
 					<array>
 						<string>Travel</string>
@@ -338,6 +396,8 @@ Computers and Electronics</string>
 			<string>Utilities</string>
 			<key>icon</key>
 			<string>🔧</string>
+			<key>colorCode</key>
+			<integer>4</integer>
 			<key>contains</key>
 			<array>
 				<string>Service</string>
@@ -350,6 +410,8 @@ Computers and Electronics</string>
 					<string>Water</string>
 					<key>icon</key>
 					<string>🚰</string>
+					<key>colorCode</key>
+					<integer>4</integer>
 					<key>contains</key>
 					<array>
 						<string>Service</string>
@@ -362,6 +424,8 @@ Computers and Electronics</string>
 					<string>Gas</string>
 					<key>icon</key>
 					<string>🛢️</string>
+					<key>colorCode</key>
+					<integer>4</integer>
 					<key>contains</key>
 					<array>
 						<string>Service</string>
@@ -374,6 +438,8 @@ Computers and Electronics</string>
 					<string>Electric</string>
 					<key>icon</key>
 					<string>🔌</string>
+					<key>colorCode</key>
+					<integer>4</integer>
 					<key>contains</key>
 					<array>
 						<string>Service</string>
@@ -386,6 +452,8 @@ Computers and Electronics</string>
 					<string>Heating</string>
 					<key>icon</key>
 					<string>🥵</string>
+					<key>colorCode</key>
+					<integer>4</integer>
 					<key>contains</key>
 					<array>
 						<string>Service</string>
@@ -398,6 +466,8 @@ Computers and Electronics</string>
 					<string>Waste</string>
 					<key>icon</key>
 					<string>🗑️</string>
+					<key>colorCode</key>
+					<integer>4</integer>
 					<key>contains</key>
 					<array>
 						<string>Service</string>
@@ -410,6 +480,8 @@ Computers and Electronics</string>
 					<string>Other Utilities</string>
 					<key>icon</key>
 					<string>🔧</string>
+					<key>colorCode</key>
+					<integer>4</integer>
 					<key>contains</key>
 					<array>
 						<string>Service</string>
@@ -423,6 +495,8 @@ Computers and Electronics</string>
 			<string>Services</string>
 			<key>icon</key>
 			<string>🛎️</string>
+			<key>colorCode</key>
+			<integer>5</integer>
 			<key>contains</key>
 			<array>
 				<string>Service</string>
@@ -434,6 +508,8 @@ Computers and Electronics</string>
 					<string>Cable</string>
 					<key>icon</key>
 					<string>📺</string>
+					<key>colorCode</key>
+					<integer>5</integer>
 					<key>contains</key>
 					<array>
 						<string>Service</string>
@@ -445,6 +521,8 @@ Computers and Electronics</string>
 					<string>Cleaning</string>
 					<key>icon</key>
 					<string>🧹</string>
+					<key>colorCode</key>
+					<integer>5</integer>
 					<key>contains</key>
 					<array>
 						<string>Service</string>
@@ -456,6 +534,8 @@ Computers and Electronics</string>
 					<string>Insurance</string>
 					<key>icon</key>
 					<string>📝</string>
+					<key>colorCode</key>
+					<integer>5</integer>
 					<key>contains</key>
 					<array>
 						<string>Service</string>
@@ -468,6 +548,8 @@ Computers and Electronics</string>
 Internet</string>
 					<key>icon</key>
 					<string>🌐</string>
+					<key>colorCode</key>
+					<integer>5</integer>
 					<key>contains</key>
 					<array>
 						<string>Service</string>
@@ -479,6 +561,8 @@ Internet</string>
 					<string>Subscriptions</string>
 					<key>icon</key>
 					<string>🌐</string>
+					<key>colorCode</key>
+					<integer>5</integer>
 					<key>contains</key>
 					<array>
 						<string>Service</string>
@@ -490,6 +574,8 @@ Internet</string>
 					<string>Phone</string>
 					<key>icon</key>
 					<string>🌐</string>
+					<key>colorCode</key>
+					<integer>5</integer>
 					<key>contains</key>
 					<array>
 						<string>Service</string>
@@ -501,6 +587,8 @@ Internet</string>
 					<string>Hair Care</string>
 					<key>icon</key>
 					<string>👱‍♀️</string>
+					<key>colorCode</key>
+					<integer>5</integer>
 					<key>contains</key>
 					<array>
 						<string>Service</string>

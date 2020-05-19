@@ -15,15 +15,16 @@ enum names : String{
     case otherCategoryName = "Everything Else"
 }
 
+
 class SpendingCategoryViewData: Hashable, Identifiable{
     var percentage : CGFloat = CGFloat(0.0)
-    var spent : String = ""
-    var limit : String = ""
+    var spent : Float
+    var limit : Float
     var name : String = ""
     var icon : String = "🍔"
     var id = UUID()
     
-    init(percentage: CGFloat, spent: String, limit: String, name: String, icon: String) {
+    init(percentage: CGFloat, spent: Float, limit: Float, name: String, icon: String) {
         self.percentage = percentage
         self.limit = limit
         self.spent = spent
@@ -53,18 +54,24 @@ class SpendingCardViewModel: ObservableObject {
     var budget : Budget
     var coordinator: BudgetsTabCoordinator?
     @Published var categories = [SpendingCategory]()
-    @Published var subCategories = [SpendingCategory]()
+    var subCategories = [SpendingCategory]()
     @Published var otherCategory : SpendingCategoryViewData?
     var viewData = SpendingCardViewData()
-    var totalSpending = 0
+    var services  = [BalanceParentService]()
     
     init(budget: Budget){
         self.budget = budget
         self.categories = budget.getParentSpendingCategories()
         self.subCategories = budget.getSubSpendingCategories()
-        //NotificationCenter.default.addObserver(self, selector: #selector(update(_:)), name: .modelUpdate, object: nil)
         makeOtherCategory()
-        self.totalSpending = Int((self.budget.spent))
+        makeServices()
+    }
+    
+    func makeServices(){
+        for category in categories{
+            let service = BalanceParentService(spendingCategory: category)
+            self.services.append(service)
+        }
     }
     
     func makeOtherCategory(){
@@ -93,7 +100,7 @@ class SpendingCardViewModel: ObservableObject {
             otherPercentage = Float(otherSpentTotal) / otherLimit
         }
         
-        let categoryViewData = SpendingCategoryViewData(percentage: CGFloat(otherPercentage), spent: "$" + String(Int(round(otherSpentTotal))), limit: "$" + String(Int(round(otherLimit))), name: otherName, icon: otherIcon)
+        let categoryViewData = SpendingCategoryViewData(percentage: CGFloat(otherPercentage), spent: otherSpentTotal, limit: otherLimit, name: otherName, icon: otherIcon)
         self.otherCategory = categoryViewData
         
         
@@ -138,57 +145,7 @@ class SpendingCardViewModel: ObservableObject {
     }
     */
 
-    /*
-    func generateViewData(){
-        
-        var categories = [SpendingCategoryViewData]()
-        let spendingCategories = self.budget.getSubSpendingCategories()
-        var spendingCategoryLimitTotal = 0.0
-        var selectedSpentTotal = 0.0
-        
-        for spendingCategory in spendingCategories{
-            
-            if spendingCategory.selected{
-                let name = (spendingCategory.name)!
-                let spent = spendingCategory.getAmountSpent()
-                selectedSpentTotal = selectedSpentTotal + Double(spent)
-                let limit = spendingCategory.limit
-                spendingCategoryLimitTotal = spendingCategoryLimitTotal + Double(limit)
-                let icon = spendingCategory.icon ?? "❓"
-                var percentage = Float(0.0)
-                if limit > 0.0 && spent > 0.0{
-                    percentage = spent / limit
-                }
-                    
-                    
-                    
-                let categoryViewData = SpendingCategoryViewData(percentage: CGFloat(percentage), spent: "$" + String(Int(round(spent))), limit: "$" + String(Int(round(limit))), name: name, icon: icon)
-                    categories.append(categoryViewData)
-            }
-                
-            
-        }
-        
-        let otherName = names.otherCategoryName.rawValue
-        let otherLimit = self.budget.getAmountAvailable() - Float(spendingCategoryLimitTotal)
-        let otherIcon = "🔸"
-        var otherPercentage = Float(0.0)
-        let otherSpentTotal = self.budget.calculateOtherSpent()
-        if otherLimit > 0.0 && otherSpentTotal > 0.0{
-            otherPercentage = Float(otherSpentTotal) / otherLimit
-        }
-        
-        let categoryViewData = SpendingCategoryViewData(percentage: CGFloat(otherPercentage), spent: "$" + String(Int(round(otherSpentTotal))), limit: "$" + String(Int(round(otherLimit))), name: otherName, icon: otherIcon)
-        categories.append(categoryViewData)
-        
-        
-        let cardName = "Budget"
-        self.viewData = SpendingCardViewData(cardTitle: cardName, categories: categories)
-        
     
-    }
-    */
-
     
     
     

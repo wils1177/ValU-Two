@@ -20,6 +20,7 @@ struct OnboardingStepViewData: Hashable{
     var iconName: String
     var iconColor: Color
     var backgroundColor: Color
+    var subTectColor : Color
     var completionHandler: (()->Void)?
     var hash = UUID()
     
@@ -27,6 +28,7 @@ struct OnboardingStepViewData: Hashable{
         hasher.combine(hash)
     }
 }
+
 
 
 
@@ -47,11 +49,11 @@ struct OnboardingStepRow: View {
             VStack{
                 
                 HStack{
-                    Text(self.viewData.title).font(.system(size: 17)).foregroundColor(.white).bold().padding(.leading).padding(.top).padding(.bottom, 7)
+                    Text(self.viewData.title).font(.system(size: 17)).foregroundColor(self.viewData.backgroundColor).bold().padding(.leading).padding(.top).padding(.bottom, 5)
                     Spacer()
                 }
                 HStack{
-                    Text(self.viewData.description).font(.body).foregroundColor(.white).padding(.leading).padding(.bottom)
+                    Text(self.viewData.description).font(.subheadline).foregroundColor(self.viewData.subTectColor).padding(.leading).padding(.bottom)
                     Spacer()
                 }
                 
@@ -60,7 +62,7 @@ struct OnboardingStepRow: View {
             
             
             
-        }.background(self.viewData.backgroundColor).cornerRadius(20).shadow(radius: 20).padding(.leading).padding(.trailing).padding(.bottom, 5))
+        }.background(Color(.white)).cornerRadius(20).padding(.bottom, 5))
     }
     
     var body: some View {
@@ -75,7 +77,7 @@ struct OnboardingStepRow: View {
                     self.viewData.completionHandler!()
                 }){
                     self.getBody()
-                }
+                }.buttonStyle(PlainButtonStyle())
             }
         }
     }

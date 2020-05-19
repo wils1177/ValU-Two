@@ -42,7 +42,7 @@ struct SelectCategoriesView: View {
                         Text("Go ahead and pick some budget categories, ya nut!").bold().lineLimit(nil).multilineTextAlignment(.center).foregroundColor(.white).padding()
                         }.padding()
                     
-                    CategoryCardListView<BudgetCardsPresentor>(viewModel: self.viewModel)
+                    CategoryCardListView<BudgetCardsPresentor>(viewModel: self.viewModel, categories: self.viewModel.spendingCategories)
                     
                 }
             })

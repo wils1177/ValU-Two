@@ -10,7 +10,7 @@ import SwiftUI
 
 struct IncomeCardView: View {
     
-    @State var pickerOptions = ["Weekly", "Semi-Monthly", "Monthly"]
+    @State var pickerOptions = ["Monthly", "Semi-Monthly", "Weekly"]
     @ObservedObject var viewModel : CashFlowViewModel
     
     
@@ -29,10 +29,14 @@ struct IncomeCardView: View {
     }
     
     var timeFrameTitle: some View{
-        HStack{
-            Text("January").font(.headline).foregroundColor(Color(.lightGray)).bold()
-            Spacer()
-        }.padding(.bottom).padding(.top , 5)
+        VStack(alignment: .leading){
+            HStack{
+                Text("Income vs Expenses").font(.title).bold()
+                Spacer()
+            }.padding(.top , 5)
+            Text(self.pickerOptions[self.viewModel.segement]).foregroundColor(Color(.lightGray)).bold()
+        }
+        
     }
     
     func dateToMonth(date: Date){
@@ -54,33 +58,53 @@ struct IncomeCardView: View {
                 
                 VStack{
                     
-                    self.title
-                    self.picker
-                    self.timeFrameTitle
+                    self.picker.padding(.horizontal).padding(.bottom)
+                    //self.timeFrameTitle.padding(.horizontal).padding(.bottom)
                     
                     
                     if self.viewModel.segement == 0{
-                        if self.viewModel.selectedWeek != nil{
-                            IncomeExpensesHeader(viewData: self.viewModel.selectedWeek!)
+                        if self.viewModel.selectedMonth != nil{
+                            HStack{
+                                IncomeExpensesHeader(viewData: self.viewModel.selectedMonth!)
+                                Spacer()
+                            }
+                            
+                        }
+                        else{
+                            self.timeFrameTitle
                         }
                         
-                        IncomeGraphView(viewModel: self.viewModel, viewData: self.viewModel.weekData).padding(.top)
+                        IncomeGraphView(viewModel: self.viewModel, viewData: self.viewModel.monthData)
                     }
                     else if self.viewModel.segement == 1{
                         if self.viewModel.selectedBiMonth != nil{
-                            IncomeExpensesHeader(viewData: self.viewModel.selectedBiMonth!)
+                            HStack{
+                                IncomeExpensesHeader(viewData: self.viewModel.selectedBiMonth!)
+                                Spacer()
+                            }
+                            
                         }
-                        IncomeGraphView(viewModel: self.viewModel, viewData: self.viewModel.biMonthData).padding(.top)
+                        else{
+                            self.timeFrameTitle
+                        }
+                        IncomeGraphView(viewModel: self.viewModel, viewData: self.viewModel.biMonthData)
 
                     }
                     else{
-                        if self.viewModel.selectedMonth != nil{
-                            IncomeExpensesHeader(viewData: self.viewModel.selectedMonth!)
+                        if self.viewModel.selectedWeek != nil{
+                            HStack{
+                                IncomeExpensesHeader(viewData: self.viewModel.selectedWeek!)
+                                Spacer()
+                            }
+                            
                         }
-                        IncomeGraphView(viewModel: self.viewModel, viewData: self.viewModel.monthData).padding(.top)
+                        else{
+                            self.timeFrameTitle
+                        }
+                        IncomeGraphView(viewModel: self.viewModel, viewData: self.viewModel.weekData)
                     }
                     
-                }.padding().background(Color(.white)).cornerRadius(10).shadow(radius: 5)
+                }
                 
             }
         }

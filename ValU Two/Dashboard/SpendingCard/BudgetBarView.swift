@@ -9,15 +9,15 @@
 import SwiftUI
 
 struct BudgetBarView: View {
-    var barHeight = 60
+    var barHeight = 55
     var iconText : String
     var categoryName : String
-    var amountSpent = "$550"
+    //var amountSpent = "$550"
     var limitText = "/ $650"
     var percentage = 0.35
     var hue : Double = 0.35
     
-    var spendingCategory : SpendingCategory?
+   @ObservedObject var spendingCategory : SpendingCategory
     
     init(spendingCategory: SpendingCategory){
         self.spendingCategory = spendingCategory
@@ -29,26 +29,12 @@ struct BudgetBarView: View {
         
         let percentage = getPercentage(amount: amount, limit: limit)
         
-        self.percentage = percentage
         self.hue = getHue(percentage: percentage)
-        self.amountSpent = getAmountSpent(amount: amount)
         self.limitText = self.getLimitText(limit: limit)
         
         
     }
-    
-    init(iconText: String, categoryName: String, amountSpent: String, limitText: String, percentage: Double){
-        
-        self.iconText = iconText
-        self.categoryName = categoryName
-        self.amountSpent = amountSpent
-        self.limitText = limitText
-        self.percentage = percentage
-        
-        self.hue = getHue(percentage: percentage)
-        
-    }
-    
+
     func getAmountSpent(amount: Float) -> String{
         return "$" + String(Int(amount))
     }
@@ -59,8 +45,8 @@ struct BudgetBarView: View {
     
     func getPercentage(amount: Float, limit: Float) -> Double{
         
-        if limit == 0.0{
-            return 0.15
+        if (amount / limit) < 0.10 || limit == 0.0{
+            return 0.10
         }
         if amount / limit > 1.0{
             
@@ -76,13 +62,13 @@ struct BudgetBarView: View {
     
     func getHue(percentage: Double) -> Double{
         if self.spendingCategory == nil{
-            return Double(0.255)
+            return Double(0.321)
         }
         else if percentage < 0.75{
-            return Double(0.255)
+            return Double(0.321)
         }
         else if percentage < 1.0 && percentage > 0.7{
-            return Double(0.167)
+            return Double(0.321)
         }
         else{
             return Double(0.0)
@@ -95,14 +81,14 @@ struct BudgetBarView: View {
 
     
     var background: some View{
-        RoundedRectangle(cornerRadius: 20).frame(height: CGFloat(self.barHeight)).foregroundColor(Color(hue: hue, saturation: 0.05, brightness: 0.95))
+        RoundedRectangle(cornerRadius: 20).frame(height: CGFloat(self.barHeight)).foregroundColor(Color(.quaternarySystemFill))
 
     }
     
     var progressBar: some View{
         GeometryReader{ g in
             HStack{
-                RoundedRectangle(cornerRadius: 20).frame(width: CGFloat(g.size.width) * CGFloat(self.percentage), height: CGFloat(self.barHeight)).foregroundColor(Color(hue: self.hue, saturation: 0.35, brightness: 1.0))
+                RoundedRectangle(cornerRadius: 20).frame(width: CGFloat(g.size.width) * CGFloat(self.getPercentage(amount: self.spendingCategory.spent, limit: self.spendingCategory.limit)), height: CGFloat(self.barHeight)).foregroundColor(colorMap[Int(self.spendingCategory.colorCode)])
                 Spacer()
             }
             
@@ -111,28 +97,31 @@ struct BudgetBarView: View {
     
     var description: some View{
         HStack{
-            Text(self.iconText).font(.title)
+            Text(self.iconText).font(.system(size: 25)).shadow(radius: 2)
             Text(self.categoryName).font(.headline).padding(.leading, 5)
             Spacer()
-            Text(self.amountSpent).bold().font(.headline)
+            Text(getAmountSpent(amount: self.spendingCategory.getAmountSpent())).bold().font(.headline)
             Text(self.limitText).foregroundColor(Color(.lightGray)).font(.headline)
         }.padding(.horizontal, 15)
     }
     
     var body: some View {
-            ZStack(){
-                
-                background.shadow(radius: 2)
-                    
-                    progressBar
-                
-                
-                    description
-                    
-                
-                
-                }.padding(.horizontal, 3)
         
+            ZStack(){
+            
+            background
+                
+            progressBar.offset(x:2)
+            
+            
+                description
+                
+            
+            
+            }.padding(.horizontal, 3)
+        
+        
+            
         
     }
 }

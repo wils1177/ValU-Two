@@ -10,26 +10,28 @@ import SwiftUI
 
 struct IncomeGraphEntry: View {
     
-    var fixedWidth = CGFloat(18.0)
+    var fixedWidth = CGFloat(12.0)
     var incomeHeight = CGFloat(100.0)
     var expenseHeight = CGFloat(70.0)
-    var maxHeight = CGFloat(175)
-    var maxValue : CGFloat
+    var maxHeight : CGFloat
     var entryData : TransactionDateCache
-    var viewModel : CashFlowViewModel
+    @ObservedObject var viewModel : CashFlowViewModel
     
-    init(viewModel: CashFlowViewModel, entryData: TransactionDateCache, maxValue: CGFloat, maxHeight: CGFloat){
+    var scale : Int
+    
+    init(viewModel: CashFlowViewModel, entryData: TransactionDateCache, maxHeight: CGFloat, scale: Int){
         self.entryData = entryData
         self.viewModel = viewModel
         
-        self.maxValue = maxValue
-        self.maxHeight = maxHeight
+        self.maxHeight = maxHeight - 18
+        
+        self.scale = scale
         
     }
     
     func getActualIncomeHeight() -> CGFloat{
         
-        let ratio = CGFloat(self.entryData.income * -1) / maxValue
+        let ratio = CGFloat(self.entryData.income * -1) / CGFloat(scale * 4)
         
         return ratio * maxHeight
         
@@ -37,8 +39,7 @@ struct IncomeGraphEntry: View {
     
     func getActualExpensesHeight() -> CGFloat{
         
-        let ratio = CGFloat(self.entryData.expenses) / maxValue
-        
+        let ratio = CGFloat(self.entryData.expenses) / CGFloat(scale * 4)
         return ratio * maxHeight
         
     }
@@ -54,21 +55,30 @@ struct IncomeGraphEntry: View {
     
     var body: some View {
         
-        VStack{
-            
+        VStack(spacing: 0){
+            Spacer()
             Button(action: {
                 // What to perform
                 self.viewModel.changeSelectedTimeFrame(timeFrame: self.entryData)
             }) {
                 // How the button looks like
-                VStack{
-                    Spacer()
-                    HStack(alignment: .bottom, spacing: 0){
-                        Capsule().frame(width: fixedWidth, height: getActualIncomeHeight()).foregroundColor(Color(.systemGreen))
-                        Capsule().frame(width: fixedWidth, height: getActualExpensesHeight()).foregroundColor(Color(.systemRed))
+                ZStack(alignment: .bottom){
+                    VStack(spacing: 0){
+
+                        HStack(alignment: .bottom, spacing: 0){
+                            Capsule().frame(width: fixedWidth, height: getActualIncomeHeight()).foregroundColor(Color(.systemGreen))
+                            Capsule().frame(width: fixedWidth, height: getActualExpensesHeight()).foregroundColor(Color(.systemRed))
+                        }.padding(.top)
+                        Text(getLabel()).foregroundColor(Color(.lightGray))
+                        
+                        
                     }
-                    Text(getLabel()).foregroundColor(Color(.lightGray))
+                    if self.viewModel.isSelected(timeFrame: self.entryData){
+                        Capsule().frame(width: fixedWidth * 4.0, height: maxHeight  + 30).foregroundColor(Color(.tertiarySystemFill))
+                    }
+                    
                 }
+                
                 
             }
             

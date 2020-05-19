@@ -10,57 +10,55 @@ import SwiftUI
 
 struct BudgetBalanceCard: View {
     
-    var viewModel : BudgetBalancerPresentor
-    @ObservedObject var viewData : BalanceCategoryViewData
+    @ObservedObject var spendingCategory : SpendingCategory
+    @ObservedObject var service : BalanceParentService
+    var coordinator : SetSpendingLimitDelegate
     
+    init(service: BalanceParentService, spendingCategory: SpendingCategory, coordinator: SetSpendingLimitDelegate){
+        self.spendingCategory = spendingCategory
+        self.service = BalanceParentService(spendingCategory: spendingCategory)
+        self.coordinator = coordinator
+    }
     
-    
-    init(viewModel: BudgetBalancerPresentor, viewData: BalanceCategoryViewData){
-        self.viewModel = viewModel
-        self.viewData = viewData
+    var card : some View{
+        HStack{
+            VStack{
+                       
+                CategoryHeader(name: self.spendingCategory.name!, icon: self.spendingCategory.icon!).padding(.horizontal).padding(.top, 10)
+
+
+                       
+                       HStack{
+                        Text("$" + String(Int(self.service.getParentLimit()))).font(.system(size: 25)).bold().padding(.leading)
+                           Spacer()
+                       }.padding(.top, 10).padding(.bottom, 5).padding(.leading, 8)
+                       
+                       HStack{
+                           Text("You've Spent " + "$" + String(Int(self.spendingCategory.initialThirtyDaysSpent)) + " last month").font(.footnote).foregroundColor(Color(.lightGray))
+               
+                           Spacer()
+                       }.padding(.horizontal).padding(.bottom, 10).padding(.leading, 8)
+                       
+                       
+                   }
+            
+            Spacer()
+            VStack{
+                Image(systemName: "chevron.right").foregroundColor(Color(.lightGray)).font(Font.system(.headline).bold())
+            }.padding(.trailing, 20)
+            
+        }
+        
+        .background(Color(.white)).cornerRadius(15)
     }
     
     
     var body: some View {
-        VStack{
-            
-            HStack(){
-                Text(self.viewData.icon).font(.subheadline)
-                Text(self.viewData.name).font(.subheadline).foregroundColor(Color(.black))
-                Spacer()
-                Button(action: {
-                    self.viewModel.deleteCategory(name: self.viewData.name)
-                }){
-                    
-                    Image(systemName: "x.circle.fill").foregroundColor(Color(.gray))
-
-                }.buttonStyle(PlainButtonStyle())
-                
-                
-            }.padding(.horizontal).padding(.top)
-             
-            HStack{
-                CustomInputTextField(text: self.$viewData.limit, placeHolderText: "Amount", textSize: .systemFont(ofSize: 20), alignment: .left, delegate: self.viewModel, key: self.viewData.name).id(self.viewData.index)
-                //TextField("test", text: self.$viewData.limit)
-                
-                
-                Stepper("", onIncrement: {
-                    print("up")
-                    self.viewModel.incrementCategory(categoryName: self.viewData.name, incrementAmount: 10)
-                }, onDecrement: {
-                    print("down")
-                    self.viewModel.incrementCategory(categoryName: self.viewData.name, incrementAmount: -10)
-                }).id(self.viewData.index)
-                
- 
-            }.padding(.horizontal)
-            
-            HStack{
-                Text("You've Spent " + self.viewData.lastThirtyDaysSpent + " last month").font(.callout).foregroundColor(Color(.lightGray))
-                Spacer()
-            }.padding(.horizontal).padding(.bottom)
-            
-            
-            }.background(Color(.white)).cornerRadius(15).shadow(radius: 5)
+        
+        Button(action: {
+            self.coordinator.showCategoryDetail(category: self.spendingCategory, service: self.service)
+        }) {
+            self.card
+        }.buttonStyle(PlainButtonStyle())
     }
 }

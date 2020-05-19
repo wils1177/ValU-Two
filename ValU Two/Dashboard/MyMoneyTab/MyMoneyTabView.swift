@@ -7,17 +7,37 @@
 //
 
 import SwiftUI
+import SwiftUICharts
 
 struct MyMoneyTabView: View {
     
     var viewModel : MyMoneyViewModel
+    var coordinator : MoneyTabCoordinator?
     
     var body: some View {
-        List{
-            BalanceSummaryView().padding(.top)
-            SwiftUIAccountsView().padding(.top)
-            IncomeCardView(viewModel: self.viewModel.cashFlowViewModel).padding(.top)
-        }.navigationBarTitle("My Money")
+        
+        VStack{
+            
+            
+            List{
+                
+                HStack{
+                    Text("Summary").font(.system(size: 22)).bold()
+                    Spacer()
+                    
+                }.padding(.top, 10)
+                
+                BalanceSummaryView().padding(.horizontal, 5).padding(.top, 5)
+                
+                //CashFlowHighlightView().padding(.horizontal, 5).padding(.top, 5)
+                
+                SwiftUIAccountsView(coordinator: self.coordinator).padding(.top, 10)
+                
+            }
+ 
+        }
+        
+        .navigationBarTitle("My Money")
     }
 }
 

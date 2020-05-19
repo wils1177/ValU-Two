@@ -32,7 +32,7 @@ struct ConnectToBankView: View {
                         Text("Sure, dude!").font(.subheadline).foregroundColor(.white).bold().padding()
                     }
                     Spacer()
-                }.background(LinearGradient(gradient:  Gradient(colors: [.black, .black]), startPoint: .topTrailing, endPoint: .center)).cornerRadius(30).shadow(radius: 10).padding()
+                }.background(AppTheme().themeColorPrimary).cornerRadius(10).shadow(radius: 10).padding().padding(.horizontal).padding(.bottom)
                 
                 
             }

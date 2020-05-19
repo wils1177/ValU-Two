@@ -14,9 +14,8 @@ struct TransactionRow: View {
     var transactionService : TransactionService
     
     
-    var transaction : Transaction
+    @ObservedObject var transaction : Transaction
     var presentationDate: String?
-    var presentationAmount : String?
     var icons : [String]
     var categoryName : String
     
@@ -31,7 +30,8 @@ struct TransactionRow: View {
         self.icons = transactionService.getIcons(categories: transaction.categoryMatches?.allObjects as! [CategoryMatch])
         
         self.presentationDate = getPresentationDate(date: transaction.date!)
-        self.presentationAmount = getPresentationAmount(amount: transaction.amount)
+        
+        
         
     }
     
@@ -41,9 +41,7 @@ struct TransactionRow: View {
         return  df.string(from: date)
     }
     
-    func getPresentationAmount(amount : Double) -> String{
-        return String(format: "$%.02f", amount)
-    }
+
     
     var body: some View {
         
@@ -67,11 +65,11 @@ struct TransactionRow: View {
 
                     VStack{
                         HStack{
-                            Text(transaction.name!).font(.headline).bold().lineLimit(1)
+                            Text(transaction.name ?? "missing" ).font(.headline).bold().lineLimit(1)
                             Spacer()
                         }
                         HStack{
-                            Text(self.categoryName).font(.subheadline)
+                            Text(self.categoryName).font(.subheadline).foregroundColor(Color(.lightGray))
                             Spacer()
                         }
                         
@@ -79,21 +77,21 @@ struct TransactionRow: View {
                     
                     
                     Spacer()
-                    VStack{
+                    VStack(alignment: .trailing){
                         HStack{
                             Spacer()
-                            Text(self.presentationAmount!).font(.headline).bold().lineLimit(1)
+                            Text(self.transactionService.getAmount()).font(.headline).bold().lineLimit(1).fixedSize(horizontal: true, vertical: false)
                             
                         }
                         HStack{
                             Spacer()
-                            Text(self.presentationDate!).font(.subheadline).lineLimit(1)
+                            Text(self.presentationDate ?? "Missing" ).font(.subheadline).lineLimit(1).foregroundColor(Color(.lightGray))
                             
                         }
                         
                     }.frame(maxWidth: 70)
 
-                }.padding().background(Color(.white)).cornerRadius(10).shadow(radius: 5).padding(3)
+                }.padding().background(Color(.white)).cornerRadius(10).shadow(radius: 0).padding(1)
             }.buttonStyle(PlainButtonStyle())
              
         }

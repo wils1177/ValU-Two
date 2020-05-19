@@ -19,11 +19,11 @@ struct WelcomeView: View {
            Spacer()
             
             Text("Welcome to").font(.largeTitle).bold()
-            Text("Budget App 69 ").font(.largeTitle).bold().foregroundColor(Color(.systemGreen)).padding(.bottom)
+            Text("Budget App 69 ").font(.largeTitle).bold().foregroundColor(AppTheme().themeColorPrimary).padding(.bottom).padding(.bottom)
             
-            MarketingRow(imageName: "creditcard", headline: "Budget", description: "Set goals and track your spending over time.").padding(.horizontal).padding(.leading)
-            MarketingRow(imageName: "arrow.clockwise.circle", headline: "Automated", description: "Connect to your bank and never worry about manually entering your spending.").padding(.horizontal).padding(.leading)
-            MarketingRow(imageName: "lock.circle", headline: "Private", description: "Budget App 69 does not store or access your financial information. Everything stays on your device.").padding(.horizontal).padding(.leading)
+            MarketingRow(imageName: "creditcard", headline: "Budget", description: "Set goals and track your spending over time.").padding(.horizontal).padding(.leading).padding(.bottom, 10)
+            MarketingRow(imageName: "arrow.clockwise.circle", headline: "Automated", description: "Connect to your bank and never worry about manually entering your spending.").padding(.horizontal).padding(.leading).padding(.bottom, 10)
+            MarketingRow(imageName: "lock.circle", headline: "Private", description: "Your financial date stays on your device").padding(.horizontal).padding(.leading).padding(.bottom, 10)
 
 
             Spacer()
@@ -37,7 +37,7 @@ struct WelcomeView: View {
                         Text("Get Started").font(.subheadline).foregroundColor(Color(.systemBackground)).bold().padding()
                     }
                     Spacer()
-                }.background(LinearGradient(gradient:  Gradient(colors: [.yellow, .green]), startPoint: .topTrailing, endPoint: .center)).cornerRadius(30).shadow(radius: 10).padding()
+                }.background(AppTheme().themeColorPrimary).cornerRadius(10).shadow(radius: 10).padding().padding(.horizontal).padding(.bottom)
                 
                 
             }

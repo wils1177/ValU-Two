@@ -29,19 +29,15 @@ class CategoryPickerPresentor {
     
     func generateViewData(){
         let budgetCards = BudgetCardsPresentor(budget: self.budget)
-        budgetCards.generateViewData()
         budgetCards.delegate = self
         
         let suggestedCard = SuggestedCategoryPresentor(budget: self.budget)
-        suggestedCard.generateViewData()
         suggestedCard.delegate = self
         
         self.viewData = CategoryPickerViewData(budgetCategoriesPresentor: budgetCards, suggestedCategoryPresentor: suggestedCard)
     }
     
     func submit(){
-        self.delegate!.generateViewData()
-        self.generateViewData()
     }
     
     

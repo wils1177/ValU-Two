@@ -10,45 +10,40 @@ import SwiftUI
 
 struct BudgetSection: View {
     
-    var spendingCategory : SpendingCategory
+    @ObservedObject var spendingCategory : SpendingCategory
     var title: String
-    var children : [SpendingCategory]
     var viewModel : SpendingCardViewModel
+    
+    var children : [SpendingCategory]
     
     init(spendingCategory: SpendingCategory, viewModel: SpendingCardViewModel){
         self.spendingCategory = spendingCategory
         self.viewModel = viewModel
         self.title = spendingCategory.name!
-        self.children = spendingCategory.subSpendingCategories?.allObjects as! [SpendingCategory]
+        self.children = spendingCategory.getSelectedChildren()
     }
     
         var body: some View {
             VStack(spacing: 0.0){
                 
                 HStack{
-                    Text(self.title).font(.headline).foregroundColor(.gray)
+                    Text(self.title).font(.headline).foregroundColor(Color(.gray)).bold()
                     Spacer()
                 }.padding(.bottom, 15)
                 
-                    ForEach(self.children, id: \.self) { child in
-                        VStack(){
-                            if child.selected{
+                
+                ForEach(self.spendingCategory.getSelectedChildren(), id: \.self) { child in
                                 Button(action: {
                                     self.viewModel.coordinator?.showCategory(categoryName: child.name!)
                                 }) {
-                                    //BudgetBarView(spendingCategory: child).padding(.bottom, 15)
-                                    TempBudgetBar(spendingCategory: child).padding(.bottom, 20)
+                                    BudgetBarView(spendingCategory: child).padding(.bottom, 15)
+                                    //TempBudgetBar(spendingCategory: child).padding(.bottom, 20)
                                 }.buttonStyle(PlainButtonStyle())
                                 
-                            }
-                        
-                        }
+      
                 }
-                
-                
-                    
-                    
-        }
+         
+            }
                 
     }
             

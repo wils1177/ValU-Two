@@ -40,7 +40,7 @@ public class SpendingCategory: NSManagedObject, NSCopying {
         self.spent = 0.0
         self.initialThirtyDaysSpent = 0.0
         self.selected = false
-        self.colorCode = 0
+        self.colorCode = Int32(categoryEntry.colorCode!)
         
         
     }
@@ -53,33 +53,48 @@ public class SpendingCategory: NSManagedObject, NSCopying {
     }
     
     func getAmountSpent() -> Float{
-        reCalculateAmountSpent()
-        return self.spent
+        return calculateAmountSpent()
     }
     
-    func reCalculateAmountSpent(){
-        self.spent = 0.0
+    func calculateAmountSpent() -> Float{
+        var newSpent = Float(0.0)
         for transactionMatch in self.transactionMatches?.allObjects as! [CategoryMatch]{
             
             if CommonUtils.isWithinBudget(transaction: transactionMatch.transaction!, budget: self.budget!){
                 if transactionMatch.amount > 0{
-                    self.spent  = self.spent +  Float(transactionMatch.amount)
+                    newSpent  = newSpent +  transactionMatch.amount
                 }  
                 
             }
             
         }
+        
+        return newSpent
+        
+        
     }
     
     func isAnyChildSelected() -> Bool {
         var oneChildSelected = false
         for child in self.subSpendingCategories?.allObjects as! [SpendingCategory]{
-            if child.selected{
+            if child.limit > 0{
                 oneChildSelected = true
             }
         }
         
         return oneChildSelected
+    }
+    
+    func getSelectedChildren() -> [SpendingCategory] {
+        let allChildren = self.subSpendingCategories?.allObjects as! [SpendingCategory]
+        var selected = [SpendingCategory]()
+        for child in allChildren{
+            if child.selected{
+                selected.append(child)
+            }
+        }
+        
+        return selected
     }
 
     

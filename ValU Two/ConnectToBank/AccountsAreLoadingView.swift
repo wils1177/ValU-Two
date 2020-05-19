@@ -29,9 +29,9 @@ struct AccountsAreLoadingView: View {
                 .onAppear(){
                     self.animate.toggle()
                     self.presentor?.viewWillLoad()
-            }
+            }.foregroundColor(AppTheme().themeColorPrimary)
                 .padding()
-            Text("Loading Accounts...")
+            Text("Loading Accounts...").bold()
             
             
             Button(action: {

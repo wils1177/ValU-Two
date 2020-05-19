@@ -64,16 +64,17 @@ class TransactionProccessor: BudgetDateFindable{
             matchToTimeFrame(transaction: transaction)
             
             // First, we will see if there any matches based on existign rules
-            //var matches = checkForRuleMatches(transaction: transaction, spendingCategories: spendingCategories)
-            var matches = [CategoryMatch]()
+            var spendingCategoryMatches = checkForRuleMatches(transaction: transaction, spendingCategories: spendingCategories)
+            //var matches = [CategoryMatch]()
             
             // If there are no matches from existing rules, match on default logic 
-            if matches.count == 0{
+            if spendingCategoryMatches.count == 0{
 
-                let spendingCategoryMatches = matchTransactionToSpendingCategory(transaction: transaction, spendingCategories: spendingCategories)
-                
-                matches = createCategoryMatches(transaction: transaction, spendingCategories: spendingCategoryMatches)
+                spendingCategoryMatches = matchTransactionToSpendingCategory(transaction: transaction, spendingCategories: spendingCategories)
             }
+            
+            //Turn the spending category matches into category match objects
+            let matches = createCategoryMatches(transaction: transaction, spendingCategories: spendingCategoryMatches)
             
             for match in matches{
                 
@@ -101,6 +102,7 @@ class TransactionProccessor: BudgetDateFindable{
         
     }
     
+    //Get's any matches from existing transaction rules
     func checkForRuleMatches(transaction: Transaction, spendingCategories: [SpendingCategory]) -> [SpendingCategory]{
         
         var matches = [SpendingCategory]()
@@ -172,9 +174,19 @@ class TransactionProccessor: BudgetDateFindable{
     func createCategoryMatches(transaction: Transaction, spendingCategories: [SpendingCategory]) -> [CategoryMatch]{
         var matches = [CategoryMatch]()
         
+        var count = 0
         for spendingCategory in spendingCategories{
-            let categoryMatch = dataManager.createCategoryMatch(transaction: transaction, category: spendingCategory, amount: Float(transaction.amount))
-            matches.append(categoryMatch)
+            if count == 0{
+                let categoryMatch = dataManager.createCategoryMatch(transaction: transaction, category: spendingCategory, amount: Float(transaction.amount))
+                matches.append(categoryMatch)
+            }
+            else{
+                let categoryMatch = dataManager.createCategoryMatch(transaction: transaction, category: spendingCategory, amount: Float(0.0))
+                matches.append(categoryMatch)
+            }
+            
+            
+            count = count + 1
         }
         
         return matches

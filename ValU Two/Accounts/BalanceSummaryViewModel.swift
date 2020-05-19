@@ -23,7 +23,13 @@ class BalanceSummaryViewModel {
     func getBalanceTotal() -> Double{
         var total = 0.0
         for account in self.accounts{
-            total = total + account.balances!.available
+            if account.type == "credit"{
+                total = total - account.balances!.current
+            }
+            else{
+                total = total + account.balances!.available
+            }
+            
         }
         return total
     }

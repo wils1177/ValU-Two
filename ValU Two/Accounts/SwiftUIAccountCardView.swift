@@ -16,22 +16,39 @@ struct SwiftUIAccountCardView: View {
         self.account = account
     }
     
+    func getBalance() -> String{
+        if account.type == "credit"{
+            return String(Int(account.balances!.current))
+        }
+        else{
+            return String(Int(account.balances!.available))
+        }
+    }
+    
     var body: some View {
-        VStack(alignment: .leading){
-            Text(account.name!).font(.title).bold()
-            Spacer().frame(width: 300, height: 110)
-
-            Divider()
-            HStack{
-                Text("$" + String(account.balances!.current)).font(.largeTitle)
+        HStack{
+            VStack(alignment: .leading){
+                HStack{
+                    Text(account.name!).font(.title).foregroundColor(.white).bold()
+                    Spacer()
+                    Image(systemName: "creditcard.fill").foregroundColor(Color(.white)).font(.system(size: 25))
+                }
+                
+                Spacer()
+                
+                //Divider().foregroundColor(Color(.white))
+                HStack{
+                    Text("$" + getBalance()).font(.title).bold().foregroundColor(.white)
+                }
+                HStack{
+                    Text("XXXX" + (account.mask ?? "XXXX")).font(.headline).foregroundColor(Color(.lightText))
+                   Spacer().frame(width: 60)
+                }
+                
+                
             }
-            HStack{
-                Text("XXXX" + (account.mask ?? "XXXX")).font(.headline)
-               Spacer().frame(width: 60)
-            }
-            
-            
-        }.padding().background(LinearGradient(gradient:  Gradient(colors: [.purple, .orange]), startPoint: .topTrailing, endPoint: .center))
+            Spacer()
+        }.frame(width: 280, height: 170).padding().background(LinearGradient(gradient:  Gradient(colors: [AppTheme().themeColorSecondary, AppTheme().themeColorPrimary]), startPoint: .topTrailing, endPoint: .center))
             .cornerRadius(20).shadow(radius: 5)
     }
 }

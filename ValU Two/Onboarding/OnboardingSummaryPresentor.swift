@@ -41,10 +41,10 @@ class OnboardingSummaryPresentor : Presentor, NewBudgetModel, ObservableObject{
         
         self.currentStep = self.getCurrentStep()
         
-        let connectBankStep = generateStep(currentStep: self.currentStep, title: "Connect to your bank", description: "A breif description", stage: 1)
-        let enterIncomeStep = generateStep(currentStep: self.currentStep, title: "Confirm your income", description: "A breif description", stage: 2)
-        let savingsStep = generateStep(currentStep: self.currentStep, title: "Set a savings goal", description: "A breif description", stage: 3)
-        let balanceStep = generateStep(currentStep: self.currentStep, title: "Create your budget", description: "A breif description", stage: 4)
+        let connectBankStep = generateStep(currentStep: self.currentStep, title: "Connect to your bank", description: "Setup an automated connection", stage: 1)
+        let enterIncomeStep = generateStep(currentStep: self.currentStep, title: "Confirm your income", description: "Set your income for your budget", stage: 2)
+        let savingsStep = generateStep(currentStep: self.currentStep, title: "Set a savings goal", description: "Decide how much you want to save", stage: 3)
+        let balanceStep = generateStep(currentStep: self.currentStep, title: "Create your budget", description: "Make your budgets!", stage: 4)
         
         let steps = [connectBankStep, enterIncomeStep, savingsStep, balanceStep]
         
@@ -109,8 +109,9 @@ extension NewBudgetModel{
         let description = description
         let stageString = String(stage)
         let iconName = getIconName(stage: stageString, completed: completed)
-        let iconColor = getIconColor(completed: completed)
+        let iconColor = getIconColor(selectable: selectable)
         let backgroundColor = getBackgroundColor(selectable: selectable)
+        let subTextColor = getSubTextColor(selectable: selectable)
         var action : (()->Void)?
         if selectable{
             action = getAction(stage: stage)
@@ -119,7 +120,7 @@ extension NewBudgetModel{
             action = nil
         }
         
-        return OnboardingStepViewData(title: title, description: description, iconName: iconName, iconColor: iconColor, backgroundColor: backgroundColor, completionHandler: action)
+        return OnboardingStepViewData(title: title, description: description, iconName: iconName, iconColor: iconColor, backgroundColor: backgroundColor, subTectColor: subTextColor, completionHandler: action)
         
     }
     
@@ -163,23 +164,32 @@ extension NewBudgetModel{
     
     
     
-    func getIconColor(completed: Bool) -> Color{
+    func getIconColor(selectable: Bool) -> Color{
         
-        if completed{
-            return Color.green
+        if selectable{
+            return AppTheme().themeColorPrimary
         }
         else{
-            return Color.white
+            return Color(.lightGray)
         }
         
     }
     
     func getBackgroundColor(selectable: Bool) -> Color{
         if selectable{
-            return Color.black
+            return Color(.black)
         }
         else{
-            return Color.gray
+            return Color(.lightGray)
+        }
+    }
+    
+    func getSubTextColor(selectable: Bool) -> Color{
+        if selectable{
+            return Color(.gray)
+        }
+        else{
+            return Color(.lightGray)
         }
     }
     

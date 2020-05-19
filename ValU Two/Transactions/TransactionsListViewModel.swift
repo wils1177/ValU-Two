@@ -11,22 +11,12 @@ import CoreData
 import UIKit
 import SwiftUI
 
-struct TransactionViewData: Hashable {
-    var name : String = ""
-    var amount : String = ""
-    var category : String = ""
-    var date : String = ""
-    var icons : [String] = ["🍩"]
-    var rawTransaction: Transaction
-    var idx : Int
-    
-}
+
 
 class TransactionsListViewModel: ObservableObject, Presentor{
     
     @Published var transactions = [Transaction]()
     let dataManager = DataManager()
-    @Published var viewData = [TransactionViewData]()
     var title : String?
     var budget : Budget
     var coordinator: TransactionRowDelegate?
@@ -37,7 +27,6 @@ class TransactionsListViewModel: ObservableObject, Presentor{
         fetchTransactionsForBudget()
         
         
-        NotificationCenter.default.addObserver(self, selector: #selector(update(_:)), name: .modelUpdate, object: nil)
         
     }
     
@@ -51,16 +40,19 @@ class TransactionsListViewModel: ObservableObject, Presentor{
             fetchOtherTransactions()
         }
         
-        NotificationCenter.default.addObserver(self, selector: #selector(update(_:)), name: .modelUpdate, object: nil)
     }
     
     init(budget: Budget, predicate: NSPredicate, title: String = ""){
         self.title = title
         self.budget = budget
         fetchTransactions(predicate: predicate)
-        NotificationCenter.default.addObserver(self, selector: #selector(update(_:)), name: .modelUpdate, object: nil)
-        
-        
+
+    }
+    
+    init(budget: Budget, transactions: [Transaction], title : String){
+        self.budget = budget
+        self.transactions = transactions
+        self.title = title
     }
     
     func configure() -> UIViewController {
@@ -83,7 +75,9 @@ class TransactionsListViewModel: ObservableObject, Presentor{
             }
         }
         
-        self.transactions = otherTransactions
+        
+        
+        self.transactions = Array(Set(otherTransactions))
         
     }
     
@@ -96,6 +90,7 @@ class TransactionsListViewModel: ObservableObject, Presentor{
             self.transactions = [Transaction]()
             
         }
+        self.transactions = self.transactions.sorted(by: {$0.date!.compare($1.date!) == .orderedDescending})
         //print(self.transactions)
     }
     
@@ -119,10 +114,7 @@ class TransactionsListViewModel: ObservableObject, Presentor{
     
     
     
-    @objc func update(_ notification:Notification){
-        self.viewData.removeAll()
-        
-    }
+
     
     
     func fetchTransactionsForBudget(){

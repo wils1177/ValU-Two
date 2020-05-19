@@ -17,10 +17,10 @@ struct MarketingRow: View {
     var body: some View {
         HStack{
             
-            Image(systemName: self.imageName).font(.system(size: 27)).foregroundColor(Color(.systemGreen)).padding(.trailing)
+            Image(systemName: self.imageName).font(.system(size: 30)).foregroundColor(AppTheme().themeColorPrimary).padding(.trailing)
             VStack(alignment: .leading){
                 
-                Text(self.headline).font(.headline).padding(.bottom, 3)
+                Text(self.headline).font(.headline).padding(.bottom, 5)
                 Text(self.description).font(.callout).foregroundColor(Color(.lightGray))
             }
             Spacer()

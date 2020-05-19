@@ -8,15 +8,14 @@
 
 import SwiftUI
 
-struct CategoryCardView<Model>: HasButtonRows, View where Model: CategoryListViewModel {
-    var buttonArray = [[CategoryButton]]()
+struct CategoryCardView<Model>: View where Model: CategoryListViewModel {
     
-    var viewData : BudgetCategoryViewData
     var presentor : Model?
     
-    init(presentor: Model?, viewData: BudgetCategoryViewData){
-        self.viewData = viewData
-        self.buttonArray = generateButtonArray(buttonList: self.viewData.categories)
+    var category : SpendingCategory
+    
+    init(presentor: Model?, category: SpendingCategory){
+        self.category = category
         self.presentor = presentor
     }
     
@@ -30,73 +29,36 @@ struct CategoryCardView<Model>: HasButtonRows, View where Model: CategoryListVie
           
           HStack{
             
-            Text(self.viewData.icon).font(.largeTitle)
-            Text(self.viewData.sectionTitle).font(.title).fontWeight(.bold)
+            Text(self.category.icon!).font(.largeTitle)
+            Text(self.category.name!).font(.title).fontWeight(.bold)
             Spacer()
             //CategoryButtonView(text: "Add Section")
-            }
+            }.padding()
             
-                HStack{
-                    Text("You've spent " + self.viewData.amountSpent + " in the last 30 days")
-                    Spacer()
-                }
-                
-                
-            
+
           
-          }.padding()
+          }
             
-            
-            
-            ForEach(self.buttonArray, id: \.self){ row in
+ 
+            ForEach(self.category.subSpendingCategories?.allObjects as! [SpendingCategory], id: \.self){subCategory in
+                    
+                    CategoryButtonView(category: subCategory)
+                    
                 
-                HStack {
-                    
-                ForEach(row, id: \.self){button in
-                    
-                    CategoryButtonView(presentor: self.presentor!, button: button)
-                    
-                }
                     
                     
-                }.padding(10)
+            }
                                 
-            }
+            
           
         
           
 
-          }.background(Color(.white)).cornerRadius(10).shadow(radius: 10).padding()
+          }.background(Color(.white)).cornerRadius(10).padding()
     }
 }
 
-extension HasButtonRows{
-    func generateButtonArray(buttonList: [CategoryButton]) -> [[CategoryButton]]{
-            
-        var charCount = 1
-        var all = [[CategoryButton]]()
-        var row = [CategoryButton]()
-        for category in buttonList {
-            
-            charCount = charCount + category.name.count
-            
-            if charCount >= 34{
-                all.append(row)
-                row = [CategoryButton]()
-                charCount = category.name.count
-            }
-            
-            
-            row.append(category)
-            
-            
-        }
-        
-        all.append(row)
-        return all
-        
-    }
-}
+
 
 
 

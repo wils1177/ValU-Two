@@ -15,44 +15,62 @@ struct TransactionDetailView: View {
     
     @ObservedObject var viewModel : TransactionDetailViewModel
     @ObservedObject var transaction : Transaction
+    var account : AccountData?
     
     
-    init(viewModel: TransactionDetailViewModel, transaction: Transaction){
+    init(viewModel: TransactionDetailViewModel, transaction: Transaction, account: AccountData?){
         self.viewModel = viewModel
         self.transaction = transaction
-
+        self.account = account
+        
+        
+    }
+    
+    func dateToString(date: Date) -> String{
+        let formatter1 = DateFormatter()
+        formatter1.dateStyle = .short
+        return formatter1.string(from: date)
     }
     
     var headerTitle : some View{
-        VStack{
-            HStack{
-                Text(self.viewModel.viewData!.name).font(.title).bold()
+        VStack(alignment: .center){
+            
+            TransactionIconView(icons: viewModel.getIcons(categories: self.transaction.categoryMatches?.allObjects as! [CategoryMatch])).padding().padding(.horizontal).scaleEffect(2).padding(.top, 10)
+            
+            HStack(){
                 Spacer()
-            }.padding(.horizontal).padding(.top)
-                       
-                       
-                       
-                       
-            HStack{
-                Text(viewModel.viewData!.accountName)
+                Text(transaction.name!).font(.title).bold().multilineTextAlignment(.center)
                 Spacer()
             }.padding(.horizontal)
                        
+                       
+                       
+                       
             HStack{
-                Text(viewModel.viewData!.date)
+                Spacer()
+                Text((self.account?.name ?? "No Account") + " - " + dateToString(date: self.transaction.date!)).font(.subheadline).foregroundColor(Color(.gray))
                 Spacer()
             }.padding(.horizontal)
+            
+            /*
+            HStack{
+                Spacer()
+                Text(dateToString(date: self.transaction.date!)).font(.callout).foregroundColor(Color(.gray))
+                Spacer()
+            }.padding(.horizontal)
+            */
         }
     }
     
     var amountSection : some View{
         VStack{
             HStack{
-                Text("Original Amount").font(.headline).bold()
+                Text("Original Amount")
                 Spacer()
-                Text(self.viewModel.viewData!.amount).font(.headline)
+                Text(CommonUtils.makeMoneyString(number: self.transaction.amount))
+
             }
-        }.padding().background(Color(.white)).cornerRadius(10).shadow(radius: 1)
+        }
     }
     
     var rawCategories: some View{
@@ -65,33 +83,80 @@ struct TransactionDetailView: View {
         VStack{
             HStack{
                 Toggle(isOn: self.$viewModel.isHidden) {
-                    Text("Hide from Budget").font(.headline).bold()
+                    Text("Hide from Budget")
                         Spacer()
-                }.onTapGesture {
-                  // Any actions here.
-                    print("Status Changed")
-                    self.viewModel.toggleHidden()
                 }
+                //.onTapGesture {
+                  // Any actions here.
+                //    print("Status Changed")
+                //    self.viewModel.toggleHidden()
+                //}
             }
-        }.padding().background(Color(.white)).cornerRadius(10).shadow(radius: 1)
+        }
+    }
+    
+    var actionSection : some View{
+        HStack{
+            
+            Button(action: {
+                //Button Action
+                self.viewModel.coordinator?.showEditCategory(transaction: self.viewModel.transaction)
+                }){
+                HStack{
+                    Spacer()
+                   VStack(alignment: .center){
+                    Image(systemName: "ellipsis.circle.fill").imageScale(.large).foregroundColor(Color(.systemBlue)).padding(.top, 10)
+                    Text("Edit Category").foregroundColor(Color(.systemBlue)).font(.caption).padding(.bottom, 5)
+                    }
+                    Spacer()
+                }.padding(.horizontal).padding(.vertical, 5).background(Color(.white)).cornerRadius(10).padding(.leading).padding(.trailing, 5)
+
+            }
+            
+            Spacer()
+            
+            Button(action: {
+                //Button Action
+                self.viewModel.coordinator?.showSplitTransaction(transaction: self.viewModel.transaction)
+                }){
+                HStack{
+                    Spacer()
+                       VStack(alignment: .center){
+                            Image(systemName: "divide.circle.fill").imageScale(.large).foregroundColor(Color(.systemBlue)).padding(.top, 10)
+                        Text("Split").foregroundColor(Color(.systemBlue)).font(.caption).padding(.bottom, 5)
+                        }
+                    Spacer()
+                }.padding(.horizontal).padding(.vertical, 5).background(Color(.white)).cornerRadius(10).padding(.trailing).padding(.leading, 5)
+
+            }
+            
+            
+            
+                
+            
+            
+        }.padding(5)
+        
+        
+        
     }
     
 
     
     var categorySection : some View{
-        VStack{
+        VStack(spacing: 0){
             ForEach(self.transaction.categoryMatches!.allObjects as! [CategoryMatch], id: \.self) { category in
-                VStack{
+                VStack(spacing: 0){
                     CategoryAmountRowView(viewData: category, viewModel: self.viewModel)
                     
                     if category.id != (self.transaction.categoryMatches?.allObjects as! [CategoryMatch]).last!.id{
-                        Divider()
+                        Divider().padding(.leading).padding(.leading).padding(.vertical, 8)
                     }
                     
                 }
                 
             }
-        }.padding().background(Color(.white)).cornerRadius(10).shadow(radius: 1)
+        }.padding(12).background(Color(.white)).cornerRadius(10)
     }
 
     
@@ -100,82 +165,44 @@ struct TransactionDetailView: View {
         ScrollView{
             VStack{
                 
-            HStack{
-                self.headerTitle
-                Spacer()
-                TransactionIconView(icons: viewModel.viewData!.icons).padding().padding().padding(.horizontal).scaleEffect(2)
-            }.padding(.top)
-            
-            Divider().padding(.horizontal)
-                self.amountSection.padding()
-            
+            self.headerTitle
+                
+            //Divider().padding(.horizontal)
+                
+                actionSection.padding(.top, 10)
+                
+                
+                HStack{
+                    Text("GENERAL").font(.caption).foregroundColor(Color(.gray))
+                    Spacer()
+                }.padding(.horizontal).padding(.top).padding(.horizontal).padding(.bottom, 5)
+                
+                VStack(){
+                    self.amountSection.padding(.horizontal).padding(.top, 12)
+                    Divider().padding(.leading, 20)
+                    self.settingsSection.padding(.horizontal).padding(.bottom, 12)
+                    }.background(Color(.white)).cornerRadius(10).padding(.horizontal).padding(.bottom)
+                
                 
             
                 if (self.transaction.categoryMatches?.allObjects as! [CategoryMatch]).count > 0{
                 
                 HStack{
-                    Text("Categories").font(.headline).bold()
+                    Text("CATEGORIES").font(.caption).foregroundColor(Color(.gray))
                     Spacer()
-                }.padding(.horizontal)
+                }.padding(.horizontal).padding(.horizontal)
                 
-                self.categorySection.padding(.horizontal)
+                self.categorySection.padding(.horizontal).padding(.bottom, 30)
             }
-                
-            self.settingsSection.padding()
-            
-            HStack{
-                
-                Button(action: {
-                    //Button Action
-                    self.viewModel.coordinator?.showEditCategory(transaction: self.viewModel.transaction)
-                    }){
-                    HStack{
-                        Spacer()
-                        ZStack{
-                            Text("Change Categories").font(.subheadline).foregroundColor(.white).bold().padding()
-                        }
-                        Spacer()
-                    }.background(Color(.systemTeal)).cornerRadius(20).shadow(radius: 10).padding()
-                    
-                    
-                }
-                
-                
-                
-            }
-                
-            HStack{
-                
-                Button(action: {
-                    //Button Action
-                    }){
-                    HStack{
-                        Spacer()
-                        ZStack{
-                            Text("Someone Paid Me Back").font(.subheadline).foregroundColor(.black).bold().padding()
-                        }
-                        Spacer()
-                    }.background(Color(.white)).cornerRadius(20).shadow(radius: 10).padding(.horizontal)
-                    
-                    
-                }
-                
-                
-                
-            }
-                
-                
-            
+         
             Spacer()
         }
         
         
-        }
+        }.background(Color(.systemGroupedBackground))
         
     }
 }
-
-
 
 
 

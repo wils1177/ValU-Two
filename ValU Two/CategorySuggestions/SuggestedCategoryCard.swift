@@ -36,9 +36,9 @@ struct SuggestedCategoryCard: View {
                 Text("Spent Last Month").font(.headline).foregroundColor(Color(.gray))
             }.padding(.leading).padding(.trailing).padding(.top)
             
-            List(self.viewModel.viewData, id: \.self){ category in
+            List(self.viewModel.spendingCategories, id: \.self){ category in
     
-                SuggestionEntryView(viewModel: self.viewModel, viewData: category).padding(.leading).padding(.trailing)
+                SuggestionEntryView(viewModel: self.viewModel, category: category).padding(.leading).padding(.trailing)
             }
 
             

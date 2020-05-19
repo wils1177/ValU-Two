@@ -11,9 +11,11 @@ import SwiftUI
 struct SwiftUIAccountsView: View {
         
     var accounts : [AccountData]
+    var coordinator: MoneyTabCoordinator?
     
-    init(){
+    init(coordinator: MoneyTabCoordinator?){
         accounts = AccountsViewModel().accounts
+        self.coordinator = coordinator
     }
     
     init(accounts: [AccountData]){
@@ -21,28 +23,34 @@ struct SwiftUIAccountsView: View {
     }
     
     var body: some View {
-        VStack{
+        VStack(spacing: 5){
             HStack{
-                Text("Your Accounts").font(.title).padding()
+                Text("Accounts").font(.system(size: 22)).bold().bold()
                 Spacer()
                 
             }
             
-            
-            
-        
-            // statuses
-            ScrollView(.horizontal, content: {
-                
-                HStack(spacing: 0) {
-                    ForEach(self.accounts, id: \.self){ account in
-                        
-                        SwiftUIAccountCardView(account: account).padding()
+                VStack(spacing: 5) {
+                        ForEach(self.accounts, id: \.self){ account in
+                            
 
+                            Button(action: {
+                                // What to perform
+                                self.coordinator?.showAccountDetail(account: account)
+                            }) {
+                                // How the button looks like
+                                SwiftUIAccountCardView(account: account).padding()
+                            }.buttonStyle(PlainButtonStyle())
                         
-                    }
+                            
+                            
+
+                            
+                        }
                 }
-            })
+            
+            
+
             
             
             
@@ -53,8 +61,4 @@ struct SwiftUIAccountsView: View {
     }
 }
 
-struct SwiftUIAccountsView_Previews: PreviewProvider {
-    static var previews: some View {
-        SwiftUIAccountsView()
-    }
-}
+

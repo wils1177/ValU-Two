@@ -14,23 +14,26 @@ struct BalanceSummaryView: View {
     var balanceTotal : String
     
     init(){
-        self.balanceTotal = "$" + String(Int(self.viewModel.totalAccountBalance))
+        self.balanceTotal = CommonUtils.makeMoneyString(number: Int(self.viewModel.totalAccountBalance))
     }
     
     var body: some View {
-        VStack{
-            HStack{
-                Text("Balance").font(.headline).bold()
-                Spacer()
+        HStack{
+            //Spacer()
+            
+            
+            VStack(alignment: .leading, spacing: 0){
+                
+                HStack{
+                    Image(systemName: "creditcard.fill").foregroundColor(Color(.lightGray))
+                    Text("Available Balance").font(.headline).bold().foregroundColor(Color(.lightGray))
+                }
+                
+                Text(balanceTotal).font(.system(size: 43)).bold().padding(.top, 10)
+                
             }
             Spacer()
-            HStack{
-                Spacer()
-                Text(self.balanceTotal).font(.system(size: 40)).bold()
-                Spacer()
-            }
-            Spacer()
-        }.frame(height: 120).padding().background(Color(.white)).cornerRadius(10).shadow(radius: 3)
+        }.padding().background(Color(.white)).cornerRadius(15)
     }
 }
 

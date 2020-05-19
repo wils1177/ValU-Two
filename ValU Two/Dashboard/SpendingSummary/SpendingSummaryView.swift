@@ -13,6 +13,8 @@ struct SpendingSummaryView: View {
     
     @ObservedObject var viewModel : SpendingSummaryViewModel
     
+    @State var showMore = false
+    
     init(){
         self.viewModel = SpendingSummaryViewModel()
         
@@ -28,7 +30,7 @@ struct SpendingSummaryView: View {
         
         VStack{
         
-        VStack{
+            VStack(alignment: .leading){
         
         HStack{
             Spacer()
@@ -38,31 +40,48 @@ struct SpendingSummaryView: View {
             
         
             ForEach(self.viewModel.viewData, id: \.self){ entry in
+                
+                VStack(spacing: 0.0){
+                    if self.viewModel.viewData.firstIndex(of: entry)! < 5 || self.showMore{
+                        SpendingSummaryRow(viewData: entry).padding(.bottom).padding(.top).padding(.horizontal, 5)
+                    }
+                }
+                
+            }
+        
+        
+        }.padding().padding(.bottom, 5)
             
-            SpendingSummaryRow(viewData: entry).padding(.bottom).padding(.top)
-             //Text("hey")
-            }.transition(.slide)
-        
-        
-        
-        }.padding().padding(.bottom)
-        
-            HStack{
+            
+            if self.viewModel.viewData.count > 5 {
+                Divider().padding(.bottom, 5)
                 Button(action: {
-                    print("view condendsed")
                     withAnimation{
-                        self.viewModel.toggleCondesnsed()
+                        self.showMore.toggle()
                     }
                     
                 }){
+                    HStack{
+                        Text(self.viewModel.buttonText).foregroundColor(Color(.white))
+                        Spacer()
+                        if !self.showMore{
+                            Image(systemName: "arrow.down").padding(.trailing).foregroundColor(Color(.white))
+                        }
+                        else{
+                            Image(systemName: "arrow.up").padding(.trailing).foregroundColor(Color(.white))
+                        }
+                        
+                    }
                     
-                    Text(self.viewModel.buttonText).foregroundColor(Color(.white))
                 }.buttonStyle(PlainButtonStyle()).padding(.bottom).padding(.leading)
-                Spacer()
             }
+            
+                
+                
+            
         
 
-        }.background(Color(.systemTeal)).cornerRadius(10).shadow(radius: 15)
+        }.animation(.easeInOut(duration: 0.6)).background((Color(#colorLiteral(red: 0.721568644, green: 0.8862745166, blue: 0.5921568871, alpha: 1)))).cornerRadius(10).shadow(radius: 15)
         
     }
         

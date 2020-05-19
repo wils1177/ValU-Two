@@ -15,10 +15,6 @@ import SwiftUI
 
 class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, SetSavingsViewDelegate, PlaidLinkDelegate, BudgetCategoriesDelegate, SetSpendingLimitDelegate, plaidIsConnectedDelegate, IncomeCoordinator, BudgetTypeDelegate, BudgetEditableCoordinator{
     
-    
-    
-    
-    
 
     // Dependencies
     var budget : Budget?
@@ -122,11 +118,10 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, SetSavings
     
     func continueToBudgetCategories(){
         print("Contine to Budget Categories")
+        let view = BalancerView(budget: self.budget!, coordinator: self)
         
-        let presentor = BudgetBalancerPresentor(budget: self.budget!)
-        let vc = presentor.configure()
-        presentor.coordinator = self
-        
+        let vc = UIHostingController(rootView: view)
+        vc.title = "Set Budget"
         self.navigationController.pushViewController(vc, animated: true)
     }
     
@@ -147,6 +142,10 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, SetSavings
         self.navigationController.popViewController(animated: true)
         DataManager().saveDatabase()
     
+    }
+    
+    func showCategoryDetail() {
+        
     }
 
     

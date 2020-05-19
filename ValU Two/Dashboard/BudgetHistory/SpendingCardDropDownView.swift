@@ -48,7 +48,7 @@ struct SpendingCardDropDownView: View {
                     }){
                     ZStack{
                         
-                        SpendingCategoryView(viewData: category)
+                        Text("placeholder")
                     }
                     }.buttonStyle(PlainButtonStyle())
                     

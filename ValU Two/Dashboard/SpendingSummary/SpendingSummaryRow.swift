@@ -23,18 +23,17 @@ struct SpendingSummaryRow: View {
                 
                 ZStack{
                     HStack{
-                        Rectangle().frame(width: (g.size.width) * CGFloat(self.viewData.percentage!), height: 45).foregroundColor(Color(.systemFill)).cornerRadius(10).offset(x: CGFloat(-20))
+                        Rectangle().frame(width: (g.size.width) * CGFloat(self.viewData.percentage! - 0.02), height: 45).foregroundColor(Color(.systemFill)).cornerRadius(10)
                         Spacer()
                     }
                     
                         
                     HStack{
-                        Text(self.viewData.icon).font(.headline)
-                        Text(self.viewData.name).font(.subheadline).foregroundColor(Color(.white))
+                        Text(self.viewData.icon).font(.headline).padding(.leading, 5)
+                        Text(self.viewData.name).foregroundColor(Color(.white))//.bold()
                         Spacer()
                         Text(self.viewData.amount).foregroundColor(Color(.white)).padding(.trailing)
                         Text("(" + self.viewData.displayPercent + ")").foregroundColor(Color(.white))
-                        
                     }
                         
                     

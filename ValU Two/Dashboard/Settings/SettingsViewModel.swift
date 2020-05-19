@@ -127,12 +127,13 @@ class SettingsViewModel: ObservableObject, Presentor{
             try dataManager.deleteEntity(predicate: PredicateBuilder().generateItemPredicate(itemId: itemId), entityName: "ItemData")
             try dataManager.deleteEntity(predicate: PredicateBuilder().generateItemPredicate(itemId: itemId), entityName: "AccountData")
             try dataManager.deleteEntity(predicate: PredicateBuilder().generateItemPredicate(itemId: itemId), entityName: "Transaction")
+            try dataManager.deleteEntity(predicate: PredicateBuilder().generateItemPredicate(itemId: itemId), entityName: "CategoryMatch")
             
             dataManager.saveDatabase()
             self.budget!.updateAmountSpent()
             dataManager.saveDatabase()
             updateView()
-            //NotificationCenter.default.post(name: .modelUpdate, object: nil)
+            NotificationCenter.default.post(name: .modelUpdate, object: nil)
             
         }catch{
             print("Could not delete the item!")

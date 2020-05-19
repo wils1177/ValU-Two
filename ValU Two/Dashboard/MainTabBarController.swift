@@ -49,7 +49,11 @@ class MainTabBarController: UITabBarController {
         
         if self.budget == nil || UserDefaults.standard.object(forKey: "UserOnboarded") == nil{
             print("Not onboarded Yet")
-            let vc = UIHostingController(rootView: CouldNotLoadView(errorMessage: "Could not Load Budget! Sorry!"))
+            let vc = UIHostingController(rootView: CouldNotLoadView(errorMessage: ""))
+            viewControllers = [vc]
+        }
+        else if self.budget == nil && UserDefaults.standard.object(forKey: "UserOnboarded") != nil{
+            let vc = UIHostingController(rootView: CouldNotLoadView(errorMessage: "Could Not Load Budget!"))
             viewControllers = [vc]
         }
         else{

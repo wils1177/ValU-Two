@@ -13,6 +13,8 @@ import SwiftUI
 class NewBudgetCoordinator : BudgetEditableCoordinator{
     
     
+    
+    
     var childCoordinators = [Coordinator]()
     var navigationController = UINavigationController()
     var budget : Budget?
@@ -70,6 +72,10 @@ class NewBudgetCoordinator : BudgetEditableCoordinator{
         try! DataManager().deleteEntity(predicate: PredicateBuilder().generateByIdPredicate(id: self.budget!.id!), entityName: "Budget")
         self.navigationController = UINavigationController()
         self.parent?.dismissNewBudgetCoordinator()
+    }
+    
+    func showCategoryDetail() {
+        
     }
     
     func setMonth(){

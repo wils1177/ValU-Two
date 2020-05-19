@@ -69,6 +69,23 @@ class CommonUtils{
         
     }
     
+    static func makeMoneyString(number: Int) -> String{
+        
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .currency
+        var moneyString = numberFormatter.string(from: NSNumber(value:number))!
+        moneyString.removeLast(3)
+        return moneyString
+    }
+    
+    static func makeMoneyString(number: Double) -> String{
+        
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .currency
+        let moneyString = numberFormatter.string(from: NSNumber(value:number))!
+        return moneyString
+    }
+    
     
 }
 

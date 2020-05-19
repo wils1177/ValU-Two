@@ -8,13 +8,12 @@
 
 import SwiftUI
 
-struct CategoryButtonView<Model>: View where Model: CategorySelecter {
+struct CategoryButtonView: View {
     
-    @ObservedObject var button : CategoryButton
-    var presentor : Model
+    @ObservedObject var category : SpendingCategory
     
     func getButtonColor() -> Color {
-        if button.selected{
+        if category.selected{
             
             return .green
         }
@@ -23,36 +22,26 @@ struct CategoryButtonView<Model>: View where Model: CategorySelecter {
         }
     }
     
-    func editCategory(){
-        let originalName = self.button.name
-        if button.selected{
-            self.presentor.selectedCategoryName(name: originalName)
-        }
-        else{
-            self.presentor.deSelectedCategoryName(name: originalName)
-        }
-    }
+
     
-    init(presentor: Model, button: CategoryButton ){
-        self.presentor = presentor
-        self.button = button
+    init(category: SpendingCategory ){
+        self.category = category
     }
     
     
     var body: some View {
         
         Button(action: {
-            self.button.selected.toggle()
-            self.editCategory()
+            self.category.selected.toggle()
             
         }){
             HStack{
+
+                Text(category.icon! + category.name!).font(.headline).padding()
+                Spacer()
+                Image(systemName: "plus.circle.fill").imageScale(.large).foregroundColor(self.getButtonColor()).padding(.trailing)        
                 
-                
-                Text(button.icon + button.name).font(.footnote).foregroundColor(.white).padding()
-                
-                
-            }.background(self.getButtonColor()).cornerRadius(20).shadow(radius: 5)
+            }
     }
 }
     

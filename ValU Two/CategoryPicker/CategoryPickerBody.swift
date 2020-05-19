@@ -14,64 +14,61 @@ struct CategoryPickerBody: View {
     var viewModel : CategoryPickerPresentor
     @Binding var isShowingAddCategory : Bool
     
-    private var indicator: some View {
-        RoundedRectangle(cornerRadius: Constants.radius)
-            .fill(Color.secondary)
-            .frame(
-                width: Constants.indicatorWidth,
-                height: Constants.indicatorHeight
-        )
-    }
+
     
     var body: some View {
-        VStack{
-            self.indicator.padding(.top)
-            HStack{
-                Spacer()
-                Button(action: {
-                    self.isShowingAddCategory.toggle()
-                }){
-                    Text("Done").padding(.horizontal)
-                }.buttonStyle(BorderlessButtonStyle())
-            }
-            Picker("", selection: $pickerSelection) {
-                
-              Text("Suggestions").tag(0)
-              Text("All Categories").tag(1)
-            }
-            .pickerStyle(SegmentedPickerStyle())
-            .padding(.horizontal)
-            
-            if self.pickerSelection == 0{
-                SuggestedCategoryCard(viewModel: viewModel.viewData!.suggestedCategoryPresentor)
-            }
-            else{
-                
-                
-                
-                ScrollView(.vertical, content: {
+        
+        NavigationView{
+            List{
+
+                Picker("", selection: $pickerSelection) {
                     
-                    VStack{
-                        HStack{
-                            Text("All Categories").font(.title).fontWeight(.bold)
-                            Spacer()
-                        }.padding(.leading)
-                        HStack{
-                            Text("Select from an exaustive list of categories")
-                            Spacer()
-                        }.padding(.leading)
-                        Divider()
-                    }.padding()
+                  Text("Suggestions").tag(0)
+                  Text("All Categories").tag(1)
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .padding(.horizontal)
+                
+                if self.pickerSelection == 0{
+                    SuggestedCategoryCard(viewModel: viewModel.viewData!.suggestedCategoryPresentor)
+                }
+                else{
                     
                     
-                    CategoryCardListView(viewModel: self.viewModel.viewData!.budgetCategoriesPresentor)
-                })
+                    
+                        
+                        VStack{
+                            HStack{
+                                Text("All Categories").font(.title).fontWeight(.bold)
+                                Spacer()
+                            }.padding(.leading)
+                            HStack{
+                                Text("Select from an exaustive list of categories")
+                                Spacer()
+                            }.padding(.leading)
+                            Divider()
+                        }.padding()
+                        
+                        
+                        CategoryCardListView(viewModel: self.viewModel.viewData!.budgetCategoriesPresentor, categories: self.viewModel.viewData!.budgetCategoriesPresentor.spendingCategories)
+                    
+                    
+                    
+                }
                 
                 
-            }
+            }.navigationBarTitle("Choose Category", displayMode: .large)
+            .navigationBarItems( trailing: Button(action: {
+                                 //self.viewModel.submit()
+                                self.isShowingAddCategory.toggle()
+                             }){
             
-            
+                                 Text("Done").font(.subheadline).foregroundColor(.black).padding(7)
+                                         
+                             })
         }
+        
+        
     }
 }
 

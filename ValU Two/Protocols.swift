@@ -14,7 +14,6 @@ protocol Presentor {
 }
 
 protocol ViewModel{
-    func generateViewData()
 }
 
 protocol BudgetDateFindable{
@@ -24,7 +23,6 @@ protocol BudgetDateFindable{
 }
 
 protocol CategorySelecter: class{
-    var selectedCategoryNames : [String] {get set}
     var spendingCategories : [SpendingCategory]{get set}
     var budget : Budget? {get set}
     
@@ -34,8 +32,7 @@ protocol CategorySelecter: class{
     
 }
 
-protocol CategoryListViewModel: UserSubmitViewModel, CategorySelecter{
-    var viewData: [BudgetCategoryViewData] { get set }
+protocol CategoryListViewModel: UserSubmitViewModel{
        
 }
 
@@ -43,13 +40,7 @@ protocol KeyboardDelegate{
     func onKeyBoardSet(text : String, key: String?)
 }
 
-protocol HasButtonRows {
-    
-    var buttonArray : [[CategoryButton]]{ get set }
-    
-    func generateButtonArray(buttonList: [CategoryButton]) ->[[CategoryButton]]
-    
-}
+
 
 protocol UserSubmitViewModel: class, ViewModel{
     func submit()
@@ -75,6 +66,7 @@ protocol BudgetCategoriesDelegate {
 
 protocol SetSpendingLimitDelegate {
     func finishedSettingLimits()
+    func showCategoryDetail(category: SpendingCategory, service: BalanceParentService)
 }
 
 protocol BudgetTypeDelegate{
@@ -120,7 +112,7 @@ protocol BudgetEditor {
     func dismiss()
     
     var coordinator : BudgetEditableCoordinator? {get set}
-    var viewData : EditBudgetViewData? {get set}
+    var budget: Budget {get set}
     
 }
 
@@ -130,6 +122,8 @@ protocol BudgetEditableCoordinator: IncomeCoordinator, SetSavingsViewDelegate, S
     func continueToSetSavings()
     func dimiss()
 }
+
+
 
 protocol EditBudgetDelegate{
     func showEdit(budgetToEdit: Budget)

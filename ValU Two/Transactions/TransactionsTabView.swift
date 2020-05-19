@@ -29,7 +29,7 @@ struct TransactionsTabView: View {
             List(self.viewModel.rows!, id: \.self) { row in
                 
                 if row.spendingSummary != nil{
-                    SpendingSummaryView()
+                    SpendingSummaryView().animation(.easeInOut(duration: 0.6))
                 }
                 else if row.sectionTitle != nil{
                     HStack{
@@ -46,7 +46,8 @@ struct TransactionsTabView: View {
                 
                 
                 
-            }.navigationBarTitle(Text("Transactions"))
+                }
+            .navigationBarTitle(Text("Transactions"))
             
         
     }

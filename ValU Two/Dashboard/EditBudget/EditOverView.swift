@@ -12,53 +12,139 @@ struct EditOverView: View {
     
     var viewModel : BudgetEditor
     
-    var body: some View {
-        VStack{
+    var income: some View{
+        HStack{
             
-            HStack{
-                Text(self.viewModel.viewData!.description).padding(.horizontal)
-                Spacer()
-            }.padding(.top)
+            Image(systemName: "pencil.circle.fill").resizable()
+                .frame(width: 30.0, height: 30.0).foregroundColor(Color(.systemGreen)).padding(.leading)
+            
+            VStack(spacing: 0){
+                
+                HStack{
+                    Text("Income").font(.system(size: 17)).foregroundColor(.black).bold().padding(.leading).padding(.top).padding(.bottom, 3)
+                    Spacer()
+                }
+                HStack{
+                    Text("$" + String(Int(self.viewModel.budget.amount))).font(.body).foregroundColor(Color(.lightGray)).padding(.leading).padding(.bottom)
+                    Spacer()
+                }
+                
+
+            }
             
             VStack{
-                ForEach(self.viewModel.viewData!.steps, id: \.self) { step in
-                    OnboardingStepRow(viewData: step)
-                }
-            }.padding(.top)
+                Image(systemName: "chevron.right").foregroundColor(Color(.lightGray)).font(Font.system(.headline).bold())
+            }.padding(.trailing, 20).padding(.top)
             
+        }.background(Color(.white).cornerRadius(20).padding(.bottom, 5))
+    }
+    
+    var savings: some View{
+        HStack{
             
-            Spacer()
+            Image(systemName: "pencil.circle.fill").resizable()
+                .frame(width: 30.0, height: 30.0).foregroundColor(Color(.systemGreen)).padding(.leading)
             
-            Button(action: {
-                //Button Action
-                self.viewModel.dismiss()
-                }){
+            VStack(spacing: 0){
+                
                 HStack{
+                    Text("Savings Goal").font(.system(size: 17)).foregroundColor(Color(.black)).bold().padding(.leading).padding(.top).padding(.bottom, 3)
                     Spacer()
-                    ZStack{
-                        Text("Finish").font(.subheadline).foregroundColor(.white).bold().padding()
-                    }
+                }
+                HStack{
+                    Text("$" + String(Int(self.viewModel.budget.amount * self.viewModel.budget.savingsPercent))).font(.body).foregroundColor(Color(.lightGray)).padding(.leading).padding(.bottom)
                     Spacer()
-                }.background(LinearGradient(gradient:  Gradient(colors: [.black, .black]), startPoint: .topTrailing, endPoint: .center)).cornerRadius(30).shadow(radius: 10).padding()
+                }
                 
-                
+
             }
             
+            VStack{
+                Image(systemName: "chevron.right").foregroundColor(Color(.lightGray)).font(Font.system(.headline).bold())
+            }.padding(.trailing, 20).padding(.top)
             
-        }.navigationBarTitle(self.viewModel.viewData!.navigationTitle).navigationBarItems(trailing:
+        }.background(Color(.white).cornerRadius(20).padding(.bottom, 5))
+    }
+    
+    var categories: some View{
+        HStack{
             
-            Button(action: {
-                self.viewModel.dismiss()
-            }){
-            ZStack{
+            Image(systemName: "pencil.circle.fill").resizable()
+                .frame(width: 30.0, height: 30.0).foregroundColor(Color(.systemGreen)).padding(.leading)
+            
+            VStack(spacing: 0){
                 
-                Text("Dismiss")
+                HStack{
+                    Text("Budgets").font(.system(size: 17)).foregroundColor(.black).bold().padding(.leading).padding(.top).padding(.bottom, 3)
+                    Spacer()
+                }
+                HStack{
+                    Text("Set Budgets").font(.body).foregroundColor(Color(.lightGray)).padding(.leading).padding(.bottom)
+                    Spacer()
+                }
+                
+
             }
-            }
+            
+            VStack{
+                Image(systemName: "chevron.right").foregroundColor(Color(.lightGray)).font(Font.system(.headline).bold())
+            }.padding(.trailing, 20).padding(.top)
             
             
+        }.background(Color(.white).cornerRadius(20).padding(.bottom, 5))
+    }
+    
+    var body: some View {
+        
             
-        )
+                
+                
+                
+                
+                
+
+                
+        List{
+            VStack{
+                //BudgetCardView(budget: self.viewModel.budget, viewModel: nil).background(Color(.systemGreen)).cornerRadius(20).padding(.vertical, 5).padding(.horizontal, 7).shadow(radius: 5)
+                
+
+
+                Button(action: {
+                    // What to perform
+                    self.viewModel.editIncome()
+                }) {
+                    // How the button looks like
+                    income.padding(.top)
+                }.buttonStyle(PlainButtonStyle())
+                Button(action: {
+                    // What to perform
+                    self.viewModel.editSavings()
+                }) {
+                    // How the button looks like
+                    savings
+                }.buttonStyle(PlainButtonStyle())
+                Button(action: {
+                    // What to perform
+                    self.viewModel.editBudget()
+                }) {
+                    // How the button looks like
+                    categories
+                }.buttonStyle(PlainButtonStyle())
+                
+                
+                Spacer()
+            }.padding(.top)
+        }
+                
+                
+                
+                
+
+                
+                
+            
+        
         
     }
 }

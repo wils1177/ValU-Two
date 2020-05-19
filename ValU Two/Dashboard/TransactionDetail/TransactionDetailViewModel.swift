@@ -10,113 +10,58 @@ import Foundation
 import MapKit
 import SwiftUI
 
-struct TransactionDetailViewData{
-    var coordinate: CLLocationCoordinate2D?
-    var name: String
-    var amount: String
-    var date: String
-    var accountName : String
-    var icons : [String]
-    var categories : [CategoryAmountViewData]
-    var rawCategories : [String]
-}
 
-class CategoryAmountViewData: Hashable, ObservableObject{
-    
-    static func == (lhs: CategoryAmountViewData, rhs: CategoryAmountViewData) -> Bool {
-        return lhs.id == rhs.id
-    }
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-
-    }
-    
-    var name : String
-    @Published var amount : String
-    var id  : UUID
-    
-    init(name: String, amount: String, id:UUID){
-        self.name = name
-        self.amount = amount
-        self.id = id
-    }
-}
 
 class TransactionDetailViewModel: ObservableObject, Presentor, KeyboardDelegate {
     
     
     
     @Published var transaction : Transaction
-    @Published var viewData : TransactionDetailViewData?
-    @Published var isHidden : Bool
+    
+    @Published var isHidden : Bool{
+        didSet {
+            // Here's where any code goes that needs to run when a switch is toggled
+            self.toggleHidden()
+        }
+    }
+    
+    
     var coordinator : TransactionRowDelegate?
+    
+    var account : AccountData?
     
     init(transaction: Transaction){
         self.transaction = transaction
         self.isHidden = transaction.isHidden
-        generateViewData()
-        
+        self.account = getAccount()
     }
     
     
     func configure() -> UIViewController {
-        let vc = UIHostingController(rootView: TransactionDetailView(viewModel: self, transaction: self.transaction))
+        let vc = UIHostingController(rootView: TransactionDetailView(viewModel: self, transaction: self.transaction, account: self.account))
         vc.navigationItem.largeTitleDisplayMode = .never
         return vc
     }
     
-    func getAccountName() -> String{
+    func getAccount() -> AccountData?{
         let accountId = self.transaction.accountId!
         let query = PredicateBuilder().generateByAccountIdPredicate(id: accountId)
-        var accountName = ""
+        var accountToReturn : AccountData?
         do{
             let account = try DataManager().getEntity(predicate: query, entityName: "AccountData") as! [AccountData]
             if account.first != nil{
-                accountName = account.first!.name!
+                accountToReturn = account.first!
                 
             }
         }
         catch{
-            accountName = "No Account Found"
+            print("no account found for transaction detail")
         }
         
-        return accountName
+        return accountToReturn
     }
     
-    func generateViewData(){
-        
-        var lat : Double?
-        var lon : Double?
-        var coordinate : CLLocationCoordinate2D?
-        
-        if self.transaction.location?.lat != nil{
-            lat = Double(self.transaction.location!.lat!)
-        }
-        
-        if self.transaction.location?.lon != nil{
-            lon = Double(self.transaction.location!.lon!)
-        }
-        
-        if lat != nil && lon != nil{
-            coordinate = CLLocationCoordinate2D(latitude: lat!, longitude: lon!)
-        }
-        
-        let name = transaction.name!
-        let date = transaction.date
-        let amount = transaction.amount
-        let accountName = getAccountName()
-        let icons = getIcons(categories: self.transaction.categoryMatches?.allObjects as! [CategoryMatch])
-        
-        let df = DateFormatter()
-        df.dateFormat = "yyyy-MM-dd"
-        
-        let categoryAmounts = createCategoryAmountViewData(categories: transaction.categoryMatches?.allObjects as! [CategoryMatch])
-        
-        self.viewData = TransactionDetailViewData(coordinate: coordinate, name: name, amount: "$" + String(amount), date: df.string(from: date!), accountName: accountName, icons: icons, categories: categoryAmounts, rawCategories: self.transaction.plaidCategories!)
-        
-        
-    }
+
     
     
     func getIcons(categories: [CategoryMatch]) -> [String]{
@@ -136,20 +81,6 @@ class TransactionDetailViewModel: ObservableObject, Presentor, KeyboardDelegate 
         
     }
     
-    func createCategoryAmountViewData(categories: [CategoryMatch]) -> [CategoryAmountViewData]{
-        
-        var categoryAmountViewData = [CategoryAmountViewData]()
-        for match in categories{
-            let name = match.spendingCategory!.icon! + " " + match.spendingCategory!.name!
-            let amount = String(match.amount)
-            categoryAmountViewData.append(CategoryAmountViewData(name: name, amount: amount, id: match.id!))
-        }
-        
-        return categoryAmountViewData
-        
-        
-        
-    }
     
     func onKeyBoardSet(text: String, key: String?) {
         
@@ -158,7 +89,7 @@ class TransactionDetailViewModel: ObservableObject, Presentor, KeyboardDelegate 
                 updateCategoryMatchAmount(amount: value, categoryIdString: uuid)
             }
         }
-        
+        DataManager().saveDatabase()
     }
     
     func updateCategoryMatchAmount(amount: Float, categoryIdString: String){
@@ -166,15 +97,21 @@ class TransactionDetailViewModel: ObservableObject, Presentor, KeyboardDelegate 
         for categoryMatch in self.transaction.categoryMatches?.allObjects as! [CategoryMatch]{
             if categoryMatch.id!.uuidString == categoryIdString{
                 categoryMatch.amount = amount
+                //categoryMatch.spendingCategory!.reCalculateAmountSpent()
+                categoryMatch.spendingCategory!.objectWillChange.send()
+                self.transaction.objectWillChange.send()
             }
         }
-        NotificationCenter.default.post(name: .modelUpdate, object: nil)
+        
     }
     
     func toggleHidden(){
         self.transaction.isHidden.toggle()
         DataManager().saveDatabase()
-        NotificationCenter.default.post(name: .modelUpdate, object: nil)
+        for match in transaction.categoryMatches?.allObjects as! [CategoryMatch]{
+            match.spendingCategory!.objectWillChange.send()
+        }
+        DataManager().saveDatabase()
     }
     
     

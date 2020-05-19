@@ -13,9 +13,9 @@ struct BalancerView: View {
     @ObservedObject var viewModel : BudgetBalancerPresentor
     @State private var bottomSheetShown = false
     
-    init(viewModel: BudgetBalancerPresentor){
+    init(budget: Budget, coordinator: SetSpendingLimitDelegate){
         
-        self.viewModel = viewModel
+        self.viewModel = BudgetBalancerPresentor(budget: budget, coordinator: coordinator)
         
 
     }
@@ -31,7 +31,7 @@ struct BalancerView: View {
         
         
         self.balancerBody
-            .navigationBarTitle("Balance Budget", displayMode: .large).navigationBarItems(trailing:
+            .navigationBarTitle("Set Budget", displayMode: .large).navigationBarItems(trailing:
                 
                 HStack{
 

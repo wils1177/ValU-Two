@@ -214,11 +214,11 @@ public class Budget: NSManagedObject, NSCopying, Identifiable {
     func updateAmountSpent(){
         print("updating the amount spent")
         self.spent = 0.0
-        let spendingCategories = getSubSpendingCategories()
-        for category in spendingCategories{
-            category.reCalculateAmountSpent()
+        //let spendingCategories = getSubSpendingCategories()
+        //for category in spendingCategories{
+        //    category.reCalculateAmountSpent()
 
-        }
+        //}
         print("finished updating the amount spent")
     }
     

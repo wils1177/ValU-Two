@@ -11,22 +11,19 @@ import SwiftUI
 struct SuggestionEntryView: View {
     
     var viewModel : SuggestedCategoryPresentor
-    var viewData : SuggestedCategoryViewData
+    var category : SpendingCategory
     
-    init(viewModel : SuggestedCategoryPresentor, viewData: SuggestedCategoryViewData ){
+    init(viewModel : SuggestedCategoryPresentor, category: SpendingCategory ){
         self.viewModel = viewModel
-        self.viewData = viewData
+        self.category = category
     }
     
     var body: some View {
         HStack{
             
             
-            CategoryButtonView(presentor: self.viewModel, button: self.viewData.categoryButton)
+            CategoryButtonView(category: self.category)
             
-            Spacer()
-            
-            Text(viewData.amountSpent).font(.headline)
             
             
         }

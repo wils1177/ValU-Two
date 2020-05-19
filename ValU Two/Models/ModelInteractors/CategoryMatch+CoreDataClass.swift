@@ -21,6 +21,7 @@ public class CategoryMatch: NSManagedObject {
         self.spendingCategory = category
         self.amount = amount
         self.id = UUID()
+        self.itemId = transaction.itemId!
         
     }
 

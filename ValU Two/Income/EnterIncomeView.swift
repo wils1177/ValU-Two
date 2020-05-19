@@ -34,18 +34,27 @@ struct EnterIncomeView: View {
     
     var body: some View {
         
-        ScrollView{
+        List{
             VStack(alignment: .center){
                     
+                VStack(spacing: 10){
+                    /*
+                    Text("Confirm Your Monthly Income").font(.title).bold().lineLimit(2).fixedSize(horizontal: false, vertical: true).padding(.top).padding(.bottom)
+                    */
+                    Text("Set the income to use for your budget.").font(.system(size: 18)).foregroundColor(Color(.lightGray)).multilineTextAlignment(.center).fixedSize(horizontal: false, vertical: true)
+                }
+                
                     
-                Text("Confirm Your Monthly Income").font(.system(size: 23)).bold().lineLimit(2).fixedSize(horizontal: false, vertical: true).padding(.horizontal).padding(.top).padding(.top)
-                Text("Set the income to use for your budget.").font(.system(size: 21)).bold().foregroundColor(Color(.lightGray)).multilineTextAlignment(.center).fixedSize(horizontal: false, vertical: true).padding(.horizontal).padding()
+                HStack{
+                    Spacer()
+                    CustomInputTextField(text: self.$incomeService.currentIncomeEntry, placeHolderText: "Your Income", textSize: .systemFont(ofSize: 23), alignment: .left, delegate: nil, key: nil)
+                        .padding(.horizontal)
+                    .frame(width: 310, height: 45).background(Color(.white)).cornerRadius(10)
+                        
+                        errorState
+                    Spacer()
+                }
                     
-                    CustomInputTextField(text: self.$incomeService.currentIncomeEntry, placeHolderText: "Your Income", textSize: .systemFont(ofSize: 28), alignment: .center, delegate: nil, key: nil)
-                    .padding(.horizontal, 25)
-                .frame(width: 310, height: 60).background(Color(.systemGroupedBackground)).cornerRadius(15)
-                    
-                    errorState
             
                 
                 
@@ -53,10 +62,14 @@ struct EnterIncomeView: View {
                 
                 if self.incomeService.getIncomeTransactions().count > 0{
                     VStack{
-                        Text("Estimate based on your previous month's income").font(.system(size: 21)).bold().lineLimit(2).fixedSize(horizontal: false, vertical: true).foregroundColor(Color(.lightGray)).padding(.horizontal).padding()
+                        HStack{
+                           Text("Previous Month's Income").font(.system(size: 21)).bold().lineLimit(2).fixedSize(horizontal: false, vertical: true).foregroundColor(Color(.black))
+                            Spacer()
+                        }
+                        
                         
                         VStack{
-                            IncomeTransactionsView(incomeService: self.incomeService).padding().padding(.horizontal)
+                            IncomeTransactionsView(incomeService: self.incomeService).padding()
                         }
                     }
                 }
@@ -79,7 +92,7 @@ struct EnterIncomeView: View {
                     }){
                     ZStack{
                         if self.incomeService.currentIncomeEntry.doubleValue != nil && self.incomeService.currentIncomeEntry.doubleValue != 0.0{
-                            Text("Confirm").bold()
+                            Text("Confirm")
                         }
                         else{
                             Text("Confirm").foregroundColor(Color(.lightGray))

@@ -11,9 +11,11 @@ import SwiftUI
 struct CategoryCardListView<Model>: View where Model: CategoryListViewModel {
     
     var viewModel : Model
+    var categories : [SpendingCategory]
 
-    init(viewModel: Model){
+    init(viewModel: Model, categories: [SpendingCategory]){
         self.viewModel = viewModel
+        self.categories = categories
     }
     
 
@@ -23,8 +25,8 @@ struct CategoryCardListView<Model>: View where Model: CategoryListViewModel {
         
         VStack{
             
-            ForEach(self.viewModel.viewData, id: \.self){ cardData in
-                CategoryCardView(presentor: self.viewModel, viewData: cardData)
+            ForEach(self.categories, id: \.self){ category in
+                CategoryCardView(presentor: self.viewModel, category: category)
             }
             
             

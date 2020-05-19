@@ -19,6 +19,8 @@ class CashFlowViewModel: ObservableObject {
     @Published var selectedMonth : TransactionDateCache?
     
     var largestWeekAmount : Float?
+    var largestBiMonthAmount : Float?
+    var largestMonthAmount : Float?
     
     @Published var segement : Int = 0
     
@@ -26,19 +28,20 @@ class CashFlowViewModel: ObservableObject {
     init(){
         
         do{
-            let weekQuery = PredicateBuilder().generateTimeFramePredicate(timeFrame: TimeFrame.weekly.rawValue)
+            let weekQuery = (PredicateBuilder().generateTimeFramePredicate(timeFrame: TimeFrame.weekly.rawValue))
             let monthQuery = PredicateBuilder().generateTimeFramePredicate(timeFrame: TimeFrame.monthly.rawValue)
             let biMonthQuery = PredicateBuilder().generateTimeFramePredicate(timeFrame: TimeFrame.semiMonthly.rawValue)
             let weekData = try DataManager().getEntity(predicate: weekQuery, entityName: "TransactionDateCache") as! [TransactionDateCache]
             let monthData = try DataManager().getEntity(predicate: monthQuery, entityName: "TransactionDateCache") as! [TransactionDateCache]
             let biMonthData = try DataManager().getEntity(predicate: biMonthQuery, entityName: "TransactionDateCache") as! [TransactionDateCache]
+            
+            
             self.weekData = weekData
+            
             self.monthData = monthData
             self.biMonthData = biMonthData
             
-            self.selectedWeek = self.weekData.first!
-            self.selectedMonth = self.monthData.first!
-            self.selectedBiMonth = self.biMonthData.first!
+            
         }catch{
             print("Could not get the data for the cash flow view!!")
         }
@@ -52,34 +55,54 @@ class CashFlowViewModel: ObservableObject {
         self.biMonthData.sort {
             $0.startDate! > $1.startDate!
         }
-        self.largestWeekAmount = findLargestWeekAmount()
+        
+        //self.selectedWeek = self.weekData.first!
+        //self.selectedMonth = self.monthData.first!
+        //self.selectedBiMonth = self.biMonthData.first!
+        
+        self.largestWeekAmount = findLargestAmount(amounts: self.weekData)
+        self.largestMonthAmount = findLargestAmount(amounts: self.monthData)
+        self.largestBiMonthAmount = findLargestAmount(amounts: self.biMonthData)
     }
     
-    func findLargestWeekAmount() -> Float{
+    func findLargestAmount(amounts: [TransactionDateCache]) -> Float{
         
         var largest = Float(0.0)
-        for week in self.weekData{
+        for amount in amounts{
             
-            if week.income.magnitude > largest{
-                largest = week.income.magnitude
+            if amount.income.magnitude > largest{
+                largest = amount.income.magnitude
             }
-            if week.expenses.magnitude > largest{
-                largest = week.expenses.magnitude
+            if amount.expenses.magnitude > largest{
+                largest = amount.expenses.magnitude
             }
             
         }
         return largest
     }
     
+    func isSelected(timeFrame: TransactionDateCache) -> Bool{
+        if self.selectedWeek != nil && timeFrame.id == self.selectedWeek!.id{
+            return true
+        }
+        if self.selectedMonth != nil && timeFrame.id == self.selectedMonth!.id{
+            return true
+        }
+        if self.selectedBiMonth != nil && timeFrame.id == self.selectedBiMonth!.id{
+            return true
+        }
+        return false
+    }
+    
     func getViewData(selector: Int) -> [TransactionDateCache]{
         if selector == 0{
-            return self.weekData
+            return self.monthData
         }
         else if selector == 1{
             return self.biMonthData
         }
         else{
-            return self.monthData
+            return self.weekData
         }
     }
     
@@ -94,6 +117,21 @@ class CashFlowViewModel: ObservableObject {
         else if timeFrame.timeFrame == TimeFrame.weekly.rawValue{
             self.selectedWeek = timeFrame
         }
+        
+    }
+    
+    func getCurrentMonth() -> TransactionDateCache{
+        
+        let today = Date()
+        
+        for month in self.monthData{
+            if (month.startDate! ... month.endDate!).contains(today){
+                return month
+            }
+        }
+
+        print("COULD NOT FIND A MONTH")
+        return self.monthData.first!
         
     }
     

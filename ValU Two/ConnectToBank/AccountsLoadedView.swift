@@ -24,9 +24,8 @@ struct AccountsLoadedView: View {
                 
                Spacer()
                 
-                Text("Accounts Successfully Loaded").font(.title).bold().lineLimit(nil).padding().multilineTextAlignment(.center).padding(.bottom, 70)
+                Text("Accounts Successfully Loaded").font(.title).bold().lineLimit(nil).padding().multilineTextAlignment(.center).padding(.bottom, 55)
                 
-                Spacer()
                 LoadedAccountsList(accounts: self.accounts)
                 Spacer()
                 
@@ -40,7 +39,7 @@ struct AccountsLoadedView: View {
                             Text("Continue").font(.subheadline).foregroundColor(.white).bold().padding()
                         }
                         Spacer()
-                    }.background(LinearGradient(gradient:  Gradient(colors: [.black, .black]), startPoint: .topTrailing, endPoint: .center)).cornerRadius(30).shadow(radius: 10).padding()
+                    }.background(AppTheme().themeColorPrimary).cornerRadius(10).shadow(radius: 10).padding(.horizontal).padding(.horizontal).padding(.bottom)
                     
                     
                 }
@@ -51,10 +50,10 @@ struct AccountsLoadedView: View {
                     HStack{
                         Spacer()
                         ZStack{
-                            Text("Add More Accounts").font(.subheadline).foregroundColor(.white).bold().padding()
+                            Text("Add More Accounts").font(.subheadline).foregroundColor(AppTheme().themeColorPrimary).bold().padding()
                         }
                         Spacer()
-                    }.background(LinearGradient(gradient:  Gradient(colors: [.black, .black]), startPoint: .topTrailing, endPoint: .center)).cornerRadius(30).shadow(radius: 10).padding()
+                    }.background(Color(red: 0.9, green: 0.9, blue: 0.9)).cornerRadius(10).shadow(radius: 0).padding(.horizontal).padding(.horizontal).padding(.bottom).padding(.bottom)
                     
                     
                 }

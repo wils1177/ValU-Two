@@ -10,39 +10,12 @@ import Foundation
 import UIKit
 import SwiftUI
 
-struct BudgetCategoryViewData : Hashable {
-    let sectionTitle : String
-    let icon: String
-    let amountSpent: String
-    let categories : [CategoryButton]
-}
 
-class CategoryButton : Hashable, ObservableObject{
-    
-    
-    let name : String
-    let icon : String
-    @Published var selected: Bool
-    
-    init(name: String, icon: String, selected: Bool){
-        self.name = name
-        self.icon = icon
-        self.selected = selected
-    }
-    
-    static func == (lhs: CategoryButton, rhs: CategoryButton) -> Bool {
-        return lhs.name == rhs.name
-    }
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(name)
-    }
-    
-}
+
+
 
 class BudgetCardsPresentor : Presentor, CategoryListViewModel, UserSubmitViewModel {
     
-    var viewData = [BudgetCategoryViewData]()
     var selectedCategoryNames = [String]()
     var spendingCategories = [SpendingCategory]()
     
@@ -53,9 +26,8 @@ class BudgetCardsPresentor : Presentor, CategoryListViewModel, UserSubmitViewMod
 
     init (budget: Budget){
         self.budget = budget
-        getSpendingCategories()
+        self.spendingCategories = self.budget!.getParentSpendingCategories()
         setupInitialSelectedCategories()
-        generateViewData()
     }
 
     func configure() -> UIViewController {
@@ -107,71 +79,7 @@ class BudgetCardsPresentor : Presentor, CategoryListViewModel, UserSubmitViewMod
 
 }
 
-extension CategorySelecter{
-    
-    
-    func selectedCategoryName(name:String){
-        
-        self.selectedCategoryNames.append(name)
-        submit()
-        
-    }
-    
-    func deSelectedCategoryName(name:String){
-        self.selectedCategoryNames.removeAll { $0 == name }
-        submit()
-    }
-    
-}
 
-extension CategoryListViewModel{
-    
-    func getSpendingCategories(){
-        self.spendingCategories = budget!.getParentSpendingCategories()
-    }
-    
-    
-    func generateViewData(){
-        
-        
-        var viewData = [BudgetCategoryViewData]()
-        
-        for spendingCategory in self.spendingCategories{
-            
-                        
-            let sectionTitle = spendingCategory.name!
-            var subCategories = [CategoryButton]()
-            let icon = spendingCategory.icon ?? "❓"
-            
-            let amountSpent = spendingCategory.initialThirtyDaysSpent
-            let amountSpentString = String(format: "$%.02f", amountSpent)
-                        
-            if spendingCategory.subSpendingCategories != nil{
-                
-                for case let subSpendingCategory as SpendingCategory in spendingCategory.subSpendingCategories!{
-                    
-                    let name = subSpendingCategory.name!
-                    let icon = subSpendingCategory.icon!
-                    var selectedDefault = false
-                    
-                    if self.selectedCategoryNames.contains(name){
-                        selectedDefault = true
-                    }
-                    
-                    let newSubCategory = CategoryButton(name: name, icon: icon, selected: selectedDefault)
-                    subCategories.append(newSubCategory)
-                }
-                
-            }
-            
-            viewData.append(BudgetCategoryViewData(sectionTitle: sectionTitle, icon: icon, amountSpent: amountSpentString, categories: subCategories))
-            
-        }
-        
-        self.viewData = viewData
-    }
-    
-}
 
 
 

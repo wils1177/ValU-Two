@@ -44,10 +44,12 @@ struct CategoryEntry : Codable {
     let name : String
     let contains : [String]?
     let icon : String?
+    let colorCode : Int?
     let subCategories : [CategoryEntry]?
     
     enum CodingKeys : String, CodingKey {
         case name =  "name"
+        case colorCode = "colorCode"
         case contains = "contains"
         case icon = "icon"
         case subCategories = "subCategories"

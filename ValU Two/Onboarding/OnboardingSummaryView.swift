@@ -14,17 +14,33 @@ struct OnboardingSummaryView: View {
     
     init(viewModel : OnboardingSummaryPresentor){
         self.viewModel = viewModel
+        
+        // To remove only extra separators below the list:
+        UITableView.appearance().tableFooterView = UIView()
+
+        // To remove all separators including the actual ones:
+        UITableView.appearance().separatorStyle = .none
+        
+        
+        UITableViewCell.appearance().backgroundColor = .systemGroupedBackground
+        UITableView.appearance().backgroundColor = .systemGroupedBackground
+        
     }
     
     var body: some View {
         
-        ScrollView{
-            VStack{
+        List{
                 
                 HStack{
-                    Text("Get started creating your very first budget!").padding()
+                    VStack{
+                        Text("👋").font(.system(size: 39)).padding(.leading).padding(.top)
+                        VStack{
+                            Text("Hi there! Follow these steps to get started creating your very first budget!").font(.callout).padding(.top, 15).padding(.leading).multilineTextAlignment(.center)
+                        }
+                    }
+
                     Spacer()
-                }
+                }.padding(.bottom, 20)
                 
                 
                 ForEach(self.viewModel.viewData!.steps, id: \.self) { step in
@@ -34,8 +50,8 @@ struct OnboardingSummaryView: View {
                 Spacer()
                 
                 
-            }
-        }.navigationBarTitle(Text("Get Started"),  displayMode: .large)
+            
+            }.navigationBarTitle(Text("Get Started"),  displayMode: .large)
         
     }
 }

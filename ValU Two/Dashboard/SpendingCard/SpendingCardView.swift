@@ -11,10 +11,12 @@ import SwiftUI
 struct SpendingCardView: View {
     
     var viewModel : SpendingCardViewModel
+    var budget : Budget
     
     init(budget : Budget, viewModel: SpendingCardViewModel, coordinator: BudgetsTabCoordinator){
         //print("Spending Card init")
         self.viewModel = viewModel
+        self.budget = budget
         viewModel.coordinator = coordinator
         
         // To remove only extra separators below the list:
@@ -33,57 +35,47 @@ struct SpendingCardView: View {
             
         VStack(spacing: 0.0){
             
-            HStack{
-                Text("Expenses").font(.system(size: 20)).bold()
-                Spacer()
-                Text("$" + String(self.viewModel.totalSpending)).font(.headline).fontWeight(.bold)
-            }.padding(.bottom, 15)
+            
+            
+              
                 
-                Divider().padding(.bottom, 5)
-                
-                
-                    ForEach(self.viewModel.categories, id: \.self){ category in
+            ForEach(self.viewModel.services, id: \.self){ service in
                             
                         
                             
                             VStack(spacing: CGFloat(0.0)){
-                                if category.isAnyChildSelected(){
-
-                                    BudgetSection(spendingCategory: category, viewModel: self.viewModel).padding(.top).cornerRadius(10)
+                                if service.getParentLimit() > 0.0{
                                     
+                                    Button(action: {
+                                        // your action here
+                                        self.viewModel.coordinator?.showIndvidualBudget(spendingCategory: service.parent)
+                                    }) {
+                                        ParentCategoryCard(spendingCategory: service.parent, service: service).padding(.bottom)
+                                    }.buttonStyle(PlainButtonStyle())
+  
                                 }
                                 
                                 
-                                if self.viewModel.categories.last!.name! == category.name!{
-                                    
-                                        
-                                        HStack{
-                                            Text(names.otherCategoryName.rawValue).font(.headline).foregroundColor(.gray)
-                                            Spacer()
-                                        }.padding(.bottom, 15)
-                                        
-                                        
-                                        Button(action: {
-                                            self.viewModel.coordinator?.showCategory(categoryName: names.otherCategoryName.rawValue)
-                                        }) {
-                                            BudgetBarView(iconText: self.viewModel.otherCategory!.icon, categoryName: self.viewModel.otherCategory!.name, amountSpent: self.viewModel.otherCategory!.spent, limitText: self.viewModel.otherCategory!.limit, percentage: Double(self.viewModel.otherCategory!.percentage)).padding(.bottom, 15)
-                                        }.buttonStyle(PlainButtonStyle())
-                                        
-                                        
-                                    
-                                    
-                                }
+                                
                                 
                             
                         }
                         
                     }
+            
+            Button(action: {
+                // your action here
+                self.viewModel.coordinator?.showCategory(categoryName: names.otherCategoryName.rawValue)
+            }) {
+                OtherSpendingSection(viewModel: self.viewModel).padding(.bottom)
+            }.buttonStyle(PlainButtonStyle())
+            
                 
                 
                 
             
             
-                }
+        }.padding(.horizontal, 5)
             
             
             

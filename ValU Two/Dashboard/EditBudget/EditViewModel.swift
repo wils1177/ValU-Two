@@ -16,35 +16,21 @@ struct EditBudgetViewData{
     var description : String
 }
 
-class EditBudgetViewModel : Presentor, BudgetEditor{    
+class EditBudgetViewModel : Presentor, BudgetEditor{
     
     var budget : Budget
-    var viewData : EditBudgetViewData?
     var coordinator : BudgetEditableCoordinator?
     
     init(budget: Budget){
         self.budget = budget
-        generateViewData()
-    }
+   }
     
     func configure() -> UIViewController {
         let vc = UIHostingController(rootView: EditOverView(viewModel: self))
         return vc
     }
     
-    func generateViewData(){
-        let editIncome = OnboardingStepViewData(title: "Edit Income", description: "A breif description", iconName: "pencil.circle.fill", iconColor: Color(.white), backgroundColor: Color(.black), completionHandler: self.editIncome)
-        let editSavings = OnboardingStepViewData(title: "Edit Savings Goal", description: "A breif description", iconName: "pencil.circle.fill", iconColor: Color(.white), backgroundColor: Color(.black), completionHandler: self.editSavings)
-        let editBudget = OnboardingStepViewData(title: "Rebalance Budget", description: "A breif description", iconName: "pencil.circle.fill", iconColor: Color(.white), backgroundColor: Color(.black), completionHandler: self.editBudget)
-        
-        let steps = [editIncome, editSavings, editBudget]
-        
-        let navigationTitle = "Edit Budget"
-        let description = "Select an option to begin editing your budget."
-        
-        self.viewData = EditBudgetViewData(steps: steps, navigationTitle: navigationTitle, description: description)
-        
-    }
+
     
     
 }
