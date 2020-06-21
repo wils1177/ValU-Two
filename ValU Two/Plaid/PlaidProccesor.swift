@@ -10,12 +10,14 @@ import Foundation
 import SwiftKeychainWrapper
 import CoreData
 import Firebase
+import FirebaseCrashlytics
 
 enum PlaidUserDefaultKeys: String{
     case incomeReadyKey = "IncomeReadyFor:"
     case publicTokenKey = "public_token"
     case accessTokenKey = "AccessTokenFor:"
     case institutionId = "istitutionId-"
+    case loginRequiredKey = "LoginRequiredFor:"
 }
 
 class PlaidProccessor: BudgetDateFindable{
@@ -44,7 +46,8 @@ class PlaidProccessor: BudgetDateFindable{
         do {
             let tokenResponse = try decoder.decode(TokenExchangeResponse.self, from: response)
             let accessTokenString = tokenResponse.accessToken
-            print(tokenResponse)
+            print("PRINTING ACCESS TOKEN FOR TESTING PURPOSES")
+            print(accessTokenString)
             let itemId = tokenResponse.itemId
             let saveSuccessful: Bool = KeychainWrapper.standard.set(accessTokenString, forKey: PlaidUserDefaultKeys.accessTokenKey.rawValue + itemId)
             print(saveSuccessful)
@@ -74,12 +77,25 @@ class PlaidProccessor: BudgetDateFindable{
         print(saveSuccessful)
     }
     
+    // Get the public token from the public token generation response
+    static func proccessPublicToken(response: Data) throws -> String{
+        let decoder = JSONDecoder()
+        do{
+            let parsedResponse = try decoder.decode(PublicTokenResponse.self, from: response)
+            return parsedResponse.publicToken
+        }
+        catch{
+            print("Could not decode Plaid connction response for generating a public token")
+            throw PlaidConnectionError.BadRequest
+        }
+    }
+    
     
     /*
      Takes in Plaid JSON response
      Parses and saves trasnsactions response to CoreData
     */
-    func aggregate(response: Data, isInitial: Bool = true){
+    func aggregate(response: Data, isInitial: Bool = true) throws{
    
         let decoder = JSONDecoder()
         
@@ -105,13 +121,16 @@ class PlaidProccessor: BudgetDateFindable{
         } catch (let err) {
             print("error:")
             print(err)
+
+            Crashlytics.crashlytics().record(error: err)
+            throw PlaidConnectionError.ProccessingError
         }
 
         
     }
     
     
-    func aggregateIncome(response: Data){
+    func aggregateIncome(response: Data) {
         let decoder = JSONDecoder()
         
         do {
@@ -133,11 +152,7 @@ class PlaidProccessor: BudgetDateFindable{
         
         for account in response{
             
-            if account.subType == "checking" || account.subType == "credit card"{
-                
-                dataManager.saveAccount(account: account, itemId: itemId)
-                
-            }
+            dataManager.saveAccount(account: account, itemId: itemId)
             
         }
         

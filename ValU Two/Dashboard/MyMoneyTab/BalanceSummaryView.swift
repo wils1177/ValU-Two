@@ -19,21 +19,21 @@ struct BalanceSummaryView: View {
     
     var body: some View {
         HStack{
-            //Spacer()
+            Spacer()
             
             
-            VStack(alignment: .leading, spacing: 0){
+            VStack(alignment: .center, spacing: 0){
                 
                 HStack{
                     Image(systemName: "creditcard.fill").foregroundColor(Color(.lightGray))
                     Text("Available Balance").font(.headline).bold().foregroundColor(Color(.lightGray))
                 }
                 
-                Text(balanceTotal).font(.system(size: 43)).bold().padding(.top, 10)
+                Text(balanceTotal).font(.system(size: 43)).bold().padding(.top, 3)
                 
             }
             Spacer()
-        }.padding().background(Color(.white)).cornerRadius(15)
+        }.padding()
     }
 }
 

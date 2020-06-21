@@ -54,7 +54,7 @@ struct SettingsView: View {
                     HStack{
                         
                         Button(action: {
-                            self.viewModel.showPlaidLink()
+                            self.viewModel.connectAccounts()
                         }) {
                             Text("Connect More Accounts").padding(.leading)
                         }

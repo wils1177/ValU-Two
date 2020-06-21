@@ -28,7 +28,7 @@ class TransactionProccessor: BudgetDateFindable{
         let today = Date()
         let thirtyDaysAgo = Calendar.current.date(byAdding: .day, value: -30, to: today)
         
-        let spendingCategories = self.budget.getAllSpendingCategories()
+        let spendingCategories = self.budget.getSubSpendingCategories()
         
         for category in spendingCategories{
             category.initialThirtyDaysSpent = 0.0
@@ -61,7 +61,7 @@ class TransactionProccessor: BudgetDateFindable{
         if transaction.transactionId != nil{
             
             //First match the amount to the time frame
-            matchToTimeFrame(transaction: transaction)
+            //matchToTimeFrame(transaction: transaction)
             
             // First, we will see if there any matches based on existign rules
             var spendingCategoryMatches = checkForRuleMatches(transaction: transaction, spendingCategories: spendingCategories)
@@ -128,12 +128,12 @@ class TransactionProccessor: BudgetDateFindable{
     func getDeepestMatch(spendingCategories: [SpendingCategory]) -> [SpendingCategory]{
                 
         var match = spendingCategories.first
-        var depth = 0
+        var depth = Int32(2)
         if match != nil{
             for category in spendingCategories{
-                if category.contains!.count > depth{
+                if category.matchDepth < depth{
                     match = category
-                    depth = category.contains!.count
+                    depth = category.matchDepth
                 }
             }
             return [match!]
@@ -155,13 +155,20 @@ class TransactionProccessor: BudgetDateFindable{
             let categoryLabels:Set<String> = Set(spendingCateogory.contains!)
             let transactionCategoryLabels:Set<String> = Set(transaction.plaidCategories!)
             
+            
+            if categoryLabels.contains(where: transactionCategoryLabels.contains){
+                // We have a match!
+                matches.append(spendingCateogory)
+            }
+            
+            /*
             if categoryLabels.isSubset(of: transactionCategoryLabels){
                 
                 // We have a match!
                 matches.append(spendingCateogory)
                 
             }
-            
+            */
         }
         
         
@@ -190,6 +197,18 @@ class TransactionProccessor: BudgetDateFindable{
         }
         
         return matches
+    }
+    
+    func checkIfShouldBeHidden(transaction: Transaction){
+        if transaction.plaidCategories != nil{
+            if transaction.plaidCategories!.contains("Internal Account Transfer"){
+                transaction.isHidden = true
+            }
+            else if transaction.plaidCategories!.contains("Credit Card"){
+                transaction.isHidden = true
+            }
+        }
+        
     }
     
     func matchToTimeFrame(transaction: Transaction){

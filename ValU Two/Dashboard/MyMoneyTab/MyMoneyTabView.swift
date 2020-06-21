@@ -21,13 +21,9 @@ struct MyMoneyTabView: View {
             
             List{
                 
-                HStack{
-                    Text("Summary").font(.system(size: 22)).bold()
-                    Spacer()
-                    
-                }.padding(.top, 10)
                 
-                BalanceSummaryView().padding(.horizontal, 5).padding(.top, 5)
+                
+                BalanceSummaryView().padding(.horizontal, 5).padding(.top, 25).padding(.bottom)
                 
                 //CashFlowHighlightView().padding(.horizontal, 5).padding(.top, 5)
                 
@@ -37,7 +33,7 @@ struct MyMoneyTabView: View {
  
         }
         
-        .navigationBarTitle("My Money")
+        .navigationBarTitle("Accounts")
     }
 }
 

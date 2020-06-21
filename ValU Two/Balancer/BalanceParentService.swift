@@ -40,6 +40,16 @@ class BalanceParentService : ObservableObject, Hashable{
         return total
     }
     
+    func getParentInitialSpent() -> Float{
+        var total = Float(0.0)
+        for child in self.children{
+            
+            total = child.initialThirtyDaysSpent + total
+
+        }
+        return total
+    }
+    
     func getPercentageSpent() -> Float{
         let limit = getParentLimit()
         let spent = getParentSpent()

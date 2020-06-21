@@ -21,8 +21,8 @@ public class Location: NSManagedObject{
         self.address = (location.address ?? nil)
         self.city = location.city ?? nil
         self.country = location.country ?? nil
-        self.lat = location.lat ?? nil
-        self.lon = location.lon ?? nil
+        self.lat = location.lat ?? 0.0
+        self.lon = location.lon ?? 0.0
         self.postalCode = location.postalCode ?? nil
         self.region = location.region ?? nil
         self.storeNumber = location.storeNumber ?? nil

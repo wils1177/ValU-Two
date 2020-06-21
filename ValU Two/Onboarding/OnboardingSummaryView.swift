@@ -11,6 +11,8 @@ import SwiftUI
 struct OnboardingSummaryView: View {
     
     @ObservedObject var viewModel : OnboardingSummaryPresentor
+    @EnvironmentObject var itemManagerService : ItemManagerService
+    
     
     init(viewModel : OnboardingSummaryPresentor){
         self.viewModel = viewModel
@@ -25,6 +27,11 @@ struct OnboardingSummaryView: View {
         UITableViewCell.appearance().backgroundColor = .systemGroupedBackground
         UITableView.appearance().backgroundColor = .systemGroupedBackground
         
+        
+    }
+    
+    func getBankConnectionDescription() -> String{
+        return String(self.itemManagerService.getItems().count) + " account connected"
     }
     
     var body: some View {
@@ -42,11 +49,15 @@ struct OnboardingSummaryView: View {
                     Spacer()
                 }.padding(.bottom, 20)
                 
-                
-                ForEach(self.viewModel.viewData!.steps, id: \.self) { step in
-                    OnboardingStepRow(viewData: step)
-                }
-                
+            GenericOnboardingStepRow(title: self.viewModel.viewData!.steps[0].title, description: getBankConnectionDescription(), iconName: self.viewModel.viewData!.steps[0].iconName, iconColor: self.viewModel.viewData!.steps[0].iconColor, backgroundColor: self.viewModel.viewData!.steps[0].backgroundColor, subTectColor: self.viewModel.viewData!.steps[0].subTectColor, completionHandler: self.viewModel.viewData!.steps[0].completionHandler)
+            
+            GenericOnboardingStepRow(title: self.viewModel.viewData!.steps[1].title, description: self.viewModel.viewData!.steps[1].description, iconName: self.viewModel.viewData!.steps[1].iconName, iconColor: self.viewModel.viewData!.steps[1].iconColor, backgroundColor: self.viewModel.viewData!.steps[1].backgroundColor, subTectColor: self.viewModel.viewData!.steps[1].subTectColor, completionHandler: self.viewModel.viewData!.steps[1].completionHandler)
+            
+            GenericOnboardingStepRow(title: self.viewModel.viewData!.steps[2].title, description: self.viewModel.viewData!.steps[2].description, iconName: self.viewModel.viewData!.steps[2].iconName, iconColor: self.viewModel.viewData!.steps[2].iconColor, backgroundColor: self.viewModel.viewData!.steps[2].backgroundColor, subTectColor: self.viewModel.viewData!.steps[2].subTectColor, completionHandler: self.viewModel.viewData!.steps[2].completionHandler)
+            
+            GenericOnboardingStepRow(title: self.viewModel.viewData!.steps[3].title, description: self.viewModel.viewData!.steps[3].description, iconName: self.viewModel.viewData!.steps[3].iconName, iconColor: self.viewModel.viewData!.steps[3].iconColor, backgroundColor: self.viewModel.viewData!.steps[3].backgroundColor, subTectColor: self.viewModel.viewData!.steps[3].subTectColor, completionHandler: self.viewModel.viewData!.steps[3].completionHandler)
+            
+          
                 Spacer()
                 
                 

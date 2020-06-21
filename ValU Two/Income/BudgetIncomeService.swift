@@ -9,12 +9,23 @@
 import Foundation
 
 class BudgetIncomeService : ObservableObject{
-    var incomePredictionService  = IncomePredictionService()
+    var incomePredictionService : IncomePredictionService
     var budget : Budget
     @Published var currentIncomeEntry : String = ""
     
     init(budget : Budget){
         self.budget = budget
+        
+        if self.budget.timeFrame == 0{
+            self.incomePredictionService = IncomePredictionService(timeFrame: TimeFrame.monthly)
+        }else if self.budget.timeFrame == 1{
+           self.incomePredictionService = IncomePredictionService(timeFrame: TimeFrame.semiMonthly)
+        }
+        else{
+            self.incomePredictionService = IncomePredictionService(timeFrame: TimeFrame.weekly)
+        }
+        
+        
         let intialIncome = getInitialIncome()
         if intialIncome == 0.0{
             self.currentIncomeEntry = ""
@@ -46,10 +57,6 @@ class BudgetIncomeService : ObservableObject{
         
         if income != 0.0 {
             self.budget.amount = Float(income)
-        }
-        
-        if self.budget.budgetTimeFrame == nil{
-            self.budget.budgetTimeFrame = TimeFrameManager().getCurrentTimeFrame()
         }
 
     }

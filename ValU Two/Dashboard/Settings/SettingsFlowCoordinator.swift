@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import SwiftUI
 
-class SettingsFlowCoordinator : Coordinator, PlaidLinkDelegate, plaidIsConnectedDelegate{
+class SettingsFlowCoordinator : Coordinator, PlaidLinkDelegate{
     
     
     var parent : BudgetsTabCoordinator?
@@ -36,13 +36,23 @@ class SettingsFlowCoordinator : Coordinator, PlaidLinkDelegate, plaidIsConnected
         
     }
     
-    func showPlaidLink(){
+    func connectAccounts(){
+        let presentor = LoadingAccountsPresentor(budget : self.budget, itemManager: ItemManagerService())
+        presentor.coordinator = self
+        presentor.viewData.viewState = LoadingAccountsViewState.Initial
+        self.presentorStack.append(presentor)
+        let vc = presentor.configure()
+        
+        self.navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func launchPlaidLink() {
         let presentor = PlaidLinkViewPresentor()
         presentor.coordinator = self
-        let vc = presentor.configure()
-        vc.modalPresentationStyle = .fullScreen
-        self.navigationController.present(vc, animated: true)
         self.presentorStack.append(presentor)
+        let linkVC = presentor.configure()
+        linkVC.modalPresentationStyle = .fullScreen
+        self.navigationController.present(linkVC, animated: true)
     }
     
     func dismissPlaidLink(sender: PlaidLinkViewPresentor) {
@@ -58,28 +68,23 @@ class SettingsFlowCoordinator : Coordinator, PlaidLinkDelegate, plaidIsConnected
     
     func plaidLinkSuccess(sender: PlaidLinkViewPresentor) {
         
-        let presentor = LoadingAccountsPresentor(budget: self.budget)
-        presentor.coordinator = self
-        let vc = presentor.configure()
-        self.navigationController.pushViewController(vc, animated: false)
-        
+        self.presentorStack.popLast()
+        let loadingAccountsPresentor = self.presentorStack.last! as! LoadingAccountsPresentor
+        loadingAccountsPresentor.startLoadingAccounts()
         sender.linkViewController?.dismiss(animated: true, completion: {
             print("link dismissed")
             
         })
-        _ = self.presentorStack.popLast()
         
     }
     
     func plaidIsConnected() {
         self.navigationController.popViewController(animated: true)
-        let settingsPresentor = self.presentorStack.last as? SettingsViewModel
-        settingsPresentor?.updateView()
-        self.budget.updateAmountSpent()
+        self.presentorStack.popLast()
     }
     
     func connectMoreAccounts(){
-        self.navigationController.popViewController(animated: true)
+        launchPlaidLink()
     }
     
     func dismissSettings(){
@@ -93,3 +98,6 @@ class SettingsFlowCoordinator : Coordinator, PlaidLinkDelegate, plaidIsConnected
     }
 
 }
+
+
+

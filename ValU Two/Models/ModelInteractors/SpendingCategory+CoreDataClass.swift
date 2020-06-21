@@ -23,6 +23,7 @@ public class SpendingCategory: NSManagedObject, NSCopying {
         newSpendingCategory.initialThirtyDaysSpent = self.initialThirtyDaysSpent
         newSpendingCategory.selected = self.selected
         newSpendingCategory.id = UUID()
+        newSpendingCategory.matchDepth = self.matchDepth
         return newSpendingCategory
     }
     
@@ -40,6 +41,7 @@ public class SpendingCategory: NSManagedObject, NSCopying {
         self.spent = 0.0
         self.initialThirtyDaysSpent = 0.0
         self.selected = false
+        self.matchDepth = Int32(categoryEntry.matchDepth!)
         self.colorCode = Int32(categoryEntry.colorCode!)
         
         

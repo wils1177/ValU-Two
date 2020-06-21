@@ -33,7 +33,7 @@ class TransactionsTabCoordinator : Coordinator, TransactionRowDelegate{
         self.view = vc
         
         self.navigationController.navigationBar.prefersLargeTitles = true
-        self.navigationController.tabBarItem = UITabBarItem(title: "Transactions", image: UIImage(systemName: "arrow.down.right.and.arrow.up.left"), selectedImage: UIImage(named: "tab_icon_seelcted"))
+        self.navigationController.tabBarItem = UITabBarItem(title: "Transactions", image: UIImage(systemName: "arrow.up.arrow.down"), selectedImage: UIImage(named: "tab_icon_seelcted"))
         self.navigationController.pushViewController(vc, animated: false)
         
     }
@@ -41,6 +41,51 @@ class TransactionsTabCoordinator : Coordinator, TransactionRowDelegate{
 
     
 
+    
+    
+}
+
+extension TransactionRowDelegate{
+    
+    func showEditCategory(transaction: Transaction) {
+        
+        let presentor = EditCategoryViewModel(transaction: transaction, budget: self.budget)
+        self.presentorStack.append(presentor)
+        presentor.coordinator = self
+        let vc = presentor.configure()
+        self.navigationController.present(vc, animated: true)
+        
+    }
+    
+    func showTransactionDetail(transaction: Transaction){
+        
+        let presentor = TransactionDetailViewModel(transaction: transaction)
+        presentor.coordinator = self
+        let vc = presentor.configure()
+        
+        self.navigationController.navigationBar.setBackgroundImage(UIImage(color: .systemGroupedBackground), for: .default) //UIImage.init(named: "transparent.png")
+        self.navigationController.navigationBar.shadowImage = UIImage()
+        self.navigationController.navigationBar.isTranslucent = true
+        self.navigationController.view.backgroundColor = .systemGroupedBackground
+
+        
+        self.navigationController.pushViewController(vc, animated: true)
+    }
+    
+    
+    func showSplitTransaction(transaction: Transaction){
+        let view = SplitTransactionView()
+        let vc = UIHostingController(rootView: view)
+        self.navigationController.present(vc, animated: true)
+    }
+    
+
+    
+    func dismissEditCategory() {
+        self.presentorStack.popLast()
+        self.navigationController.dismiss(animated: true)
+    }
+    
     
     
 }

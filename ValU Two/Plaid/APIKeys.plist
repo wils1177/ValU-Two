@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>DEVELOPMENT_CLIENT_SECRET</key>
+	<string>7c8f2f05460d93faef9004c7084307</string>
 	<key>CLIENT_ID</key>
 	<string>5cf863c7584f980012544d3f</string>
 	<key>SANDBOX_CLIENT_SECRET</key>

@@ -11,6 +11,7 @@ import SwiftUI
 struct HistoryEntryView: View {
     
     var budget : Budget
+    var service : BudgetStatsService
     
     func getTitle() -> String{
         return CommonUtils.getMonthFromDate(date: self.budget.startDate!)
@@ -27,54 +28,59 @@ struct HistoryEntryView: View {
     func getPercentage() -> Float{
         return self.budget.spent / self.budget.getAmountAvailable()
     }
+    
+    func getStartDate() -> String{
+        let date = self.budget.startDate!
+        let df = DateFormatter()
+        df.dateFormat = "dd/MM/yyyy"
+        return df.string(from: date)
+    }
+    
+    func getEndDate() -> String{
+        let date = self.budget.endDate!
+        let df = DateFormatter()
+        df.dateFormat = "dd/MM/yyyy"
+        return df.string(from: date)
+    }
+    
+    func getIcon() -> some View{
+        if self.service.didHitSavingsGoal(budget: self.budget){
+            return AnyView(Image(systemName: "checkmark.circle.fill").font(.system(size: 35)).padding(.trailing, 10).foregroundColor(Color(.systemGreen)))
+        }
+        else{
+            return AnyView(Image(systemName: "xmark.shield.fill").font(.system(size: 35)).padding(.trailing, 10).foregroundColor(Color(.systemGray)))
+        }
+    }
         
 
     var body: some View {
-        VStack{
-            HStack{
-                Text(getTitle()).font(.title).fontWeight(.bold)
-                Spacer()
-            }
-            HStack{
-                
-                HStack{
-                    
-                    //Spacer()
-                    VStack{
-                        Text(getSpent()).font(.system(size: 28)).fontWeight(.bold)
-                        Text("Spent").font(.headline).fontWeight(.bold).foregroundColor(Color(.gray))
-                    }
-                    
-                    
-                }.padding(.leading).padding(.leading)
-
-                Spacer()
-                
-                HStack{
-                    
-                    
-                    VStack{
-                        //Spacer()
-                        Text(getReminaing()).font(.system(size: 28)).fontWeight(.bold)
-                        Text("Saved").font(.headline).fontWeight(.bold).foregroundColor(Color(.gray))
-                        
-                    }
-                    
-                    
-                }.padding(.trailing).padding(.trailing).padding(.top)
-                
-            }
-            
         
-            
-            ProgressBarView(percentage: CGFloat(getPercentage()), color: Color(.black))
-            
-            
-            
-            
-            
-            
-        }.padding().background(Color(.white)).cornerRadius(10).shadow(radius: 8).padding(.leading).padding(.trailing).padding(.bottom)
+        VStack(spacing: 0){
+            HStack{
+                Text(getTitle()).font(.headline)
+                Text(getStartDate()).font(.footnote).foregroundColor(Color(.lightGray))
+                Text("-").font(.footnote).foregroundColor(Color(.lightGray))
+                Text(getEndDate()).font(.footnote).foregroundColor(Color(.lightGray))
+                Spacer()
+            }.padding(.bottom, 10)
+            HStack{
+                getIcon()
+                
+                VStack(alignment: .leading){
+                    HStack(alignment: .bottom){
+                        Text("$200").font(.title).bold()
+                        Text("Saved").font(.headline).foregroundColor(Color(.lightGray)).padding(.bottom, 4)
+                        Spacer()
+                    }
+                    
+                    Text("You beat your savings goal!").font(.footnote).foregroundColor(Color(.gray))
+                }
+                Spacer()
+            }.padding(.leading, 10)
+        }.padding().background(Color(.white)).cornerRadius(15).padding(.bottom, 15).padding(.horizontal, 10)
+        
+        
+        
     }
 }
 

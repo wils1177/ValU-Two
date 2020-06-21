@@ -47,7 +47,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = rootView
         window?.makeKeyAndVisible()
         
-        UINavigationBar.appearance().tintColor = .black
+        UINavigationBar.appearance().tintColor = AppTheme().themeColorPrimaryUIKit
         
         // Use Firebase library to configure APIs
         FirebaseApp.configure()

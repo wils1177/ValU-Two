@@ -34,7 +34,7 @@ struct BudgetBalanceCard: View {
                        }.padding(.top, 10).padding(.bottom, 5).padding(.leading, 8)
                        
                        HStack{
-                           Text("You've Spent " + "$" + String(Int(self.spendingCategory.initialThirtyDaysSpent)) + " last month").font(.footnote).foregroundColor(Color(.lightGray))
+                        Text("You've Spent " + "$" + String(Int(self.service.getParentInitialSpent())) + " last month").font(.footnote).foregroundColor(Color(.lightGray))
                
                            Spacer()
                        }.padding(.horizontal).padding(.bottom, 10).padding(.leading, 8)

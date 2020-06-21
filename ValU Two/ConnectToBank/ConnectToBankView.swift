@@ -10,11 +10,19 @@ import SwiftUI
 
 struct ConnectToBankView: View {
     
-    var coordinator : OnboardingFlowCoordinator?
+    var coordinator : PlaidLinkDelegate?
+    var itemService : ItemManagerService
     
+    init(coordinator: PlaidLinkDelegate, itemManager: ItemManagerService){
+        self.coordinator = coordinator
+        self.itemService = itemManager
+    }
     
-    var body: some View {
-        
+    var myConnectionsView : some View{
+        MyConnectionsView(service: self.itemService, coordinator: self.coordinator!)
+    }
+    
+    var noConnectionsView : some View{
         VStack(alignment: .center){
             
            Spacer()
@@ -40,10 +48,20 @@ struct ConnectToBankView: View {
             
         }.navigationBarHidden(true)
     }
-}
-
-struct ConnectToBankView_Previews: PreviewProvider {
-    static var previews: some View {
-        ConnectToBankView()
+    
+    
+    var body: some View {
+        
+        VStack{
+            if self.itemService.getItems().count > 0{
+                myConnectionsView
+            }
+            else{
+                noConnectionsView
+            }
+        }
+        
     }
 }
+
+

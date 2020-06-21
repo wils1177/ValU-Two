@@ -24,11 +24,14 @@ struct SwiftUIAccountsView: View {
     
     var body: some View {
         VStack(spacing: 5){
+            
+            /*
             HStack{
                 Text("Accounts").font(.system(size: 22)).bold().bold()
                 Spacer()
                 
             }
+            */
             
                 VStack(spacing: 5) {
                         ForEach(self.accounts, id: \.self){ account in

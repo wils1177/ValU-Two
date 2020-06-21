@@ -12,15 +12,17 @@ import Foundation
 class IncomePredictionService{
     
     var transactions = [Transaction]()
+    var timeFrame: TimeFrame
     
-    init(){
-        
+    init(timeFrame: TimeFrame){
+        self.timeFrame = timeFrame
         getPreviousIncomeTransactions()
         
     }
     
     func getPreviousIncomeTransactions(){
         let endDate = Date()
+        
         let startDate = Calendar.current.date(byAdding: .day, value: -30, to: endDate)!
         
         let query = PredicateBuilder().generateNegativeAmountPredicate(startDate: startDate, endDate: endDate)
@@ -40,7 +42,17 @@ class IncomePredictionService{
         for transaction in self.transactions{
             total = total + transaction.amount
         }
-        return total * -1
+        
+        if timeFrame == TimeFrame.monthly{
+            return total * -1
+        }
+        else if timeFrame == TimeFrame.semiMonthly{
+            return (total * -1) / 2
+        }
+        else{
+            return (total * -1) / 4.7
+        }
+        
     }
     
     func getSortedIncomeTransactions() -> [Transaction]{

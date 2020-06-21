@@ -35,9 +35,6 @@ struct SpendingCardView: View {
             
         VStack(spacing: 0.0){
             
-            
-            
-              
                 
             ForEach(self.viewModel.services, id: \.self){ service in
                             

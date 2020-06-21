@@ -38,7 +38,7 @@ class EditBudgetViewModel : Presentor, BudgetEditor{
 extension BudgetEditor{
     
     func editIncome(){
-        coordinator?.loadIncomeScreen()
+        coordinator?.continueToTimeFrame()
     }
     
     func editBudget(){

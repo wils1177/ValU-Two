@@ -21,6 +21,7 @@ struct LoadingAccountsView: View {
         case .Loading: return false
         case .Success: return true
         case .Failure: return true
+        case .Initial: return false
         }
     }
     
@@ -30,6 +31,16 @@ struct LoadingAccountsView: View {
         case .Loading: return false
         case .Success: return true
         case .Failure: return false
+        case .Initial: return false
+        }
+    }
+    
+    private func isInitial(for state: LoadingAccountsViewState) -> Bool {
+        switch state {
+        case .Loading: return false
+        case .Success: return false
+        case .Failure: return false
+        case .Initial: return true
         }
     }
     
@@ -42,9 +53,11 @@ struct LoadingAccountsView: View {
     @ViewBuilder
     var body: some View {
         
-        if isDoneLoading(for: $viewData.viewState.wrappedValue){
+        if isInitial(for: $viewData.viewState.wrappedValue){
+            ConnectToBankView(coordinator: self.presentor!.coordinator!, itemManager: self.presentor!.itemManager)
+        }
+        else if isDoneLoading(for: $viewData.viewState.wrappedValue){
             if isSuccessfull(for: $viewData.viewState.wrappedValue){
-                //WelcomeView()
                 AccountsLoadedView(presentor: self.presentor).transition(.slide)
             }
             else{

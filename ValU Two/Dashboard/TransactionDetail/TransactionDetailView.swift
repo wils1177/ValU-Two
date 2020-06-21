@@ -23,7 +23,9 @@ struct TransactionDetailView: View {
         self.transaction = transaction
         self.account = account
         
+        UISwitch.appearance().onTintColor = AppTheme().themeColorPrimaryUIKit
         
+        print(transaction.plaidCategories)
     }
     
     func dateToString(date: Date) -> String{
@@ -85,7 +87,7 @@ struct TransactionDetailView: View {
                 Toggle(isOn: self.$viewModel.isHidden) {
                     Text("Hide from Budget")
                         Spacer()
-                }
+                }.accentColor(AppTheme().themeColorPrimary)
                 //.onTapGesture {
                   // Any actions here.
                 //    print("Status Changed")
@@ -105,8 +107,8 @@ struct TransactionDetailView: View {
                 HStack{
                     Spacer()
                    VStack(alignment: .center){
-                    Image(systemName: "ellipsis.circle.fill").imageScale(.large).foregroundColor(Color(.systemBlue)).padding(.top, 10)
-                    Text("Edit Category").foregroundColor(Color(.systemBlue)).font(.caption).padding(.bottom, 5)
+                    Image(systemName: "ellipsis.circle.fill").imageScale(.large).foregroundColor(AppTheme().themeColorPrimary).padding(.top, 10)
+                    Text("Edit Category").foregroundColor(AppTheme().themeColorPrimary).font(.caption).padding(.bottom, 5)
                     }
                     Spacer()
                 }.padding(.horizontal).padding(.vertical, 5).background(Color(.white)).cornerRadius(10).padding(.leading).padding(.trailing, 5)
@@ -122,8 +124,8 @@ struct TransactionDetailView: View {
                 HStack{
                     Spacer()
                        VStack(alignment: .center){
-                            Image(systemName: "divide.circle.fill").imageScale(.large).foregroundColor(Color(.systemBlue)).padding(.top, 10)
-                        Text("Split").foregroundColor(Color(.systemBlue)).font(.caption).padding(.bottom, 5)
+                            Image(systemName: "divide.circle.fill").imageScale(.large).foregroundColor(AppTheme().themeColorPrimary).padding(.top, 10)
+                        Text("Split").foregroundColor(AppTheme().themeColorPrimary).font(.caption).padding(.bottom, 5)
                         }
                     Spacer()
                 }.padding(.horizontal).padding(.vertical, 5).background(Color(.white)).cornerRadius(10).padding(.trailing).padding(.leading, 5)

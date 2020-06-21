@@ -14,12 +14,32 @@ class PlaidLinkViewPresentor : UIViewController, Presentor  {
     
     var coordinator : PlaidLinkDelegate?
     var linkViewController: PLKPlaidLinkViewController?
+    var publicToken : String?
+    var presentorStack = [Presentor]()
+    
+    init(publicToken : String? = nil){
+        self.publicToken = publicToken
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+
     
     func configure() -> UIViewController {
         // With shared configuration from Info.plist
         let linkViewDelegate = self
-        self.linkViewController = PLKPlaidLinkViewController(delegate:
+        
+        if self.publicToken == nil{
+            self.linkViewController = PLKPlaidLinkViewController(delegate:
             linkViewDelegate)
+        }
+        else{
+            self.linkViewController = PLKPlaidLinkViewController(publicToken: self.publicToken!, delegate: linkViewDelegate)
+        }
+        
         if (UI_USER_INTERFACE_IDIOM() == .pad) {
             self.linkViewController!.modalPresentationStyle = .formSheet;
         }
@@ -27,9 +47,7 @@ class PlaidLinkViewPresentor : UIViewController, Presentor  {
         return self.linkViewController!
     }
     
-    func dissmisPlaidLink(){
-        
-    }
+
     
 
 }

@@ -28,14 +28,13 @@ struct AccountsAreLoadingView: View {
                 .animation(Animation.linear(duration: 1.0).repeatForever(autoreverses: false))
                 .onAppear(){
                     self.animate.toggle()
-                    self.presentor?.viewWillLoad()
             }.foregroundColor(AppTheme().themeColorPrimary)
                 .padding()
             Text("Loading Accounts...").bold()
             
             
             Button(action: {
-                self.presentor?.transactionPull()
+                self.presentor?.aggregationService?.transactionPull()
             }){
                 
                 HStack{

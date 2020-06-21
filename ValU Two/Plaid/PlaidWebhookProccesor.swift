@@ -31,69 +31,35 @@ class PlaidWebhookProccesor{
         else if webhookCode == "HISTORICAL_UPDATE"{
                 print("Proccessing Histocial Update Webhook")
                 DataManager().saveDatabase()
-                historicalUpdatePull()
+                PlaidDefaultUpdateService(itemId: self.itemId!).historicalUpdatePull()
         }
         else if webhookCode == "DEFAULT_UPDATE"{
             print("Proccessing Default Update Webhook")
             BudgetCopyer().checkIfBudgetIsOutdated()
             DataManager().saveDatabase()
-            initiateDefaultUpdatePull()
+            PlaidDefaultUpdateService(itemId: self.itemId!).initiateDefaultUpdatePull()
+        }
+        else if webhookCode == "ERROR"{
+            handleErrorWebhook()
         }
         
         
         
     }
     
-    func historicalUpdatePull(){
-        let today = Date()
-        var mostRecentTransaction = Calendar.current.date(byAdding: .day, value: -60, to: today)
+    
+    func handleErrorWebhook(){
         
+        let loginRequiredKey = PlaidUserDefaultKeys.loginRequiredKey.rawValue + self.itemId!
+        UserDefaults.standard.set(true, forKey: loginRequiredKey)
         
-
-
-        let plaidConnection = PlaidConnection()
-        
-        try? plaidConnection.getTransactions(itemId : self.itemId!, startDate: mostRecentTransaction!, endDate: today, completion: self.defatulUpdatePullFinished(result:))
     }
     
     
-    func initiateDefaultUpdatePull(){
-        
-        let today = Date()
-        var mostRecentTransaction = Calendar.current.date(byAdding: .day, value: -30, to: today)
-        
-        do{
-            mostRecentTransaction = try DataManager().fetchMostRecentTransactionDate()
-        }
-        catch{
-            print("Could NOT get the most recent trasnsaction, falling back to 30 days")
-        }
-
-
-        let plaidConnection = PlaidConnection()
-        
-        try? plaidConnection.getTransactions(itemId: self.itemId!, startDate: mostRecentTransaction!, endDate: today, completion: self.defatulUpdatePullFinished(result:))
-        
-    }
-
     
     
-    func defatulUpdatePullFinished(result: Result<Data, Error>){
     
-        
-        DispatchQueue.main.async {
-            switch result {
-            case .failure(let error):
-                print(error)
-            case .success(let dataResult):
-                //Todo : Try-Catch this 
-                let budget = try? DataManager().getBudget()
-                PlaidProccessor(budget: budget!).aggregate(response: dataResult, isInitial: false)
-            }
-        }
-        
-        
-    }
+    
     
     func startIncomePull(){
         print("getting income...")

@@ -18,20 +18,35 @@ struct AccountsLoadedView: View {
         self.accounts = presentor!.getLoadedAccounts()
     }
     
+    @State var cardsHidden = false
+    
+    func makeCardViews() -> [AnyView]{
+        var cards = [AnyView]()
+        for account in self.accounts{
+            cards.append(AnyView(SwiftUIAccountCardView(account: account)))
+        }
+        return cards
+    }
+    
     var body: some View {
         
             VStack(alignment: .center){
                 
-               Spacer()
                 
-                Text("Accounts Successfully Loaded").font(.title).bold().lineLimit(nil).padding().multilineTextAlignment(.center).padding(.bottom, 55)
+                Text("Accounts Successfully Loaded").font(.title).bold().lineLimit(nil).padding().multilineTextAlignment(.center).padding(.top).padding(.top)
                 
-                LoadedAccountsList(accounts: self.accounts)
+                //LoadedAccountsList(accounts: self.accounts)
+                //SnapCarousel(accounts: self.accounts).environmentObject(UIStateModel())
+                if !self.cardsHidden{
+                    CarouselView(itemHeight: 190, views: makeCardViews())
+                }
+                
                 Spacer()
                 
                 Button(action: {
                     //Button Action
                     self.presentor?.userPressedContinue()
+                    self.cardsHidden = true
                     }){
                     HStack{
                         Spacer()
@@ -57,10 +72,9 @@ struct AccountsLoadedView: View {
                     
                     
                 }
-                
-                
+     
         }
-        
+
         
         .navigationBarTitle(Text("Welcome"),  displayMode: .large)
         .navigationBarHidden(true)

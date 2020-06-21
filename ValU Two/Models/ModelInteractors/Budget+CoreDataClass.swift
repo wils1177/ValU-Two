@@ -160,20 +160,38 @@ public class Budget: NSManagedObject, NSCopying, Identifiable {
     
     func setTimeFrame(timeFrame: TimeFrame) {
         
-        let comp: DateComponents = Calendar.current.dateComponents([.year, .month], from: Date())
-        let startOfMonth = Calendar.current.date(from: comp)
+        let today = Date()
         
         if timeFrame == TimeFrame.monthly{
             self.timeFrame = TimeFrame.monthly.rawValue
-            self.startDate = startOfMonth
-            self.endDate = Calendar.current.date(byAdding: .month, value: 1, to: startOfMonth!)
+            self.startDate = today.startOfMonth!
+            self.endDate = today.endOfMonth!
         }
         else if timeFrame == TimeFrame.semiMonthly{
-            //Todo: A real implementation around semi monthly
-            print("Semi Monthly does not really work yet")
+            
+            let startOfMonth = today.startOfMonth!
+            let fifteenth = today.fifteenthOfMonth!
+            let endOfMonth = today.endOfMonth!
+            
+            if (startOfMonth ... fifteenth).contains(today){
+                self.startDate = startOfMonth
+                self.endDate = fifteenth
+            }
+            else{
+                self.startDate = fifteenth
+                self.endDate = endOfMonth
+            }
+            
+            
             self.timeFrame = TimeFrame.semiMonthly.rawValue
-            self.startDate = Date()
-            self.endDate = Calendar.current.date(byAdding: .day, value: 15, to: Date())
+            
+        }
+        else if timeFrame == TimeFrame.weekly{
+            
+            self.startDate = today.startOfWeek!
+            self.endDate = today.endOfWeek!
+            
+            self.timeFrame = TimeFrame.weekly.rawValue
         }
         
         
@@ -212,14 +230,14 @@ public class Budget: NSManagedObject, NSCopying, Identifiable {
     }
     
     func updateAmountSpent(){
-        print("updating the amount spent")
-        self.spent = 0.0
+        //print("updating the amount spent")
+        //self.spent = 0.0
         //let spendingCategories = getSubSpendingCategories()
         //for category in spendingCategories{
         //    category.reCalculateAmountSpent()
 
         //}
-        print("finished updating the amount spent")
+        //print("finished updating the amount spent")
     }
     
     func deSelectCategory(name: String){

@@ -46,10 +46,7 @@ protocol UserSubmitViewModel: class, ViewModel{
     func submit()
 }
 
-protocol plaidIsConnectedDelegate{
-    func plaidIsConnected()
-    func connectMoreAccounts()
-}
+
 
 
 protocol StartPageViewDelegate {
@@ -76,8 +73,11 @@ protocol BudgetTypeDelegate{
 
 
 protocol PlaidLinkDelegate {
+    func launchPlaidLink()
     func dismissPlaidLink(sender: PlaidLinkViewPresentor)
     func plaidLinkSuccess(sender : PlaidLinkViewPresentor)
+    func plaidIsConnected()
+    func connectMoreAccounts()
 }
 
 protocol CardsPresentor : Presentor{
@@ -102,6 +102,7 @@ protocol IncomeCoordinator: Coordinator {
     
     func loadIncomeScreen()
     func incomeSubmitted(budget: Budget)
+    func continueToTimeFrame()
 }
 
 protocol BudgetEditor {
@@ -120,6 +121,7 @@ protocol BudgetEditableCoordinator: IncomeCoordinator, SetSavingsViewDelegate, S
     func continueToBudgetCategories()
     func continueToPlaid()
     func continueToSetSavings()
+    
     func dimiss()
 }
 

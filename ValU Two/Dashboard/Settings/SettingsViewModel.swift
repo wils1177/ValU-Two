@@ -75,8 +75,8 @@ class SettingsViewModel: ObservableObject, Presentor{
         
     }
     
-    func showPlaidLink(){
-        self.coordinator?.showPlaidLink()
+    func connectAccounts(){
+        self.coordinator?.connectAccounts()
     }
     
     func deleteItem(itemId: String){

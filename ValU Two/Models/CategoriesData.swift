@@ -45,6 +45,7 @@ struct CategoryEntry : Codable {
     let contains : [String]?
     let icon : String?
     let colorCode : Int?
+    let matchDepth : Int?
     let subCategories : [CategoryEntry]?
     
     enum CodingKeys : String, CodingKey {
@@ -52,6 +53,7 @@ struct CategoryEntry : Codable {
         case colorCode = "colorCode"
         case contains = "contains"
         case icon = "icon"
+        case matchDepth = "matchDepth"
         case subCategories = "subCategories"
     }
     

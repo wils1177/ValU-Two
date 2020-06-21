@@ -19,6 +19,16 @@ struct TokenExchangeResponse : Codable {
     }
 }
 
+struct PublicTokenResponse: Codable{
+    let publicToken : String
+    let requestId : String
+    
+    enum CodingKeys : String, CodingKey {
+        case publicToken =  "public_token"
+        case requestId =  "request_id"
+    }
+}
+
 struct IncomeResponse : Codable {
     //let item : ItemJSON
     let income : IncomeJSON
@@ -100,7 +110,7 @@ struct TransactionJSON : Codable {
     var location : LocationJSON
     var pending : Bool
     var transactionId : String
-    var plaidCategories : [String]
+    var plaidCategories : [String]?
     
     enum CodingKeys : String, CodingKey {
         case accountId  = "account_id"
@@ -120,7 +130,7 @@ struct AccountJSON : Codable {
     
     var accountId : String
     var balances : BalanceJSON
-    var mask : String
+    var mask : String?
     var name : String
     var officialName : String?
     var type : String
@@ -174,8 +184,8 @@ struct LocationJSON : Codable {
     var address : String?
     var city :  String?
     var country : String?
-    var lat : String?
-    var lon : String?
+    var lat : Double?
+    var lon : Double?
     var postalCode : String?
     var region : String?
     var storeNumber : String?

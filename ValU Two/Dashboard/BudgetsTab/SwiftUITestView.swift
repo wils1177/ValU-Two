@@ -21,6 +21,10 @@ struct BudgetCardView: View {
     var available : String
     var daysLeft : String?
     
+    var good = ["🥳", "😎", "🙌", "💪", "🤩"]
+    
+    var bad = ["🙃", "💩", "👹", "😳"]
+    
     var savingsGoal : String
     
     init(budget : Budget, viewModel: BudgetsViewModel? = nil){
@@ -33,6 +37,36 @@ struct BudgetCardView: View {
         self.savingsGoal = "$" + String(Int(self.budget.amount * self.budget.savingsPercent))
         self.daysLeft = getDaysLeftInMonth(date: Date())
         self.viewModel = viewModel
+    }
+    
+
+    
+    func getIcon() -> String{
+        switch self.percentage{
+        case 0.9..<1.0:
+            return "😎"
+        case 0.8..<0.9:
+            return "🙌"
+        case 0.7..<0.8:
+            return "💪"
+        case 0.6..<0.7:
+            return "🤩"
+        case 0.5..<0.6:
+            return "🥳"
+        case 0.4..<0.5:
+            return "🙌"
+        case 0.3..<0.4:
+            return "🙃"
+        case 0.2..<0.3:
+            return "👹"
+        case 0.1..<0.2:
+            return "🙃"
+        case 0.0..<0.1:
+            return "💩"
+        default:
+            return "😎"
+        }
+    
     }
     
     func getDaysLeftInMonth(date: Date) -> String{
@@ -128,14 +162,83 @@ struct BudgetCardView: View {
         }.padding(.vertical, 30)
     }
     
+    var new: some View{
+        HStack{
+            VStack(alignment: .leading){
+                Text("Left to Spend").font(.system(size: 22)).foregroundColor(Color(.lightText)).bold().padding(.bottom, 4)
+                HStack(alignment: .bottom, spacing: 0){
+                    Text(self.remaining).font(.title).foregroundColor(Color(.white)).bold()
+                    Text(" / " + self.available).font(.headline).foregroundColor(Color(.lightText)).padding(.bottom, 2)
+                }
+                
+            }.padding(.leading, 20).padding(.vertical).padding(.vertical, 10)
+            Spacer()
+            VStack{
+                
+                Text(getIcon()).font(.system(size: 53)).padding(.trailing).padding(.trailing)
+            }
+            
+        }
+    }
+    
+    var partialCircle : some View{
+        VStack{
+            HStack{
+                Spacer()
+                Image(systemName: "ellipsis.circle.fill").font(.system(size: 26)).foregroundColor(Color(.white))
+            }.padding(.horizontal, 5).padding(.top, 15).offset(y: 30)
+            
+            
+            HStack{
+                Spacer()
+                ZStack{
+                    
+                    
+                    
+                    Circle().fill(Color.clear).frame(width:180, height: 180)
+                        .overlay(Circle()
+                                .rotation(Angle(degrees: -90))
+                            .trim(from: CGFloat(0.0), to: CGFloat(1.0))
+                            .stroke(style: StrokeStyle(lineWidth: CGFloat(11.0), lineCap: .round, lineJoin: .round))
+                            .fill(Color(.clear))
+                                
+                        )
+                        .overlay(Circle()
+                            .rotation(Angle(degrees: 152))
+                            .trim(from: CGFloat(0.0), to: 0.65)
+                            .stroke(style: StrokeStyle(lineWidth: CGFloat(11.0), lineCap: .round, lineJoin: .round))
+                            .fill(Color(.white))
+                        
+                            
+                    )
+                    
+                    VStack(alignment: .center){
+                        
+                        if remaining.count > 6{
+                            Text("$500").font(.system(size: 34)).foregroundColor(Color(.white)).bold()
+                        }
+                        else{
+                            Text(self.remaining).font(.title).foregroundColor(Color(.white)).bold()
+                        }
+                        Text("Left To Spend").foregroundColor(Color(.lightText)).bold().offset(y: 40)
+                        //Text("of $5,0000").foregroundColor(Color(.lightText)).font(.caption).bold()
+                        
+                        
+                    }
+                    
+                }.offset(y: 10).padding(.bottom, 20)
+                
+                Spacer()
+            }
+            
+        }
+        
+        
 
+        
+    }
     
 
-    
-
-    
-
-    
     
     var body: some View {
         
@@ -145,8 +248,9 @@ struct BudgetCardView: View {
         
         //megaCircle.padding(.bottom)
             
-        regular
-        
+        new
+        //regular
+        //partialCircle.padding().frame(height: 200).clipped()
         //textOnly
         //TextAndBar.padding()
         

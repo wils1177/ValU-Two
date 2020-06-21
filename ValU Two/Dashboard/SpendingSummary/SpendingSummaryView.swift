@@ -33,17 +33,30 @@ struct SpendingSummaryView: View {
             VStack(alignment: .leading){
         
         HStack{
+            Text("Spent Last 30 Days").font(.headline).bold().foregroundColor(Color(.black))
             Spacer()
-            Text("Spending Last 30 Days").font(.headline).bold().foregroundColor(Color(.white))
-            Spacer()
-        }.padding(.bottom)
+            
+            if self.viewModel.viewData.count > 5 {
+                Button(action: {
+                    withAnimation{
+                        self.showMore.toggle()
+                    }
+                    
+                }){
+                    Text(self.viewModel.buttonText).foregroundColor(AppTheme().themeColorPrimary).font(.callout)
+
+                    }.buttonStyle(PlainButtonStyle()).padding(.trailing, 5)
+            }
+            
+            
+        }
             
         
             ForEach(self.viewModel.viewData, id: \.self){ entry in
                 
                 VStack(spacing: 0.0){
                     if self.viewModel.viewData.firstIndex(of: entry)! < 5 || self.showMore{
-                        SpendingSummaryRow(viewData: entry).padding(.bottom).padding(.top).padding(.horizontal, 5)
+                        SpendingSummaryRow(viewData: entry).padding(.bottom).padding(.top).padding(.horizontal, 3)
                     }
                 }
                 
@@ -52,7 +65,7 @@ struct SpendingSummaryView: View {
         
         }.padding().padding(.bottom, 5)
             
-            
+            /*
             if self.viewModel.viewData.count > 5 {
                 Divider().padding(.bottom, 5)
                 Button(action: {
@@ -75,13 +88,13 @@ struct SpendingSummaryView: View {
                     
                 }.buttonStyle(PlainButtonStyle()).padding(.bottom).padding(.leading)
             }
-            
+            */
                 
                 
             
         
 
-        }.animation(.easeInOut(duration: 0.6)).background((Color(#colorLiteral(red: 0.721568644, green: 0.8862745166, blue: 0.5921568871, alpha: 1)))).cornerRadius(10).shadow(radius: 15)
+        }.animation(.easeInOut(duration: 0.6)).background(Color(.white)).cornerRadius(15)//.shadow(radius: 10)
         
     }
         

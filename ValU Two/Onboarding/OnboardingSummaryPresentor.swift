@@ -16,6 +16,7 @@ struct OnboardingSummaryViewData{
 class OnboardingSummaryPresentor : Presentor, NewBudgetModel, ObservableObject{
     
     var coordinator: BudgetEditableCoordinator?
+    @Published var itemManagerService : ItemManagerService
     
     
     var budget : Budget
@@ -23,14 +24,17 @@ class OnboardingSummaryPresentor : Presentor, NewBudgetModel, ObservableObject{
     var currentStep = 0
     
     
-    init(budget: Budget){
+    init(budget: Budget, itemManagerService: ItemManagerService){
         self.budget = budget
+        self.itemManagerService = itemManagerService
         generateViewData()
     }
     
     func configure() -> UIViewController {
         
         let view = OnboardingSummaryView(viewModel: self)
+            .environmentObject(self.itemManagerService)
+        
         let vc = UIHostingController(rootView: view)
         return vc
         
@@ -41,7 +45,7 @@ class OnboardingSummaryPresentor : Presentor, NewBudgetModel, ObservableObject{
         
         self.currentStep = self.getCurrentStep()
         
-        let connectBankStep = generateStep(currentStep: self.currentStep, title: "Connect to your bank", description: "Setup an automated connection", stage: 1)
+        let connectBankStep = generateStep(currentStep: self.currentStep, title: "Connect to your bank", description: getBankDescription(), stage: 1)
         let enterIncomeStep = generateStep(currentStep: self.currentStep, title: "Confirm your income", description: "Set your income for your budget", stage: 2)
         let savingsStep = generateStep(currentStep: self.currentStep, title: "Set a savings goal", description: "Decide how much you want to save", stage: 3)
         let balanceStep = generateStep(currentStep: self.currentStep, title: "Create your budget", description: "Make your budgets!", stage: 4)
@@ -77,7 +81,7 @@ class OnboardingSummaryPresentor : Presentor, NewBudgetModel, ObservableObject{
     }
     
     func loadIncomeScreen(){
-        self.coordinator?.loadIncomeScreen()
+        self.coordinator?.continueToTimeFrame()
         
     }
     
@@ -124,11 +128,7 @@ extension NewBudgetModel{
         
     }
     
-    
-    func getCurrentStep() -> Int{
-        
-        var step = 0
-        
+    func getItemCount() -> Int{
         var itemCount = 0
         do {
             let items = try DataManager().getItems()
@@ -137,6 +137,29 @@ extension NewBudgetModel{
         catch{
             print("Could not load items man")
         }
+        return itemCount
+    }
+    
+    func getBankDescription() -> String{
+        let itemCount = getItemCount()
+        if itemCount == 0 {
+            return "Set up an automated connection"
+        }
+        else if itemCount == 1{
+            return String(itemCount) + " account connected"
+        }
+        else{
+            return String(itemCount) + " accounts connected"
+        }
+        
+    }
+    
+    
+    func getCurrentStep() -> Int{
+        
+        var step = 0
+        
+        let itemCount = getItemCount()
     
         if itemCount > 0 {
             step =  1

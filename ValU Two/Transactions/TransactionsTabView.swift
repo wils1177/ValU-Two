@@ -33,9 +33,9 @@ struct TransactionsTabView: View {
                 }
                 else if row.sectionTitle != nil{
                     HStack{
-                        Text(row.sectionTitle!).font(.title).fontWeight(.bold)
+                        Text(row.sectionTitle!).font(.system(size: 22)).fontWeight(.bold)
                         Spacer()
-                    }.padding()
+                    }.padding(.horizontal)
                     
                 }
                 else{

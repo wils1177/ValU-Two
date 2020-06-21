@@ -53,7 +53,7 @@ struct OtherSpendingSection: View {
               }
               
               HStack{
-                  ProgressBarView(percentage: self.viewModel.otherCategory!.percentage, color: Color(.purple), width: 290).padding(.bottom)
+                ProgressBarView(percentage: self.viewModel.otherCategory!.percentage, color: AppTheme().themeColorPrimary, width: 290).padding(.bottom)
               }
               
           }

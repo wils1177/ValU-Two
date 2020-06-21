@@ -10,35 +10,54 @@ import SwiftUI
 
 struct PastBudgetsView: View {
     
-    var budgets: [Budget]
-    var viewModel: BudgetsViewModel
+    @ObservedObject var viewModel : HistoryViewModel
     
-    
-    func historyZeroState() -> some View{
-        return HStack{
-            Text("Budgets will appear here after they're completed").foregroundColor(Color(.lightGray))
-            Spacer()
-        }.padding(.horizontal).padding(.bottom)
+    init(viewModel: HistoryViewModel){
+        self.viewModel = viewModel
+        
+        // To remove only extra separators below the list:
+        UITableView.appearance().tableFooterView = UIView()
+
+        // To remove all separators including the actual ones:
+        UITableView.appearance().separatorStyle = .none
+        
+        
+        //UITableViewCell.appearance().backgroundColor = .clear
+        //UITableView.appearance().backgroundColor = .clear
     }
     
+    var historyZeroState : some View{
+        VStack{
+            Image(systemName: "xmark.shield.fill").font(.system(size: 50)).padding(.trailing, 10).foregroundColor(AppTheme().themeColorPrimary).padding(.top).padding(.top)
+            Text("No Compelted Budgets Yet").font(.headline).multilineTextAlignment(.center).padding(.top)
+            Text("Past budgets will show up here when completed").font(.caption).foregroundColor(Color.gray).multilineTextAlignment(.center)
+        }.padding(.bottom).padding(.bottom)
+    }
+    
+
+    
     var body: some View {
-        List{
-            VStack(spacing: 0){
+        VStack(alignment: .center, spacing: 0){
                 
-                if budgets.count > 0 {
-                    ForEach(self.budgets, id: \.self) { budget in
+                if self.viewModel.historicalBudgets.count > 0 {
+                    ForEach(viewModel.historicalBudgets, id: \.self) { budget in
                         VStack(spacing: 0){
-                            HistoryEntryView(budget: budget)
+                            HistoryEntryView(budget: budget, service: self.viewModel.service)
                         }
                     }
                 }
                 else{
-                    historyZeroState()
+                    HStack{
+                        Spacer()
+                        historyZeroState.padding(.top)
+                        Spacer()
+                    }
+                    
                 }
                 
                 
             }
-            }.padding(.top).navigationBarTitle("History")
+            
         
     }
 }

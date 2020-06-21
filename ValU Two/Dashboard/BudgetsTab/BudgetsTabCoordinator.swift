@@ -12,17 +12,13 @@ import SwiftUI
 class BudgetsTabCoordinator : Coordinator, TransactionRowDelegate, EditBudgetDelegate, SetSpendingLimitDelegate{
     
     
-    
-    
-    
-    
-    
-    
+     
 
     var childCoordinators = [Coordinator]()
     var navigationController = UINavigationController()
     var presentorStack = [Presentor]()
     var settingsCoordinator : SettingsFlowCoordinator?
+    var plaidUpdateCoordiantor : PlaidUpdateFlowCoordinator?
     var budget : Budget
     
     init(budget: Budget){
@@ -33,7 +29,7 @@ class BudgetsTabCoordinator : Coordinator, TransactionRowDelegate, EditBudgetDel
     
     func start() {
         
-        let homePresentor = BudgetsViewModel()
+        let homePresentor = BudgetsViewModel(budget: self.budget, coordinator: self)
         homePresentor.coordinator = self
         self.presentorStack.append(homePresentor)
         
@@ -41,7 +37,7 @@ class BudgetsTabCoordinator : Coordinator, TransactionRowDelegate, EditBudgetDel
         
         self.navigationController.navigationBar.prefersLargeTitles = true
         
-        self.navigationController.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house"), selectedImage: UIImage(named: "tab_icon_seelcted"))
+        self.navigationController.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "creditcard"), selectedImage: UIImage(named: "tab_icon_seelcted"))
         self.navigationController.pushViewController(homeView, animated: false)
         
     }
@@ -90,7 +86,6 @@ class BudgetsTabCoordinator : Coordinator, TransactionRowDelegate, EditBudgetDel
     }
     
     func showCategory(categoryName: String){
-        self.navigationController.interactivePopGestureRecognizer!.delegate = nil
         
         let presentor = TransactionsListViewModel(budget: self.budget, categoryName: categoryName)
         presentor.coordinator = self
@@ -115,37 +110,13 @@ class BudgetsTabCoordinator : Coordinator, TransactionRowDelegate, EditBudgetDel
         self.navigationController.pushViewController(vc, animated: true)
     }
     
-    func makeNewBudget(budget: Budget){
-        
-        
-        let newBudgetCoordinator = NewBudgetCoordinator(budget: budget)
-        newBudgetCoordinator.parent = self
-        newBudgetCoordinator.start()
-        self.childCoordinators.append(newBudgetCoordinator)
-        
-        self.navigationController.present(newBudgetCoordinator.navigationController, animated: true)
-        
-    }
+
     
     func dismissNewBudgetCoordinator(){
         self.childCoordinators.popLast()
     }
     
-    func showFutureBudgets(futureTimeFrames: [BudgetTimeFrame], viewModel: BudgetsViewModel){
-        
-        let vc = UIHostingController(rootView: FutureBudgetsView(timeFrames: futureTimeFrames, viewModel: viewModel))
-        vc.title = "Upcomming"
-        self.navigationController.pushViewController(vc, animated: true)
-        
-    }
-    
-    func showPastBudgets(pastTimeFrames: [Budget], viewModel: BudgetsViewModel){
-        
-        let vc = UIHostingController(rootView: PastBudgetsView(budgets: pastTimeFrames, viewModel: viewModel))
-        vc.title = "History"
-        self.navigationController.pushViewController(vc, animated: true)
-        
-    }
+ 
     
     func showCashFlow(viewModel: CashFlowViewModel){
         let view = CashFlowFullScreenView(viewModel: viewModel)
@@ -184,52 +155,19 @@ class BudgetsTabCoordinator : Coordinator, TransactionRowDelegate, EditBudgetDel
         self.navigationController.popViewController(animated: true)
         DataManager().saveDatabase()
     }
+    
+    func showPlaidUpdate(publicToken: String, itemId: String, sender: FixNowService){
+        self.plaidUpdateCoordiantor = PlaidUpdateFlowCoordinator(navigationController: self.navigationController, itemId: itemId, publicToken: publicToken, fixNowService : sender)
+        plaidUpdateCoordiantor?.start()
+        
+    }
+    
+
 
     
 }
 
-extension TransactionRowDelegate{
-    
-    func showEditCategory(transaction: Transaction) {
-        
-        let presentor = EditCategoryViewModel(transaction: transaction, budget: self.budget)
-        self.presentorStack.append(presentor)
-        presentor.coordinator = self
-        let vc = presentor.configure()
-        self.navigationController.present(vc, animated: true)
-        
-    }
-    
-    func showTransactionDetail(transaction: Transaction){
-        
-        let presentor = TransactionDetailViewModel(transaction: transaction)
-        presentor.coordinator = self
-        let vc = presentor.configure()
-        
-        self.navigationController.navigationBar.setBackgroundImage(UIImage(color: .systemGroupedBackground), for: .default) //UIImage.init(named: "transparent.png")
-        self.navigationController.navigationBar.shadowImage = UIImage()
-        self.navigationController.navigationBar.isTranslucent = true
-        self.navigationController.view.backgroundColor = .systemGroupedBackground
 
-        
-        self.navigationController.pushViewController(vc, animated: true)
-    }
-    
-    
-    func showSplitTransaction(transaction: Transaction){
-        let view = SplitTransactionView()
-        let vc = UIHostingController(rootView: view)
-        self.navigationController.present(vc, animated: true)
-    }
-    
-
-    
-    func dismissEditCategory() {
-        self.presentorStack.popLast()
-        self.navigationController.dismiss(animated: true)
-    }
-    
-}
 
 public extension UIImage {
   public convenience init?(color: UIColor, size: CGSize = CGSize(width: 1, height: 1)) {

@@ -9,11 +9,13 @@
 import Foundation
 import UIKit
 import SwiftUI
+import FirebaseCrashlytics
 
 enum LoadingAccountsViewState{
     case Loading
     case Success
     case Failure
+    case Initial
 }
 
 class LoadingAccountsViewData : ObservableObject{
@@ -23,113 +25,49 @@ class LoadingAccountsViewData : ObservableObject{
 class LoadingAccountsPresentor : Presentor {
     
     var view : LoadingAccountsView?
-    var coordinator : plaidIsConnectedDelegate?
-    let plaid  = PlaidConnection()
-    let plaidProccesor : PlaidProccessor
+    var coordinator : PlaidLinkDelegate?
+    var aggregationService : PlaidInitialAggService?
     var viewData = LoadingAccountsViewData()
     let budget : Budget
     var itemId : String?
+    var itemManager : ItemManagerService
     
-    init(budget: Budget){
+    init(budget: Budget, itemManager: ItemManagerService){
         self.budget = budget
-        self.plaidProccesor = PlaidProccessor(budget: self.budget)
-        
-        //print("add new observer")
-        NotificationCenter.default.addObserver(self, selector: #selector(startTransactionsPull(_:)), name: .initialUpdate, object: nil)
+        self.viewData.viewState = LoadingAccountsViewState.Initial
+        self.itemManager = itemManager
     }
-    
-    deinit{
-        //print("Dellocate the LoadingAccounts Presentor")
-        NotificationCenter.default.removeObserver(self, name: .initialUpdate, object: nil)
-    }
-    
-    
-    
 
     
     func configure() -> UIViewController {
         let view = LoadingAccountsView(presentor: self, viewData: self.viewData)
         let vc = UIHostingController(rootView: view)
-        self.viewData.viewState = LoadingAccountsViewState.Loading
-        
+        self.aggregationService = PlaidInitialAggService(completion: self.handleAggregationResult(result:), budget: budget)
         
         
         return vc
     }
     
-    func viewWillLoad(){
+
+    
+    func startLoadingAccounts(){
         self.viewData.viewState = LoadingAccountsViewState.Loading
-        
-        self.pullInAccountData()
-
-    }
-    
-    func pullInAccountData(){
-        
-        //let dispatchA = DispatchGroup()
-
-        
-        //dispatchA.enter()
-        
-        print("Exchanging public token...")
-        try? plaid.exchangePublicForAccessToken(completion: self.tokenExchangeFinished(result:))
-        
-        
-    }
-    
-    @objc func startTransactionsPull(_ notification:Notification){
-        print("starting transaction pull:")
-        print(self)
-        self.transactionPull()
-        
+        self.aggregationService!.startAggregation()
     }
     
     
-    func transactionPull(){
-        //print("can you tell me how often?")
-        let calendar = Calendar.current
-        let currentDate = Date()
-        let startDate = calendar.date(byAdding: .month, value: -1, to: currentDate)
-        let endDate = currentDate
-
-        
-        //Todo: Handle this failing
-        try? self.plaid.getTransactions(itemId: self.itemId!, startDate: startDate!, endDate: endDate, completion: self.transactionsPullFinished(result:))
-        
-    }
-    
-    
-    func tokenExchangeFinished(result: Result<Data, Error>){
-        
-        DispatchQueue.main.async {
-            switch result {
-            case .failure(let error):
-                self.viewData.viewState = LoadingAccountsViewState.Failure
-                print(error)
-            case .success(let dataResult):
-                self.itemId = self.plaidProccesor.saveAccessToken(response: dataResult)
-                print("itemId officially set")
-            }
+    func handleAggregationResult(result: Result<String, Error>){
+        switch result {
+        case .failure(let _):
+            self.viewData.viewState = LoadingAccountsViewState.Failure
+        case .success(let result):
+            self.itemId = result
+            self.viewData.viewState = LoadingAccountsViewState.Success
+            self.itemManager.loadItems()
         }
-        
     }
     
-    func transactionsPullFinished(result: Result<Data, Error>){
-        
-        DispatchQueue.main.async {
-            switch result {
-            case .failure(let error):
-                self.viewData.viewState = LoadingAccountsViewState.Failure
-                print(error)
-            case .success(let dataResult):
-                self.plaidProccesor.aggregate(response: dataResult)
-                TransactionProccessor(budget: self.budget).updateInitialThiryDaysSpent()
-                self.viewData.viewState = LoadingAccountsViewState.Success
-
-            }
-        }
-        
-    }
+    
     
     func getLoadedAccounts() -> [AccountData]{
         

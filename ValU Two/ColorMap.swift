@@ -16,9 +16,11 @@ var colorMap = [Color(hue: 0.234, saturation: saturation, brightness: brightness
 
 struct AppTheme {
     
-    var themeColorPrimary = Color(.systemTeal)
+    var themeColorPrimary = Color(.systemBlue)
+    
+    var themeColorPrimaryUIKit = UIColor.systemBlue
 
-    var themeColorSecondary = Color(.systemGreen)
+    var themeColorSecondary = Color(.systemRed)
     
 
 }

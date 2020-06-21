@@ -31,25 +31,40 @@ struct EnterIncomeView: View {
         }
     }
     
+    func getTimeFrameText() -> String{
+        if budget.timeFrame == 0{
+            return "Monthly"
+        }
+        else if budget.timeFrame == 1{
+            return "Semi-Monthly"
+        }
+        else{
+            return "Weekly"
+        }
+    }
+    
     
     var body: some View {
         
         List{
-            VStack(alignment: .center){
+            VStack(alignment: .leading){
                     
-                VStack(spacing: 10){
-                    /*
-                    Text("Confirm Your Monthly Income").font(.title).bold().lineLimit(2).fixedSize(horizontal: false, vertical: true).padding(.top).padding(.bottom)
-                    */
-                    Text("Set the income to use for your budget.").font(.system(size: 18)).foregroundColor(Color(.lightGray)).multilineTextAlignment(.center).fixedSize(horizontal: false, vertical: true)
-                }
+                    
+                Text("Enter your " + self.getTimeFrameText() + " income.").font(.system(size: 21)).bold().lineLimit(2).fixedSize(horizontal: false, vertical: true).padding(.top).padding(.bottom,5).padding(.leading)
+                    
+                HStack{
+                    Text("This is the available income you will use for your budget.").font(.system(size: 15)).foregroundColor(Color(.gray)).multilineTextAlignment(.leading).fixedSize(horizontal: false, vertical: true)
+                    Spacer()
+                }.padding(.bottom, 10).padding(.leading)
+                    
+                
                 
                     
                 HStack{
                     Spacer()
-                    CustomInputTextField(text: self.$incomeService.currentIncomeEntry, placeHolderText: "Your Income", textSize: .systemFont(ofSize: 23), alignment: .left, delegate: nil, key: nil)
+                    CustomInputTextField(text: self.$incomeService.currentIncomeEntry, placeHolderText: "Your Income", textSize: .systemFont(ofSize: 25), alignment: .left, delegate: nil, key: nil)
                         .padding(.horizontal)
-                    .frame(width: 310, height: 45).background(Color(.white)).cornerRadius(10)
+                    .frame(width: 310, height: 60).background(Color(.white)).cornerRadius(10)
                         
                         errorState
                     Spacer()
@@ -58,14 +73,19 @@ struct EnterIncomeView: View {
             
                 
                 
-                Spacer().padding(.bottom, 25)
+                Spacer().padding(.bottom, 30)
                 
                 if self.incomeService.getIncomeTransactions().count > 0{
                     VStack{
                         HStack{
-                           Text("Previous Month's Income").font(.system(size: 21)).bold().lineLimit(2).fixedSize(horizontal: false, vertical: true).foregroundColor(Color(.black))
+                            Text("Past Income").font(.system(size: 21)).bold().lineLimit(2).fixedSize(horizontal: false, vertical: true).foregroundColor(Color(.black))
                             Spacer()
-                        }
+                        }.padding(.bottom, 5).padding(.leading)
+                        
+                        HStack{
+                            Text("We've guessed your income based on previous income transactions").font(.system(size: 15)).foregroundColor(Color(.gray)).multilineTextAlignment(.leading).fixedSize(horizontal: false, vertical: true)
+                            Spacer()
+                        }.padding(.leading)
                         
                         
                         VStack{
@@ -92,7 +112,7 @@ struct EnterIncomeView: View {
                     }){
                     ZStack{
                         if self.incomeService.currentIncomeEntry.doubleValue != nil && self.incomeService.currentIncomeEntry.doubleValue != 0.0{
-                            Text("Confirm")
+                            Text("Confirm").foregroundColor(AppTheme().themeColorPrimary)
                         }
                         else{
                             Text("Confirm").foregroundColor(Color(.lightGray))

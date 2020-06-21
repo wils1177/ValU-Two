@@ -8,6 +8,7 @@ target 'ValU Two' do
   # Pods for ValU Two
   pod 'Plaid'
   pod 'SwiftKeychainWrapper'
+  pod 'Firebase/Crashlytics'
   # add the Firebase pod for Google Analytics
   pod 'Firebase/Analytics'
   # add pods for any other desired Firebase products

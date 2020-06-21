@@ -30,30 +30,30 @@ struct OnboardingStepViewData: Hashable{
 }
 
 
-
-
-struct OnboardingStepRow: View {
+struct GenericOnboardingStepRow : View{
     
-    var viewData : OnboardingStepViewData
-    
-    init(viewData: OnboardingStepViewData){
-        self.viewData = viewData
-    }
+    var title : String
+    var description : String
+    var iconName: String
+    var iconColor: Color
+    var backgroundColor: Color
+    var subTectColor : Color
+    var completionHandler: (()->Void)?
     
     private func getBody() -> some View {
         return AnyView(HStack{
             
-            Image(systemName: self.viewData.iconName).resizable()
-                .frame(width: 30.0, height: 30.0).foregroundColor(self.viewData.iconColor).padding(.leading)
+            Image(systemName: self.iconName).resizable()
+                .frame(width: 30.0, height: 30.0).foregroundColor(self.iconColor).padding(.leading)
             
             VStack{
                 
                 HStack{
-                    Text(self.viewData.title).font(.system(size: 17)).foregroundColor(self.viewData.backgroundColor).bold().padding(.leading).padding(.top).padding(.bottom, 5)
+                    Text(self.title).font(.system(size: 17)).foregroundColor(self.backgroundColor).bold().padding(.leading).padding(.top).padding(.bottom, 5)
                     Spacer()
                 }
                 HStack{
-                    Text(self.viewData.description).font(.subheadline).foregroundColor(self.viewData.subTectColor).padding(.leading).padding(.bottom)
+                    Text(self.description).font(.subheadline).foregroundColor(self.subTectColor).padding(.leading).padding(.bottom)
                     Spacer()
                 }
                 
@@ -68,19 +68,22 @@ struct OnboardingStepRow: View {
     var body: some View {
         
         VStack{
-            if self.viewData.completionHandler == nil {
+            if self.completionHandler == nil {
                 self.getBody()
             }
             else{
                 Button(action: {
                 //Button Action
-                    self.viewData.completionHandler!()
+                    self.completionHandler!()
                 }){
                     self.getBody()
                 }.buttonStyle(PlainButtonStyle())
             }
         }
     }
+    
 }
+
+
 
 

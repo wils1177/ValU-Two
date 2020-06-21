@@ -13,8 +13,9 @@ class MainTabBarController: UITabBarController {
     
     var parentCoordinator : AppCoordinator?
     var homeTabCoordinator : BudgetsTabCoordinator?
-    var historyTabCoordinator : MoneyTabCoordinator?
+    var moneyTabCoordinator : MoneyTabCoordinator?
     var transactionTabCoordinator : TransactionsTabCoordinator?
+    var historyTabCoordinator : HistoryTabCoordiantor?
     
     
     var budget: Budget?
@@ -24,6 +25,8 @@ class MainTabBarController: UITabBarController {
     override func viewWillAppear(_ animated: Bool) {
         
         setupViews()
+        
+        UITabBar.appearance().tintColor = AppTheme().themeColorPrimaryUIKit
         
     }
 
@@ -60,14 +63,16 @@ class MainTabBarController: UITabBarController {
             print("User Is Onboarded")
             self.homeTabCoordinator = BudgetsTabCoordinator(budget: self.budget!)
             self.transactionTabCoordinator = TransactionsTabCoordinator(budget: self.budget!)
-            self.historyTabCoordinator = MoneyTabCoordinator(budget: self.budget!)
+            self.moneyTabCoordinator = MoneyTabCoordinator(budget: self.budget!)
+            self.historyTabCoordinator = HistoryTabCoordiantor(budget: self.budget!)
             
             self.homeTabCoordinator?.start()
             self.transactionTabCoordinator?.start()
+            self.moneyTabCoordinator?.start()
             self.historyTabCoordinator?.start()
             
             
-            viewControllers = [self.homeTabCoordinator!.navigationController, self.transactionTabCoordinator!.navigationController, self.historyTabCoordinator!.navigationController]
+            viewControllers = [self.homeTabCoordinator!.navigationController, self.transactionTabCoordinator!.navigationController, self.moneyTabCoordinator!.navigationController, self.historyTabCoordinator!.navigationController]
         }
         
         

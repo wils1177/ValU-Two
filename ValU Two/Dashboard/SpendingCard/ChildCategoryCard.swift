@@ -38,7 +38,7 @@ struct ChildCategoryCard: View {
             }
             
             HStack{
-                ProgressBarView(percentage: CGFloat(self.getPercentage()), color: Color(.purple), width: 290).padding(.bottom)
+                ProgressBarView(percentage: CGFloat(self.getPercentage()), color: AppTheme().themeColorPrimary, width: 290).padding(.bottom)
             }
             
         }

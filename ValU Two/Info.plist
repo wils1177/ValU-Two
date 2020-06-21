@@ -6,6 +6,8 @@
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIconName</key>
+	<string>AppIcon</string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -28,7 +30,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>
@@ -48,13 +50,12 @@
 		<string>sandbox</string>
 		<key>key</key>
 		<string>d77e9d8584d9f161593bda890bacbb</string>
-		<key>webhook</key>
-		<string>https://us-central1-valu-2.cloudfunctions.net/plaidWebhook</string>
 		<key>product</key>
 		<array>
-			<string>income</string>
 			<string>transactions</string>
 		</array>
+		<key>webhook</key>
+		<string>https://us-central1-valu-2.cloudfunctions.net/plaidWebhook</string>
 	</dict>
 	<key>UIBackgroundModes</key>
 	<array>

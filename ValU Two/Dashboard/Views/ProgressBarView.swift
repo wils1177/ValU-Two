@@ -49,10 +49,10 @@ struct ProgressBarView: View {
             
             ZStack(alignment: .leading){
             
-                RoundedRectangle(cornerRadius: 20).frame(width: self.width, height: 15).foregroundColor(Color(red: 0.9, green: 0.9, blue: 0.9))
+                RoundedRectangle(cornerRadius: 20).frame(width: self.width, height: 12).foregroundColor(Color(red: 0.96, green: 0.96, blue: 0.96))
                 
                 
-                RoundedRectangle(cornerRadius: 20).frame(width: self.width * self.getPercentage(), height: 15).foregroundColor(self.getColor())
+                RoundedRectangle(cornerRadius: 20).frame(width: self.width * self.getPercentage(), height: 12).foregroundColor(self.color)
 
                 
             }

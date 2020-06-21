@@ -63,9 +63,19 @@ extension BudgetEditableCoordinator{
         self.navigationController.pushViewController(vc, animated: true)
     }
     
+    func continueToTimeFrame(){
+        let model = TimeFrameViewModel(budget: self.budget!)
+        model.coordinator = self
+        let view = TimeFrameView(viewModel: model)
+        let vc = UIHostingController(rootView: view)
+        vc.title = "Frequency"
+        self.navigationController.pushViewController(vc, animated: true)
+    }
+    
     func incomeSubmitted(budget: Budget) {
         
         self.budget = budget
+        self.navigationController.popViewController(animated: false)
         self.navigationController.popViewController(animated: true)
         DataManager().saveDatabase()
     

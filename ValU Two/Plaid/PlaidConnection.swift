@@ -17,12 +17,14 @@ enum PlaidURLs{
     case GetTransactions
     case GetIncome
     case RemoveItem
+    case GetPublicToken
 }
 
 enum PlaidConnectionError: Error {
     case AccessTokenNotFound
     case PublicTokenNotFound
     case BadRequest
+    case ProccessingError
 }
 
 struct Keys : Codable{
@@ -51,6 +53,7 @@ class PlaidConnection{
         self.URLdict[PlaidURLs.GetAccounts] = URL(string : (rootURL + "/accounts/get"))!
         self.URLdict[PlaidURLs.GetIncome] = URL(string : (rootURL + "/income/get"))!
         self.URLdict[PlaidURLs.RemoveItem] = URL(string : (rootURL + "/item/remove"))!
+        self.URLdict[PlaidURLs.GetPublicToken] = URL(string : (rootURL + "/item/public_token/create"))!
         
 
 
@@ -100,6 +103,20 @@ class PlaidConnection{
         try postRequest(url: URL, jsonBody: json, completion: completion, dispatch: nil)
         
          
+    }
+    
+    func getPublicToken(itemId: String, completion : @escaping (Result<Data, Error>) -> ()) throws{
+        
+        let URL = PlaidURLs.GetPublicToken
+        let keys = getAPIKeys()
+        
+        guard let accessToken: String = KeychainWrapper.standard.string(forKey: PlaidUserDefaultKeys.accessTokenKey.rawValue + itemId) else{
+            print("Error: missing access Token")
+            throw PlaidConnectionError.AccessTokenNotFound
+        }
+        
+        let json: [String: Any] = ["client_id" : keys.clientID, "secret" : keys.clientSecret, "access_token" : accessToken]
+        try postRequest(url: URL, jsonBody: json, completion: completion, dispatch: nil)
     }
     
     func getIncome(itemId: String, completion : @escaping (Result<Data, Error>) -> ()) throws{
