@@ -14,12 +14,11 @@ class PlaidInitialAggService {
     var completion : (Result<String, Error>) -> ()
     var plaidProccesor : PlaidProccessor
     var itemId : String?
-    var budget : Budget
+    var spendingCategories = SpendingCategoryService().getSubSpendingCategories()
     
-    init(completion : @escaping (Result<String, Error>) -> (), budget: Budget){
+    init(completion : @escaping (Result<String, Error>) -> ()){
         self.completion = completion
-        self.plaidProccesor = PlaidProccessor(budget: budget)
-        self.budget = budget
+        self.plaidProccesor = PlaidProccessor(spendingCategories: self.spendingCategories)
         NotificationCenter.default.addObserver(self, selector: #selector(startTransactionsPull(_:)), name: .initialUpdate, object: nil)
     }
     
@@ -94,7 +93,7 @@ class PlaidInitialAggService {
             case .success(let dataResult):
                 do{
                     try self.plaidProccesor.aggregate(response: dataResult)
-                    TransactionProccessor(budget: self.budget).updateInitialThiryDaysSpent()
+                    TransactionProccessor(spendingCategories: self.spendingCategories).updateInitialThiryDaysSpent()
                     self.completion(.success(self.itemId!))
                 }
                 catch{

@@ -38,15 +38,13 @@ class HistoryEntryViewData: Hashable{
 
 class HistoryViewModel : ObservableObject {
     
-    var budget : Budget
     @Published var historicalBudgets : [Budget]
     var coordinator : MoneyTabCoordinator?
     var viewData = [HistoryEntryViewData]()
     
     var service : BudgetStatsService
 
-    init(budget : Budget){
-        self.budget = budget
+    init(){
         
         let pastQuery = PredicateBuilder().generatePastBudgetPredicate(currentDate: Date())
         
@@ -58,7 +56,7 @@ class HistoryViewModel : ObservableObject {
     
     
     
-    
+    /*
     func testBudgetCopy(){
         
         let copier = BudgetCopyer()
@@ -69,31 +67,12 @@ class HistoryViewModel : ObservableObject {
         DataManager().saveDatabase()
  
     }
-    
+    */
     
     func generateViewData(){
         
         self.viewData = [HistoryEntryViewData]()
-        for pastBudget in self.historicalBudgets{
-            
-            let available = pastBudget.getAmountAvailable()
-            let spendValue = pastBudget.spent
-            
-            let remaining = "$" + String(Int(round(available - spendValue)))
-            let spent = "$" + String(Int(round(spendValue)))
-            let percentage = CGFloat(spendValue / available)
-            let startDate = pastBudget.startDate!
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "LLLL"
-            let nameOfMonth = dateFormatter.string(from: startDate)
-            let title = nameOfMonth
-            
-            let spendingCardModel = SpendingCardViewModel(budget: pastBudget)
-            let spendingCardViewData = spendingCardModel.viewData
-            
-            let entry = HistoryEntryViewData(title: title, spent: spent, remaining: remaining, percentage: percentage, spendingCardViewData: spendingCardViewData)
-            self.viewData.append(entry)
-        }
+
         
     }
 

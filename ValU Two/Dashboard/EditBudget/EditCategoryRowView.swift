@@ -8,10 +8,10 @@
 
 import SwiftUI
 
-struct EditCategoryRowView: View {
+struct EditCategoryRowView<ViewModel>: View where ViewModel: CategoryListViewModel  {
     
     @ObservedObject var category : SpendingCategory
-    @ObservedObject var viewModel : EditCategoryViewModel
+    @ObservedObject var viewModel : ViewModel
     
     func getButtonColor() -> Color {
         if self.viewModel.isSelected(name: category.name!){
@@ -45,7 +45,7 @@ struct EditCategoryRowView: View {
     
 
     
-    init(category: SpendingCategory, viewModel : EditCategoryViewModel ){
+    init(category: SpendingCategory, viewModel : ViewModel ){
         self.category = category
         self.viewModel = viewModel
     }

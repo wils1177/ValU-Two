@@ -15,35 +15,35 @@ class BudgetBalancerPresentor : ObservableObject {
     
     
     
-    @Published var budget: Budget
+    var budget: Budget
     var coordinator : SetSpendingLimitDelegate?
-    var parentCategories : [SpendingCategory]
-    var parentServices = [BalanceParentService]()
     @Published var percentage : Float = 0.0
     
     init(budget: Budget, coordinator: SetSpendingLimitDelegate){
         self.budget = budget
-        let categories = budget.getParentSpendingCategories()
-        self.parentCategories = categories
+        let sections = budget.getBudgetSections()
+
         self.coordinator = coordinator
         
-        for category in categories{
-            let service = BalanceParentService(spendingCategory: category)
-            self.parentServices.append(service)
-        }
+
     }
+    
     
 
   
     func getSpent() -> Float{
         
         var spent : Float = 0.0
-        for category in self.parentServices{
-            spent = spent + category.getParentLimit()
+        for section in self.budget.getBudgetSections(){
+            spent = spent + Float(section.getLimit())
         }
         
         return spent
         
+    }
+    
+    func getDisplaySpent() -> String{
+        return String(roundToTens(x: getSpent()))
     }
     
     func getLeftToSpend() -> String{
@@ -55,6 +55,7 @@ class BudgetBalancerPresentor : ObservableObject {
         return String(roundToTens(x: available) - roundToTens(x: spent))
         
     }
+    
     
     func getPercentage() -> Float{
         let available = self.budget.getAmountAvailable()
@@ -74,10 +75,74 @@ class BudgetBalancerPresentor : ObservableObject {
         return "$" + String(roundToTens(x: available))
     }
     
+    func showNewSectionView(){
+        self.coordinator?.showNewSectionView()
+    }
+    
     
     
     func roundToTens(x : Float) -> Int {
         return 10 * Int(round(x / 10.0))
+    }
+    
+    
+    func getBudgetStatusBarViewData() -> [BudgetStatusBarViewData]{
+        
+        var viewDataToReturn = [BudgetStatusBarViewData]()
+        let amountAvailable = self.budget.getAmountAvailable()
+        let spentTotal = self.getSpent()
+        var total = amountAvailable
+        
+        if spentTotal > amountAvailable{
+            total = Float(spentTotal)
+        }
+        
+
+        
+        var sectionSpentTotal = 0.0
+        for section in self.budget.getBudgetSections(){
+            let limitForSection = section.getLimit()
+            let data = BudgetStatusBarViewData(percentage: limitForSection / Double(total), color: colorMap[Int(section.colorCode)], name: section.name!)
+            
+            if limitForSection > 0.0 && limitForSection > 0.0{
+                viewDataToReturn.append(data)
+            }
+            
+        }
+        
+        viewDataToReturn.sort(by: { $0.percentage > $1.percentage })
+        
+
+        
+        return viewDataToReturn
+    }
+    
+    
+    func deleteBudgetSection(id: UUID){
+        
+        
+        do{
+            let sectionToRemove = try DataManager().getEntity(predicate: PredicateBuilder().generateByIdPredicate(id: id), entityName: "BudgetSection") as! [BudgetSection]
+            self.budget.removeFromBudgetSection(sectionToRemove[0])
+              
+            //try DataManager().deleteEntity(predicate: PredicateBuilder().generateByIdPredicate(id: id), entityName: "BudgetSection")
+            print("section deleted")
+            DataManager().saveDatabase()
+            
+        }
+        catch{
+            print("Could Not Delete Budget Section")
+        }
+        
+        
+        
+        
+        
+        
+ 
+        
+        //self.objectWillChange.send()
+        
     }
 
     

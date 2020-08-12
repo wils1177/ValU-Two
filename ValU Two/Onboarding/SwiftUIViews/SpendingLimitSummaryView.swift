@@ -21,31 +21,30 @@ struct SpendingLimitSummaryView: View {
     
     var body: some View {
         VStack(spacing: 0){
+            
             HStack{
-                Text("Overview").font(.headline).bold()
+                Text("SPENT IN BUDGETS").font(.system(size: 16)).foregroundColor(Color(.gray)).fontWeight(.light).padding(.bottom)
                 Spacer()
-            }.padding(.horizontal).padding(.top, 10)
+            }
+            
             
             HStack(alignment: .bottom, spacing: 2){
                 
-                Text("$").font(.system(size: 20)).foregroundColor(Color(.black)).bold().padding(.bottom, 5)
-                Text(self.viewModel.getLeftToSpend()).font(.system(size: 35)).foregroundColor(.black).bold()
+                Text("$").font(.system(size: 35)).foregroundColor(Color(.black)).bold()
+                Text(self.viewModel.getDisplaySpent()).font(.system(size: 35)).foregroundColor(.black).bold()
                 Text(" / " + self.viewModel.getAvailable()).font(.headline).foregroundColor(Color(.lightGray)).bold().padding(.bottom, 5)
                 Spacer()
                 
-            }.padding(.horizontal).padding(.top, 10)
+            }.padding(.bottom).padding(.leading)
             
-            HStack{
-                Text("Left To Budget").font(.subheadline).foregroundColor(Color(.lightGray)).bold()
-                Spacer()
-            }.padding(.horizontal).padding(.horizontal).padding(.bottom, 10)
+           
             
-            ProgressBarView(percentage: CGFloat(self.viewModel.getPercentage()), color: Color(.green)).padding(.bottom)
+            BudgetStatusBarView(viewData: self.viewModel.getBudgetStatusBarViewData())
             
             
             
             
-        }.background(Color(.white))
+            }.padding().background(Color(.white))
     }
 }
 

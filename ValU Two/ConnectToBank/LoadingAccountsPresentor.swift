@@ -28,12 +28,10 @@ class LoadingAccountsPresentor : Presentor {
     var coordinator : PlaidLinkDelegate?
     var aggregationService : PlaidInitialAggService?
     var viewData = LoadingAccountsViewData()
-    let budget : Budget
     var itemId : String?
     var itemManager : ItemManagerService
     
-    init(budget: Budget, itemManager: ItemManagerService){
-        self.budget = budget
+    init(itemManager: ItemManagerService){
         self.viewData.viewState = LoadingAccountsViewState.Initial
         self.itemManager = itemManager
     }
@@ -42,7 +40,8 @@ class LoadingAccountsPresentor : Presentor {
     func configure() -> UIViewController {
         let view = LoadingAccountsView(presentor: self, viewData: self.viewData)
         let vc = UIHostingController(rootView: view)
-        self.aggregationService = PlaidInitialAggService(completion: self.handleAggregationResult(result:), budget: budget)
+        self.aggregationService = PlaidInitialAggService(completion: self.handleAggregationResult(result:))
+        
         
         
         return vc
@@ -62,6 +61,7 @@ class LoadingAccountsPresentor : Presentor {
             self.viewData.viewState = LoadingAccountsViewState.Failure
         case .success(let result):
             self.itemId = result
+            UserDefaults.standard.set(true, forKey: "UserOnboarded")
             self.viewData.viewState = LoadingAccountsViewState.Success
             self.itemManager.loadItems()
         }
@@ -72,9 +72,8 @@ class LoadingAccountsPresentor : Presentor {
     func getLoadedAccounts() -> [AccountData]{
         
         if self.itemId != nil{
-            let query = PredicateBuilder().generateItemPredicate(itemId: self.itemId!)
             do{
-                return  try DataManager().getEntity(predicate: query, entityName: "AccountData") as! [AccountData]
+                return  try DataManager().getEntity(entityName: "AccountData") as! [AccountData]
             }
             catch{
                 return [AccountData]()

@@ -24,6 +24,13 @@ class PredicateBuilder{
         return NSPredicate(format: "(endDate >= %@) AND (startDate <= %@)", executionDate as NSDate, executionDate as NSDate)
     }
     
+    //TODO: Finish this function so that it actually returns something. It will fail right now
+    func generateOtherCategoryInBudgetPredicate(startDate: Date, endDate: Date) -> NSPredicate{
+        return NSPredicate(format: "(date > %@) AND (date <= %@) AND ", startDate as NSDate, endDate as NSDate)
+    }
+    
+
+    
     func generateTimeFramePredicate(timeFrame: Int32) -> NSPredicate{
         return NSPredicate(format: "(timeFrame == %@)", timeFrame as NSNumber)
    }

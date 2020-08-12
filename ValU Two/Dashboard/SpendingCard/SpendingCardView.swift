@@ -33,46 +33,48 @@ struct SpendingCardView: View {
     var body: some View {
             
             
-        VStack(spacing: 0.0){
-            
-                
+        VStack{
             ForEach(self.viewModel.services, id: \.self){ service in
-                            
-                        
-                            
-                            VStack(spacing: CGFloat(0.0)){
-                                if service.getParentLimit() > 0.0{
-                                    
-                                    Button(action: {
-                                        // your action here
-                                        self.viewModel.coordinator?.showIndvidualBudget(spendingCategory: service.parent)
-                                    }) {
-                                        ParentCategoryCard(spendingCategory: service.parent, service: service).padding(.bottom)
+                                      
+                                  
+                                      
+                    VStack(spacing: 0){
+                        if service.getParentLimit() > 0.0{
+                                              
+                            Button(action: {
+                                    // your action here
+                                    self.viewModel.coordinator?.showIndvidualBudget(budgetSection: service.parent)
+                                }) {
+                                        ParentCategoryCard(budgetSection: service.parent, service: service).padding(.bottom, 10)
                                     }.buttonStyle(PlainButtonStyle())
-  
+            
                                 }
-                                
-                                
-                                
-                                
-                            
-                        }
-                        
-                    }
+                                          
+
+                }//.listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+                                  
+            }//.listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+        }
+            
+        
+            
+        
+        
+        /*
             
             Button(action: {
                 // your action here
-                self.viewModel.coordinator?.showCategory(categoryName: names.otherCategoryName.rawValue)
+                self.viewModel.coordinator?.showOtherTransactions()
             }) {
                 OtherSpendingSection(viewModel: self.viewModel).padding(.bottom)
             }.buttonStyle(PlainButtonStyle())
             
-                
+            */
                 
                 
             
             
-        }.padding(.horizontal, 5)
+
             
             
             

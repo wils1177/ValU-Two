@@ -18,6 +18,10 @@ class TimeFrameViewModel: ObservableObject{
     init(budget: Budget){
         self.budget = budget
         
+        if budget.timeFrame == -1{
+            budget.timeFrame = 0
+        }
+        
         if budget.timeFrame == 0{
             self.currentTimeFrame = TimeFrame.monthly
         }
@@ -65,7 +69,7 @@ class TimeFrameViewModel: ObservableObject{
             self.budget.setTimeFrame(timeFrame: self.currentTimeFrame!)
         }
         
-        self.coordinator?.loadIncomeScreen()
+        self.coordinator?.timeFrameSubmitted()
         DataManager().saveDatabase()
         
         

@@ -20,16 +20,14 @@ enum PlaidUserDefaultKeys: String{
     case loginRequiredKey = "LoginRequiredFor:"
 }
 
-class PlaidProccessor: BudgetDateFindable{
+class PlaidProccessor{
     
     
     var spendingCategories : [SpendingCategory]
-    var budget : Budget
     var transactionRules = [TransactionRule]()
     
-    init(budget: Budget){
-        self.budget = budget
-        self.spendingCategories = CommonUtils.getSubSpendingCategories()
+    init(spendingCategories: [SpendingCategory]){
+        self.spendingCategories = spendingCategories
         
         do{
             self.transactionRules =  try DataManager().getTransactionRules()
@@ -171,10 +169,9 @@ class PlaidProccessor: BudgetDateFindable{
                 if account.accountId == transaction.accountId{
                     
                     let newTransaction = dataManager.saveTransaction(transaction: transaction, itemId: itemId)
-                    
-                    
 
-                    TransactionProccessor(budget: self.budget, transactionRules: self.transactionRules).proccessTransactionToCategory(transaction: newTransaction, spendingCategories: self.spendingCategories)
+
+                    TransactionProccessor(spendingCategories: self.spendingCategories, transactionRules: self.transactionRules).proccessTransactionToCategory(transaction: newTransaction, spendingCategories: self.spendingCategories)
 
                     
                     

@@ -10,11 +10,11 @@ import SwiftUI
 
 struct ChildCategoryCard: View {
     
-    @ObservedObject var spendingCategory : SpendingCategory
+    @ObservedObject var budgetCategory : BudgetCategory
     
-    func getPercentage() -> Float{
-        if self.spendingCategory.limit != 0.0{
-            return self.spendingCategory.getAmountSpent() / self.spendingCategory.limit
+    func getPercentage() -> Double{
+        if self.budgetCategory.limit != 0.0{
+            return self.budgetCategory.getAmountSpent() / self.budgetCategory.limit
         }
         else{
             return 0.0
@@ -25,9 +25,9 @@ struct ChildCategoryCard: View {
         VStack(spacing: 0){
             HStack{
                 VStack(spacing: 0.0){
-                    CategoryHeader(name: self.spendingCategory.name!, icon: self.spendingCategory.icon!).padding(.horizontal).padding(.top, 10)
+                    CategoryHeader(name: self.budgetCategory.spendingCategory!.name!, icon: self.budgetCategory.spendingCategory!.icon!).padding(.horizontal).padding(.top, 10)
                     
-                    SpendingSummary(spent: self.spendingCategory.getAmountSpent(), limit: self.spendingCategory.limit)
+                    SpendingSummary(spent: Float(self.budgetCategory.getAmountSpent()), limit: Float(self.budgetCategory.limit))
      
                 }
                 
@@ -38,7 +38,7 @@ struct ChildCategoryCard: View {
             }
             
             HStack{
-                ProgressBarView(percentage: CGFloat(self.getPercentage()), color: AppTheme().themeColorPrimary, width: 290).padding(.bottom)
+                ProgressBarView(percentage: CGFloat(self.getPercentage()), color: colorMap[Int(budgetCategory.budgetSection!.colorCode)], width: 290).padding(.bottom)
             }
             
         }

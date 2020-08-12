@@ -10,22 +10,52 @@ import SwiftUI
 
 struct ParentCategoryCard: View {
     
-    @ObservedObject var spendingCategory : SpendingCategory
+    @ObservedObject var budgetSection : BudgetSection
     @ObservedObject var service : BalanceParentService
     
-    init(spendingCategory: SpendingCategory, service: BalanceParentService){
-        self.spendingCategory = spendingCategory
+    init(budgetSection: BudgetSection, service: BalanceParentService){
+        self.budgetSection = budgetSection
         self.service = service
+        
+        
     }
     
     
     var body: some View {
+        
+        HStack{
+            VStack(spacing: 2){
+                CategoryHeader(name: self.budgetSection.name!, icon: self.budgetSection.icon!).padding(.horizontal).padding(.top, 10)
+                
+                HStack(spacing: 0){
+                    BudgetSectionIconLarge(color: colorMap[Int(self.budgetSection.colorCode)]).padding(.leading).padding(.bottom)
+                    
+                    VStack(alignment: .leading, spacing:0){
+                        
+                        
+                        SpendingSummary(spent: Float(service.getParentSpent()), limit: Float(service.getParentLimit()))
+                        
+                        ProgressBarView(percentage: CGFloat(self.service.getPercentageSpent()), color: colorMap[Int(self.budgetSection.colorCode)], width: 250).padding(.bottom)
+                    }.padding(.leading)
+                    
+                    Spacer()
+                    
+                }
+            }
+            
+            Image(systemName: "chevron.right").foregroundColor(Color(.lightGray)).font(Font.system(.headline).bold()).padding(.trailing)
+            
+        }
+        
+        .background(Color(.white)).cornerRadius(15)
+        
+        /*
         VStack(spacing: 0){
             HStack{
                 VStack(spacing: 0.0){
-                    CategoryHeader(name: self.spendingCategory.name!, icon: self.spendingCategory.icon!).padding(.horizontal).padding(.top, 10)
                     
-                    SpendingSummary(spent: service.getParentSpent(), limit: service.getParentLimit())
+                    
+                    
       
                 }
                 VStack{
@@ -34,12 +64,12 @@ struct ParentCategoryCard: View {
             }
             
             HStack{
-                ProgressBarView(percentage: CGFloat(self.service.getPercentageSpent()), color: AppTheme().themeColorPrimary, width: 290).padding(.bottom)
+                
             }
             
         }
-        .background(Color(.white)).cornerRadius(15)
         
+        */
     }
 }
 

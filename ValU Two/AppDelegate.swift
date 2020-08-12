@@ -30,7 +30,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             print("First launch, setting UserDefault.")
             UserDefaults.standard.set(true, forKey: "launchedBefore")
-            TimeFrameManager().createTransactionCaches()
+            //TimeFrameManager().createTransactionCaches()
+            SpendingCategoryService.generateSpendingCategories()
             TimeFrameManager().createInitialBudgetTimeFrames()
         }
         

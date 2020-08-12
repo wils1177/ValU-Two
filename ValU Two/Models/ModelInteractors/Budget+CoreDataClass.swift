@@ -52,100 +52,51 @@ public class Budget: NSManagedObject, NSCopying, Identifiable {
         print("creating budget")
         let entity = NSEntityDescription.entity(forEntityName: "Budget", in: context)
         self.init(entity: entity!, insertInto: context)
-        self.active = true
+        self.active = false
         self.spent = 0.0
         self.id = UUID()
         self.name = "Placeholder"
-        setTimeFrame(timeFrame: TimeFrame.monthly)
-        self.generateSpendingCategories()
-        
+        self.timeFrame = -1
+        self.generateDefaultBudgetSections()
 
-        
     }
     
-    func generateSpendingCategories(){
+    func generateDefaultBudgetSections(){
+        let parentSpendingCategories = SpendingCategoryService().getParentSpendingCategories()
         
-        let categoryData = CategoriesData()
-        let categoryList = categoryData.getCategoriesList()
-        
-
-        
-        //Create a spending category for ALL categoryies
-        createSpendingCategory(categories: categoryList.categories)
-        
-    }
-    
-    func createSpendingCategory(categories: [CategoryEntry]){
-        
-        for category in categories{
+        for parent in parentSpendingCategories{
+            let name = parent.name!
+            let icon = parent.icon!
             
-            let newSpendingCategory = DataManager().createNewSpendingCategory(categoryEntry: category)
-            self.addToSpendingCategories(newSpendingCategory)
-
-            
-            if category.subCategories != nil{
-                for subCategory in category.subCategories!{
-                    let newSpendingSubCategory = DataManager().createNewSpendingCategory(categoryEntry: subCategory)
-                    newSpendingCategory.addToSubSpendingCategories(newSpendingSubCategory)
-                    newSpendingSubCategory.budget = self
+            if name != "Custom"{
+                let newBudgetSection = DataManager().createBudgetSection(name: name, icon: icon, colorCode: Int(parent.colorCode))
+                self.addToBudgetSection(newBudgetSection)
+                
+                for subCategory in parent.subSpendingCategories?.allObjects as! [SpendingCategory]{
+                    let newBudgetCategory = DataManager().createBudgetCategory(category: subCategory)
+                    newBudgetSection.addToBudgetCategories(newBudgetCategory)
                 }
             }
             
         }
+        DataManager().saveDatabase()
         
     }
     
-    func getSubSpendingCategories() -> [SpendingCategory]{
-        
-        var categoriesToReturn = [SpendingCategory]()
-        
-        for case let category as SpendingCategory in self.spendingCategories!{
-            
-            if category.subSpendingCategories != nil{
-                for case let subCategory as SpendingCategory in category.subSpendingCategories!{
-                    categoriesToReturn.append(subCategory)
-                }
-            }
-            
-        }
-        
-        return categoriesToReturn
+    func getBudgetSections() -> [BudgetSection]{
+        return self.budgetSection?.allObjects as! [BudgetSection]
     }
     
-    func getParentSpendingCategories() -> [SpendingCategory]{
-        
-        var categoriesToReturn = [SpendingCategory]()
-        
-        for case let category as SpendingCategory in self.spendingCategories!{
-            
-            if category.subSpendingCategories != nil && category.subSpendingCategories!.count > 0{
-                categoriesToReturn.append(category)
+    func getBudgetCategories() -> [BudgetCategory]{
+        var budgetCategories = [BudgetCategory]()
+        let sections = self.getBudgetSections()
+        for section in sections{
+            for category in section.budgetCategories?.allObjects as! [BudgetCategory]{
+                budgetCategories.append(category)
             }
-            
         }
         
-        return categoriesToReturn
-        
-    }
-    
-    func getAllSpendingCategories() -> [SpendingCategory]{
-        
-        var categoriesToReturn = [SpendingCategory]()
-        
-        for case let category as SpendingCategory in self.spendingCategories!{
-            
-            categoriesToReturn.append(category)
-            
-            if category.subSpendingCategories != nil{
-                for case let subCategory as SpendingCategory in category.subSpendingCategories!{
-                    categoriesToReturn.append(subCategory)
-                }
-            }
-            
-        }
-        
-        return categoriesToReturn
-        
+        return budgetCategories
     }
     
     
@@ -219,14 +170,11 @@ public class Budget: NSManagedObject, NSCopying, Identifiable {
     
     
     func getAmountSpent() -> Float{
-        self.spent = 0.0
-        for transaction in self.transactions?.allObjects as! [Transaction]{
-            if transaction.amount > 0{
-                self.spent = self.spent + Float(transaction.amount)
-            }
-            
+        var spent = 0.0
+        for section in self.budgetSection?.allObjects as! [BudgetSection]{
+            spent = spent + section.getSpent()
         }
-        return self.spent
+        return Float(spent)
     }
     
     func updateAmountSpent(){
@@ -240,6 +188,7 @@ public class Budget: NSManagedObject, NSCopying, Identifiable {
         //print("finished updating the amount spent")
     }
     
+    /*
     func deSelectCategory(name: String){
         let categories = getSubSpendingCategories()
         for category in categories{
@@ -248,7 +197,7 @@ public class Budget: NSManagedObject, NSCopying, Identifiable {
             }
         }
     }
-    
+    */
     
     
 

@@ -60,80 +60,93 @@ struct BudgetsView: View {
         }
     }
     
+    var budgetHeader : some View{
+        
+        VStack(spacing: 0){
+            HStack(spacing:5){
+                VStack(alignment: .leading){
+
+                    Text("MONTHLY BUDGET").font(.system(size: 14)).foregroundColor(Color(.gray)).fontWeight(.light)
+                    Text(getDateString()).font(.system(size: 22)).foregroundColor(Color(.black)).fontWeight(.semibold)
+
+                }.padding(.leading)
+
+                Spacer()
+                HStack{
+                    //Image(systemName: "clock.fill").foregroundColor(Color(.lightGray))
+                    Text(self.getDaysRemaining()).foregroundColor(Color(.white)).font(.footnote).bold().padding(4).padding(.horizontal, 10).background(AppTheme().themeColorPrimary).cornerRadius(20)
+                }.padding(.trailing, 10)
+            }
+            //Divider().padding(.top, 10).padding(.leading).padding(.leading)
+        }.padding(.top, 10)
+        
+    }
+    
+    var categoriesHeader: some View{
+        HStack(spacing: 0){
+            Text("Budgets").font(.system(size: 22)).bold()
+            Spacer()
+            
+            Button(action: {
+                // What to perform
+                self.viewModel.coordinator.continueToBudgetCategories()
+            }) {
+                // How the button looks like
+                Text("Edit").font(.callout).foregroundColor(AppTheme().themeColorPrimary).padding(.trailing)
+            }.buttonStyle(PlainButtonStyle())
+            
+        }.padding(.horizontal, 15).padding(.top, 10)
+    }
+    
+
+    
 
     
     var body: some View {
  
             List{
                 
-                fixNowCards
+                //fixNowCards
                 
                 //self.topButtons//.padding(.top, 7)
-            
-                VStack(spacing: 0){
-                    HStack(spacing:5){
-                        HStack{
-                            Text(getDateString()).font(.system(size: 22)).foregroundColor(Color(.black)).fontWeight(.semibold)
-
-                        }.padding(.leading)
-
-                        Spacer()
-                        HStack{
-                            //Image(systemName: "clock.fill").foregroundColor(Color(.lightGray))
-                            Text(self.getDaysRemaining()).foregroundColor(Color(.white)).font(.footnote).bold().padding(4).padding(.horizontal, 10).background(Color(.lightGray)).cornerRadius(20)
-                        }.padding(.trailing, 10)
-                    }.padding(.horizontal, 10)
-                    Divider().padding(.top, 10).padding(.leading).padding(.leading)
-                }.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)).padding(.bottom).padding(.top, 10)
-                
-
                 
                 
-                
-                
-                    //Text("$" + String(self.viewModel.totalSpending)).font(.headline).fontWeight(.bold)
-            
-                
-                
-                Button(action: {
-                    self.viewModel.coordinator.editClicked(budgetToEdit: self.viewModel.currentBudget)
-                }) {
-                    BudgetCardView(budget: self.viewModel.currentBudget, viewModel: self.viewModel).background(AppTheme().themeColorPrimary).cornerRadius(20).padding(.horizontal, 5).shadow(radius: 5)
-                    //testBudgetSummary.background(Color(.systemBlue)).cornerRadius(20).padding(.horizontal, 5).shadow(radius: 4).padding(.top, 5)
-                }.buttonStyle(PlainButtonStyle())
-                
-                
-                
-                
-                IncomeSectionView(budget: self.viewModel.currentBudget, coordinator: self.viewModel.coordinator).padding(.top, 10)
-                
-
-                    HStack(spacing: 0){
-                        Text("Categories").font(.system(size: 22)).bold()
-                        Spacer()
+                Section(header: self.budgetHeader){
+                    
+                    VStack{
+                        
+                        
                         
                         Button(action: {
-                            // What to perform
-                            self.viewModel.coordinator.continueToBudgetCategories()
+                            self.viewModel.coordinator.editClicked(budgetToEdit: self.viewModel.currentBudget)
                         }) {
-                            // How the button looks like
-                            Text("Edit").font(.callout).foregroundColor(AppTheme().themeColorPrimary).padding(.trailing)
+                            BudgetCardView(budget: self.viewModel.currentBudget, viewModel: self.viewModel).background(Color(.white)).cornerRadius(20)
                         }.buttonStyle(PlainButtonStyle())
                         
-                    }.padding(.horizontal, 15).padding(.top, 10)
-                
+                        IncomeSectionView(coordinator: self.viewModel.coordinator, service: self.viewModel.budgetTransactionsService).padding(.top, 10)
+                        
+                    }
                     
+                    
+                    
+                    
+                }
+
                 
 
+                Section(header: self.categoriesHeader){
+                    SpendingCardView(budget: self.viewModel.currentBudget, viewModel: self.viewModel.spendingModel!, coordinator: self.viewModel.coordinator)
+                }
 
-                SpendingCardView(budget: self.viewModel.currentBudget, viewModel: self.viewModel.spendingModel!, coordinator: self.viewModel.coordinator)
                 
+                
+        
 
-
-            }
+            }.listStyle(GroupedListStyle())
+            
                   
 
-        .navigationBarTitle("Budget").navigationBarItems(
+        .navigationBarTitle("Summary").navigationBarItems(
                                                                    
                                                                    
                 trailing: Button(action: {

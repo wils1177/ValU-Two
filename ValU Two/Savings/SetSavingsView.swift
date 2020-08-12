@@ -47,7 +47,7 @@ struct SetSavingsView: View {
 
         VStack{
                 
-                reccomendation
+                //reccomendation
                 SetSavingsSlider(viewData: self.viewData, presentor: self.presentor)
                 
                 //self.indicator.offset(y: -((CGFloat(0.20) * geometry.size.height) - (geometry.size.height/2)))

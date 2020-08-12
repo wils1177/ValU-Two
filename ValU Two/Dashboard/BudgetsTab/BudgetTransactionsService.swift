@@ -8,7 +8,7 @@
 
 import Foundation
 
-class BudgetIncomeExpensesService : ObservableObject {
+class BudgetTransactionsService : ObservableObject {
     
     @Published var budget: Budget
     @Published var budgetTransactions : [Transaction]
@@ -51,6 +51,7 @@ class BudgetIncomeExpensesService : ObservableObject {
     
     func getBudgetExpenses() -> Double {
         var expenses = 0.0
+
         for transaction in self.budgetTransactions{
             if (transaction.amount > 0 && !transaction.isHidden){
                 let matches = transaction.categoryMatches?.allObjects as! [CategoryMatch]
@@ -85,6 +86,47 @@ class BudgetIncomeExpensesService : ObservableObject {
             }
         }
         return transactionsToReturn
+    }
+    
+    func getOtherSpentTotal() -> Double{
+        let otherTransactions = getOtherTransactionsInBudget()
+        var total = 0.0
+        for transaction in otherTransactions{
+            if transaction.amount > 0.0{
+                total = total + transaction.amount
+            }
+        }
+        return total
+    }
+    
+    func getOtherTransactionsInBudget() -> [Transaction]{
+        
+        var otherTransactions = [Transaction]()
+        
+        for transaction in self.budgetTransactions{
+            // A Transcation if it has no matches or if it has only non-budgeted matches
+            if transaction.categoryMatches?.allObjects.count == 0 || !checkIfCategoryIsBudgeted(budget: budget, transaction: transaction){
+                otherTransactions.append(transaction)
+            }
+
+        }
+        return otherTransactions
+        
+    }
+    
+    func checkIfCategoryIsBudgeted(budget: Budget, transaction: Transaction) -> Bool{
+        let allCategoryMatches = transaction.categoryMatches!.allObjects as! [CategoryMatch]
+        
+        for match in allCategoryMatches{
+            let id = match.spendingCategory!.id!
+            for budgetCategory in budget.getBudgetCategories(){
+                if budgetCategory.spendingCategory!.id! == id && budgetCategory.limit > 0.0{
+                    return true
+                }
+            }
+        }
+        
+        return false
     }
     
 }

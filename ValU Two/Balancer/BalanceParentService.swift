@@ -10,58 +10,56 @@ import Foundation
 
 class BalanceParentService : ObservableObject, Hashable{
     
-    @Published var parent : SpendingCategory
-    @Published var children : [SpendingCategory]
+    @Published var parent : BudgetSection
     
     var id = UUID()
     
-    init(spendingCategory: SpendingCategory){
-        self.parent = spendingCategory
-        self.children = spendingCategory.subSpendingCategories?.allObjects as! [SpendingCategory]
+    init(budgetSection: BudgetSection){
+        self.parent = budgetSection
     }
     
-    func getParentLimit() -> Float{
-        var total = Float(0.0)
-        for child in self.children{
-            total = child.limit + total
-        }
-        return total
+    func getParentLimit() -> Double{
+        
+        self.parent.getLimit()
     }
     
-    func getParentSpent() -> Float{
-        var total = Float(0.0)
-        for child in self.children{
+    func getParentSpent() -> Double{
+        
+        self.parent.getSpent()
+    }
+    
+    func getParentInitialSpent() -> Double{
+        self.parent.getInitialSpent()
+    }
+    
+    func getPercentageSpent() -> Double{
+        self.parent.getPercentageSpent()
+        
+    }
+    
+    
+    func deleteCategory(id: UUID) {
+        
+        for category in self.parent.budgetCategories?.allObjects as! [BudgetCategory]{
+            if category.id! == id{
+                self.parent.removeFromBudgetCategories(category)
+                let predicate = PredicateBuilder().generateByIdPredicate(id: category.id!)
+                category.spendingCategory!.objectWillChange.send()
+                self.objectWillChange.send()
+                do{
+                    try DataManager().deleteEntity(predicate: predicate, entityName: "BudgetCategory")
+                }
+                catch{
+                    print("WARNING: Could delete budget category entity")
+                }
             
-            if child.limit > 0.0{
-                total = child.getAmountSpent() + total
+                
             }
-            
         }
-        return total
-    }
-    
-    func getParentInitialSpent() -> Float{
-        var total = Float(0.0)
-        for child in self.children{
-            
-            total = child.initialThirtyDaysSpent + total
-
-        }
-        return total
-    }
-    
-    func getPercentageSpent() -> Float{
-        let limit = getParentLimit()
-        let spent = getParentSpent()
-        
-        if limit != 0.0{
-           return spent / limit
-        }
-        else{
-            return 0.0
-        }
+        self.parent.budget!.objectWillChange.send()
         
     }
+    
     
     static func == (lhs: BalanceParentService, rhs: BalanceParentService) -> Bool {
         return lhs.id == rhs.id

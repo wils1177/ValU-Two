@@ -18,6 +18,8 @@ class BudgetCopyer{
         newBudget.spent = Float(0.0)
         newBudget.inflow = Float(0.0)
         
+        //TODO: Put back in place functionality to replicate budget sections and categories
+        /*
         for newCategory in newBudget.getAllSpendingCategories(){
             
             for category in budget.getAllSpendingCategories(){
@@ -31,6 +33,7 @@ class BudgetCopyer{
             newCategory.spent = Float(0.0)
             newCategory.initialThirtyDaysSpent = Float(0.0)
         }
+        */
         
         newBudget.setTimeFrame(timeFrame: TimeFrame.monthly)
         

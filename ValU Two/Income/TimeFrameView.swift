@@ -116,7 +116,7 @@ struct TimeFrameView: View {
                                   HStack{
                                       Spacer()
                                       ZStack{
-                                          Text("Continue").font(.subheadline).foregroundColor(Color(.systemBackground)).bold().padding()
+                                          Text("Done").font(.subheadline).foregroundColor(Color(.systemBackground)).bold().padding()
                                       }
                                       Spacer()
                                   }.background(AppTheme().themeColorPrimary).cornerRadius(10).shadow(radius: 10).padding().padding(.horizontal).padding(.bottom)
@@ -141,7 +141,7 @@ struct TimeFrameView: View {
                 
 
                 
-            }.navigationBarTitle("Frequency")
+            }.navigationBarTitle("Time Frame")
             
             
             

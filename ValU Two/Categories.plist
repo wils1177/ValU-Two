@@ -8,7 +8,7 @@
 			<key>name</key>
 			<string>Eat &amp; Drink</string>
 			<key>icon</key>
-			<string>🍔</string>
+			<string>mappin.and.ellipse</string>
 			<key>colorCode</key>
 			<integer>0</integer>
 			<key>matchDepth</key>
@@ -25,7 +25,7 @@
 					<key>icon</key>
 					<string>🛒</string>
 					<key>colorCode</key>
-					<integer>1</integer>
+					<integer>0</integer>
 					<key>matchDepth</key>
 					<integer>0</integer>
 					<key>contains</key>
@@ -45,19 +45,6 @@
 					<key>contains</key>
 					<array>
 						<string>Restaurants</string>
-					</array>
-				</dict>
-				<dict>
-					<key>name</key>
-					<string>Fast Food</string>
-					<key>icon</key>
-					<string>🍟</string>
-					<key>colorCode</key>
-					<integer>0</integer>
-					<key>matchDepth</key>
-					<integer>0</integer>
-					<key>contains</key>
-					<array>
 						<string>Fast Food</string>
 					</array>
 				</dict>
@@ -96,9 +83,9 @@
 			<key>name</key>
 			<string>Health &amp; Care</string>
 			<key>icon</key>
-			<string>🏥</string>
+			<string>heart.fill</string>
 			<key>colorCode</key>
-			<integer>0</integer>
+			<integer>1</integer>
 			<key>matchDepth</key>
 			<integer>0</integer>
 			<key>contains</key>
@@ -195,11 +182,11 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Fun</string>
+			<string>Entertainment</string>
 			<key>icon</key>
-			<string>🎟️</string>
+			<string>sportscourt</string>
 			<key>colorCode</key>
-			<integer>0</integer>
+			<integer>4</integer>
 			<key>matchDepth</key>
 			<integer>0</integer>
 			<key>contains</key>
@@ -214,7 +201,7 @@
 					<key>icon</key>
 					<string>🏟️</string>
 					<key>colorCode</key>
-					<integer>1</integer>
+					<integer>4</integer>
 					<key>matchDepth</key>
 					<integer>0</integer>
 					<key>contains</key>
@@ -231,7 +218,7 @@
 					<key>icon</key>
 					<string>🎥</string>
 					<key>colorCode</key>
-					<integer>1</integer>
+					<integer>4</integer>
 					<key>matchDepth</key>
 					<integer>0</integer>
 					<key>contains</key>
@@ -245,7 +232,7 @@
 					<key>icon</key>
 					<string>🍷</string>
 					<key>colorCode</key>
-					<integer>1</integer>
+					<integer>4</integer>
 					<key>matchDepth</key>
 					<integer>0</integer>
 					<key>contains</key>
@@ -257,11 +244,39 @@
 				</dict>
 				<dict>
 					<key>name</key>
+					<string>Shopping</string>
+					<key>icon</key>
+					<string>🛍️</string>
+					<key>colorCode</key>
+					<integer>4</integer>
+					<key>matchDepth</key>
+					<integer>0</integer>
+					<key>contains</key>
+					<array>
+						<string>Shops</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Subscriptions</string>
+					<key>icon</key>
+					<string>🌐</string>
+					<key>colorCode</key>
+					<integer>4</integer>
+					<key>matchDepth</key>
+					<integer>0</integer>
+					<key>contains</key>
+					<array>
+						<string>Subscription</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
 					<string>Other Fun</string>
 					<key>icon</key>
 					<string>🎟️</string>
 					<key>colorCode</key>
-					<integer>1</integer>
+					<integer>4</integer>
 					<key>matchDepth</key>
 					<integer>1</integer>
 					<key>contains</key>
@@ -273,112 +288,9 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Shops</string>
-			<key>icon</key>
-			<string>🛍️</string>
-			<key>colorCode</key>
-			<integer>1</integer>
-			<key>matchDepth</key>
-			<integer>0</integer>
-			<key>contains</key>
-			<array>
-				<string>Shops</string>
-			</array>
-			<key>subCategories</key>
-			<array>
-				<dict>
-					<key>name</key>
-					<string>Clothing</string>
-					<key>icon</key>
-					<string>👚</string>
-					<key>colorCode</key>
-					<integer>1</integer>
-					<key>matchDepth</key>
-					<integer>0</integer>
-					<key>contains</key>
-					<array>
-						<string>Clothing and Accessories</string>
-					</array>
-				</dict>
-				<dict>
-					<key>name</key>
-					<string>Computers</string>
-					<key>icon</key>
-					<string>🖥️</string>
-					<key>colorCode</key>
-					<integer>1</integer>
-					<key>matchDepth</key>
-					<integer>0</integer>
-					<key>contains</key>
-					<array>
-						<string>Computers and Electronics
-Computers and Electronics
-Computers and Electronics</string>
-					</array>
-				</dict>
-				<dict>
-					<key>name</key>
-					<string>Other Shops</string>
-					<key>icon</key>
-					<string>🛍️</string>
-					<key>colorCode</key>
-					<integer>1</integer>
-					<key>matchDepth</key>
-					<integer>1</integer>
-					<key>contains</key>
-					<array>
-						<string>Shops</string>
-					</array>
-				</dict>
-				<dict>
-					<key>name</key>
-					<string>Car Shops</string>
-					<key>icon</key>
-					<string>🏎️</string>
-					<key>colorCode</key>
-					<integer>1</integer>
-					<key>matchDepth</key>
-					<integer>0</integer>
-					<key>contains</key>
-					<array>
-						<string>Automotive</string>
-					</array>
-				</dict>
-				<dict>
-					<key>name</key>
-					<string>Beauty</string>
-					<key>icon</key>
-					<string>💄</string>
-					<key>colorCode</key>
-					<integer>1</integer>
-					<key>matchDepth</key>
-					<integer>0</integer>
-					<key>contains</key>
-					<array>
-						<string>Beauty Products</string>
-					</array>
-				</dict>
-				<dict>
-					<key>name</key>
-					<string>Bookstores</string>
-					<key>icon</key>
-					<string>📚</string>
-					<key>colorCode</key>
-					<integer>1</integer>
-					<key>matchDepth</key>
-					<integer>0</integer>
-					<key>contains</key>
-					<array>
-						<string>Bookstores</string>
-					</array>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>name</key>
 			<string>Transportation</string>
 			<key>icon</key>
-			<string>🚆</string>
+			<string>airplane</string>
 			<key>colorCode</key>
 			<integer>3</integer>
 			<key>matchDepth</key>
@@ -493,11 +405,11 @@ Computers and Electronics</string>
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Bills and Utilities</string>
+			<string>Housing &amp; Utilities </string>
 			<key>icon</key>
-			<string>🔧</string>
+			<string>house.fill</string>
 			<key>colorCode</key>
-			<integer>4</integer>
+			<integer>2</integer>
 			<key>matchDepth</key>
 			<integer>1</integer>
 			<key>contains</key>
@@ -513,7 +425,7 @@ Computers and Electronics</string>
 					<key>icon</key>
 					<string>🌐</string>
 					<key>colorCode</key>
-					<integer>5</integer>
+					<integer>2</integer>
 					<key>matchDepth</key>
 					<integer>0</integer>
 					<key>contains</key>
@@ -523,12 +435,26 @@ Computers and Electronics</string>
 				</dict>
 				<dict>
 					<key>name</key>
+					<string>Rent</string>
+					<key>icon</key>
+					<string>🏠</string>
+					<key>colorCode</key>
+					<integer>2</integer>
+					<key>matchDepth</key>
+					<integer>0</integer>
+					<key>contains</key>
+					<array>
+						<string>Rent</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
 					<string>Internet
 Internet</string>
 					<key>icon</key>
 					<string>🌐</string>
 					<key>colorCode</key>
-					<integer>5</integer>
+					<integer>2</integer>
 					<key>matchDepth</key>
 					<integer>0</integer>
 					<key>contains</key>
@@ -542,7 +468,7 @@ Internet</string>
 					<key>icon</key>
 					<string>📝</string>
 					<key>colorCode</key>
-					<integer>5</integer>
+					<integer>2</integer>
 					<key>matchDepth</key>
 					<integer>0</integer>
 					<key>contains</key>
@@ -556,7 +482,7 @@ Internet</string>
 					<key>icon</key>
 					<string>📺</string>
 					<key>colorCode</key>
-					<integer>5</integer>
+					<integer>2</integer>
 					<key>matchDepth</key>
 					<integer>0</integer>
 					<key>contains</key>
@@ -566,58 +492,16 @@ Internet</string>
 				</dict>
 				<dict>
 					<key>name</key>
-					<string>Subscriptions</string>
-					<key>icon</key>
-					<string>🌐</string>
-					<key>colorCode</key>
-					<integer>5</integer>
-					<key>matchDepth</key>
-					<integer>0</integer>
-					<key>contains</key>
-					<array>
-						<string>Subscription</string>
-					</array>
-				</dict>
-				<dict>
-					<key>name</key>
 					<string>Utilities</string>
 					<key>icon</key>
 					<string>🔧</string>
 					<key>colorCode</key>
-					<integer>4</integer>
+					<integer>2</integer>
 					<key>matchDepth</key>
 					<integer>1</integer>
 					<key>contains</key>
 					<array>
 						<string>Utilities</string>
-					</array>
-				</dict>
-				<dict>
-					<key>name</key>
-					<string>Rent</string>
-					<key>icon</key>
-					<string>🏠</string>
-					<key>colorCode</key>
-					<integer>4</integer>
-					<key>matchDepth</key>
-					<integer>0</integer>
-					<key>contains</key>
-					<array>
-						<string>Rent</string>
-					</array>
-				</dict>
-				<dict>
-					<key>name</key>
-					<string>Other Services</string>
-					<key>icon</key>
-					<string>🏤</string>
-					<key>colorCode</key>
-					<integer>4</integer>
-					<key>matchDepth</key>
-					<integer>1</integer>
-					<key>contains</key>
-					<array>
-						<string>Service</string>
 					</array>
 				</dict>
 			</array>

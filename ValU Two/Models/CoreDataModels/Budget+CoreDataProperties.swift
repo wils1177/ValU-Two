@@ -1,8 +1,9 @@
 //
 //  Budget+CoreDataProperties.swift
-//  
+//  ValU Two
 //
-//  Created by Clayton Wilson on 4/12/20.
+//  Created by Clayton Wilson on 6/21/20.
+//  Copyright © 2020 Clayton Wilson. All rights reserved.
 //
 //
 
@@ -21,50 +22,15 @@ extension Budget {
     @NSManaged public var endDate: Date?
     @NSManaged public var id: UUID?
     @NSManaged public var inflow: Float
+    @NSManaged public var name: String?
+    @NSManaged public var repeating: Bool
     @NSManaged public var savingsPercent: Float
     @NSManaged public var spent: Float
     @NSManaged public var startDate: Date?
     @NSManaged public var timeFrame: Int32
-    @NSManaged public var name: String?
-    @NSManaged public var repeating: Bool
-    @NSManaged public var spendingCategories: NSOrderedSet?
-    @NSManaged public var transactions: NSSet?
     @NSManaged public var budgetTimeFrame: BudgetTimeFrame?
-
-}
-
-// MARK: Generated accessors for spendingCategories
-extension Budget {
-
-    @objc(insertObject:inSpendingCategoriesAtIndex:)
-    @NSManaged public func insertIntoSpendingCategories(_ value: SpendingCategory, at idx: Int)
-
-    @objc(removeObjectFromSpendingCategoriesAtIndex:)
-    @NSManaged public func removeFromSpendingCategories(at idx: Int)
-
-    @objc(insertSpendingCategories:atIndexes:)
-    @NSManaged public func insertIntoSpendingCategories(_ values: [SpendingCategory], at indexes: NSIndexSet)
-
-    @objc(removeSpendingCategoriesAtIndexes:)
-    @NSManaged public func removeFromSpendingCategories(at indexes: NSIndexSet)
-
-    @objc(replaceObjectInSpendingCategoriesAtIndex:withObject:)
-    @NSManaged public func replaceSpendingCategories(at idx: Int, with value: SpendingCategory)
-
-    @objc(replaceSpendingCategoriesAtIndexes:withSpendingCategories:)
-    @NSManaged public func replaceSpendingCategories(at indexes: NSIndexSet, with values: [SpendingCategory])
-
-    @objc(addSpendingCategoriesObject:)
-    @NSManaged public func addToSpendingCategories(_ value: SpendingCategory)
-
-    @objc(removeSpendingCategoriesObject:)
-    @NSManaged public func removeFromSpendingCategories(_ value: SpendingCategory)
-
-    @objc(addSpendingCategories:)
-    @NSManaged public func addToSpendingCategories(_ values: NSOrderedSet)
-
-    @objc(removeSpendingCategories:)
-    @NSManaged public func removeFromSpendingCategories(_ values: NSOrderedSet)
+    @NSManaged public var transactions: NSSet?
+    @NSManaged public var budgetSection: NSSet?
 
 }
 
@@ -82,5 +48,22 @@ extension Budget {
 
     @objc(removeTransactions:)
     @NSManaged public func removeFromTransactions(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for budgetSection
+extension Budget {
+
+    @objc(addBudgetSectionObject:)
+    @NSManaged public func addToBudgetSection(_ value: BudgetSection)
+
+    @objc(removeBudgetSectionObject:)
+    @NSManaged public func removeFromBudgetSection(_ value: BudgetSection)
+
+    @objc(addBudgetSection:)
+    @NSManaged public func addToBudgetSection(_ values: NSSet)
+
+    @objc(removeBudgetSection:)
+    @NSManaged public func removeFromBudgetSection(_ values: NSSet)
 
 }

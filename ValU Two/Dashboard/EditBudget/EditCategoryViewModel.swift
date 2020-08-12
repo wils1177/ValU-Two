@@ -17,15 +17,15 @@ class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, Observa
     
     var selectedCategoryNames = [String]()
     var spendingCategories = [SpendingCategory]()
+    var subSpendingCategories = [SpendingCategory]()
     var saveRule : Bool = true
-    var budget : Budget?
     
     var transaction : Transaction
 
-    init(transaction: Transaction, budget: Budget){
+    init(transaction: Transaction){
         self.transaction = transaction
-        self.budget = budget
-        self.spendingCategories = self.budget!.getParentSpendingCategories()
+        self.spendingCategories = SpendingCategoryService().getParentSpendingCategories()
+        self.subSpendingCategories = SpendingCategoryService().getSubSpendingCategories()
         
     }
     
@@ -40,24 +40,17 @@ class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, Observa
     
     func submit() {
         
-        
-
-        self.budget?.updateAmountSpent()
-        
         if saveRule{
             createTransactionRule()
         }
         DataManager().saveDatabase()
-
         
         NotificationCenter.default.post(name: .modelUpdate, object: nil)
         coordinator?.dismissEditCategory()
 
     }
     
-    
-    
-    
+
     
     func createTransactionRule(){
         
@@ -91,7 +84,7 @@ class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, Observa
     func selectedCategoryName(name:String){
         
         
-        for spendingCategory in self.budget!.getSubSpendingCategories(){
+        for spendingCategory in self.subSpendingCategories{
             if spendingCategory.name! == name{
                 
                 var amount = 0.0

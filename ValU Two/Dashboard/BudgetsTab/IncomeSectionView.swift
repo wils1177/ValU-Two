@@ -9,17 +9,14 @@
 import SwiftUI
 
 struct IncomeSectionView: View {
-    var model : BudgetIncomeExpensesService
-    var budget : Budget
-    var viewModel = CashFlowViewModel()
-    
+    var model : BudgetTransactionsService
+
     var income : String
     var expenses: String
     var coordinator : BudgetsTabCoordinator?
     
-    init(budget: Budget, coordinator: BudgetsTabCoordinator?){
-        self.budget = budget
-        self.model = BudgetIncomeExpensesService(budget: budget)
+    init(coordinator: BudgetsTabCoordinator?, service : BudgetTransactionsService){
+        self.model = service
         self.income = CommonUtils.makeMoneyString(number: (Int(model.getBudgetIncome() * -1)))
         self.expenses = CommonUtils.makeMoneyString(number: (Int(model.getBudgetExpenses())))
         
@@ -30,8 +27,7 @@ struct IncomeSectionView: View {
     var incomePortion : some View{
         VStack(alignment: .center){
             HStack{
-                //Circle().frame(width: 7, height: 7).foregroundColor(Color(.systemGreen))
-                Image(systemName: "chevron.up.circle.fill").foregroundColor(Color(.systemGreen)).imageScale(.large)
+                Image(systemName: "chevron.up.circle.fill").foregroundColor(Color(.systemGreen)).font(.system(size: 27))
                 Spacer()
                 Text(self.income).font(.system(size: 24)).fontWeight(.bold).lineLimit(1)
                 
@@ -44,14 +40,14 @@ struct IncomeSectionView: View {
             
             //Text("This Month").font(.callout).bold().foregroundColor(Color(.lightGray))
             //Text("Up $400").font(.callout).foregroundColor(Color(.lightGray))
-        }.padding().background(Color(.white)).cornerRadius(15).padding(.vertical, 5)
+        }.padding().background(Color(.white)).cornerRadius(15)//.padding(.vertical, 5)
     }
     
     var expensesPortion : some View{
         VStack(alignment: .center){
             HStack{
                 //Circle().frame(width: 7, height: 7).foregroundColor(Color(.systemRed))
-                Image(systemName: "chevron.down.circle.fill").foregroundColor(Color(.systemRed)).imageScale(.large)
+                Image(systemName: "chevron.down.circle.fill").foregroundColor(Color(.systemRed)).font(.system(size: 27))
                 Spacer()
                 Text(self.expenses).font(.system(size: 24)).fontWeight(.bold).lineLimit(1)
                 
@@ -64,20 +60,16 @@ struct IncomeSectionView: View {
             
             //Text("This Month").font(.callout).bold().foregroundColor(Color(.lightGray))
             //Text("Up $400").font(.callout).foregroundColor(Color(.lightGray))
-        }.padding().background(Color(.white)).cornerRadius(15).padding(.vertical, 5)
+        }.padding().background(Color(.white)).cornerRadius(15)//.padding(.vertical, 5)
     }
     
     
     var card : some View{
         VStack(spacing: 0){
             
-            //HStack{
-            //    Text("CASH FLOW").font(.subheadline).foregroundColor(Color(.lightGray))
-            //    Spacer()
-            //}.padding(.leading).padding(.bottom, 5)
             
             HStack{
-                Spacer()
+                //Spacer()
                 Button(action: {
                     self.coordinator?.showIncome(transactions: self.model.getIncomeTransactions())
                 }) {
@@ -92,7 +84,7 @@ struct IncomeSectionView: View {
                 }.buttonStyle(PlainButtonStyle())
                 
                 
-                Spacer()
+                //Spacer()
                 
             }
             

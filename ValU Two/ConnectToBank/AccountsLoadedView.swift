@@ -33,7 +33,7 @@ struct AccountsLoadedView: View {
             VStack(alignment: .center){
                 
                 
-                Text("Accounts Successfully Loaded").font(.title).bold().lineLimit(nil).padding().multilineTextAlignment(.center).padding(.top).padding(.top)
+                Text("Accounts Successfully Connected").font(.title).bold().lineLimit(nil).padding().multilineTextAlignment(.center).padding(.top).padding(.top)
                 
                 //LoadedAccountsList(accounts: self.accounts)
                 //SnapCarousel(accounts: self.accounts).environmentObject(UIStateModel())
@@ -46,7 +46,7 @@ struct AccountsLoadedView: View {
                 Button(action: {
                     //Button Action
                     self.presentor?.userPressedContinue()
-                    self.cardsHidden = true
+                    //self.cardsHidden = true
                     }){
                     HStack{
                         Spacer()
@@ -73,7 +73,7 @@ struct AccountsLoadedView: View {
                     
                 }
      
-        }
+                }
 
         
         .navigationBarTitle(Text("Welcome"),  displayMode: .large)

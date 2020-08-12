@@ -45,20 +45,21 @@ class OnboardingSummaryPresentor : Presentor, NewBudgetModel, ObservableObject{
         
         self.currentStep = self.getCurrentStep()
         
-        let connectBankStep = generateStep(currentStep: self.currentStep, title: "Connect to your bank", description: getBankDescription(), stage: 1)
-        let enterIncomeStep = generateStep(currentStep: self.currentStep, title: "Confirm your income", description: "Set your income for your budget", stage: 2)
-        let savingsStep = generateStep(currentStep: self.currentStep, title: "Set a savings goal", description: "Decide how much you want to save", stage: 3)
+        let timeFrameStep = generateStep(currentStep: self.currentStep, title: "Select Time Frame", description: getTimeFrameDescription(), stage: 1)
+        let enterIncomeStep = generateStep(currentStep: self.currentStep, title: "Confirm your income", description: getIncomeDescription(), stage: 2)
+        let savingsStep = generateStep(currentStep: self.currentStep, title: "Set a savings goal", description: getSavingsDescription(), stage: 3)
         let balanceStep = generateStep(currentStep: self.currentStep, title: "Create your budget", description: "Make your budgets!", stage: 4)
         
-        let steps = [connectBankStep, enterIncomeStep, savingsStep, balanceStep]
+        let steps = [timeFrameStep, enterIncomeStep, savingsStep, balanceStep]
         
         self.viewData = OnboardingSummaryViewData(steps: steps)
         
     }
     
     func getAction(stage: Int) -> (()->Void)? {
+
         if stage == 1{
-            return self.continueToPlaid
+            return self.continueToTimeFrame
         }
         else if stage == 2{
             return self.loadIncomeScreen
@@ -81,7 +82,7 @@ class OnboardingSummaryPresentor : Presentor, NewBudgetModel, ObservableObject{
     }
     
     func loadIncomeScreen(){
-        self.coordinator?.continueToTimeFrame()
+        self.coordinator?.loadIncomeScreen()
         
     }
     
@@ -94,6 +95,14 @@ class OnboardingSummaryPresentor : Presentor, NewBudgetModel, ObservableObject{
         self.coordinator?.continueToBudgetCategories()
         
         
+    }
+    
+    func continueToTimeFrame(){
+        self.coordinator?.continueToTimeFrame()
+    }
+    
+    func dismiss(){
+        self.coordinator?.dimiss()
     }
     
 
@@ -140,18 +149,40 @@ extension NewBudgetModel{
         return itemCount
     }
     
-    func getBankDescription() -> String{
-        let itemCount = getItemCount()
-        if itemCount == 0 {
-            return "Set up an automated connection"
+    func getTimeFrameDescription() -> String{
+        
+        if self.budget.timeFrame == 0{
+            return "Monthly Budget"
         }
-        else if itemCount == 1{
-            return String(itemCount) + " account connected"
+        else if self.budget.timeFrame == 1{
+            return "Sem-Monthly Budget"
+        
+        }
+        else if self.budget.timeFrame == 2{
+            return "Weekly Budget"
         }
         else{
-            return String(itemCount) + " accounts connected"
+            return "How long is your budget?"
         }
         
+    }
+    
+    func getIncomeDescription() -> String{
+        if self.budget.amount == Float(0.0){
+            return "Set your income for your budget"
+        }
+        else {
+            return CommonUtils.makeMoneyString(number: Int(self.budget.amount))
+        }
+    }
+    
+    func getSavingsDescription() -> String{
+        if self.budget.savingsPercent == Float(0.0){
+            return "Set a savings goal"
+        }
+        else {
+            return String(Int(self.budget.savingsPercent * 100)) + "%"   + " of income"
+        }
     }
     
     
@@ -159,11 +190,10 @@ extension NewBudgetModel{
         
         var step = 0
         
-        let itemCount = getItemCount()
-    
-        if itemCount > 0 {
-            step =  1
+        if self.budget.timeFrame != -1{
+            step = 1
         }
+
         if self.budget.amount != Float(0.0){
             step = 2
         }
@@ -215,6 +245,8 @@ extension NewBudgetModel{
             return Color(.lightGray)
         }
     }
+    
+    
     
 
     

@@ -12,33 +12,50 @@ import SwiftUI
 class BudgetsTabCoordinator : Coordinator, TransactionRowDelegate, EditBudgetDelegate, SetSpendingLimitDelegate{
     
     
-     
+    
 
     var childCoordinators = [Coordinator]()
     var navigationController = UINavigationController()
     var presentorStack = [Presentor]()
     var settingsCoordinator : SettingsFlowCoordinator?
+    var newBudgetCoorinator : NewBudgetCoordinator?
     var plaidUpdateCoordiantor : PlaidUpdateFlowCoordinator?
-    var budget : Budget
     
-    init(budget: Budget){
+    //Dependencids
+    var budget : Budget?
+    var budgetTransactionsService : BudgetTransactionsService?
+    
+    
+    
+    init(budget: Budget?){
         self.budget = budget
+        
+        if budget != nil{
+            self.budgetTransactionsService = BudgetTransactionsService(budget: budget!)
+        }
         
     }
     
     
     func start() {
         
-        let homePresentor = BudgetsViewModel(budget: self.budget, coordinator: self)
-        homePresentor.coordinator = self
-        self.presentorStack.append(homePresentor)
+        if self.budget != nil && budget!.active{
+            let homePresentor = BudgetsViewModel(budget: self.budget!, budgetService: self.budgetTransactionsService!, coordinator: self)
+            homePresentor.coordinator = self
+            self.presentorStack.append(homePresentor)
+            
+            let homeView = homePresentor.configure()
+            self.navigationController.pushViewController(homeView, animated: false)
+        }
+        else{
+            let vc = UIHostingController(rootView: BudgetZeroState(coordinator: self))
+            self.navigationController.pushViewController(vc, animated: false)
+        }
         
-        let homeView = homePresentor.configure()
         
         self.navigationController.navigationBar.prefersLargeTitles = true
+        self.navigationController.tabBarItem = UITabBarItem(title: "Summary", image: UIImage(systemName: "creditcard"), selectedImage: UIImage(named: "tab_icon_seelcted"))
         
-        self.navigationController.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "creditcard"), selectedImage: UIImage(named: "tab_icon_seelcted"))
-        self.navigationController.pushViewController(homeView, animated: false)
         
     }
     
@@ -64,7 +81,7 @@ class BudgetsTabCoordinator : Coordinator, TransactionRowDelegate, EditBudgetDel
     
     func showSettings(){
         
-        self.settingsCoordinator = SettingsFlowCoordinator(budget: self.budget)
+        self.settingsCoordinator = SettingsFlowCoordinator()
         self.settingsCoordinator?.parent = self
         self.settingsCoordinator?.start()
         self.navigationController.present(self.settingsCoordinator!.navigationController, animated: true)
@@ -85,39 +102,43 @@ class BudgetsTabCoordinator : Coordinator, TransactionRowDelegate, EditBudgetDel
         
     }
     
-    func showCategory(categoryName: String){
+    func showCategory(category: SpendingCategory){
         
-        let presentor = TransactionsListViewModel(budget: self.budget, categoryName: categoryName)
+        let transactions = TransactionsCategoryFetcher.fetchTransactionsForCategoryAndDateRange(spendingCategory: category, startDate: self.budget!.startDate!, endDate: self.budget!.endDate!)
+        let presentor = TransactionsListViewModel(transactions: transactions, title: category.name!)
         presentor.coordinator = self
         let vc = presentor.configure()
-        
-        
         self.navigationController.pushViewController(vc, animated: true)
         
     }
     
-    func showIncome(transactions: [Transaction]){
-        let presentor = TransactionsListViewModel(budget: self.budget, transactions: transactions , title: "Earned")
+    func showOtherTransactions(){
+        let transactions = self.budgetTransactionsService!.getOtherTransactionsInBudget()
+        let presentor = TransactionsListViewModel(transactions: transactions, title: "Everything Else")
         presentor.coordinator = self
         let vc = presentor.configure()
+        vc.title = "Everything Else"
+        self.navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func showIncome(transactions: [Transaction]){
+
+        let presentor = TransactionsListViewModel(transactions: transactions, title: "Earnings")
+        presentor.coordinator = self
+        let vc = presentor.configure()
+        vc.title = "Earnings"
         self.navigationController.pushViewController(vc, animated: true)
     }
     
     func showExpenses(transactions: [Transaction]){
-        let presentor = TransactionsListViewModel(budget: self.budget, transactions: transactions , title: "Spent")
+        let presentor = TransactionsListViewModel(transactions: transactions, title: "Spent")
         presentor.coordinator = self
         let vc = presentor.configure()
+        vc.title = "Spent"
         self.navigationController.pushViewController(vc, animated: true)
     }
     
 
-    
-    func dismissNewBudgetCoordinator(){
-        self.childCoordinators.popLast()
-    }
-    
- 
-    
     func showCashFlow(viewModel: CashFlowViewModel){
         let view = CashFlowFullScreenView(viewModel: viewModel)
         let vc = UIHostingController(rootView: view)
@@ -126,30 +147,32 @@ class BudgetsTabCoordinator : Coordinator, TransactionRowDelegate, EditBudgetDel
     }
     
     
-    func showIndvidualBudget(spendingCategory: SpendingCategory){
-        let view = CategoryDetailView(spendingCategory: spendingCategory, coordinator: self)
+    func showIndvidualBudget(budgetSection: BudgetSection){
+        let view = CategoryDetailView(budgetSection: budgetSection, coordinator: self)
         let vc = UIHostingController(rootView: view)
-        vc.title = spendingCategory.name! + " Budget"
+        vc.title = budgetSection.name! + " Budget"
         self.navigationController.pushViewController(vc, animated: true)
     }
     
     func continueToBudgetCategories(){
 
-        let view = BalancerView(budget: self.budget, coordinator: self)
+        let view = BalancerView(budget: self.budget!, coordinator: self)
         let vc = UIHostingController(rootView: view)
         vc.title = "Set Budget"
         self.navigationController.pushViewController(vc, animated: true)
     }
     
-    func showCategoryDetail(category: SpendingCategory, service: BalanceParentService) {
-        let view = BalanceDetailView(category: category, service: service)
-        let vc = UIHostingController(rootView: view)
-        vc.title = category.name!
+    func showCategoryDetail(budgetSection: BudgetSection, service: BalanceParentService) {
+        //let view = BalanceDetailView(budgetSection: budgetSection, service: service, coordinator: self)
+        //let vc = UIHostingController(rootView: view)
+        //vc.title = budgetSection.name!
         
 
         
-        self.navigationController.pushViewController(vc, animated: true)
+        //self.navigationController.pushViewController(vc, animated: true)
     }
+    
+
     
     func finishedSettingLimits() {
         self.navigationController.popViewController(animated: true)
@@ -159,6 +182,24 @@ class BudgetsTabCoordinator : Coordinator, TransactionRowDelegate, EditBudgetDel
     func showPlaidUpdate(publicToken: String, itemId: String, sender: FixNowService){
         self.plaidUpdateCoordiantor = PlaidUpdateFlowCoordinator(navigationController: self.navigationController, itemId: itemId, publicToken: publicToken, fixNowService : sender)
         plaidUpdateCoordiantor?.start()
+        
+    }
+    
+    
+    func createNewBudget(){
+        
+        self.newBudgetCoorinator = NewBudgetCoordinator()
+        self.newBudgetCoorinator?.parent = self
+        self.newBudgetCoorinator?.start()
+        self.navigationController.present(self.newBudgetCoorinator!.navigationController, animated: true)
+        
+    }
+    
+    func dismissNewBudgetCoordinator(){
+        self.newBudgetCoorinator = nil
+    }
+    
+    func showNewSectionView() {
         
     }
     

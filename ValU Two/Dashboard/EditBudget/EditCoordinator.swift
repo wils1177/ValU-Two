@@ -12,8 +12,6 @@ import SwiftUI
 
 class EditCoordiantor : BudgetEditableCoordinator{
     
-    
-
     var childCoordinators = [Coordinator]()
     var navigationController : UINavigationController
     var budget : Budget?
@@ -44,6 +42,10 @@ class EditCoordiantor : BudgetEditableCoordinator{
     
     func continueToPlaid() {
         
+    }
+    
+    func timeFrameSubmitted() {
+    
     }
     
     
@@ -127,17 +129,45 @@ extension BudgetEditableCoordinator{
         
     }
     
+    func showNewSectionView() {
+        var view  = NewBudgetSectionView(budget: self.budget!)
+        view.coordinator = self
+        let vc = UIHostingController(rootView: view)
+        
+        self.navigationController.present(vc, animated: true)
+    }
+    
+    func showNewCategoryView(budgetSection: BudgetSection){
+        let vm = AddCategoriesViewModel(budgetSection: budgetSection)
+        var view  = EditBudgetCategoriesView(budgetSection: budgetSection, viewModel: vm)
+        view.coordinator = self
+        let vc = UIHostingController(rootView: view)
+        
+        self.navigationController.present(vc, animated: true)
+    }
+    
+    func dismissPresented(){
+        self.navigationController.dismiss(animated: true)
+    }
+    
 
     
-    func showCategoryDetail(category: SpendingCategory, service: BalanceParentService) {
-        let view = BalanceDetailView(category: category, service: service)
+    func showCategoryDetail(budgetSection: BudgetSection, service: BalanceParentService) {
+        let view = BalanceDetailView(budgetSection: budgetSection, service: service, coordinator: self)
         let vc = UIHostingController(rootView: view)
-        vc.title = category.name!
+        vc.title = budgetSection.name!
         
-
+        
         
         self.navigationController.pushViewController(vc, animated: true)
     }
+    
+    func goBack(){
+        self.navigationController.popViewController(animated: true)
+    }
+    
+    
+    
     
     func continueToPlaid() {
         

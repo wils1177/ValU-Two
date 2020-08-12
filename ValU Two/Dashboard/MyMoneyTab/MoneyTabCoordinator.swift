@@ -14,13 +14,7 @@ class MoneyTabCoordinator : Coordinator, TransactionRowDelegate{
     var childCoordinators = [Coordinator]()
     var navigationController = UINavigationController()
     var presentorStack = [Presentor]()
-    var budget : Budget
-    
-    init(budget: Budget){
-        
-        self.budget = budget
-        
-    }
+
     
     
     func start() {

@@ -26,7 +26,7 @@ class PlaidWebhookProccesor{
             let incomeItemKey = PlaidUserDefaultKeys.incomeReadyKey.rawValue + itemId
             UserDefaults.standard.set(true, forKey: incomeItemKey)
             //NotificationCenter.default.post(name: .incomeReady, object: nil, userInfo: userInfo)
-            startIncomePull()
+            //startIncomePull()
         }
         else if webhookCode == "HISTORICAL_UPDATE"{
                 print("Proccessing Histocial Update Webhook")
@@ -42,12 +42,10 @@ class PlaidWebhookProccesor{
         else if webhookCode == "ERROR"{
             handleErrorWebhook()
         }
-        
-        
+
         
     }
-    
-    
+
     func handleErrorWebhook(){
         
         let loginRequiredKey = PlaidUserDefaultKeys.loginRequiredKey.rawValue + self.itemId!
@@ -55,40 +53,6 @@ class PlaidWebhookProccesor{
         
     }
     
-    
-    
-    
-    
-    
-    
-    func startIncomePull(){
-        print("getting income...")
-        //TODO: Handle each of these errors!
-        try? DataManager().deleteIncomeData()
-        try? PlaidConnection().getIncome(itemId: self.itemId!, completion: self.incomePullFinished(result:))
-    }
-    
-    
-    func incomePullFinished(result: Result<Data, Error>){
-        
-        DispatchQueue.main.async {
-            switch result {
-            case .success(let dataResult):
-                    print("income success")
-                    
-                    let budget = try? DataManager().getBudget()
-                    //TODO: This should be a try/catch
-                    PlaidProccessor(budget: budget!).aggregateIncome(response: dataResult)
-            case .failure(let error):
-                    print(error)
-            }
-        }
-        
-    }
-    
-    
-    
-
 }
 
 extension Notification.Name {

@@ -16,14 +16,16 @@ class BudgetsViewModel: ObservableObject, Presentor{
     
     var coordinator : BudgetsTabCoordinator
     var spendingModel : SpendingCardViewModel?
+    var budgetTransactionsService : BudgetTransactionsService
     @Published var futureBudgets  = [BudgetTimeFrame]()
     @Published var historicalBudgets = [Budget]()
     @Published var currentBudget : Budget
     @Published var selected = 0
     
-    init(budget: Budget, coordinator: BudgetsTabCoordinator){
+    init(budget: Budget, budgetService: BudgetTransactionsService, coordinator: BudgetsTabCoordinator){
         self.currentBudget = budget
         self.coordinator = coordinator
+        self.budgetTransactionsService = budgetService
         self.spendingModel = generateSpendingCardViewModel(budget: budget, coordinator: coordinator)
         NotificationCenter.default.addObserver(self, selector: #selector(update(_:)), name: .modelUpdate, object: nil)
     }
@@ -44,7 +46,7 @@ class BudgetsViewModel: ObservableObject, Presentor{
     
 
     func generateSpendingCardViewModel(budget: Budget, coordinator: BudgetsTabCoordinator) -> SpendingCardViewModel{
-        let viewModel = SpendingCardViewModel(budget: budget)
+        let viewModel = SpendingCardViewModel(budget: budget, budgetTransactionsService: self.budgetTransactionsService)
         viewModel.coordinator = coordinator
         return viewModel
     }
@@ -72,6 +74,42 @@ class BudgetsViewModel: ObservableObject, Presentor{
         
         
         
+    }
+    
+    func getBudgetStatusBarViewData() -> [BudgetStatusBarViewData]{
+        
+        var viewDataToReturn = [BudgetStatusBarViewData]()
+        let amountAvailable = self.currentBudget.getAmountAvailable()
+        let spentTotal = self.budgetTransactionsService.getBudgetExpenses()
+        let otherTotal = self.budgetTransactionsService.getOtherSpentTotal()
+        var total = amountAvailable
+        
+        if spentTotal > Double(amountAvailable){
+            total = Float(spentTotal)
+        }
+        
+
+        
+        var sectionSpentTotal = 0.0
+        for section in self.currentBudget.getBudgetSections(){
+            let spentInSection = section.getSpent()
+            let limitForSection = section.getLimit()
+            sectionSpentTotal = spentInSection + sectionSpentTotal
+            let data = BudgetStatusBarViewData(percentage: spentInSection / Double(total), color: colorMap[Int(section.colorCode)], name: section.name!)
+            
+            if limitForSection > 0.0 && spentInSection > 0.0{
+                viewDataToReturn.append(data)
+            }
+            
+        }
+        
+        viewDataToReturn.sort(by: { $0.percentage > $1.percentage })
+        
+        let percentage = Float(otherTotal) / total
+        let otherData = BudgetStatusBarViewData(percentage: Double(percentage), color: Color(.lightGray), name: "Other")
+        viewDataToReturn.append(otherData)
+        
+        return viewDataToReturn
     }
     
     

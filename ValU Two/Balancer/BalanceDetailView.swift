@@ -10,19 +10,31 @@ import SwiftUI
 
 struct BalanceDetailView: View {
     
-    var spendingCategory : SpendingCategory
+    @ObservedObject var budgetSection : BudgetSection
     @ObservedObject var service : BalanceParentService
+    var coordinator : BudgetEditableCoordinator
     
-    init(category : SpendingCategory, service : BalanceParentService){
-        self.spendingCategory = category
+    init(budgetSection : BudgetSection, service : BalanceParentService, coordinator: BudgetEditableCoordinator){
+        self.coordinator = coordinator
+        self.budgetSection = budgetSection
         self.service = service
+        
+
+    }
+    
+    var newCategoryButton : some View{
+        Button(action: {
+            
+            self.coordinator.showNewCategoryView(budgetSection: self.budgetSection)
+        }) {
+            Image(systemName: "plus.circle.fill").font(.system(size: 28, weight: .regular)).foregroundColor(AppTheme().themeColorPrimary)
+        }
     }
     
     
     var topCard: some View{
         VStack(alignment: .center){
-                   
-                   //CategoryHeader(name: self.spendingCategory.name!, icon: self.spendingCategory.icon!).padding(.horizontal).padding(.top, 10)
+
 
             HStack(){
                 Spacer()
@@ -48,51 +60,63 @@ struct BalanceDetailView: View {
             }.padding(.bottom).padding(.bottom)
             
             
-                   
-            /*
-                   HStack{
-                    Text("$" + String(Int(self.service.getParentLimit()))).font(.system(size: 35)).bold().padding(.leading)
-                       Spacer()
-                   }.padding(.top, 10).padding(.bottom, 5).padding(.leading, 8)
-                   
-                   HStack{
-                       Text("You've Spent " + "$" + String(Int(self.spendingCategory.initialThirtyDaysSpent)) + " last month").font(.footnote).foregroundColor(Color(.lightGray))
-           
-                       Spacer()
-                   }.padding(.horizontal).padding(.bottom, 10).padding(.leading, 8)
-               */
+
                    
                }//.background(Color(.white)).cornerRadius(15)
     }
     
+    var sectionHeader : some View{
+        VStack{
+            HStack{
+                BudgetSectionIconLarge(color: colorMap[Int(self.budgetSection.colorCode)], icon: self.budgetSection.icon!, size: 40)
+                Text("Budget Detail").font(.system(size: 22)).bold().padding(.leading, 5)
+                Spacer()
+                newCategoryButton.padding(.trailing)
+                }.padding(.vertical)
+            
+
+        }
+    }
+    
+    
     
     
     var body: some View {
+        
+        
         List{
-                
-                topCard
-                
-            VStack{
-                HStack{
-                    Text(self.spendingCategory.icon! + " " + self.spendingCategory.name! + " Budget").font(.system(size: 22)).bold()
-                        Spacer()
-                    }.padding(.top)
-                
-                    HStack{
-                        Text("Budget for the categorie you'd like to include").font(.subheadline).foregroundColor(Color(.lightGray))
-                        Spacer()
-                    }.padding(.bottom, 5).padding(.top, 5)
-            }.padding(.horizontal, 10)
-                
             
-            ForEach(self.spendingCategory.subSpendingCategories?.allObjects as! [SpendingCategory], id: \.self) { child in
-                VStack{
-                    BudgetDetailCard(category: child, parentService: self.service)
+            topCard.padding(.top)
+                           
+                       
+            
+           
+                
+            Section(header: sectionHeader){
+                ForEach(self.budgetSection.budgetCategories?.allObjects as! [BudgetCategory], id: \.self) { child in
+                        VStack{
+                            BudgetDetailCard(budgetCategory: child, parentService: self.service).padding(.vertical, 5)
+                        }
+                    
+                    
                 }
             }
+            
                 
                 
-        }.navigationBarTitle(self.spendingCategory.name!)
+        }
+        
+        
+        .listStyle(GroupedListStyle())
+            .navigationBarTitle(Text(self.budgetSection.name!)).navigationBarItems(trailing: Button(action: {
+                self.coordinator.goBack()
+                    }){
+                    ZStack{
+                        
+                        Text("Confirm")
+                    }
+            })
+    
     }
 }
 

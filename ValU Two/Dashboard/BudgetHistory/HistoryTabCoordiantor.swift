@@ -15,18 +15,12 @@ class HistoryTabCoordiantor : Coordinator{
     var childCoordinators = [Coordinator]()
     var navigationController = UINavigationController()
     var presentorStack = [Presentor]()
-    var budget : Budget
-    
-    init(budget: Budget){
-        
-        self.budget = budget
-        
-    }
+
     
     
     func start() {
         
-        let viewModel = HistoryViewModel(budget: self.budget)
+        let viewModel = HistoryViewModel()
         let vc = UIHostingController(rootView: HistoryTabView(viewModel: viewModel))
 
         self.navigationController.navigationBar.prefersLargeTitles = true

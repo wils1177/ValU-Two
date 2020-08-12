@@ -9,10 +9,15 @@
 import Foundation
 import SwiftUI
 
-var saturation = 0.444
+var saturation = 0.666
 var brightness = 0.99
 
-var colorMap = [Color(hue: 0.234, saturation: saturation, brightness: brightness), Color(hue: 0.345, saturation: saturation, brightness: brightness), Color(hue: 0.666, saturation: saturation, brightness: brightness), Color(hue: 0.555, saturation: saturation, brightness: brightness), Color(hue: 0.444, saturation: saturation, brightness: brightness), Color(hue: 0.333, saturation: saturation, brightness: brightness), Color(hue: 0.222, saturation: saturation, brightness: brightness), Color(hue: 0.675, saturation: saturation, brightness: brightness)]
+var colorMap = [Color(.systemPurple), Color(.systemRed), Color(.systemPink), Color(.systemYellow), Color(.systemGreen), Color(.systemPink),
+                Color(.systemBlue), Color(.systemTeal), Color(.systemIndigo), Color(.systemGray4), Color(.systemOrange), Color(.systemPink),
+                Color(.systemFill), Color(.quaternarySystemFill)
+]
+
+
 
 struct AppTheme {
     

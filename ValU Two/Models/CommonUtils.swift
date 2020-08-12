@@ -18,6 +18,10 @@ class CommonUtils{
         
     }
     
+    static func isWithinDates(transaction: Transaction, start: Date, end: Date) -> Bool{
+        return (start ... end).contains(transaction.date!) && !transaction.isHidden
+    }
+    
     static func getMonthFromDate(date: Date) -> String{
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "LLLL"
@@ -32,41 +36,6 @@ class CommonUtils{
         let nameOfMonth = dateFormatter.string(from: date)
         let title = nameOfMonth
         return title
-    }
-    
-    static func getParentSpendingCategories() -> [SpendingCategory]{
-        var spendingCategoriesToReturn = [SpendingCategory]()
-        do{
-            let spendgingCategories = try DataManager().getEntity(entityName: "SpendingCategory") as! [SpendingCategory]
-            for category in spendgingCategories{
-                if category.subSpendingCategories != nil && (category.subSpendingCategories!.allObjects as! [SpendingCategory]).count > 0{
-                    spendingCategoriesToReturn.append(category)
-                }
-            }
-        }
-        catch{
-            print("COULD NOT FETCH SPENDING CATEGORIES")
-        }
-        
-        return spendingCategoriesToReturn
-    }
-    
-    static func getSubSpendingCategories() -> [SpendingCategory]{
-         var spendingCategoriesToReturn = [SpendingCategory]()
-         do{
-             let spendgingCategories = try DataManager().getEntity(entityName: "SpendingCategory") as! [SpendingCategory]
-             for category in spendgingCategories{
-                 if category.subSpendingCategories == nil || (category.subSpendingCategories!.allObjects as! [SpendingCategory]).count == 0{
-                     spendingCategoriesToReturn.append(category)
-                 }
-             }
-         }
-         catch{
-             print("COULD NOT FETCH SPENDING CATEGORIES")
-         }
-         
-         return spendingCategoriesToReturn
-        
     }
     
     static func makeMoneyString(number: Int) -> String{

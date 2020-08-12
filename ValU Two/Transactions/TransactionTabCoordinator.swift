@@ -16,18 +16,11 @@ class TransactionsTabCoordinator : Coordinator, TransactionRowDelegate{
     var view : UIViewController?
     var navigationController = UINavigationController()
     var presentorStack = [Presentor]()
-    var budget : Budget
-    
-    init(budget: Budget){
-        
-        self.budget = budget
-        
-    }
-    
-    
+
+
     func start() {
         
-        let viewModel = TransactionsTabViewModel(budget: self.budget)
+        let viewModel = TransactionsTabViewModel()
         viewModel.coordinator = self
         let vc = viewModel.configure()
         self.view = vc
@@ -49,7 +42,7 @@ extension TransactionRowDelegate{
     
     func showEditCategory(transaction: Transaction) {
         
-        let presentor = EditCategoryViewModel(transaction: transaction, budget: self.budget)
+        let presentor = EditCategoryViewModel(transaction: transaction)
         self.presentorStack.append(presentor)
         presentor.coordinator = self
         let vc = presentor.configure()

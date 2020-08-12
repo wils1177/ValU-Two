@@ -12,16 +12,25 @@ struct BalancerView: View {
     
     @ObservedObject var viewModel : BudgetBalancerPresentor
     @State private var bottomSheetShown = false
+    var budget : Budget
     
     init(budget: Budget, coordinator: SetSpendingLimitDelegate){
-        
+        self.budget = budget
         self.viewModel = BudgetBalancerPresentor(budget: budget, coordinator: coordinator)
+        
+        
+        // To remove all separators including the actual ones:
+        UITableView.appearance().separatorStyle = .none
+        
+        
+        UITableViewCell.appearance().backgroundColor = .clear
+        UITableView.appearance().backgroundColor = .systemGroupedBackground
         
 
     }
     
     private var balancerBody: some View {
-        BalancerBodyView(viewModel : self.viewModel)
+        BalancerBodyView(viewModel : self.viewModel, budget: self.budget)
     }
     
 
@@ -31,7 +40,7 @@ struct BalancerView: View {
         
         
         self.balancerBody
-            .navigationBarTitle("Set Budget", displayMode: .large).navigationBarItems(trailing:
+            .navigationBarTitle("Set Budgets", displayMode: .large).navigationBarItems(trailing:
                 
                 HStack{
 

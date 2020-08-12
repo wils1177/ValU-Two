@@ -32,8 +32,11 @@ protocol CategorySelecter: class{
     
 }
 
-protocol CategoryListViewModel: UserSubmitViewModel{
-       
+protocol CategoryListViewModel: UserSubmitViewModel, ObservableObject{
+    func selectedCategoryName(name:String)
+    func deSelectedCategoryName(name:String)
+    func isSelected(name: String) -> Bool
+    
 }
 
 protocol KeyboardDelegate{
@@ -63,7 +66,9 @@ protocol BudgetCategoriesDelegate {
 
 protocol SetSpendingLimitDelegate {
     func finishedSettingLimits()
-    func showCategoryDetail(category: SpendingCategory, service: BalanceParentService)
+    func showCategoryDetail(budgetSection: BudgetSection, service: BalanceParentService)
+    func showNewSectionView()
+    
 }
 
 protocol BudgetTypeDelegate{
@@ -92,7 +97,6 @@ protocol TransactionRowDelegate: class {
     
     var navigationController : UINavigationController{ get set }
     var presentorStack : [Presentor]{ get set }
-    var budget: Budget{ get set }
 }
 
 protocol IncomeCoordinator: Coordinator {
@@ -103,6 +107,7 @@ protocol IncomeCoordinator: Coordinator {
     func loadIncomeScreen()
     func incomeSubmitted(budget: Budget)
     func continueToTimeFrame()
+    func timeFrameSubmitted()
 }
 
 protocol BudgetEditor {
@@ -111,6 +116,7 @@ protocol BudgetEditor {
     func editBudget()
     func editSavings()
     func dismiss()
+    
     
     var coordinator : BudgetEditableCoordinator? {get set}
     var budget: Budget {get set}
@@ -121,6 +127,7 @@ protocol BudgetEditableCoordinator: IncomeCoordinator, SetSavingsViewDelegate, S
     func continueToBudgetCategories()
     func continueToPlaid()
     func continueToSetSavings()
+    
     
     func dimiss()
 }

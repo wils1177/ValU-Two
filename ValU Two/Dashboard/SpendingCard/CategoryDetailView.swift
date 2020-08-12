@@ -10,21 +10,21 @@ import SwiftUI
 
 struct CategoryDetailView: View {
     
-    var spendingCategory : SpendingCategory
+    var budgetSection : BudgetSection
     var coordinator : BudgetsTabCoordinator
     
     var body: some View {
         List{
             VStack(spacing: 0.0){
-                ForEach(self.spendingCategory.subSpendingCategories?.allObjects as! [SpendingCategory], id: \.self) { category in
+                ForEach(self.budgetSection.budgetCategories?.allObjects as! [BudgetCategory], id: \.self) { category in
                     VStack(spacing: 0.0){
                         if category.limit > 0.0{
                             
                             Button(action: {
                                 // your action here
-                                self.coordinator.showCategory(categoryName: category.name!)
+                                self.coordinator.showCategory(category: category.spendingCategory!)
                             }) {
-                                ChildCategoryCard(spendingCategory: category).padding(.bottom, 15)
+                                ChildCategoryCard(budgetCategory: category).padding(.bottom, 15)
                             }.buttonStyle((PlainButtonStyle()))
                             
                             

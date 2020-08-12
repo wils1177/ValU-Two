@@ -14,9 +14,7 @@ public class SpendingCategory: NSManagedObject, NSCopying {
     
     
     public func copy(with zone: NSZone? = nil) -> Any {
-        let newSpendingCategory = DataManager().createNewSpendingCategory()
-        newSpendingCategory.name = self.name
-        newSpendingCategory.icon = self.icon
+        let newSpendingCategory = DataManager().createNewSpendingCategory(icon: self.icon!, name: self.name!)
         newSpendingCategory.contains = self.contains
         newSpendingCategory.limit = self.limit
         newSpendingCategory.spent = self.spent
@@ -47,6 +45,28 @@ public class SpendingCategory: NSManagedObject, NSCopying {
         
     }
     
+    convenience init(icon: String, name: String, context: NSManagedObjectContext!){
+        
+        let entity = NSEntityDescription.entity(forEntityName: "SpendingCategory", in: context)
+        self.init(entity: entity!, insertInto: context)
+        
+        self.name  = name
+        self.icon = icon
+        self.id = UUID()
+        self.contains = [String]()
+        self.limit = 0.0
+        self.spent = 0.0
+        self.initialThirtyDaysSpent = 0.0
+        self.selected = false
+        self.matchDepth = Int32(0)
+        self.colorCode = Int32(0)
+        
+        
+    }
+    
+    
+
+    
     convenience init(context: NSManagedObjectContext){
         
         let entity = NSEntityDescription.entity(forEntityName: "SpendingCategory", in: context)
@@ -54,27 +74,20 @@ public class SpendingCategory: NSManagedObject, NSCopying {
         
     }
     
-    func getAmountSpent() -> Float{
-        return calculateAmountSpent()
+    func getAmountSpentForTimeFrame(startDate: Date, endDate: Date) -> Double{
+        var amountSpent = 0.0
+        for match in self.transactionMatches?.allObjects as! [CategoryMatch]{
+            let transaction = match.transaction!
+            if CommonUtils.isWithinDates(transaction: transaction, start: startDate, end: endDate){
+                amountSpent = amountSpent + Double(match.amount)
+            }
+        }
+        return amountSpent
     }
     
-    func calculateAmountSpent() -> Float{
-        var newSpent = Float(0.0)
-        for transactionMatch in self.transactionMatches?.allObjects as! [CategoryMatch]{
-            
-            if CommonUtils.isWithinBudget(transaction: transactionMatch.transaction!, budget: self.budget!){
-                if transactionMatch.amount > 0{
-                    newSpent  = newSpent +  transactionMatch.amount
-                }  
-                
-            }
-            
-        }
-        
-        return newSpent
-        
-        
-    }
+    
+    
+    
     
     func isAnyChildSelected() -> Bool {
         var oneChildSelected = false

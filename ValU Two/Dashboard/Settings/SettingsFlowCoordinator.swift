@@ -16,16 +16,12 @@ class SettingsFlowCoordinator : Coordinator, PlaidLinkDelegate{
     var parent : BudgetsTabCoordinator?
     var childCoordinators = [Coordinator]()
     var navigationController = UINavigationController()
-    var budget: Budget
     var presentorStack = [Presentor]()
 
-    init(budget: Budget){
-        self.budget = budget
-    }
     
     func start(){
         
-        let presentor = SettingsViewModel(budget: self.budget)
+        let presentor = SettingsViewModel()
         presentor.coordinator = self
         let vc = presentor.configure()
         
@@ -37,7 +33,7 @@ class SettingsFlowCoordinator : Coordinator, PlaidLinkDelegate{
     }
     
     func connectAccounts(){
-        let presentor = LoadingAccountsPresentor(budget : self.budget, itemManager: ItemManagerService())
+        let presentor = LoadingAccountsPresentor(itemManager: ItemManagerService())
         presentor.coordinator = self
         presentor.viewData.viewState = LoadingAccountsViewState.Initial
         self.presentorStack.append(presentor)

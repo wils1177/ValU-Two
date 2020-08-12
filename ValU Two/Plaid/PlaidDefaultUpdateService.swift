@@ -54,7 +54,7 @@ class PlaidDefaultUpdateService{
                 //Todo : Try-Catch this
                 let budget = try? DataManager().getBudget()
                 do{
-                    try PlaidProccessor(budget: budget!).aggregate(response: dataResult, isInitial: false)
+                    try PlaidProccessor(spendingCategories: SpendingCategoryService().getSubSpendingCategories()).aggregate(response: dataResult, isInitial: false)
                     print("UPDATE PULL WOKED")
                 }catch{
                     print("error occurred when proccessing default update transacions")

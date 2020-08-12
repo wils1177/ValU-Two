@@ -39,13 +39,11 @@ class TransactionsTabViewModel: ObservableObject, Presentor{
     @Published var transactionsThisWeek : TransactionsListViewModel?
     @Published var transactionsToday : TransactionsListViewModel?
     @Published var transactionsThisMonth : TransactionsListViewModel?
-    var budget : Budget
     var coordinator : TransactionsTabCoordinator?
     
     var rows : [ListWrapper]?
     
-    init(budget: Budget){
-        self.budget = budget
+    init(){
         generateViewData()
         NotificationCenter.default.addObserver(self, selector: #selector(update(_:)), name: .modelUpdate, object: nil)
     }
@@ -59,11 +57,11 @@ class TransactionsTabViewModel: ObservableObject, Presentor{
         
         let spendingSummary = SpendingSummaryViewModel()
         
-        self.transactionsToday = TransactionsListViewModel(budget: self.budget, predicate: PredicateBuilder().generateTodayPredicate())
+        self.transactionsToday = TransactionsListViewModel(predicate: PredicateBuilder().generateTodayPredicate())
         self.transactionsToday?.coordinator = self.coordinator
-        self.transactionsThisWeek = TransactionsListViewModel(budget: self.budget, predicate: PredicateBuilder().generateThisWeekPredicate())
+        self.transactionsThisWeek = TransactionsListViewModel(predicate: PredicateBuilder().generateThisWeekPredicate())
         self.transactionsThisWeek?.coordinator = self.coordinator
-        self.transactionsThisMonth = TransactionsListViewModel(budget: self.budget, predicate: PredicateBuilder().generateEarlierThisMonthPredicate())
+        self.transactionsThisMonth = TransactionsListViewModel(predicate: PredicateBuilder().generateEarlierThisMonthPredicate())
         self.transactionsThisMonth?.coordinator = self.coordinator
         
         self.rows = [ListWrapper]()

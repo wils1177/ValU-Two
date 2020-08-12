@@ -53,12 +53,7 @@ struct ConnectToBankView: View {
     var body: some View {
         
         VStack{
-            if self.itemService.getItems().count > 0{
-                myConnectionsView
-            }
-            else{
-                noConnectionsView
-            }
+            noConnectionsView
         }
         
     }

@@ -18,7 +18,6 @@ struct ItemViewData: Hashable{
 class SettingsViewModel: ObservableObject, Presentor{
     
     var loadingAccountsPresentor : LoadingAccountsPresentor?
-    var budget : Budget?
     var coordinator : SettingsFlowCoordinator?
     
     var dataManager = DataManager()
@@ -27,9 +26,9 @@ class SettingsViewModel: ObservableObject, Presentor{
     var itemIdToRemove : String?
     var showError  = false
     
-    init(budget: Budget){
+    init(){
         //print("settings view model init")
-        self.budget = budget
+
        updateView()
         
     }
@@ -130,7 +129,6 @@ class SettingsViewModel: ObservableObject, Presentor{
             try dataManager.deleteEntity(predicate: PredicateBuilder().generateItemPredicate(itemId: itemId), entityName: "CategoryMatch")
             
             dataManager.saveDatabase()
-            self.budget!.updateAmountSpent()
             dataManager.saveDatabase()
             updateView()
             NotificationCenter.default.post(name: .modelUpdate, object: nil)

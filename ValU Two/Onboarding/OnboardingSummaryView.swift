@@ -18,10 +18,10 @@ struct OnboardingSummaryView: View {
         self.viewModel = viewModel
         
         // To remove only extra separators below the list:
-        UITableView.appearance().tableFooterView = UIView()
+        //UITableView.appearance().tableFooterView = UIView()
 
         // To remove all separators including the actual ones:
-        UITableView.appearance().separatorStyle = .none
+        //UITableView.appearance().separatorStyle = .none
         
         
         UITableViewCell.appearance().backgroundColor = .systemGroupedBackground
@@ -48,8 +48,9 @@ struct OnboardingSummaryView: View {
 
                     Spacer()
                 }.padding(.bottom, 20)
-                
-            GenericOnboardingStepRow(title: self.viewModel.viewData!.steps[0].title, description: getBankConnectionDescription(), iconName: self.viewModel.viewData!.steps[0].iconName, iconColor: self.viewModel.viewData!.steps[0].iconColor, backgroundColor: self.viewModel.viewData!.steps[0].backgroundColor, subTectColor: self.viewModel.viewData!.steps[0].subTectColor, completionHandler: self.viewModel.viewData!.steps[0].completionHandler)
+            
+            GenericOnboardingStepRow(title: self.viewModel.viewData!.steps[0].title, description: self.viewModel.viewData!.steps[0].description, iconName: self.viewModel.viewData!.steps[0].iconName, iconColor: self.viewModel.viewData!.steps[0].iconColor, backgroundColor: self.viewModel.viewData!.steps[0].backgroundColor, subTectColor: self.viewModel.viewData!.steps[0].subTectColor, completionHandler: self.viewModel.viewData!.steps[0].completionHandler)
+
             
             GenericOnboardingStepRow(title: self.viewModel.viewData!.steps[1].title, description: self.viewModel.viewData!.steps[1].description, iconName: self.viewModel.viewData!.steps[1].iconName, iconColor: self.viewModel.viewData!.steps[1].iconColor, backgroundColor: self.viewModel.viewData!.steps[1].backgroundColor, subTectColor: self.viewModel.viewData!.steps[1].subTectColor, completionHandler: self.viewModel.viewData!.steps[1].completionHandler)
             
@@ -62,7 +63,17 @@ struct OnboardingSummaryView: View {
                 
                 
             
-            }.navigationBarTitle(Text("Get Started"),  displayMode: .large)
+            }.navigationBarTitle(Text("New Budget"),  displayMode: .large).navigationBarItems(
+                                                                       
+                                                                       
+                    trailing: Button(action: {
+                        self.viewModel.dismiss()
+                    }){
+                    ZStack{
+                        
+                        Text("Cancel")
+                    }
+            })
         
     }
 }

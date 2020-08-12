@@ -15,8 +15,8 @@ struct CategoryHeader: View {
     
     var body: some View {
         HStack(){
-            Text(self.icon).font(.system(size: 22)).bold()
-            Text(self.name).font(.system(size: 17)).foregroundColor(Color(.lightGray)).bold()
+            //Text(self.icon).font(.system(size: 22)).bold()
+            Text(self.name).font(.system(size: 17)).foregroundColor(Color(.black)).bold()
             Spacer()
 
         }

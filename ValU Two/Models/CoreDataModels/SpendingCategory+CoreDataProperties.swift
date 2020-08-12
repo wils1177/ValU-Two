@@ -2,7 +2,7 @@
 //  SpendingCategory+CoreDataProperties.swift
 //  ValU Two
 //
-//  Created by Clayton Wilson on 5/25/20.
+//  Created by Clayton Wilson on 6/21/20.
 //  Copyright © 2020 Clayton Wilson. All rights reserved.
 //
 //
@@ -23,11 +23,10 @@ extension SpendingCategory {
     @NSManaged public var id: UUID?
     @NSManaged public var initialThirtyDaysSpent: Float
     @NSManaged public var limit: Float
+    @NSManaged public var matchDepth: Int32
     @NSManaged public var name: String?
     @NSManaged public var selected: Bool
     @NSManaged public var spent: Float
-    @NSManaged public var matchDepth: Int32
-    @NSManaged public var budget: Budget?
     @NSManaged public var subSpendingCategories: NSSet?
     @NSManaged public var transactionMatches: NSSet?
     @NSManaged public var transactions: NSSet?

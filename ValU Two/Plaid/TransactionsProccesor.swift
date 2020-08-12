@@ -12,14 +12,14 @@ enum SpendingCategoryNames: String{
     case other = "Other"
 }
 
-class TransactionProccessor: BudgetDateFindable{    
+class TransactionProccessor{
     
     let dataManager = DataManager()
-    var budget : Budget
+    var spendingCategories : [SpendingCategory]
     var transactionRules : [TransactionRule]
     
-    init(budget: Budget, transactionRules: [TransactionRule] = [TransactionRule]()){
-        self.budget = budget
+    init(spendingCategories: [SpendingCategory], transactionRules: [TransactionRule] = [TransactionRule]()){
+        self.spendingCategories = spendingCategories
         self.transactionRules = transactionRules
     }
     
@@ -27,10 +27,9 @@ class TransactionProccessor: BudgetDateFindable{
         
         let today = Date()
         let thirtyDaysAgo = Calendar.current.date(byAdding: .day, value: -30, to: today)
+    
         
-        let spendingCategories = self.budget.getSubSpendingCategories()
-        
-        for category in spendingCategories{
+        for category in self.spendingCategories{
             category.initialThirtyDaysSpent = 0.0
         }
 
@@ -42,8 +41,7 @@ class TransactionProccessor: BudgetDateFindable{
                 let matches = matchTransactionToSpendingCategory(transaction: transaction, spendingCategories: spendingCategories)
                 for match in matches{
                     match.initialThirtyDaysSpent = match.initialThirtyDaysSpent + Float(transaction.amount)
-                }
-                
+                } 
             }
             
         }
@@ -60,16 +58,11 @@ class TransactionProccessor: BudgetDateFindable{
         
         if transaction.transactionId != nil{
             
-            //First match the amount to the time frame
-            //matchToTimeFrame(transaction: transaction)
-            
             // First, we will see if there any matches based on existign rules
             var spendingCategoryMatches = checkForRuleMatches(transaction: transaction, spendingCategories: spendingCategories)
-            //var matches = [CategoryMatch]()
             
             // If there are no matches from existing rules, match on default logic 
             if spendingCategoryMatches.count == 0{
-
                 spendingCategoryMatches = matchTransactionToSpendingCategory(transaction: transaction, spendingCategories: spendingCategories)
             }
             
@@ -78,22 +71,10 @@ class TransactionProccessor: BudgetDateFindable{
             
             for match in matches{
                 
-                // We will update the amount for EVERY match that's within the budget
-                if CommonUtils.isWithinBudget(transaction: transaction, budget: match.spendingCategory!.budget!){
-                    
-                    match.spendingCategory!.spent = match.spendingCategory!.spent + match.amount
-                    
-                }
-                
                 transaction.addToCategoryMatches(match)
                 match.spendingCategory!.addToTransactions(transaction)
             }
-            
-            if CommonUtils.isWithinBudget(transaction: transaction, budget: self.budget){
-                self.budget.addToTransactions(transaction)
-            }
-            
-                 
+
             dataManager.saveDatabase()
         }
         
@@ -210,85 +191,6 @@ class TransactionProccessor: BudgetDateFindable{
         }
         
     }
-    
-    func matchToTimeFrame(transaction: Transaction){
-        
-        let types = [TimeFrame.monthly.rawValue, TimeFrame.weekly.rawValue, TimeFrame.semiMonthly.rawValue]
 
-        do{
-            let query = PredicateBuilder().generateInBetweenDatesPredicate(executionDate: transaction.date!)
-            let timeFrames = try DataManager().getEntity(predicate: query, entityName: "TransactionDateCache") as! [TransactionDateCache]
-            
-            for type in types{
-                
-                var match : TransactionDateCache?
-                
-                //Check for a week level match
-                //var isMatch = false
-                for timeFrame in timeFrames{
-                    print("MATCH FOUND")
-                    if timeFrame.timeFrame == type{
-                        //isMatch = true
-                        match = timeFrame
-                    }
-                }
-                
-                //Now Update the match
-                if match != nil{
-                    match!.addToTransactions(transaction)
-                    if transaction.amount > 0{
-                        match!.expenses = match!.expenses + Float(transaction.amount)
-                    }else{
-                        match!.income = match!.income + Float(transaction.amount)
-                    }
-                }
-                
-            }
-            
-            
-            
-            
-            
-            /*
-            //If there is no existing match, create a new one
-            if !isMatch{
-                print("creating a new entry due to the following date:")
-                print(transaction.date!)
-                print("new entry is: ")
-                print(transaction.date!.startOfWeek!)
-                print("end date would be")
-                print(transaction.date!.endOfWeek!)
-                print("the results count was")
-                print(timeFrames.count)
-                let dateCache = DataManager().createTransactionDateCache(dateFrom: transaction.date!, timeFrame: TimeFrame.weekly.rawValue)
-                match = dateCache
-
-            }
-            */
-            
-            
-            
-            
-            
-            DataManager().saveDatabase()
-            
-            
-        }
-        catch{
-            print("coult not fetch transaction time frames")
-            
-        }
-        
-        
-        
-        
-    }
-    
-    
-    
-
-    
-    
-    
     
 }

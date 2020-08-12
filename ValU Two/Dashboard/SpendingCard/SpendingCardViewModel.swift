@@ -53,23 +53,25 @@ class SpendingCardViewModel: ObservableObject {
     
     var budget : Budget
     var coordinator: BudgetsTabCoordinator?
-    @Published var categories = [SpendingCategory]()
-    var subCategories = [SpendingCategory]()
+    @Published var budgetSections = [BudgetSection]()
+    var budgetCategories = [BudgetCategory]()
     @Published var otherCategory : SpendingCategoryViewData?
     var viewData = SpendingCardViewData()
     var services  = [BalanceParentService]()
+    var budgetTransactionsService : BudgetTransactionsService
     
-    init(budget: Budget){
+    init(budget: Budget, budgetTransactionsService: BudgetTransactionsService){
         self.budget = budget
-        self.categories = budget.getParentSpendingCategories()
-        self.subCategories = budget.getSubSpendingCategories()
+        self.budgetTransactionsService = budgetTransactionsService
+        self.budgetSections = budget.getBudgetSections()
+        self.budgetCategories = budget.getBudgetCategories()
         makeOtherCategory()
         makeServices()
     }
     
     func makeServices(){
-        for category in categories{
-            let service = BalanceParentService(spendingCategory: category)
+        for budgetSection in budgetSections{
+            let service = BalanceParentService(budgetSection: budgetSection)
             self.services.append(service)
         }
     }
@@ -79,12 +81,12 @@ class SpendingCardViewModel: ObservableObject {
         var spendingCategoryLimitTotal = 0.0
         var selectedSpentTotal = 0.0
         
-        for spendingCategory in self.subCategories{
+        for budgetCategory in self.budgetCategories{
             
-            if spendingCategory.selected{
-                let spent = spendingCategory.getAmountSpent()
+            if budgetCategory.limit > 0{
+                let spent = budgetCategory.getAmountSpent()
                 selectedSpentTotal = selectedSpentTotal + Double(spent)
-                let limit = spendingCategory.limit
+                let limit = budgetCategory.limit
                 spendingCategoryLimitTotal = spendingCategoryLimitTotal + Double(limit)
             }
                 
@@ -112,21 +114,8 @@ class SpendingCardViewModel: ObservableObject {
     }
     
     func getOtherSpent() -> Float{
-        var otherTotal = 0.0
-        for transaction in self.budget.transactions!.allObjects as! [Transaction]{
-            if transaction.amount > 0{
-                var isSelected = false
-                for match in transaction.categoryMatches?.allObjects as! [CategoryMatch]{
-                    if match.spendingCategory!.selected{
-                        isSelected = true
-                    }
-                }
-                if !isSelected{
-                    otherTotal = otherTotal + transaction.amount
-                }
-            }
-        }
-        return Float(otherTotal)
+        
+        return Float(self.budgetTransactionsService.getOtherSpentTotal())
     }
     
 

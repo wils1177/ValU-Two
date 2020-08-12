@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 class SpendingSummaryViewData: Hashable{
     static func == (lhs: SpendingSummaryViewData, rhs: SpendingSummaryViewData) -> Bool {
@@ -23,9 +24,11 @@ class SpendingSummaryViewData: Hashable{
     var amount : String
     var displayPercent: String
     var rawAmount : Float
+    var color : Color
     
-    init(icon: String, name: String, percentage: Float?, amount: String, rawAmount: Float, displayPercent: String){
+    init(icon: String, name: String, percentage: Float?, amount: String, rawAmount: Float, displayPercent: String, color: Color){
         self.icon = icon
+        self.color = color
         self.name = name
         self.percentage = percentage
         self.amount = amount
@@ -36,17 +39,11 @@ class SpendingSummaryViewData: Hashable{
 
 class SpendingSummaryViewModel : ObservableObject{
     
-    var budget : Budget?
+    var spendingCategoryService = SpendingCategoryService()
     @Published var viewData = [SpendingSummaryViewData]()
     var buttonText = "See More"
     
     init(){
-        do{
-            self.budget = try DataManager().getBudget()
-        }
-        catch{
-            self.budget = nil
-        }
         
         generateViewData()
         
@@ -57,15 +54,12 @@ class SpendingSummaryViewModel : ObservableObject{
         
         self.viewData.removeAll()
         
-        if self.budget != nil{
-            TransactionProccessor(budget: self.budget!).updateInitialThiryDaysSpent()
-        }
-        
-        
+        TransactionProccessor(spendingCategories: self.spendingCategoryService.getSubSpendingCategories()).updateInitialThiryDaysSpent()
+
         var largest = Float(0.0)
-        if self.budget != nil{
             
-            let spendingCategories = self.budget!.getSubSpendingCategories()
+        let spendingCategories = self.spendingCategoryService.getSubSpendingCategories()
+        
             var total = Float(0.0)
             for spendingCategory in spendingCategories{
                 
@@ -81,13 +75,12 @@ class SpendingSummaryViewModel : ObservableObject{
                 
                 if amount > 0.0{
                     
-                    let entry = SpendingSummaryViewData(icon: icon, name: name, percentage: 0.5, amount: amountString, rawAmount: amount, displayPercent: "%0.0")
+                    let entry = SpendingSummaryViewData(icon: icon, name: name, percentage: 0.5, amount: amountString, rawAmount: amount, displayPercent: "%0.0", color: colorMap[Int(spendingCategory.colorCode)])
                     self.viewData.append(entry)
                 }
                 
                 
             }
-            
             
             for entry in self.viewData{
                 let displayPercent = String(format: "%.0f%%", entry.rawAmount / total * 100)
@@ -102,7 +95,7 @@ class SpendingSummaryViewModel : ObservableObject{
 
             
             
-        }
+        
         
     }
     
