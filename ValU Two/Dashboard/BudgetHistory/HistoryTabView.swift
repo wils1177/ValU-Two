@@ -21,9 +21,7 @@ struct HistoryTabView: View {
         // To remove all separators including the actual ones:
         UITableView.appearance().separatorStyle = .none
         
-        
-        UITableViewCell.appearance().backgroundColor = .systemGroupedBackground
-        UITableView.appearance().backgroundColor = .systemGroupedBackground
+    
     }
     
     var body: some View {
@@ -65,7 +63,8 @@ struct HistoryTabView: View {
             */
             
             
-        }.navigationBarTitle("History")
+        }.listStyle(SidebarListStyle())
+        .navigationBarTitle("History")
     }
 }
 

@@ -35,7 +35,9 @@ struct TransactionList: View {
                 
                 if self.viewModel.transactions.count > 0{
 
-                    List(self.viewModel.transactions, id: \.self) { transaction in
+                    List{
+                    
+                    ForEach(self.viewModel.transactions, id: \.self) { transaction in
                         
                         VStack{
                             
@@ -49,7 +51,8 @@ struct TransactionList: View {
                         
                         
                         
-                    }
+                    }.listRowInsets(.init(top: 5, leading: 0, bottom: 5, trailing: 0))
+                    }.listStyle(SidebarListStyle())
                 }
                 else{
                     EmptyState(errorMessage: "There are no transactions here yet")

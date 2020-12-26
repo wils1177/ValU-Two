@@ -49,25 +49,36 @@ struct EnterIncomeView: View {
         List{
             VStack(alignment: .leading){
                     
-                    
-                Text("Enter your " + self.getTimeFrameText() + " income.").font(.system(size: 21)).bold().lineLimit(2).fixedSize(horizontal: false, vertical: true).padding(.top).padding(.bottom,5).padding(.leading)
-                    
                 HStack{
-                    Text("This is the available income you will use for your budget.").font(.system(size: 15)).foregroundColor(Color(.gray)).multilineTextAlignment(.leading).fixedSize(horizontal: false, vertical: true)
                     Spacer()
-                }.padding(.bottom, 10).padding(.leading)
+                    Text("Enter Your " + self.getTimeFrameText() + " Income").font(.system(size: 32)).bold().lineLimit(2).fixedSize(horizontal: false, vertical: true).multilineTextAlignment(.center).padding(.bottom,25)
+                    Spacer()
+                }
+                
+                
+               /*
+                HStack{
+                    Spacer()
+                    Text("This is the available income you will use for your budget.").multilineTextAlignment(.center).fixedSize(horizontal: false, vertical: true)
+                    Spacer()
+                }.padding(.bottom, 25)
+                */
+                
+                HStack{
+                    Spacer()
+                    Text("We've estimted you income based on your previous transactions, as a starting point.").multilineTextAlignment(.center).fixedSize(horizontal: false, vertical: true)
+                    Spacer()
+                }.padding(.bottom, 25)
                     
                 
                 
                     
-                HStack{
-                    Spacer()
-                    CustomInputTextField(text: self.$incomeService.currentIncomeEntry, placeHolderText: "Your Income", textSize: .systemFont(ofSize: 25), alignment: .left, delegate: nil, key: nil)
+                VStack{
+                    CustomInputTextField(text: self.$incomeService.currentIncomeEntry, placeHolderText: "Your Income", textSize: .systemFont(ofSize: 27), alignment: .center, delegate: nil, key: nil)
                         .padding(.horizontal)
-                    .frame(width: 310, height: 60).background(Color(.white)).cornerRadius(10)
+                    .frame(height: 60).background(Color(.lightText)).cornerRadius(10)
                         
                         errorState
-                    Spacer()
                 }
                     
             
@@ -77,19 +88,15 @@ struct EnterIncomeView: View {
                 
                 if self.incomeService.getIncomeTransactions().count > 0{
                     VStack{
-                        HStack{
-                            Text("Past Income").font(.system(size: 21)).bold().lineLimit(2).fixedSize(horizontal: false, vertical: true).foregroundColor(Color(.black))
-                            Spacer()
-                        }.padding(.bottom, 5).padding(.leading)
                         
                         HStack{
-                            Text("We've guessed your income based on previous income transactions").font(.system(size: 15)).foregroundColor(Color(.gray)).multilineTextAlignment(.leading).fixedSize(horizontal: false, vertical: true)
+                            Text("Past Income").font(.system(size: 22)).bold().lineLimit(2).fixedSize(horizontal: false, vertical: true).foregroundColor(Color(.black))
                             Spacer()
                         }.padding(.leading)
                         
                         
                         VStack{
-                            IncomeTransactionsView(incomeService: self.incomeService).padding()
+                            IncomeTransactionsView(incomeService: self.incomeService).padding(.vertical)
                         }
                     }
                 }
@@ -101,7 +108,9 @@ struct EnterIncomeView: View {
             
             
             }
-        }.navigationBarTitle("Income").navigationBarItems(
+        }
+        .listStyle(SidebarListStyle())
+        .navigationBarTitle("").navigationBarItems(
                                                                        
                                                                        
                     trailing: Button(action: {

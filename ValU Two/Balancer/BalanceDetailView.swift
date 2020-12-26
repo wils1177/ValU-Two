@@ -14,6 +14,7 @@ struct BalanceDetailView: View {
     @ObservedObject var service : BalanceParentService
     var coordinator : BudgetEditableCoordinator
     
+    
     init(budgetSection : BudgetSection, service : BalanceParentService, coordinator: BudgetEditableCoordinator){
         self.coordinator = coordinator
         self.budgetSection = budgetSection
@@ -22,13 +23,49 @@ struct BalanceDetailView: View {
 
     }
     
+    func move(from source: IndexSet, to destination: Int) {
+        print("move it move it")
+        
+        let source = source.first!
+        
+        let items = self.budgetSection.getBudgetCategories()
+        
+        if source < destination {
+            var startIndex = source + 1
+            let endIndex = destination - 1
+            var startOrder = items[source].order
+            while startIndex <= endIndex {
+                items[startIndex].order = startOrder
+                startOrder = startOrder + 1
+                startIndex = startIndex + 1
+            }
+            items[source].order = startOrder
+        }
+        else if destination < source{
+            var startIndex = destination
+            let endIndex = source - 1
+            var startOrder = items[destination].order + 1
+            let newOrder = items[destination].order
+            while startIndex <= endIndex {
+                items[startIndex].order = startOrder
+                startOrder = startOrder + 1
+                startIndex = startIndex + 1
+            }
+            items[source].order = newOrder
+        }
+        
+        DataManager().saveDatabase()
+        self.budgetSection.objectWillChange.send()
+        
+    }
+    
     var newCategoryButton : some View{
         Button(action: {
             
             self.coordinator.showNewCategoryView(budgetSection: self.budgetSection)
         }) {
             Image(systemName: "plus.circle.fill").font(.system(size: 28, weight: .regular)).foregroundColor(AppTheme().themeColorPrimary)
-        }
+        }.buttonStyle(PlainButtonStyle())
     }
     
     
@@ -72,10 +109,36 @@ struct BalanceDetailView: View {
                 Text("Budget Detail").font(.system(size: 22)).bold().padding(.leading, 5)
                 Spacer()
                 newCategoryButton.padding(.trailing)
-                }.padding(.vertical)
+            }.padding(.top)
             
 
         }
+    }
+    
+    
+    var emptyState : some View{
+        
+        VStack{
+            Text("Add categories to start budgeting!").foregroundColor(Color(.gray)).padding(.vertical)
+            
+            
+            Button(action: {
+                
+                self.coordinator.showNewCategoryView(budgetSection: self.budgetSection)
+            }) {
+                HStack{
+                    Spacer()
+                    newCategoryButton
+                    Text("Add Category").foregroundColor(AppTheme().themeColorPrimary).font(.headline).bold()
+                    Spacer()
+                }.padding().background(Color(.white)).cornerRadius(15)
+            }.buttonStyle(PlainButtonStyle())
+            
+            
+            
+            
+        }
+        
     }
     
     
@@ -90,28 +153,36 @@ struct BalanceDetailView: View {
                            
                        
             
-           
+            if ((self.budgetSection.getBudgetCategories()).count > 0){
+                self.sectionHeader
+                    ForEach((self.budgetSection.getBudgetCategories()), id: \.self) { child in
+                            VStack{
+                                BudgetDetailCard(budgetCategory: child, parentService: self.service, coordinator: self.coordinator).padding(.vertical, 5)
+                            }
+                        
+                        
+                    }.onMove(perform: move)
                 
-            Section(header: sectionHeader){
-                ForEach(self.budgetSection.budgetCategories?.allObjects as! [BudgetCategory], id: \.self) { child in
-                        VStack{
-                            BudgetDetailCard(budgetCategory: child, parentService: self.service).padding(.vertical, 5)
-                        }
-                    
-                    
-                }
             }
+            else{
+                emptyState
+            }
+            
+            
             
                 
                 
         }
         
         
-        .listStyle(GroupedListStyle())
+        .listStyle(SidebarListStyle())
             .navigationBarTitle(Text(self.budgetSection.name!)).navigationBarItems(trailing: Button(action: {
                 self.coordinator.goBack()
                     }){
-                    ZStack{
+                        
+                    HStack{
+                        
+                        EditButton()
                         
                         Text("Confirm")
                     }

@@ -25,9 +25,7 @@ struct BudgetsView: View {
         // To remove all separators including the actual ones:
         UITableView.appearance().separatorStyle = .none
         
-        
-        UITableViewCell.appearance().backgroundColor = .systemGroupedBackground
-        UITableView.appearance().backgroundColor = .systemGroupedBackground
+
         print("home init")
     }
     
@@ -41,6 +39,7 @@ struct BudgetsView: View {
         return String(diffInDays!) + " DAYS LEFT"
         
     }
+
     
     func getDateString() -> String{
         let today = Date()
@@ -49,6 +48,7 @@ struct BudgetsView: View {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd"
         let day = formatter.string(from: today)
+        
         
         return monthName + " " + day
     }
@@ -62,23 +62,29 @@ struct BudgetsView: View {
     
     var budgetHeader : some View{
         
-        VStack(spacing: 0){
-            HStack(spacing:5){
-                VStack(alignment: .leading){
-
-                    Text("MONTHLY BUDGET").font(.system(size: 14)).foregroundColor(Color(.gray)).fontWeight(.light)
-                    Text(getDateString()).font(.system(size: 22)).foregroundColor(Color(.black)).fontWeight(.semibold)
-
-                }.padding(.leading)
-
+        HStack(spacing: 7){
+            
+            HStack{
+                Text("AUGUST BUDGET").font(.system(size: 18)).foregroundColor(Color(.black)).fontWeight(.semibold)
                 Spacer()
-                HStack{
-                    //Image(systemName: "clock.fill").foregroundColor(Color(.lightGray))
-                    Text(self.getDaysRemaining()).foregroundColor(Color(.white)).font(.footnote).bold().padding(4).padding(.horizontal, 10).background(AppTheme().themeColorPrimary).cornerRadius(20)
-                }.padding(.trailing, 10)
-            }
+            }.padding(.leading)
+            
+            Spacer()
+                    
+            HStack{
+                Image(systemName: "calendar").foregroundColor(Color(.white))
+                Text(self.getDaysRemaining()).foregroundColor(Color(.white)).font(.subheadline).bold()
+            }.padding(4).padding(.horizontal, 10)//.background(AppTheme().themeColorPrimary).cornerRadius(20).padding(.trailing)
+
+                
+
+
+                
+                
+                
+            
             //Divider().padding(.top, 10).padding(.leading).padding(.leading)
-        }.padding(.top, 10)
+        }.padding(.bottom, 5)
         
     }
     
@@ -87,15 +93,9 @@ struct BudgetsView: View {
             Text("Budgets").font(.system(size: 22)).bold()
             Spacer()
             
-            Button(action: {
-                // What to perform
-                self.viewModel.coordinator.continueToBudgetCategories()
-            }) {
-                // How the button looks like
-                Text("Edit").font(.callout).foregroundColor(AppTheme().themeColorPrimary).padding(.trailing)
-            }.buttonStyle(PlainButtonStyle())
             
-        }.padding(.horizontal, 15).padding(.top, 10)
+            
+        }.padding(.horizontal, 15)
     }
     
 
@@ -103,58 +103,61 @@ struct BudgetsView: View {
 
     
     var body: some View {
- 
-            List{
-                
-                //fixNowCards
-                
-                //self.topButtons//.padding(.top, 7)
-                
-                
-                Section(header: self.budgetHeader){
-                    
-                    VStack{
-                        
-                        
-                        
-                        Button(action: {
-                            self.viewModel.coordinator.editClicked(budgetToEdit: self.viewModel.currentBudget)
-                        }) {
-                            BudgetCardView(budget: self.viewModel.currentBudget, viewModel: self.viewModel).background(Color(.white)).cornerRadius(20)
-                        }.buttonStyle(PlainButtonStyle())
-                        
-                        IncomeSectionView(coordinator: self.viewModel.coordinator, service: self.viewModel.budgetTransactionsService).padding(.top, 10)
-                        
-                    }
-                    
-                    
-                    
-                    
-                }
-
-                
-
-                Section(header: self.categoriesHeader){
-                    SpendingCardView(budget: self.viewModel.currentBudget, viewModel: self.viewModel.spendingModel!, coordinator: self.viewModel.coordinator)
-                }
-
-                
-                
         
+            ScrollView{
+                    
+                    //fixNowCards
+                    
+                    //self.topButtons//.padding(.top, 7)
+                    
+                    
+                        
+                        VStack{
+                            
+                            //self.budgetHeader.padding(.bottom,5)
+                            
+                            BudgetCardView(budget: self.viewModel.currentBudget, viewModel: self.viewModel).background(Color(.white)).padding(.top)
+                            
+                            
+                            
+                            //IncomeSectionView(coordinator: self.viewModel.coordinator, service: self.viewModel.budgetTransactionsService).padding(.top, 10).padding(.horizontal)
+                            
+                        }
+                
+                Divider().padding(.leading)
 
-            }.listStyle(GroupedListStyle())
+                    
+
+                self.categoriesHeader.padding(.vertical)
+                        SpendingCardView(budget: self.viewModel.currentBudget, viewModel: self.viewModel.spendingModel!, coordinator: self.viewModel.coordinator).padding(.horizontal)
+        
+            
+
+            }
+        
+ 
+        
             
                   
 
         .navigationBarTitle("Summary").navigationBarItems(
+            
+            leading: Button(action: {
+                self.viewModel.coordinator.editClicked(budgetToEdit: self.viewModel.currentBudget)
+            }){
+            ZStack{
+                
+                Image(systemName: "pencil.circle").imageScale(.large).foregroundColor(AppTheme().themeColorPrimary)
+            }
+                }
                                                                    
                                                                    
-                trailing: Button(action: {
+                , trailing: Button(action: {
                     self.viewModel.clickedSettingsButton()
                 }){
                 ZStack{
                     
-                    Image(systemName: "gear").imageScale(.large)
+                    Image(systemName: "gear").imageScale(.large).foregroundColor(AppTheme().themeColorPrimary)
                 }
         })
            

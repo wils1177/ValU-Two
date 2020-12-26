@@ -11,7 +11,6 @@ import SwiftUI
 struct CategoryHeader: View {
     
     var name : String
-    var icon : String
     
     var body: some View {
         HStack(){

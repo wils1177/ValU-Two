@@ -52,7 +52,7 @@ class EnterIncomePresentor : Presentor, ObservableObject {
     func configure() -> UIViewController {
         self.view = EnterIncomeView(coordinator: self.coordinator!, budget: self.budget)
         let vc = UIHostingController(rootView: self.view)
-        vc.title = "Income"
+        //vc.title = "Income"
         self.viewController = vc
         return self.viewController!
     }

@@ -78,7 +78,7 @@ public class SpendingCategory: NSManagedObject, NSCopying {
         var amountSpent = 0.0
         for match in self.transactionMatches?.allObjects as! [CategoryMatch]{
             let transaction = match.transaction!
-            if CommonUtils.isWithinDates(transaction: transaction, start: startDate, end: endDate){
+            if CommonUtils.isWithinDates(transaction: transaction, start: startDate, end: endDate) && transaction.amount > 0.0{
                 amountSpent = amountSpent + Double(match.amount)
             }
         }

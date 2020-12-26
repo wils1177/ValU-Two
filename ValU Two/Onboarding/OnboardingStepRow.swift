@@ -49,7 +49,7 @@ struct GenericOnboardingStepRow : View{
             VStack{
                 
                 HStack{
-                    Text(self.title).font(.system(size: 17)).foregroundColor(self.backgroundColor).bold().padding(.leading).padding(.top).padding(.bottom, 5)
+                    Text(self.title).font(.system(size: 17)).foregroundColor(self.backgroundColor).bold().padding(.leading).padding(.top)
                     Spacer()
                 }
                 HStack{
@@ -62,7 +62,7 @@ struct GenericOnboardingStepRow : View{
             
             
             
-        }.background(Color(.white)).cornerRadius(20).padding(.bottom, 5))
+        }.background(Color(.white)).cornerRadius(20))
     }
     
     var body: some View {

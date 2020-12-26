@@ -33,7 +33,7 @@ struct SpendingSummaryView: View {
             VStack(alignment: .leading){
         
         HStack{
-            Text("Spent Last 30 Days").font(.headline).bold().foregroundColor(Color(.black))
+            Text("Spent Last 30 Days").font(.title2).bold().foregroundColor(Color(.black))
             Spacer()
             
             if self.viewModel.viewData.count > 5 {
@@ -63,7 +63,7 @@ struct SpendingSummaryView: View {
             }
         
         
-        }.padding().padding(.bottom, 5)
+        }.padding()
             
             /*
             if self.viewModel.viewData.count > 5 {
@@ -94,7 +94,7 @@ struct SpendingSummaryView: View {
             
         
 
-        }.animation(.easeInOut(duration: 0.6)).background(Color(.white)).cornerRadius(15)//.shadow(radius: 10)
+        }.animation(.easeInOut(duration: 0.6)).padding(.bottom, 20).background(Color(.white)).cornerRadius(15)//.shadow(radius: 10)
         
     }
         

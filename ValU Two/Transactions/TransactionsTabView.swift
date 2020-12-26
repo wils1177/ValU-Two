@@ -25,11 +25,13 @@ struct TransactionsTabView: View {
     
     var body: some View {
             
+        List{
             
-            List(self.viewModel.rows!, id: \.self) { row in
+            ForEach(self.viewModel.rows!, id: \.self) { row in
                 
                 if row.spendingSummary != nil{
                     SpendingSummaryView().animation(.easeInOut(duration: 0.6))
+                    //Text("test")
                 }
                 else if row.sectionTitle != nil{
                     HStack{
@@ -39,14 +41,14 @@ struct TransactionsTabView: View {
                     
                 }
                 else{
-                        TransactionRow(coordinator: self.viewModel.coordinator!, transaction : row.transactionRow!)
-                    
+                    TransactionRow(coordinator: self.viewModel.coordinator!, transaction : row.transactionRow!)
+                    //Text("test")
                     
                 }
+            }.listRowInsets(.init(top: 5, leading: 0, bottom: 5, trailing: 0))
                 
                 
-                
-                }
+                }.listStyle(SidebarListStyle())
             .navigationBarTitle(Text("Transactions"))
             
         

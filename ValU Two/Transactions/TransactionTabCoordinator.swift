@@ -56,7 +56,6 @@ extension TransactionRowDelegate{
         presentor.coordinator = self
         let vc = presentor.configure()
         
-        self.navigationController.navigationBar.setBackgroundImage(UIImage(color: .systemGroupedBackground), for: .default) //UIImage.init(named: "transparent.png")
         self.navigationController.navigationBar.shadowImage = UIImage()
         self.navigationController.navigationBar.isTranslucent = true
         self.navigationController.view.backgroundColor = .systemGroupedBackground

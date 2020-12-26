@@ -56,7 +56,7 @@ struct EditCategoriesView: View {
                                 EditCategoryCard(category: category, viewModel: self.viewModel)
                             }
                             
-                             }
+                         }.listStyle(SidebarListStyle())
             }.navigationBarTitle("Change Category", displayMode: .large)
             .navigationBarItems( trailing: Button(action: {
                                  self.viewModel.submit()
@@ -64,7 +64,7 @@ struct EditCategoriesView: View {
             
                                  Text("Done").font(.subheadline).foregroundColor(.black).padding(7)
                                          
-                             })
+            })
         }
         
             
@@ -76,6 +76,8 @@ struct EditCategoriesView: View {
     }
     
 }
+
+
 
 //struct EditCategoriesView_Previews: PreviewProvider {
 //    static var previews: some View {

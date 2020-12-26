@@ -11,15 +11,15 @@ import UIKit
 import SwiftUI
 
 class EditCoordiantor : BudgetEditableCoordinator{
-    
+    var presentorStack = [Presentor]()
+
     var childCoordinators = [Coordinator]()
-    var navigationController : UINavigationController
+    var navigationController = UINavigationController()
     var budget : Budget?
     var parent : BudgetsTabCoordinator?
     
-    init(budget : Budget, navigationController: UINavigationController){
+    init(budget : Budget){
         self.budget = budget
-        self.navigationController = navigationController
         self.navigationController.navigationBar.prefersLargeTitles = true
     }
     
@@ -27,7 +27,7 @@ class EditCoordiantor : BudgetEditableCoordinator{
         let presentor = EditBudgetViewModel(budget: self.budget!)
         presentor.coordinator = self
         let vc = presentor.configure()
-        vc.title = "More"
+        vc.title = "Edit Budgets"
         
         self.navigationController.pushViewController(vc, animated: true)
         self.navigationController.modalPresentationStyle = .fullScreen
@@ -45,6 +45,8 @@ class EditCoordiantor : BudgetEditableCoordinator{
     }
     
     func timeFrameSubmitted() {
+        
+        self.navigationController.popViewController(animated: true)
     
     }
     
@@ -64,6 +66,8 @@ extension BudgetEditableCoordinator{
         
         self.navigationController.pushViewController(vc, animated: true)
     }
+    
+    
     
     func continueToTimeFrame(){
         let model = TimeFrameViewModel(budget: self.budget!)
@@ -150,6 +154,14 @@ extension BudgetEditableCoordinator{
         self.navigationController.dismiss(animated: true)
     }
     
+    func showHistoricalTransactions(budgetCategory: BudgetCategory, model: HistoricalTransactionsViewModel){
+        var view = HistoricalTransactionsView(viewModel: model)
+        view.coordinator = self
+        let vc = UIHostingController(rootView: view)
+        
+        self.navigationController.pushViewController(vc, animated: true)
+    }
+    
 
     
     func showCategoryDetail(budgetSection: BudgetSection, service: BalanceParentService) {
@@ -166,7 +178,9 @@ extension BudgetEditableCoordinator{
         self.navigationController.popViewController(animated: true)
     }
     
-    
+    func finishSettingUpBudget(){
+        
+    }
     
     
     func continueToPlaid() {

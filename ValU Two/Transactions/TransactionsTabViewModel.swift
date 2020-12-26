@@ -90,7 +90,7 @@ class TransactionsTabViewModel: ObservableObject, Presentor{
         if self.transactionsThisWeek!.transactions.count > 0 {
             
             idx = idx + 1
-            let anotherRow = ListWrapper(sectionTitle: "Earlier This Week", idx: idx)
+            let anotherRow = ListWrapper(sectionTitle: "Last 7 Days", idx: idx)
             self.rows!.append(anotherRow)
             
             
@@ -109,7 +109,7 @@ class TransactionsTabViewModel: ObservableObject, Presentor{
         if self.transactionsThisMonth!.transactions.count > 0 {
             
             idx = idx + 1
-            let anotherRow = ListWrapper(sectionTitle: "Earlier This Month", idx: idx)
+            let anotherRow = ListWrapper(sectionTitle: "Last 30 Days", idx: idx)
             self.rows!.append(anotherRow)
             
             idx = idx + 1

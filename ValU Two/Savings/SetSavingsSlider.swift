@@ -20,6 +20,8 @@ struct SetSavingsSlider: View {
         
     }
     
+
+    
     
     var body: some View {
         VStack{
@@ -36,8 +38,8 @@ struct SetSavingsSlider: View {
                             .frame(height: self.getHeight(viewHeight: g.size.height))
                             
                             VStack{
-                                Text("$\(self.viewData.savingsAmount)").foregroundColor(Color(.white)).font(.title).bold()
-                                Text("Savings / Month").foregroundColor(Color(.lightText)).bold()
+                                Text("\(Int(self.viewData.savingsPercentage * 100))%").foregroundColor(Color(.white)).font(.title).bold()
+                                Text("Savings").foregroundColor(Color(.lightText)).bold()
                             }
                             
                             
@@ -47,8 +49,8 @@ struct SetSavingsSlider: View {
                             .fill(LinearGradient(gradient:  Gradient(colors: [.yellow, .red]), startPoint: .bottomTrailing, endPoint: .center))
                             .transition(.slide)
                             VStack{
-                                Text("$\(self.viewData.spendingAmount)").font(.title).foregroundColor(Color(.white)).bold()
-                                Text("Spending / Month").foregroundColor(Color(.lightText)).bold()
+                                Text("\(Int((1 - self.viewData.savingsPercentage) * 100))%").font(.title).foregroundColor(Color(.white)).bold()
+                                Text("Spending").foregroundColor(Color(.lightText)).bold()
                             }
                         }
                         

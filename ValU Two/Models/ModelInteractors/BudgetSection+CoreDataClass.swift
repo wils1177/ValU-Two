@@ -13,11 +13,12 @@ import CoreData
 @objc(BudgetSection)
 public class BudgetSection: NSManagedObject {
     
-    convenience init(name : String, icon: String, colorCode: Int, context: NSManagedObjectContext!){
+    convenience init(name : String, icon: String, colorCode: Int, order: Int, context: NSManagedObjectContext!){
         
         let entity = NSEntityDescription.entity(forEntityName: "BudgetSection", in: context)
         self.init(entity: entity!, insertInto: context)
         
+        self.order = Int64(order)
         self.name = name
         self.icon = icon
         self.colorCode = Int32(colorCode)
@@ -69,6 +70,10 @@ public class BudgetSection: NSManagedObject {
             return 0.0
         }
         
+    }
+    
+    func getBudgetCategories() -> [BudgetCategory]{
+        return (self.budgetCategories?.allObjects as! [BudgetCategory]).sorted(by: { $0.order < $1.order })
     }
 
 }

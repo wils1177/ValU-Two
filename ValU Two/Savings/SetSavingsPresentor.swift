@@ -112,14 +112,10 @@ class SetSavingsPresentor : Presentor {
     }
     
     
-    func try20(){
-        self.budget.savingsPercent = 0.2
-        let newViewData = generateViewData()
-        
-        self.viewData?.savingsAmount = newViewData.savingsAmount
-        self.viewData?.spendingAmount = newViewData.spendingAmount
-        self.viewData?.savingsPercentage = newViewData.savingsPercentage
-    }
+    
+    
+    
+    
     
 
     

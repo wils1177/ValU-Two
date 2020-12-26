@@ -12,6 +12,7 @@ struct BudgetStatusBarViewData: Hashable {
     var percentage : Double
     var color : Color
     var name : String
+    var icon : String
     var id = UUID()
 }
 
@@ -19,15 +20,15 @@ struct BudgetStatusBarView: View {
     
     
     var viewData = [
-        BudgetStatusBarViewData(percentage: 0.15, color: .blue, name: "Drugs"),
-        BudgetStatusBarViewData(percentage: 0.15, color: .red, name: "Crime"),
-        BudgetStatusBarViewData(percentage: 0.15, color: .green, name: "Fun"),
-        BudgetStatusBarViewData(percentage: 0.03, color: .purple, name: "1"),
-        BudgetStatusBarViewData(percentage: 0.03, color: .purple, name: "1")
+        BudgetStatusBarViewData(percentage: 0.15, color: .red, name: "Crime", icon: "pencil"),
+        BudgetStatusBarViewData(percentage: 0.15, color: .red, name: "Crime", icon: "pencil"),
+        BudgetStatusBarViewData(percentage: 0.15, color: .red, name: "Crime", icon: "pencil"),
+        BudgetStatusBarViewData(percentage: 0.15, color: .red, name: "Crime", icon: "pencil"),
+        BudgetStatusBarViewData(percentage: 0.15, color: .red, name: "Crime", icon: "pencil")
         
     ]
     
-    var maxHeight = CGFloat(12)
+    var maxHeight = CGFloat(20)
     
     
     func getLegendArray() -> [[BudgetStatusBarViewData]]{
@@ -41,9 +42,8 @@ struct BudgetStatusBarView: View {
                 HStack{
                     ForEach(row, id: \.self) {entry in
                         HStack{
-                            Circle().frame(width: 10, height: 10).foregroundColor(entry.color)
-                            Text(entry.name).font(.system(size: 12))
-                        }.padding(.horizontal, 5)
+                            Text(entry.name).font(.system(size: 15)).lineLimit(1).foregroundColor(Color(.white))
+                        }.padding(.horizontal, 7).padding(.vertical, 3).background(entry.color).cornerRadius(5)
 
                     }
                     Spacer()
@@ -51,8 +51,28 @@ struct BudgetStatusBarView: View {
                 
             }
                
-        }
+        }.padding(.top, 5)
                 
+    }
+    
+    var legendV2 : some View {
+        
+        ScrollView(.horizontal){
+            HStack(spacing: 0){
+                ForEach(self.getLegendArray(), id: \.self) {row in
+                        ForEach(row, id: \.self) {entry in
+                            
+                            VStack(alignment: .leading){
+                                BudgetSectionIconLarge(color: entry.color, icon: entry.icon, size: CGFloat(44))
+                                Text(entry.name).font(.caption).foregroundColor(Color(.lightGray)).bold().lineLimit(1)
+                            }.frame(width: 85)
+
+                        }
+                    
+                    
+                }
+            }.padding(.top, 10)
+        }
     }
     
 
@@ -72,7 +92,7 @@ struct BudgetStatusBarView: View {
                 Spacer()
             }
             
-        }.frame(height: self.maxHeight).clipShape(Capsule())
+        }.frame(height: self.maxHeight).clipShape(RoundedRectangle(cornerRadius: 8))
     }
     
     var body: some View {

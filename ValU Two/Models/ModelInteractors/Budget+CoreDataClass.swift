@@ -63,19 +63,27 @@ public class Budget: NSManagedObject, NSCopying, Identifiable {
     
     func generateDefaultBudgetSections(){
         let parentSpendingCategories = SpendingCategoryService().getParentSpendingCategories()
+        var orderIndex = 1
         
         for parent in parentSpendingCategories{
+            
             let name = parent.name!
             let icon = parent.icon!
             
             if name != "Custom"{
-                let newBudgetSection = DataManager().createBudgetSection(name: name, icon: icon, colorCode: Int(parent.colorCode))
-                self.addToBudgetSection(newBudgetSection)
                 
+                let newBudgetSection = DataManager().createBudgetSection(name: name, icon: icon, colorCode: Int(parent.colorCode), order: orderIndex)
+                self.addToBudgetSection(newBudgetSection)
+                orderIndex = orderIndex +  1
+                
+                var subOrderIndex = 1
                 for subCategory in parent.subSpendingCategories?.allObjects as! [SpendingCategory]{
-                    let newBudgetCategory = DataManager().createBudgetCategory(category: subCategory)
+                    let newBudgetCategory = DataManager().createBudgetCategory(category: subCategory, order: subOrderIndex)
                     newBudgetSection.addToBudgetCategories(newBudgetCategory)
+                    subOrderIndex = subOrderIndex +  1
                 }
+                
+                
             }
             
         }
@@ -84,7 +92,7 @@ public class Budget: NSManagedObject, NSCopying, Identifiable {
     }
     
     func getBudgetSections() -> [BudgetSection]{
-        return self.budgetSection?.allObjects as! [BudgetSection]
+        return (self.budgetSection?.allObjects as! [BudgetSection]).sorted(by: { $0.order < $1.order })
     }
     
     func getBudgetCategories() -> [BudgetCategory]{
@@ -175,6 +183,14 @@ public class Budget: NSManagedObject, NSCopying, Identifiable {
             spent = spent + section.getSpent()
         }
         return Float(spent)
+    }
+    
+    func getAmountLimited() -> Float{
+        var limit = 0.0
+        for section in self.budgetSection?.allObjects as! [BudgetSection]{
+            limit = limit + section.getLimit()
+        }
+        return Float(limit)
     }
     
     func updateAmountSpent(){

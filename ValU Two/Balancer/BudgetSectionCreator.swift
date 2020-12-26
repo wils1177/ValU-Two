@@ -18,7 +18,18 @@ class BudgetSectionCreator{
     
     func addSectionToBudget(name: String, icon: String, colorCode: Int){
         let dm = DataManager()
-        let newSection = dm.createBudgetSection(name: name, icon: icon, colorCode: colorCode)
+        
+        let sections = self.budget.budgetSection?.allObjects as! [BudgetSection]
+        var maxOrder = 0
+        
+        for section in sections{
+            if section.order > maxOrder{
+                maxOrder = Int(section.order)
+            }
+        }
+        
+        let order = maxOrder + 1
+        let newSection = dm.createBudgetSection(name: name, icon: icon, colorCode: colorCode, order: Int(order))
         budget.addToBudgetSection(newSection)
         budget.objectWillChange.send()
         dm.saveDatabase()

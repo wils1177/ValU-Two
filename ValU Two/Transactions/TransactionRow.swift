@@ -44,6 +44,8 @@ struct TransactionRow: View {
 
     
     var body: some View {
+        //Text("sdfasd")
+        
         
         Button(action: {
             // What to perform
@@ -78,16 +80,12 @@ struct TransactionRow: View {
                     
                     Spacer()
                     VStack(alignment: .trailing){
-                        HStack{
-                            Spacer()
+
                             Text(self.transactionService.getAmount()).font(.headline).bold().lineLimit(1).fixedSize(horizontal: true, vertical: false)
                             
-                        }
-                        HStack{
-                            Spacer()
                             Text(self.presentationDate ?? "Missing" ).font(.subheadline).lineLimit(1).foregroundColor(Color(.lightGray))
                             
-                        }
+                        
                         
                     }.frame(maxWidth: 70)
 
@@ -95,8 +93,8 @@ struct TransactionRow: View {
             }.buttonStyle(PlainButtonStyle())
              
         }
-        
-        
+         
+    
 }
 
 

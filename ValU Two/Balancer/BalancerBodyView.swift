@@ -32,11 +32,14 @@ struct BalancerBodyView: View {
     
     var budgetsHeader : some View{
         HStack{
-            Text("Budgets").font(.system(size: 21)).foregroundColor(Color(.black)).bold()
+            Text("Budgets").font(.system(size: 23)).foregroundColor(Color(.black)).bold()
             Spacer()
+            
+            
+            
             newSectionButton
             //EditButton()
-        }.padding(.top, 10).padding(.bottom, 5).padding(.horizontal)
+        }.padding(.top, 10)
         
     }
     
@@ -44,17 +47,49 @@ struct BalancerBodyView: View {
         
         print("delete triggered")
         
-        for index in Array(offsets){
-            //let id = viewModel.budgetSections[index].id!
-            let sections = viewModel.budget.getBudgetSections()
-            let id = sections[index].id!
-            self.viewModel.deleteBudgetSection(id: id)
-        }
+        let source = offsets.first!
+        let sections = viewModel.budget.getBudgetSections()
+        let toDelete = sections[source]
+        self.viewModel.deleteBudgetSection(section: toDelete)
+        
+
+    
     }
     
     
     func move(from source: IndexSet, to destination: Int) {
         print("move it move it")
+        
+        let source = source.first!
+        
+        let items = self.budget.getBudgetSections()
+        
+        if source < destination {
+            var startIndex = source + 1
+            let endIndex = destination - 1
+            var startOrder = items[source].order
+            while startIndex <= endIndex {
+                items[startIndex].order = startOrder
+                startOrder = startOrder + 1
+                startIndex = startIndex + 1
+            }
+            items[source].order = startOrder
+        }
+        else if destination < source{
+            var startIndex = destination
+            let endIndex = source - 1
+            var startOrder = items[destination].order + 1
+            let newOrder = items[destination].order
+            while startIndex <= endIndex {
+                items[startIndex].order = startOrder
+                startOrder = startOrder + 1
+                startIndex = startIndex + 1
+            }
+            items[source].order = newOrder
+        }
+        
+        DataManager().saveDatabase()
+        
     }
       
       var body: some View {
@@ -62,37 +97,31 @@ struct BalancerBodyView: View {
             
             List{
                              
-                        SpendingLimitSummaryView(viewModel: self.viewModel).cornerRadius(15).padding(.bottom, 20).padding(.top)
+                        SpendingLimitSummaryView(viewModel: self.viewModel).cornerRadius(15).padding(.bottom, 10).padding(.top)
                         
                             
-                        Section(header: self.budgetsHeader){
-                            
-                        
-                        //budgetsHeader.padding(.horizontal)
+
+                        budgetsHeader.padding(.horizontal)
                            ForEach(self.budget.getBudgetSections(), id: \.self) { section in
                                 VStack(spacing: 0){
                                     
                                         BudgetBalanceCard(service: BalanceParentService(budgetSection: section), budgetSection: section, coordinator: self.viewModel.coordinator!)
                                     
             
-                                }
+                                }.listRowInsets(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
                                         
 
                             }.onDelete(perform: delete).onMove(perform: move)
                             
                         
                         
-                        }
-                        
+                                                
                 
                       
                             
                         
-                    }.listStyle(GroupedListStyle())
-            HStack{
-                EditButton().padding(.leading).padding(.bottom)
-                Spacer()
-            }
+                    }.listStyle(SidebarListStyle())
+            
         
         }
         

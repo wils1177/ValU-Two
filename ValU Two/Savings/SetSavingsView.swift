@@ -14,6 +14,14 @@ struct SetSavingsView: View {
     var presentor : SetSavingsPresentor?
     
     
+    var goodMessageIcon = "👌"
+    var goodMessage = "That's a great goal!"
+    
+    var badMessageIcon = "❗"
+    var badMessage = "Your goal is a bit low!"
+    
+    var tooMuchIcon = "🥵"
+    var tooMuchMessage = "Keepj enough money for expenses!"
     
    
     init(presentor: SetSavingsPresentor?, viewData: SetSavingsViewData){
@@ -22,23 +30,80 @@ struct SetSavingsView: View {
                 
     }
     
+    func getRecMessage() -> String {
+        
+        if self.viewData.savingsPercentage < 0.20{
+            return badMessage
+        }
+        else if self.viewData.savingsPercentage > 0.6{
+            return tooMuchMessage
+        }
+        else{
+            return goodMessage
+        }
+        
+    }
+    
+    func getRecIcon() -> String {
+        
+        if self.viewData.savingsPercentage < 0.20{
+            return badMessageIcon
+        }
+        else if self.viewData.savingsPercentage > 0.6{
+            return tooMuchIcon
+        }
+        else{
+            return goodMessageIcon
+        }
+        
+    }
+    
     
     var reccomendation: some View{
-        VStack(alignment: .leading){
-
+        VStack{
+            /*
             HStack{
-                Text("Try staring with 20% of your income.").foregroundColor(Color(.lightGray))
                 Spacer()
-                Button(action: {
-                    //action
-                    print("bruh")
-                    self.presentor?.try20()
-                }){
-                    Text("Try it").bold()
+                Text(getRecIcon()).font(.largeTitle)
+                Text(getRecMessage()).font(.headline)
+                Spacer()
+            }.transition(.scale)
+            */
+            HStack{
+                Text("Experts reccomend saving at least 20% of your income.").font(.subheadline).foregroundColor(Color(.gray)).multilineTextAlignment(.center)
+            }.padding(.horizontal).padding(.horizontal)
+            
+            
+        }
+        
+    }
+    
+    var topSummary : some View {
+        HStack{
+            Spacer()
+            VStack(spacing: 3){
+                HStack{
+                    Image(systemName: "plus.circle").foregroundColor(Color(.systemGreen))
+                    Text("SAVINGS").font(.subheadline).foregroundColor(Color(.systemGreen)).bold()
                 }
+                
+                Text("$\(self.viewData.savingsAmount)").font(.title).bold()
+                
+                
             }
             
-        }.padding(10).padding(.horizontal)
+            Spacer()
+            
+            VStack(spacing: 3){
+                HStack{
+                    Image(systemName: "minus.circle").foregroundColor(Color(.systemRed))
+                    Text("SPENDING").font(.subheadline).foregroundColor(Color(.systemRed)).bold()
+                }
+                Text("$\(self.viewData.spendingAmount)").font(.title).bold()
+                
+            }
+            Spacer()
+        }
     }
     
     
@@ -47,9 +112,9 @@ struct SetSavingsView: View {
 
         VStack{
                 
-                //reccomendation
-                SetSavingsSlider(viewData: self.viewData, presentor: self.presentor)
-                
+            topSummary.padding(.top)
+            SetSavingsSlider(viewData: self.viewData, presentor: self.presentor).padding(.horizontal)
+            reccomendation
                 //self.indicator.offset(y: -((CGFloat(0.20) * geometry.size.height) - (geometry.size.height/2)))
                 
                 

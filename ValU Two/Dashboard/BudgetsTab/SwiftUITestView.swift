@@ -15,7 +15,7 @@ struct BudgetCardView: View {
     var viewModel : BudgetsViewModel
     
     var title: String
-    //var spent : String
+    var spent : String
     var remaining: String
     var percentage: Float
     var available : String
@@ -28,14 +28,16 @@ struct BudgetCardView: View {
         self.budget = budget
         self.viewModel = viewModel
         self.title = CommonUtils.getMonthFromDate(date: self.budget.startDate!)
-        //self.spent = "$" + String(Int(self.budget.getAmountSpent()))
-        self.remaining = CommonUtils.makeMoneyString(number: Int(self.budget.getAmountAvailable() - Float(self.viewModel.budgetTransactionsService.getBudgetExpenses())))
+        self.spent = CommonUtils.makeMoneyString(number: Int(self.budget.getAmountSpent()))
+        self.remaining = CommonUtils.makeMoneyString(number:  self.viewModel.getRemaining())
         self.percentage = 1.0 - (self.budget.spent / self.budget.amount)
-        self.available = "$" + String(Int(self.budget.getAmountAvailable()))
+        self.available = CommonUtils.makeMoneyString(number:(Int(self.budget.getAmountAvailable())))
         self.savingsGoal = "$" + String(Int(self.budget.amount * self.budget.savingsPercent))
         self.daysLeft = getDaysLeftInMonth(date: Date())
         
     }
+    
+    
     
 
     func getDaysLeftInMonth(date: Date) -> String{
@@ -134,18 +136,26 @@ struct BudgetCardView: View {
     var new: some View{
         VStack(spacing: 8){
             HStack{
-                VStack(alignment: .leading){
-                    Text("AVAILABLE TO SPEND").font(.system(size: 16)).foregroundColor(Color(.gray)).fontWeight(.light).padding(.bottom, 4)
-                    HStack(alignment: .bottom, spacing: 0){
-                        Text(self.remaining).font(.system(size: 37)).foregroundColor(Color(.black)).bold()
-                        Text(" of " + self.available).font(.headline).foregroundColor(Color(.gray)).padding(.bottom, 2)
-                    }
+                
 
+                HStack{
+                    Image(systemName: "calendar").foregroundColor(Color(.black))
+                    Text("17 Days Left in Budget").foregroundColor(Color(.black)).font(.system(size: 16)).bold()
                 }
                 Spacer()
-            }.padding(.leading, 20).padding(.top, 15)
+            }.padding(.horizontal, 20)//.background(AppTheme().themeColorSecondary)
+            HStack{
+                    
+                    HStack(alignment: .bottom, spacing: 0){
+                        Text(self.spent).font(.system(size: 44, design: .rounded)).foregroundColor(Color(.black)).bold()
+                        Text("  of " + self.available).font(.system(size: 24, design: .rounded)).foregroundColor(Color(.gray)).padding(.bottom, 4)
+                    }
+
+                
+                Spacer()
+            }.padding(.leading, 20)
             
-            BudgetStatusBarView(viewData: self.viewModel.getBudgetStatusBarViewData()).padding(.bottom).padding(.top, 5)
+            BudgetStatusBarView(viewData: self.viewModel.getBudgetStatusBarViewData()).padding(.bottom)//.padding(.top, 5)
         }
     }
     

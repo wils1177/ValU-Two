@@ -8,10 +8,16 @@
 
 import Foundation
 
+struct SelectableTransaction {
+    var transaction : Transaction
+    var selected = true
+}
+
 
 class IncomePredictionService{
     
     var transactions = [Transaction]()
+    var selectableTransactions = [SelectableTransaction]()
     var timeFrame: TimeFrame
     
     init(timeFrame: TimeFrame){

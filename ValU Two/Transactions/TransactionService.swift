@@ -34,6 +34,8 @@ class TransactionService{
         
     }
     
+
+    
     func getCategoryName(categories: [CategoryMatch]) -> String{
         if categories.count == 0{
             return "Other"

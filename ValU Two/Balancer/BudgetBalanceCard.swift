@@ -28,7 +28,7 @@ struct BudgetBalanceCard: View {
 
             HStack{
                 BudgetSectionIconLarge(color: colorMap[Int(self.budgetSection.colorCode)], icon: self.budgetSection.icon!, size: CGFloat(45))
-                CategoryHeader(name: self.budgetSection.name!, icon: self.budgetSection.icon!).padding(.leading)
+                CategoryHeader(name: self.budgetSection.name!).padding(.leading)
 
                     Spacer()
 

@@ -13,9 +13,11 @@ struct OnboardingSummaryView: View {
     @ObservedObject var viewModel : OnboardingSummaryPresentor
     @EnvironmentObject var itemManagerService : ItemManagerService
     
+    @ObservedObject var budget : Budget
     
     init(viewModel : OnboardingSummaryPresentor){
         self.viewModel = viewModel
+        self.budget = viewModel.budget
         
         // To remove only extra separators below the list:
         //UITableView.appearance().tableFooterView = UIView()
@@ -23,9 +25,7 @@ struct OnboardingSummaryView: View {
         // To remove all separators including the actual ones:
         //UITableView.appearance().separatorStyle = .none
         
-        
-        UITableViewCell.appearance().backgroundColor = .systemGroupedBackground
-        UITableView.appearance().backgroundColor = .systemGroupedBackground
+     
         
         
     }
@@ -60,10 +60,34 @@ struct OnboardingSummaryView: View {
             
           
                 Spacer()
+            
+            if viewModel.budget.getAmountLimited() > 0.0{
+                
+                Button(action: {
+                    //Button Action
+                    
+                    self.viewModel.coordinator!.finishSettingUpBudget()
+                    }){
+                    HStack{
+                        Spacer()
+                        ZStack{
+                            Text("Finish!").font(.subheadline).foregroundColor(.white).bold().padding()
+                        }
+                        Spacer()
+                    }.background(AppTheme().themeColorPrimary).cornerRadius(10).shadow(radius: 10).padding(.horizontal).padding(.horizontal).padding(.bottom)
+                    
+                    
+                }.buttonStyle(PlainButtonStyle())
+                
+            }
+            
+            
                 
                 
             
-            }.navigationBarTitle(Text("New Budget"),  displayMode: .large).navigationBarItems(
+            }
+        .listStyle(SidebarListStyle())
+        .navigationBarTitle(Text("New Budget"),  displayMode: .large).navigationBarItems(
                                                                        
                                                                        
                     trailing: Button(action: {

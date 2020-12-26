@@ -11,65 +11,42 @@ import SwiftUI
 struct ParentCategoryCard: View {
     
     @ObservedObject var budgetSection : BudgetSection
-    @ObservedObject var service : BalanceParentService
+    var color : Color
+    var colorSeconday : Color
+    var colorTertiary : Color
     
-    init(budgetSection: BudgetSection, service: BalanceParentService){
+    init(budgetSection: BudgetSection){
         self.budgetSection = budgetSection
-        self.service = service
-        
+        self.color = colorMap[Int(budgetSection.colorCode)]
+        self.colorSeconday = colorMapSecondary[Int(budgetSection.colorCode)]
+        self.colorTertiary = colorMapTertiaruy[Int(budgetSection.colorCode)]
         
     }
     
     
     var body: some View {
         
-        HStack{
-            VStack(spacing: 2){
-                CategoryHeader(name: self.budgetSection.name!, icon: self.budgetSection.icon!).padding(.horizontal).padding(.top, 10)
-                
-                HStack(spacing: 0){
-                    BudgetSectionIconLarge(color: colorMap[Int(self.budgetSection.colorCode)]).padding(.leading).padding(.bottom)
-                    
-                    VStack(alignment: .leading, spacing:0){
-                        
-                        
-                        SpendingSummary(spent: Float(service.getParentSpent()), limit: Float(service.getParentLimit()))
-                        
-                        ProgressBarView(percentage: CGFloat(self.service.getPercentageSpent()), color: colorMap[Int(self.budgetSection.colorCode)], width: 250).padding(.bottom)
-                    }.padding(.leading)
-                    
-                    Spacer()
-                    
-                }
-            }
-            
-            Image(systemName: "chevron.right").foregroundColor(Color(.lightGray)).font(Font.system(.headline).bold()).padding(.trailing)
-            
-        }
         
-        .background(Color(.white)).cornerRadius(15)
-        
-        /*
-        VStack(spacing: 0){
-            HStack{
-                VStack(spacing: 0.0){
-                    
-                    
-                    
-      
-                }
-                VStack{
-                    Image(systemName: "chevron.right").foregroundColor(Color(.lightGray)).font(Font.system(.headline).bold())
-                }.padding(.trailing, 20).padding(.top)
-            }
+        VStack(alignment: .leading){
             
             HStack{
-                
+                BudgetSectionIconLarge(color: colorMap[Int(self.budgetSection.colorCode)], icon: self.budgetSection.icon!)
+                Spacer()
+                SpendingSummary(spent: Float(self.budgetSection.getSpent()), limit: Float(self.budgetSection.getLimit()))
+            }.padding(.bottom, 15)
+            
+            HStack{
+                Text(self.budgetSection.name!).font(.title2).bold().foregroundColor(.white)
+                Spacer()
             }
             
-        }
+            ProgressBarView(percentage: CGFloat(self.budgetSection.getPercentageSpent()), color: Color(.white), backgroundColor: self.colorTertiary).padding(.trailing, 5).padding(.bottom, 5)
+            
+        }.padding()
         
-        */
+        .background(LinearGradient(gradient: Gradient(colors: [self.colorSeconday, self.color]), startPoint: .top, endPoint: .bottom)).cornerRadius(15)
+        
+
     }
 }
 

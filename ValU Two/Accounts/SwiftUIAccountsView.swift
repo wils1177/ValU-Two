@@ -33,7 +33,7 @@ struct SwiftUIAccountsView: View {
             }
             */
             
-                VStack(spacing: 5) {
+            VStack(alignment: .center, spacing: 5.0) {
                         ForEach(self.accounts, id: \.self){ account in
                             
 
@@ -42,7 +42,10 @@ struct SwiftUIAccountsView: View {
                                 self.coordinator?.showAccountDetail(account: account)
                             }) {
                                 // How the button looks like
-                                SwiftUIAccountCardView(account: account).padding()
+                                
+                                SwiftUIAccountCardView(account: account).shadow(radius: 5).padding()
+                                    
+                                
                             }.buttonStyle(PlainButtonStyle())
                         
                             

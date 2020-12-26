@@ -19,20 +19,21 @@ struct AccountDetailView: View {
         self.coordinator = coordinator
         let service = AccountDetailService(account: account)
         self.transactions = service.getTransactionsForAccount()
+        
     }
     
     var body: some View {
         
         List{
-                SwiftUIAccountCardView(account: self.account).padding()
+                SwiftUIAccountCardView(account: self.account)
                 ForEach(self.transactions, id: \.self){ transaction in
                     
                     TransactionRow(coordinator: self.coordinator, transaction: transaction)
                     
-                }
                 
-            
-        }.navigationBarTitle(self.account.name!)
+            }.listRowInsets(.init(top: 5, leading: 0, bottom: 5, trailing: 0))
+
+        }.listStyle(SidebarListStyle()).navigationBarTitle(self.account.name!)
         
         
     }

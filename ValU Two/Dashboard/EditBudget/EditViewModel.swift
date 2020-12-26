@@ -30,6 +30,25 @@ class EditBudgetViewModel : Presentor, BudgetEditor{
         return vc
     }
     
+    
+    func getTimeFrameDescription() -> String{
+        
+        if self.budget.timeFrame == 0{
+            return "Monthly Budget"
+        }
+        else if self.budget.timeFrame == 1{
+            return "Sem-Monthly Budget"
+        
+        }
+        else if self.budget.timeFrame == 2{
+            return "Weekly Budget"
+        }
+        else{
+            return "How long is your budget?"
+        }
+        
+    }
+    
 
     
     
@@ -37,8 +56,12 @@ class EditBudgetViewModel : Presentor, BudgetEditor{
 
 extension BudgetEditor{
     
-    func editIncome(){
+    func editTimeFrame(){
         coordinator?.continueToTimeFrame()
+    }
+    
+    func editIncome(){
+        coordinator?.loadIncomeScreen()
     }
     
     func editBudget(){

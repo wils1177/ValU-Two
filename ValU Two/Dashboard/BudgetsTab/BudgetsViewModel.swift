@@ -17,8 +17,6 @@ class BudgetsViewModel: ObservableObject, Presentor{
     var coordinator : BudgetsTabCoordinator
     var spendingModel : SpendingCardViewModel?
     var budgetTransactionsService : BudgetTransactionsService
-    @Published var futureBudgets  = [BudgetTimeFrame]()
-    @Published var historicalBudgets = [Budget]()
     @Published var currentBudget : Budget
     @Published var selected = 0
     
@@ -61,6 +59,7 @@ class BudgetsViewModel: ObservableObject, Presentor{
     
     
     func testBudgetCopy(budget: Budget){
+        
         let copier = BudgetCopyer()
         let oldBudget = budget
         let newBudget = copier.copyBudgetForNextPeriod(budget: budget)
@@ -70,7 +69,7 @@ class BudgetsViewModel: ObservableObject, Presentor{
         let modifiedEndDate = Calendar.current.date(byAdding: .day, value: -30, to: oldBudget.endDate!)!
         oldBudget.endDate = modifiedEndDate
         
-        self.historicalBudgets.append(oldBudget)
+        //self.historicalBudgets.append(oldBudget)
         
         
         
@@ -85,6 +84,7 @@ class BudgetsViewModel: ObservableObject, Presentor{
         var total = amountAvailable
         
         if spentTotal > Double(amountAvailable){
+            print("CLASJDHASLKDHKLAS")
             total = Float(spentTotal)
         }
         
@@ -95,7 +95,7 @@ class BudgetsViewModel: ObservableObject, Presentor{
             let spentInSection = section.getSpent()
             let limitForSection = section.getLimit()
             sectionSpentTotal = spentInSection + sectionSpentTotal
-            let data = BudgetStatusBarViewData(percentage: spentInSection / Double(total), color: colorMap[Int(section.colorCode)], name: section.name!)
+            let data = BudgetStatusBarViewData(percentage: spentInSection / Double(total), color: colorMap[Int(section.colorCode)], name: section.name!, icon: section.icon!)
             
             if limitForSection > 0.0 && spentInSection > 0.0{
                 viewDataToReturn.append(data)
@@ -103,11 +103,26 @@ class BudgetsViewModel: ObservableObject, Presentor{
             
         }
         
-        viewDataToReturn.sort(by: { $0.percentage > $1.percentage })
+        if !(spentTotal > Double(amountAvailable)){
+            viewDataToReturn.sort(by: { $0.percentage > $1.percentage })
+        }
         
-        let percentage = Float(otherTotal) / total
-        let otherData = BudgetStatusBarViewData(percentage: Double(percentage), color: Color(.lightGray), name: "Other")
+        let otherPercentage = Float(otherTotal) / total
+        let otherData = BudgetStatusBarViewData(percentage: Double(otherPercentage), color: AppTheme().themeColorSecondary, name: "Other", icon: "book")
         viewDataToReturn.append(otherData)
+        
+        
+        
+        if !(spentTotal > Double(amountAvailable)){
+            viewDataToReturn.sort(by: { $0.percentage > $1.percentage })
+            let remainingPercentage = Float((total - Float(spentTotal)) / total)
+            let remainingData = BudgetStatusBarViewData(percentage: Double(remainingPercentage), color: Color(#colorLiteral(red: 0.9543517232, green: 0.9543194175, blue: 0.9847152829, alpha: 1)), name: "Remaining", icon: "folder")
+            viewDataToReturn.append(remainingData)
+        }
+        
+        
+        
+        
         
         return viewDataToReturn
     }
@@ -123,6 +138,19 @@ class BudgetsViewModel: ObservableObject, Presentor{
                 print("Could Not Delete Budget")
             }
  
+    }
+    
+    func getRemaining() -> Int {
+        
+        let remaining = Int(self.currentBudget.getAmountAvailable() - Float(self.budgetTransactionsService.getBudgetExpenses()))
+        
+        if remaining > 0{
+            return remaining
+        }
+        else{
+            return 0
+        }
+    
     }
 
     

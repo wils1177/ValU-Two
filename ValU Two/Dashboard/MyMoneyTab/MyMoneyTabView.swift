@@ -14,11 +14,8 @@ struct MyMoneyTabView: View {
     var coordinator : MoneyTabCoordinator?
     
     var body: some View {
-        
-        VStack{
-            
-            
-            List{
+         
+            ScrollView{
                 
                 
                 
@@ -26,11 +23,11 @@ struct MyMoneyTabView: View {
                 
                 //CashFlowHighlightView().padding(.horizontal, 5).padding(.top, 5)
                 
-                SwiftUIAccountsView(coordinator: self.coordinator).padding(.top, 10)
+                SwiftUIAccountsView(coordinator: self.coordinator).padding(.horizontal, 10)
                 
             }
  
-        }
+        
         
         .navigationBarTitle("Accounts")
     }

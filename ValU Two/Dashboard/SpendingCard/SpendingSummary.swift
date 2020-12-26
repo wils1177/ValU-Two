@@ -14,13 +14,13 @@ struct SpendingSummary: View {
     var limit : Float
     
     var body: some View {
-        HStack(alignment: .bottom, spacing: 2){
+        VStack(alignment: .trailing, spacing: 2){
             
-            Text("$" + String(Int(self.spent))).font(.system(size: 24)).foregroundColor(.black).bold()
-            Text(" / " + "$" + String(Int(self.limit))).font(.headline).foregroundColor(Color(.lightGray)).bold().padding(.bottom, 2)
+            Text("$" + String(Int(self.spent)) + " spent").font(.headline).foregroundColor(.white).bold()
+            Text("$" + String(Int(self.limit)) + " budgeted").font(.headline).foregroundColor(Color(.white)).bold().padding(.bottom, 2)
             Spacer()
             
-        }.padding(.top, 5).padding(.bottom, 10)
+        }
     }
 }
 

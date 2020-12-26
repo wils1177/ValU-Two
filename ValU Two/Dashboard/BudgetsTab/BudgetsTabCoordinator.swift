@@ -64,10 +64,11 @@ class BudgetsTabCoordinator : Coordinator, TransactionRowDelegate, EditBudgetDel
     }
     
     func showEdit(budgetToEdit: Budget){
-        let editCoordinator = EditCoordiantor(budget: budgetToEdit, navigationController: self.navigationController)
-        //self.childCoordinators.append(editCoordinator)
-        //editCoordinator.parent = self
+        let editCoordinator = EditCoordiantor(budget: budgetToEdit)
+        self.childCoordinators.append(editCoordinator)
+        editCoordinator.parent = self
         editCoordinator.start()
+        self.navigationController.present(editCoordinator.navigationController, animated: true)
         
     }
     
@@ -148,7 +149,8 @@ class BudgetsTabCoordinator : Coordinator, TransactionRowDelegate, EditBudgetDel
     
     
     func showIndvidualBudget(budgetSection: BudgetSection){
-        let view = CategoryDetailView(budgetSection: budgetSection, coordinator: self)
+        let viewModel = BudgetDetailViewModel(budgetSection: budgetSection)
+        let view = CategoryDetailView(sectionModel: viewModel, coordinator: self)
         let vc = UIHostingController(rootView: view)
         vc.title = budgetSection.name! + " Budget"
         self.navigationController.pushViewController(vc, animated: true)

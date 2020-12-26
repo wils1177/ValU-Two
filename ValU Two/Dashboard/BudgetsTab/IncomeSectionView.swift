@@ -36,7 +36,7 @@ struct IncomeSectionView: View {
             HStack{
                 Text("Earned").font(.system(size: 17)).bold().foregroundColor(Color(.lightGray))
                 Spacer()
-            }
+            }.padding(.top, 2)
             
             //Text("This Month").font(.callout).bold().foregroundColor(Color(.lightGray))
             //Text("Up $400").font(.callout).foregroundColor(Color(.lightGray))
@@ -56,7 +56,7 @@ struct IncomeSectionView: View {
             HStack{
                 Text("Spent").font(.system(size: 17)).bold().foregroundColor(Color(.lightGray))
                 Spacer()
-            }
+            }.padding(.top, 2)
             
             //Text("This Month").font(.callout).bold().foregroundColor(Color(.lightGray))
             //Text("Up $400").font(.callout).foregroundColor(Color(.lightGray))

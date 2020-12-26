@@ -39,6 +39,35 @@ struct OtherSpendingSection: View {
     
     var body: some View {
         
+        HStack{
+            VStack(spacing: 2){
+                CategoryHeader(name: "Everything Else").padding(.horizontal).padding(.top, 10)
+                
+                HStack(spacing: 0){
+                    BudgetSectionIconLarge(color: Color(.gray), icon: "ellipses.bubble").padding(.leading, 20).padding(.bottom)
+                    
+                    VStack(alignment: .leading, spacing:0){
+                        
+                        
+                        SpendingSummary(spent: self.viewModel.otherCategory!.spent, limit: self.viewModel.otherCategory!.limit)
+                    
+                        
+                        ProgressBarView(percentage: self.viewModel.otherCategory!.percentage, color: Color(.gray)).padding(.bottom)
+                    }.padding(.leading)
+                    
+                    Spacer()
+                    
+                }
+            }
+            
+            Image(systemName: "chevron.right").foregroundColor(Color(.lightGray)).font(Font.system(.headline).bold()).padding(.trailing)
+            
+        }
+        
+        .background(Color(.white)).cornerRadius(15)
+        
+        
+        /*
         VStack(spacing: 0){
               HStack{
                   VStack(spacing: 0.0){
@@ -53,12 +82,12 @@ struct OtherSpendingSection: View {
               }
               
               HStack{
-                ProgressBarView(percentage: self.viewModel.otherCategory!.percentage, color: AppTheme().themeColorPrimary, width: 290).padding(.bottom)
+                ProgressBarView(percentage: self.viewModel.otherCategory!.percentage, color: AppTheme().themeColorPrimary, width: 100).padding(.bottom)
               }
               
           }
           .background(Color(.white)).cornerRadius(15)
-        
+        */
     }
 }
 

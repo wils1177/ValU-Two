@@ -92,7 +92,7 @@ class BudgetTransactionsService : ObservableObject {
         let otherTransactions = getOtherTransactionsInBudget()
         var total = 0.0
         for transaction in otherTransactions{
-            if transaction.amount > 0.0{
+            if transaction.amount > 0.0 && !transaction.isHidden{
                 total = total + transaction.amount
             }
         }

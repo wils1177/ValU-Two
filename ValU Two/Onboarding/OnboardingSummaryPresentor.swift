@@ -15,7 +15,7 @@ struct OnboardingSummaryViewData{
 
 class OnboardingSummaryPresentor : Presentor, NewBudgetModel, ObservableObject{
     
-    var coordinator: BudgetEditableCoordinator?
+    var coordinator: NewBudgetCoordinator?
     @Published var itemManagerService : ItemManagerService
     
     
@@ -46,9 +46,9 @@ class OnboardingSummaryPresentor : Presentor, NewBudgetModel, ObservableObject{
         self.currentStep = self.getCurrentStep()
         
         let timeFrameStep = generateStep(currentStep: self.currentStep, title: "Select Time Frame", description: getTimeFrameDescription(), stage: 1)
-        let enterIncomeStep = generateStep(currentStep: self.currentStep, title: "Confirm your income", description: getIncomeDescription(), stage: 2)
-        let savingsStep = generateStep(currentStep: self.currentStep, title: "Set a savings goal", description: getSavingsDescription(), stage: 3)
-        let balanceStep = generateStep(currentStep: self.currentStep, title: "Create your budget", description: "Make your budgets!", stage: 4)
+        let enterIncomeStep = generateStep(currentStep: self.currentStep, title: "Enter Your Income", description: getIncomeDescription(), stage: 2)
+        let savingsStep = generateStep(currentStep: self.currentStep, title: "Set a Savings Goal", description: getSavingsDescription(), stage: 3)
+        let balanceStep = generateStep(currentStep: self.currentStep, title: "Create Your Budget", description: getBudgetsDescription(), stage: 4)
         
         let steps = [timeFrameStep, enterIncomeStep, savingsStep, balanceStep]
         
@@ -185,6 +185,18 @@ extension NewBudgetModel{
         }
     }
     
+    func getBudgetsDescription() -> String{
+        
+        if self.budget.getAmountLimited() == Float(0.0){
+            return "Setup your Budgets"
+        }
+        else{
+            let moneystring = CommonUtils.makeMoneyString(number: Int(self.budget.getAmountLimited()))
+            return (moneystring + " budgeted")
+        }
+        
+    }
+    
     
     func getCurrentStep() -> Int{
         
@@ -199,6 +211,9 @@ extension NewBudgetModel{
         }
         if self.budget.savingsPercent != Float(0.0){
             step = 3
+        }
+        if self.budget.getAmountLimited() > Float(0.0){
+            step = 4
         }
 
         

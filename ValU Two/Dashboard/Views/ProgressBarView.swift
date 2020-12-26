@@ -10,14 +10,15 @@ import SwiftUI
 
 struct ProgressBarView: View {
     
-    var width = CGFloat(290.0)
     var percentage : CGFloat
     var color: Color
     
-    init(percentage : CGFloat, color: Color, width: Float = 290){
+    var background: Color
+    
+    init(percentage : CGFloat, color: Color, backgroundColor: Color = Color(.clear)){
         self.percentage = percentage
         self.color = color
-        self.width = CGFloat(width)
+        self.background = backgroundColor
     }
     
     func getColor() -> Color {
@@ -44,18 +45,37 @@ struct ProgressBarView: View {
         }
     }
     
+    var coloredBar : some View{
+        
+        GeometryReader{ g in
+            HStack{
+                RoundedRectangle(cornerRadius: 20).frame(width: g.size.width * self.getPercentage()).foregroundColor(self.color)
+                Spacer()
+            }
+            
+            
+        }.frame(height: 12)
+        
+    }
+    
+    var fullBar : some View{
+        
+        Rectangle().frame(height: 12).foregroundColor(self.background)
+        
+    }
+    
     var body: some View {
         
             
             ZStack(alignment: .leading){
             
-                RoundedRectangle(cornerRadius: 20).frame(width: self.width, height: 12).foregroundColor(Color(red: 0.96, green: 0.96, blue: 0.96))
+                fullBar
                 
                 
-                RoundedRectangle(cornerRadius: 20).frame(width: self.width * self.getPercentage(), height: 12).foregroundColor(self.color)
-
+                coloredBar
+                //Text("hy")
                 
-            }
+            }.clipShape(Capsule())
         
     }
 }

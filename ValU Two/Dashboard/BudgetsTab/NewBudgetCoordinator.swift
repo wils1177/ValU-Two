@@ -65,7 +65,6 @@ class NewBudgetCoordinator : Coordinator, BudgetEditableCoordinator {
         let presentor = EnterIncomePresentor(budget: self.budget!)
         presentor.coordinator = self
         let vc = presentor.configure()
-        
         self.navigationController.pushViewController(vc, animated: true)
     }
     
@@ -115,11 +114,17 @@ class NewBudgetCoordinator : Coordinator, BudgetEditableCoordinator {
     
     func finishedSettingLimits() {
         
+        self.newBudgetDependencies.onboardingSummaryPresentor?.generateViewData()
+        self.navigationController.popViewController(animated: true)
+        
+    }
+    
+    
+    func finishSettingUpBudget(){
         self.budget!.active = true
         self.navigationController.dismiss(animated: true)
         DataManager().saveDatabase()
         self.parent?.dismissNewBudgetCoordinator()
-        
     }
 
     

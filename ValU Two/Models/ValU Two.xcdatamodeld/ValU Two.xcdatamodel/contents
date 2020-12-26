@@ -34,6 +34,7 @@
     <entity name="BudgetCategory" representedClassName="BudgetCategory" syncable="YES">
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="limit" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="order" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="budgetSection" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="BudgetSection" inverseName="budgetCategories" inverseEntity="BudgetSection"/>
         <relationship name="spendingCategory" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SpendingCategory"/>
     </entity>
@@ -42,6 +43,7 @@
         <attribute name="icon" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="order" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="budget" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Budget" inverseName="budgetSection" inverseEntity="Budget"/>
         <relationship name="budgetCategories" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="BudgetCategory" inverseName="budgetSection" inverseEntity="BudgetCategory"/>
     </entity>
@@ -147,8 +149,8 @@
         <element name="AccountData" positionX="-63" positionY="-18" width="128" height="163"/>
         <element name="BalanceData" positionX="199.73046875" positionY="222.078125" width="128" height="88"/>
         <element name="Budget" positionX="-428.38671875" positionY="78.9453125" width="128" height="253"/>
-        <element name="BudgetCategory" positionX="-675" positionY="54" width="128" height="103"/>
-        <element name="BudgetSection" positionX="-684" positionY="45" width="128" height="133"/>
+        <element name="BudgetCategory" positionX="-675" positionY="54" width="128" height="118"/>
+        <element name="BudgetSection" positionX="-684" positionY="45" width="128" height="148"/>
         <element name="BudgetTimeFrame" positionX="-675" positionY="54" width="128" height="133"/>
         <element name="CategoryMatch" positionX="-675" positionY="54" width="128" height="118"/>
         <element name="IncomeData" positionX="-893.58984375" positionY="-73.421875" width="128" height="118"/>

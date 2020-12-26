@@ -45,22 +45,16 @@ struct SpendingCardView: View {
                                     // your action here
                                     self.viewModel.coordinator?.showIndvidualBudget(budgetSection: service.parent)
                                 }) {
-                                        ParentCategoryCard(budgetSection: service.parent, service: service).padding(.bottom, 10)
+                                        ParentCategoryCard(budgetSection: service.parent).padding(.bottom, 10)
+                                    //Text("hey").padding(.bottom, 200)
                                     }.buttonStyle(PlainButtonStyle())
             
                                 }
                                           
 
-                }//.listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+                }
                                   
-            }//.listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
-        }
-            
-        
-            
-        
-        
-        /*
+            }
             
             Button(action: {
                 // your action here
@@ -68,8 +62,17 @@ struct SpendingCardView: View {
             }) {
                 OtherSpendingSection(viewModel: self.viewModel).padding(.bottom)
             }.buttonStyle(PlainButtonStyle())
+        }
             
-            */
+        
+            
+        
+        
+        
+            
+            
+            
+            
                 
                 
             

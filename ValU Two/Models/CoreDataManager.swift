@@ -58,12 +58,12 @@ class DataManager {
         return BudgetTimeFrame(context: context, timeframe: timeFrame, startDate: startDate, endDate: endDate)
     }
     
-    func createBudgetSection(name: String, icon: String, colorCode : Int) -> BudgetSection{
-        return BudgetSection(name: name, icon: icon, colorCode: colorCode, context: context)
+    func createBudgetSection(name: String, icon: String, colorCode : Int, order: Int) -> BudgetSection{
+        return BudgetSection(name: name, icon: icon, colorCode: colorCode, order: order, context: context)
     }
     
-    func createBudgetCategory(category: SpendingCategory) -> BudgetCategory{
-        return BudgetCategory(category: category, context: context)
+    func createBudgetCategory(category: SpendingCategory, order: Int) -> BudgetCategory{
+        return BudgetCategory(category: category, order: order, context: context)
     }
     
     func saveAccount(account : AccountJSON, itemId: String){

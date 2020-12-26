@@ -117,13 +117,15 @@ protocol BudgetEditor {
     func editSavings()
     func dismiss()
     
+    func getTimeFrameDescription() -> String
+    
     
     var coordinator : BudgetEditableCoordinator? {get set}
     var budget: Budget {get set}
     
 }
 
-protocol BudgetEditableCoordinator: IncomeCoordinator, SetSavingsViewDelegate, SetSpendingLimitDelegate, BudgetTypeDelegate{
+protocol BudgetEditableCoordinator: IncomeCoordinator, SetSavingsViewDelegate, SetSpendingLimitDelegate, BudgetTypeDelegate, TransactionRowDelegate{
     func continueToBudgetCategories()
     func continueToPlaid()
     func continueToSetSavings()

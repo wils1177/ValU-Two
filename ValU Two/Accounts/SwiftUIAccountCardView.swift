@@ -48,7 +48,7 @@ struct SwiftUIAccountCardView: View {
                 
             }
             Spacer()
-        }.frame(width: 280, height: 170).padding(10).background(LinearGradient(gradient:  Gradient(colors: [AppTheme().themeColorSecondary, AppTheme().themeColorPrimary]), startPoint: .topTrailing, endPoint: .center))
+        }.frame(height: 170).padding(10).background(LinearGradient(gradient:  Gradient(colors: [AppTheme().themeColorSecondary, AppTheme().themeColorPrimary]), startPoint: .topTrailing, endPoint: .center))
             .cornerRadius(20)
     }
 }

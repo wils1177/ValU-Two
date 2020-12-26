@@ -33,7 +33,11 @@ class AddCategoriesViewModel: CategoryListViewModel{
         
         for spendingCategory in self.childSpendingCategories{
             if spendingCategory.name! == name{
-                let newBudgetCategory = DataManager().createBudgetCategory(category: spendingCategory)
+                
+                let allCategories = (self.budgetSection.budgetCategories!.allObjects as! [BudgetCategory]).sorted(by: { $0.order < $1.order })
+                let order = allCategories.last!.order + 1
+                
+                let newBudgetCategory = DataManager().createBudgetCategory(category: spendingCategory, order: Int(order))
                 self.selectedCategories.append(newBudgetCategory)
                 spendingCategory.objectWillChange.send()
                 self.objectWillChange.send()
@@ -87,7 +91,10 @@ class AddCategoriesViewModel: CategoryListViewModel{
     func createCustomSpendingCategory(icon: String, name: String){
         let newCategory = spendingCategoryService.createCustomSpendingCategory(icon: icon, name: name)
         
-        let newBudgetCategory = DataManager().createBudgetCategory(category: newCategory)
+        let allCategories = (self.budgetSection.budgetCategories!.allObjects as! [BudgetCategory]).sorted(by: { $0.order < $1.order })
+        let order = allCategories.last!.order + 1
+        
+        let newBudgetCategory = DataManager().createBudgetCategory(category: newCategory, order: Int(order))
         self.budgetSection.addToBudgetCategories(newBudgetCategory)
         
         self.spendingCategoryService.loadCategories()

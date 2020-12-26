@@ -19,6 +19,8 @@ struct EditBudgetCategoriesView: View {
     init(budgetSection: BudgetSection, viewModel: AddCategoriesViewModel){
         self.budgetSection = budgetSection
         self.viewModel = viewModel
+        
+     
     }
     
     var newCategoryButton: some View{
@@ -41,17 +43,20 @@ struct EditBudgetCategoriesView: View {
         NavigationView{
             List{
                 
-                newCategoryButton.padding(.vertical)
+                
+                newCategoryButton.padding(.vertical).listRowBackground(Color(.systemGroupedBackground))
                 
                 //SelectedBudgetCategoriesView(spendingCategories: self.viewModel.getAllCurrentlySelected(), viewModel: self.viewModel).padding(.vertical)
                     
                 
                 
                     ForEach(self.viewModel.parentSpendingCategories, id: \.self){ category in
-                        EditCategoryCard(category: category, viewModel: self.viewModel)
-                    }
+                        EditCategoryCard(category: category, viewModel: self.viewModel).padding(.bottom)
+                    }.listRowBackground(Color(.systemGroupedBackground))
                 
-            }.navigationBarTitle("Add Categories", displayMode: .inline).navigationBarItems(
+            }
+            //.listStyle(SidebarListStyle())
+            .navigationBarTitle("Add Categories", displayMode: .inline).navigationBarItems(
                 leading: Button(action: {
                             self.coordinator?.dismissPresented()
                         }){

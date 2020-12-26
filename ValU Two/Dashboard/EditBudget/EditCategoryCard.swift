@@ -37,7 +37,7 @@ struct EditCategoryCard<ViewModel>: View where ViewModel: CategoryListViewModel 
                 Text(self.category.name!).font(.system(size: 20)).bold()
                    Spacer()
                    //CategoryButtonView(text: "Add Section")
-            }.padding(.bottom)
+            }
 
                  
                    
@@ -73,7 +73,7 @@ struct EditCategoryCard<ViewModel>: View where ViewModel: CategoryListViewModel 
                     
                         
                 }
-            }.padding(.horizontal, 5)
+            }
                    
                                        
 

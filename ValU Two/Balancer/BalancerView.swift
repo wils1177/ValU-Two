@@ -23,8 +23,6 @@ struct BalancerView: View {
         UITableView.appearance().separatorStyle = .none
         
         
-        UITableViewCell.appearance().backgroundColor = .clear
-        UITableView.appearance().backgroundColor = .systemGroupedBackground
         
 
     }
@@ -43,12 +41,14 @@ struct BalancerView: View {
             .navigationBarTitle("Set Budgets", displayMode: .large).navigationBarItems(trailing:
                 
                 HStack{
+                    
+                    EditButton()
 
                     Button(action: {
                         self.viewModel.coordinator?.finishedSettingLimits()
                     }){
                         
-                        Text("Done")
+                        Text("Finish")
                         
                     }
                 }

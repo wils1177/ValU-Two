@@ -13,11 +13,11 @@ import CoreData
 @objc(BudgetCategory)
 public class BudgetCategory: NSManagedObject {
     
-    convenience init(category : SpendingCategory, context: NSManagedObjectContext!){
+    convenience init(category : SpendingCategory, order: Int, context: NSManagedObjectContext!){
         
         let entity = NSEntityDescription.entity(forEntityName: "BudgetCategory", in: context)
         self.init(entity: entity!, insertInto: context)
-        
+        self.order = Int64(order)
         self.limit = 0.0
         self.spendingCategory = category
         

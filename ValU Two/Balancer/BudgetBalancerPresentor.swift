@@ -102,7 +102,7 @@ class BudgetBalancerPresentor : ObservableObject {
         var sectionSpentTotal = 0.0
         for section in self.budget.getBudgetSections(){
             let limitForSection = section.getLimit()
-            let data = BudgetStatusBarViewData(percentage: limitForSection / Double(total), color: colorMap[Int(section.colorCode)], name: section.name!)
+            let data = BudgetStatusBarViewData(percentage: limitForSection / Double(total), color: colorMap[Int(section.colorCode)], name: section.name!, icon: section.icon!)
             
             if limitForSection > 0.0 && limitForSection > 0.0{
                 viewDataToReturn.append(data)
@@ -118,12 +118,12 @@ class BudgetBalancerPresentor : ObservableObject {
     }
     
     
-    func deleteBudgetSection(id: UUID){
+    func deleteBudgetSection(section: BudgetSection){
+        
         
         
         do{
-            let sectionToRemove = try DataManager().getEntity(predicate: PredicateBuilder().generateByIdPredicate(id: id), entityName: "BudgetSection") as! [BudgetSection]
-            self.budget.removeFromBudgetSection(sectionToRemove[0])
+            self.budget.removeFromBudgetSection(section)
               
             //try DataManager().deleteEntity(predicate: PredicateBuilder().generateByIdPredicate(id: id), entityName: "BudgetSection")
             print("section deleted")

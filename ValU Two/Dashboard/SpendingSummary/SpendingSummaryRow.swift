@@ -48,22 +48,22 @@ struct SpendingSummaryRow: View {
                         
                         HStack{
                             Text(self.viewData.icon).font(.headline).padding(.leading, 5)
-                            Text(self.viewData.name).foregroundColor(self.viewData.color).bold()
+                            Text(self.viewData.name).foregroundColor(AppTheme().themeColorPrimary).bold()
                             Spacer()
-                            Text(self.viewData.amount).foregroundColor(Color(.black)).padding(.trailing)
+                            Text(self.viewData.amount).foregroundColor(Color(.black)).fontWeight(.semibold).padding(.trailing)
                             //Text("(" + self.viewData.displayPercent + ")").foregroundColor(Color(.black))
                         }
                         
                     }
                     
                     ZStack(alignment: .leading){
-                        RoundedRectangle(cornerRadius: 10).frame(width: (g.size.width), height: 40).foregroundColor(self.viewData.color)
+                        RoundedRectangle(cornerRadius: 10).frame(width: (g.size.width), height: 40).foregroundColor(AppTheme().themeColorPrimary)
                         
                         HStack{
                             Text(self.viewData.icon).font(.headline).padding(.leading, 5)
                             Text(self.viewData.name).foregroundColor(Color(.white)).bold()
                             Spacer()
-                            Text(self.viewData.amount).foregroundColor(Color(.white)).padding(.trailing)
+                            Text(self.viewData.amount).foregroundColor(Color(.white)).fontWeight(.semibold).padding(.trailing)
                             //Text("(" + self.viewData.displayPercent + ")").foregroundColor(Color(.black))
                         }
                         

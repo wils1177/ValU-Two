@@ -10,33 +10,61 @@ import SwiftUI
 
 struct CategoryDetailView: View {
     
-    var budgetSection : BudgetSection
+    var sectionModel : BudgetDetailViewModel
     var coordinator : BudgetsTabCoordinator
     
-    var body: some View {
-        List{
-            VStack(spacing: 0.0){
-                ForEach(self.budgetSection.budgetCategories?.allObjects as! [BudgetCategory], id: \.self) { category in
-                    VStack(spacing: 0.0){
-                        if category.limit > 0.0{
-                            
-                            Button(action: {
-                                // your action here
-                                self.coordinator.showCategory(category: category.spendingCategory!)
-                            }) {
-                                ChildCategoryCard(budgetCategory: category).padding(.bottom, 15)
-                            }.buttonStyle((PlainButtonStyle()))
-                            
-                            
+    var transactionsZeroState : some View{
+        VStack{
+            Text("No transaction for this category yet").font(.subheadline)
+        }.padding().background(Color(.white)).cornerRadius(15)
+    }
+    
+    
+    var transactionsSection : some View {
+        VStack{
+            ForEach(self.sectionModel.categories, id: \.self) { category in
+                Section(header: ChildCategoryCard(budgetCategory: category.category)){
+                    
+                    
+                    if category.transactions.count > 0{
+                        
+                        ForEach(category.transactions, id: \.self) { transaction in
+                            TransactionRow(coordinator: self.coordinator, transaction: transaction).padding(.bottom, 10)
+                        }.listRowInsets(.init(top: 5, leading: 0, bottom: 5, trailing: 0))
+                    }
+                    else{
+                        
+                        HStack{
+                            Spacer()
+                            self.transactionsZeroState.padding(.bottom)
+                            Spacer()
                         }
+                        
+                        
                     }
                     
                     
-                }
-            }
-            
+                }.padding(.top)
         }
+        
     }
+    }
+
+
+    var body: some View {
+        List{
+            
+            ParentCategoryCard(budgetSection: self.sectionModel.section).padding(.top)
+            
+            
+            transactionsSection
+
+  
+            }.listRowInsets(.init(top: 5, leading: 0, bottom: 5, trailing: 0)).listStyle(SidebarListStyle())
+            
+
+        }
 }
+
 
 

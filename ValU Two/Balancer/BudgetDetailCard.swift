@@ -10,23 +10,26 @@ import SwiftUI
 
 struct BudgetDetailCard: View {
     
-    var budgetCategory : BudgetCategory
+    @ObservedObject var budgetCategory : BudgetCategory
     var spendingCategory : SpendingCategory
     var parentService : BalanceParentService
+    var coordinator: BudgetEditableCoordinator
     @ObservedObject var service : CategoryEditService
     
-    init(budgetCategory: BudgetCategory, parentService: BalanceParentService){
+    var historicalTransactions : HistoricalTransactionsViewModel
+    
+    @State var test = "test"
+     
+    
+    init(budgetCategory: BudgetCategory, parentService: BalanceParentService, coordinator: BudgetEditableCoordinator){
+        self.coordinator = coordinator
         self.budgetCategory = budgetCategory
         self.spendingCategory = budgetCategory.spendingCategory!
         self.parentService = parentService
         self.service = CategoryEditService(budgetCategory: budgetCategory, parentService: parentService)
+        self.historicalTransactions = HistoricalTransactionsViewModel(category: budgetCategory)
     }
-    
-    var spentChip : some View{
-        
-        Text("$" + String(Int(self.spendingCategory.initialThirtyDaysSpent)) + " previsouly spent").foregroundColor(Color(.white)).padding(5).padding(.horizontal, 5).background(Color(AppTheme().themeColorPrimaryUIKit.lighter(by: 30)!)).cornerRadius(15).padding(.leading)
-        
-    }
+
     
     var deleteButton: some View{
         
@@ -50,7 +53,7 @@ struct BudgetDetailCard: View {
                     
      
             
-            if self.spendingCategory.initialThirtyDaysSpent > 0.0 {
+            if self.historicalTransactions.getPreviouslySpent() > 0.0 {
                 
                 HStack{
                     CustomInputTextField(text: self.$service.editText, placeHolderText: "Amount", textSize: .systemFont(ofSize: 20), alignment: .left, delegate: self.service, key: self.spendingCategory.name!).id(self.spendingCategory.id!).padding(.horizontal, 10).padding(.vertical, 5).background(Color(.systemGroupedBackground)).cornerRadius(10).frame(width: 95).padding(.horizontal)
@@ -59,23 +62,29 @@ struct BudgetDetailCard: View {
                 
                 Divider()
                 
-                HStack{
+                Button(action: {
+                    self.coordinator.showHistoricalTransactions(budgetCategory: self.budgetCategory, model: self.historicalTransactions)
+                }) {
                     
-                    spentChip
+                    HStack{
+                        
+                        Text("$" + String(Int(self.historicalTransactions.getPreviouslySpent())) + " previsouly spent").foregroundColor(Color(.white)).padding(5).padding(.horizontal, 5).background(Color(AppTheme().themeColorPrimaryUIKit.lighter(by: 30)!)).cornerRadius(15).padding(.leading)
+                        
+                        Spacer()
+                        Image(systemName: "chevron.right").foregroundColor(Color(.lightGray)).font(Font.system(.headline).bold()).padding(.trailing)
+                    }.padding(.bottom, 10)
                     
-                    Spacer()
-                    Image(systemName: "chevron.right").foregroundColor(Color(.lightGray)).font(Font.system(.headline).bold()).padding(.trailing)
-                }.padding(.bottom, 10)
+                }.buttonStyle(BorderlessButtonStyle())
+                
+                
             }
             else{
                 
                 HStack{
-                    Button(action: {
-                        
-                    }) {
                         CustomInputTextField(text: self.$service.editText, placeHolderText: "Amount", textSize: .systemFont(ofSize: 20), alignment: .left, delegate: self.service, key: self.spendingCategory.name!).id(self.spendingCategory.id!).padding(.horizontal, 10).padding(.vertical, 5).background(Color(.systemGroupedBackground)).cornerRadius(10).frame(width: 95).padding(.horizontal)
-                        Spacer()
-                    }.buttonStyle(BorderlessButtonStyle())
+                        
+                    Spacer()
+                    
                        
                         
                 }.padding(.leading).padding(.vertical, 5).padding(.bottom)
