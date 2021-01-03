@@ -28,12 +28,22 @@ struct SpendingCardView: View {
     }
     
     
+    func getDisplayArray(categories: [BalanceParentService]) -> [[BalanceParentService]]{
+        return categories.chunked(into: 2)
+    }
     
+    private var columns: [GridItem] = [
+            GridItem(.flexible()),
+            GridItem(.flexible())
+        ]
     
     var body: some View {
-            
-            
-        VStack{
+        
+        LazyVGrid(      columns: columns,
+                        alignment: .center,
+                        spacing: 16,
+                        pinnedViews: [.sectionHeaders, .sectionFooters]
+        ){
             ForEach(self.viewModel.services, id: \.self){ service in
                                       
                                   
@@ -45,25 +55,17 @@ struct SpendingCardView: View {
                                     // your action here
                                     self.viewModel.coordinator?.showIndvidualBudget(budgetSection: service.parent)
                                 }) {
-                                        ParentCategoryCard(budgetSection: service.parent).padding(.bottom, 10)
-                                    //Text("hey").padding(.bottom, 200)
+                                        ParentCategoryCard(budgetSection: service.parent)
                                     }.buttonStyle(PlainButtonStyle())
             
                                 }
                                           
 
                 }
-                                  
-            }
-            
-            Button(action: {
-                // your action here
-                self.viewModel.coordinator?.showOtherTransactions()
-            }) {
-                OtherSpendingSection(viewModel: self.viewModel).padding(.bottom)
-            }.buttonStyle(PlainButtonStyle())
         }
-            
+        }
+        
+        
         
             
         

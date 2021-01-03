@@ -75,7 +75,7 @@ class SpendingSummaryViewModel : ObservableObject{
                 
                 if amount > 0.0{
                     
-                    let entry = SpendingSummaryViewData(icon: icon, name: name, percentage: 0.5, amount: amountString, rawAmount: amount, displayPercent: "%0.0", color: colorMap[Int(spendingCategory.colorCode)])
+                    let entry = SpendingSummaryViewData(icon: icon, name: name, percentage: 0.5, amount: amountString, rawAmount: amount, displayPercent: "%0.0", color: colorMap[Int(spendingCategory.colorCode)] as! Color)
                     self.viewData.append(entry)
                 }
                 

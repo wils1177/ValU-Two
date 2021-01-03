@@ -28,7 +28,7 @@ struct BudgetStatusBarView: View {
         
     ]
     
-    var maxHeight = CGFloat(20)
+    var maxHeight = CGFloat(12)
     
     
     func getLegendArray() -> [[BudgetStatusBarViewData]]{
@@ -42,7 +42,7 @@ struct BudgetStatusBarView: View {
                 HStack{
                     ForEach(row, id: \.self) {entry in
                         HStack{
-                            Text(entry.name).font(.system(size: 15)).lineLimit(1).foregroundColor(Color(.white))
+                            Text(entry.name).font(.system(size: 13)).lineLimit(1).foregroundColor(Color(.white))
                         }.padding(.horizontal, 7).padding(.vertical, 3).background(entry.color).cornerRadius(5)
 
                     }
@@ -58,20 +58,25 @@ struct BudgetStatusBarView: View {
     var legendV2 : some View {
         
         ScrollView(.horizontal){
-            HStack(spacing: 0){
+            HStack(alignment: .bottom, spacing: 0){
                 ForEach(self.getLegendArray(), id: \.self) {row in
                         ForEach(row, id: \.self) {entry in
                             
-                            VStack(alignment: .leading){
-                                BudgetSectionIconLarge(color: entry.color, icon: entry.icon, size: CGFloat(44))
-                                Text(entry.name).font(.caption).foregroundColor(Color(.lightGray)).bold().lineLimit(1)
-                            }.frame(width: 85)
+                            VStack(alignment: .leading, spacing: 5){
+                                HStack{
+                                    Image(systemName: entry.icon).foregroundColor(entry.color).font(.system(size: 23)).padding(.trailing, 20)
+                                }
+                                
+                                //BudgetSectionIconLarge(color: entry.color, icon: entry.icon, size: CGFloat(44))
+                                Text(entry.name).font(.system(size: 12)).foregroundColor(Color(.black)).bold().lineLimit(1).padding(.trailing, 11).padding(.top, 1)
+                                Text( String(Int(entry.percentage * 100)) + "%").font(.system(size: 18)).bold().foregroundColor(entry.color).padding(.trailing, 15)
+                            }.padding(.trailing,5).padding(.bottom, 15)
 
                         }
                     
                     
                 }
-            }.padding(.top, 10)
+            }
         }
     }
     
@@ -85,7 +90,7 @@ struct BudgetStatusBarView: View {
     
     var foreGroundBars : some View{
         GeometryReader{ g in
-            HStack(spacing: 2) {
+            HStack(spacing: 0) {
                 ForEach(self.viewData, id: \.self) {data in
                     Rectangle().frame(width: g.size.width * CGFloat(data.percentage)).foregroundColor(data.color)
               }
@@ -96,12 +101,12 @@ struct BudgetStatusBarView: View {
     }
     
     var body: some View {
-        VStack{
+        VStack(spacing: 3){
             ZStack{
                 backgroundRectangle
                 foreGroundBars
-            }.padding(.bottom, 5)
-            legend
+            }
+            legendV2.padding(.top, 15)
         }.padding(.horizontal)
         
         

@@ -16,7 +16,7 @@ struct EditCategoryRowView<ViewModel>: View where ViewModel: CategoryListViewMod
     func getButtonColor() -> Color {
         if self.viewModel.isSelected(name: category.name!){
             
-            return .green
+            return AppTheme().themeColorPrimary
         }
         else{
             return .clear
@@ -26,7 +26,7 @@ struct EditCategoryRowView<ViewModel>: View where ViewModel: CategoryListViewMod
     func getTextColor() -> Color {
         if self.viewModel.isSelected(name: category.name!){
             
-            return .green
+            return AppTheme().themeColorPrimary
         }
         else{
             return .black
@@ -70,7 +70,7 @@ struct EditCategoryRowView<ViewModel>: View where ViewModel: CategoryListViewMod
                     Spacer()
                     Image(systemName: "checkmark").foregroundColor(self.getButtonColor()).imageScale(.small).padding(.trailing, 5)
                     
-                }.padding(5).padding(.vertical, 9).background(Color(.white)).cornerRadius(10).overlay(
+                }.padding(5).padding(.vertical, 9).background(Color(.systemGroupedBackground)).cornerRadius(10).overlay(
                     RoundedRectangle(cornerRadius: 10)
                         .stroke(self.getButtonColor(), lineWidth: 3)
                     ).padding(.horizontal, 2)

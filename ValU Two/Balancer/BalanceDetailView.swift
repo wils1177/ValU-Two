@@ -59,12 +59,24 @@ struct BalanceDetailView: View {
         
     }
     
+    func delete(at offsets: IndexSet) {
+        
+        print("delete triggered")
+        
+        let source = offsets.first!
+        let categories = self.budgetSection.getBudgetCategories()
+        let toDelete = categories[source]
+        self.service.deleteCategory(id: toDelete.id!)
+
+    }
+    
     var newCategoryButton : some View{
         Button(action: {
             
             self.coordinator.showNewCategoryView(budgetSection: self.budgetSection)
         }) {
             Image(systemName: "plus.circle.fill").font(.system(size: 28, weight: .regular)).foregroundColor(AppTheme().themeColorPrimary)
+            Text("Add Category").foregroundColor(AppTheme().themeColorPrimary).bold()
         }.buttonStyle(PlainButtonStyle())
     }
     
@@ -102,13 +114,14 @@ struct BalanceDetailView: View {
                }//.background(Color(.white)).cornerRadius(15)
     }
     
+    
+    
     var sectionHeader : some View{
         VStack{
             HStack{
-                BudgetSectionIconLarge(color: colorMap[Int(self.budgetSection.colorCode)], icon: self.budgetSection.icon!, size: 40)
+                BudgetSectionIconLarge(color: colorMap[Int(self.budgetSection.colorCode)] as! Color, icon: self.budgetSection.icon!, size: 40)
                 Text("Budget Detail").font(.system(size: 22)).bold().padding(.leading, 5)
                 Spacer()
-                newCategoryButton.padding(.trailing)
             }.padding(.top)
             
 
@@ -119,9 +132,14 @@ struct BalanceDetailView: View {
     var emptyState : some View{
         
         VStack{
-            Text("Add categories to start budgeting!").foregroundColor(Color(.gray)).padding(.vertical)
+            HStack{
+                Spacer()
+                Text("No Categories Yet").foregroundColor(Color(.gray)).bold().padding(.vertical, 20)
+                Spacer()
+            }
             
             
+            /*
             Button(action: {
                 
                 self.coordinator.showNewCategoryView(budgetSection: self.budgetSection)
@@ -129,11 +147,10 @@ struct BalanceDetailView: View {
                 HStack{
                     Spacer()
                     newCategoryButton
-                    Text("Add Category").foregroundColor(AppTheme().themeColorPrimary).font(.headline).bold()
                     Spacer()
-                }.padding().background(Color(.white)).cornerRadius(15)
+                }.padding(10).background(Color(.white)).cornerRadius(15)
             }.buttonStyle(PlainButtonStyle())
-            
+            */
             
             
             
@@ -149,24 +166,26 @@ struct BalanceDetailView: View {
         
         List{
             
-            topCard.padding(.top)
+            topCard.padding(.vertical)
                            
                        
             
             if ((self.budgetSection.getBudgetCategories()).count > 0){
-                self.sectionHeader
+                //self.sectionHeader
                     ForEach((self.budgetSection.getBudgetCategories()), id: \.self) { child in
                             VStack{
-                                BudgetDetailCard(budgetCategory: child, parentService: self.service, coordinator: self.coordinator).padding(.vertical, 5)
-                            }
+                                BudgetDetailCard(budgetCategory: child, parentService: self.service, coordinator: self.coordinator).padding(.vertical, 10).padding(.horizontal, 5)
+                            }.listRowInsets(EdgeInsets())
                         
                         
-                    }.onMove(perform: move)
+                    }.onDelete(perform: delete).onMove(perform: move)
                 
             }
             else{
                 emptyState
             }
+            
+            BalanceDetailHelpCard(coordinator: self.coordinator)
             
             
             
@@ -181,15 +200,55 @@ struct BalanceDetailView: View {
                     }){
                         
                     HStack{
-                        
-                        EditButton()
-                        
-                        Text("Confirm")
+                                                
+                        ColoredActionButton(text: "Done")
                     }
             })
+        .toolbar {
+            
+            ToolbarItem(placement: .bottomBar) {
+                newCategoryButton
+                
+            }
+            
+            ToolbarItem(placement: .bottomBar) {
+                HStack{
+                    Spacer()
+                    EditButton().foregroundColor(AppTheme().themeColorPrimary)
+                }
+                
+            }
+            
+
+        }
     
     }
 }
 
 
 
+struct BalanceDetailHelpCard: View {
+    
+    var coordinator: BudgetEditableCoordinator
+    
+    var body: some View{
+        VStack(alignment: .center){
+            Text("Need help with what to budget?").font(.headline).bold()
+            Text("Try looking at some of your previous transactions.").multilineTextAlignment(.center).font(.subheadline).padding(.vertical, 2)
+            
+            Button(action: {
+                // What to perform
+                self.coordinator.showFullTransactionsList()
+            }) {
+                HStack{
+                    Spacer()
+                    Text("View Transactrions").foregroundColor(Color(.white)).bold()
+                    Spacer()
+                }.padding(10).background(AppTheme().themeColorPrimary).cornerRadius(15)
+            }.buttonStyle(PlainButtonStyle())
+            
+            
+            
+        }.padding().background(Color(.white)).cornerRadius(15).shadow(radius: 5)
+    }
+}

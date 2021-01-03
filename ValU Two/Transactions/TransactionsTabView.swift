@@ -11,10 +11,11 @@ import SwiftUI
 struct TransactionsTabView: View {
     
     @ObservedObject var viewModel : TransactionsTabViewModel
+    @ObservedObject var filterModel : TransactionFilterModel
     
-    init(viewModel: TransactionsTabViewModel){
+    init(viewModel: TransactionsTabViewModel, filterModel : TransactionFilterModel){
         self.viewModel = viewModel
-        
+        self.filterModel = filterModel
         // To remove only extra separators below the list:
         UITableView.appearance().tableFooterView = UIView()
 
@@ -27,28 +28,18 @@ struct TransactionsTabView: View {
             
         List{
             
-            ForEach(self.viewModel.rows!, id: \.self) { row in
-                
-                if row.spendingSummary != nil{
-                    SpendingSummaryView().animation(.easeInOut(duration: 0.6))
-                    //Text("test")
-                }
-                else if row.sectionTitle != nil{
-                    HStack{
-                        Text(row.sectionTitle!).font(.system(size: 22)).fontWeight(.bold)
-                        Spacer()
-                    }.padding(.horizontal)
+                TransactionsFilterView(filterModel: self.viewModel.filterModel, coordinator: self.viewModel.coordinator!).padding(.bottom, 10)
+            
+            
+                ForEach(self.viewModel.getTransactionsList(), id: \.self) { transaction in
+                    
+                    TransactionRow(coordinator: self.viewModel.coordinator!, transaction : transaction) .listRowInsets(EdgeInsets()).padding(.bottom, 10)
                     
                 }
-                else{
-                    TransactionRow(coordinator: self.viewModel.coordinator!, transaction : row.transactionRow!)
-                    //Text("test")
-                    
-                }
-            }.listRowInsets(.init(top: 5, leading: 0, bottom: 5, trailing: 0))
-                
-                
-                }.listStyle(SidebarListStyle())
+            
+            
+
+        }.listStyle(SidebarListStyle())
             .navigationBarTitle(Text("Transactions"))
             
         

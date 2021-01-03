@@ -30,6 +30,8 @@ struct EmojiSelectionGridView: View {
         
     }
     
+
+    
     var body: some View {
         VStack{
             ForEach(0..<self.icons.count, id: \.self){ row in
@@ -44,16 +46,11 @@ struct EmojiSelectionGridView: View {
                                 }){
                                     Spacer()
                                     if self.isSelectedI(row: row, col: col){
-                                        ZStack{
-                                            Circle().frame(width: 45, height: 45).foregroundColor(Color(.gray))
-                                            Text(self.icons[row][col]).font(.headline).foregroundColor(Color(.black))
-                                        }.padding(.vertical, 5)
+                                        EmojiIcon(emoji: self.icons[row][col], color: Color(.gray))
+                                        
                                         
                                     }else{
-                                        ZStack{
-                                            Circle().frame(width: 45, height: 45).foregroundColor(Color(.systemFill))
-                                            Text(self.icons[row][col]).font(.headline).foregroundColor(Color(.black))
-                                        }.padding(.vertical, 5)
+                                        EmojiIcon(emoji: self.icons[row][col], color: Color(.systemFill))
                                     }
                                     Spacer()
                             }
@@ -64,6 +61,22 @@ struct EmojiSelectionGridView: View {
             }
         }
     }
+}
+
+struct EmojiIcon: View {
+    
+    var emoji : String
+    var color : Color
+    
+    var body : some View{
+        ZStack{
+            Circle().frame(width: 50, height: 50).foregroundColor(self.color)
+            Text(self.emoji).font(.title2).foregroundColor(Color(.black))
+        }.padding(.vertical, 5)
+    }
+    
+    
+    
 }
 
 

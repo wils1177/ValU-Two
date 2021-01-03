@@ -38,13 +38,8 @@ class BudgetIncomeService : ObservableObject{
     
     func getInitialIncome() -> Double{
         let incomeAmount = self.budget.amount
+        return Double(incomeAmount)
         
-        if incomeAmount != 0.0{
-            return Double(incomeAmount)
-        }
-        else{
-            return self.incomePredictionService.getTotalIncome()
-        }
   
     }
     

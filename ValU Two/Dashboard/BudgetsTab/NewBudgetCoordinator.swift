@@ -51,7 +51,7 @@ class NewBudgetCoordinator : Coordinator, BudgetEditableCoordinator {
         model.coordinator = self
         let view = TimeFrameView(viewModel: model)
         let vc = UIHostingController(rootView: view)
-        vc.title = "Time Frame"
+        //vc.title = "Time Frame"
         self.navigationController.pushViewController(vc, animated: true)
     }
     
@@ -82,12 +82,12 @@ class NewBudgetCoordinator : Coordinator, BudgetEditableCoordinator {
         print("Contine to Set Savings Screen")
         let presentor = SetSavingsPresentor(budget: self.budget!)
         presentor.coordinator = self
-        self.presentorStack.append(presentor)
-        let setSavingsVC = presentor.configure()
-        setSavingsVC.title = "Savings Goal"
-        self.navigationController.isNavigationBarHidden = true
-        self.navigationController.pushViewController(setSavingsVC, animated: true)
-        setSavingsVC.navigationController?.setNavigationBarHidden(true, animated: false)
+        
+        let view = SavingsSelectionView(viewModel: presentor)
+        let vc = UIHostingController(rootView: view)
+        vc.title = ""
+        self.navigationController.pushViewController(vc, animated: true)
+        
     }
     
     func savingsSubmitted(budget: Budget, sender: SetSavingsPresentor){

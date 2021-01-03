@@ -17,9 +17,18 @@ struct HistoricalTransactionsView: View {
         
         List{
             ForEach(viewModel.transactions, id: \.self) { transaction in
-                    TransactionRow(coordinator: self.coordinator!, transaction: transaction)
+                TransactionRow(coordinator: self.coordinator!, transaction: transaction)
             }
-        }.navigationBarTitle(self.viewModel.budgetCategory.spendingCategory!.name!)
+        }.listStyle(SidebarListStyle())
+        .navigationBarTitle(self.viewModel.budgetCategory.spendingCategory!.name!)
+        .toolbar {
+                    ToolbarItem(placement: .bottomBar) {
+                        HStack{
+                            Text("*").font(.caption).foregroundColor(AppTheme().themeColorPrimary)
+                            Spacer()
+                        }
+                }
+        }
 
     }
 }

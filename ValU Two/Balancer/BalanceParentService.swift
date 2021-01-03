@@ -56,6 +56,7 @@ class BalanceParentService : ObservableObject, Hashable{
                 
             }
         }
+        self.objectWillChange.send()
         self.parent.budget!.objectWillChange.send()
         
     }

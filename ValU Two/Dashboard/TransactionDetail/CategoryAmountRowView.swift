@@ -24,15 +24,15 @@ struct CategoryAmountRowView: View {
     }
     
     func getCategoryName() -> String{
-        return (viewData.spendingCategory!.name ?? "name gone")
+        return (viewData.spendingCategory?.name ?? "name gone")
     }
     
     var body: some View {
         HStack{
-            Text(viewData.spendingCategory!.icon ?? "icon gone").font(.title)
+            Text(viewData.spendingCategory?.icon ?? "icon gone").font(.title)
             Text(getCategoryName())
             Spacer()
-            CustomInputTextField(text: self.$amountText, placeHolderText: "Amount", textSize: .systemFont(ofSize: 15), alignment: .right, delegate: self.viewModel, key: self.viewData.id!.uuidString, style: UITextField.BorderStyle.roundedRect)
+            CustomInputTextField(text: self.$amountText, placeHolderText: "Amount", textSize: .systemFont(ofSize: 15), alignment: .right, delegate: self.viewModel, key: self.viewData.id?.uuidString ?? "", style: UITextField.BorderStyle.roundedRect)
             .frame(width: 80)
         }
     }

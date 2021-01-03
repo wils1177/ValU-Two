@@ -19,6 +19,19 @@ class HistoricalTransactionsViewModel{
         self.transactions = getListOfTransactions()
     }
     
+    func getDisplayText() -> String {
+        let timeFrame = self.budgetCategory.budgetSection?.budget?.timeFrame
+        if timeFrame == 0{
+            return CommonUtils.makeMoneyString(number: Int(getPreviouslySpent())) + " spent in the last 30 days"
+        }
+        else if timeFrame == 1{
+            return CommonUtils.makeMoneyString(number: Int(getPreviouslySpent())) + " spent in the last 15 days"
+        }
+        else{
+            return CommonUtils.makeMoneyString(number: Int(getPreviouslySpent())) + " spent in the last week"
+        }
+    }
+    
     func getListOfTransactions() -> [Transaction]{
         
         let timeFrame = self.budgetCategory.budgetSection!.budget!.timeFrame

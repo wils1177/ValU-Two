@@ -64,10 +64,7 @@ class TransactionService{
         else{
             return " "
         }
-        
-        
-        
-        
+
         
     }
     
@@ -87,5 +84,67 @@ class TransactionService{
             return String(format: "+$%.02f", (amount * -1))
         }
     }
+    
+    func getBudgetName() -> String? {
+        let categories = self.transaction.categoryMatches!.allObjects as! [CategoryMatch]
+        if categories.count > 1 {
+            return "Multiple Budgets"
+        }
+        else if categories.count == 1{
+            
+            if categories[0].spendingCategory?.budgetCategory != nil{
+                return categories[0].spendingCategory!.budgetCategory!.budgetSection!.name!
+            }
+            else{
+                return "No Budget"
+            }
+            
+        }
+        else{
+            return "No Budget"
+        }
+    }
+    
+    func getBudgetIconName() -> String?{
+        let categories = self.transaction.categoryMatches!.allObjects as! [CategoryMatch]
+        if categories.count > 1 {
+            return "infinity.circle"
+        }
+        else if categories.count == 1{
+            
+            if categories[0].spendingCategory?.budgetCategory != nil{
+                return categories[0].spendingCategory!.budgetCategory!.budgetSection!.icon!
+            }
+            else{
+                return "pencil"
+            }
+            
+        }
+        else{
+            return "pencil"
+        }
+    }
+    
+    
+    func getBudgetColorInt() -> Int? {
+        let categories = self.transaction.categoryMatches!.allObjects as! [CategoryMatch]
+        if categories.count > 1 {
+            return 13
+        }
+        else if categories.count == 1{
+            
+            if categories[0].spendingCategory?.budgetCategory != nil{
+                return Int(categories[0].spendingCategory!.budgetCategory!.budgetSection!.colorCode)
+            }
+            else{
+                return 12
+            }
+            
+        }
+        else{
+            return 12
+        }
+    }
+    
     
 }

@@ -10,23 +10,22 @@ import SwiftUI
 
 struct TransactionIconView: View {
     
-    var icons : [String]
-    
+    var icons : [String]    
     
     var body: some View {
-        VStack{
+        VStack(alignment: .center){
             
             if icons.count == 1{
                 Text(icons[0]).font(.largeTitle).offset(x: 0, y: 0)
             }
             else if icons.count == 2{
-                VStack{
+                VStack(alignment: .center){
                     Text(icons[0]).font(.headline)//.offset(x: -10, y: 0)
                     Text(icons[1]).font(.headline)//.offset(x: 10, y: 0)
                 }
             }
             else if icons.count > 2{
-                ZStack{
+                ZStack(alignment: .center){
                     Text(icons[0]).font(.headline).offset(x: -10, y: -10)
                     Text(icons[1]).font(.headline).offset(x: 10, y: -10)
                     Text(icons[2]).font(.headline).offset(x: 0, y: 10)

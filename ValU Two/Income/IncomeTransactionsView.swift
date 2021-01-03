@@ -10,18 +10,32 @@ import SwiftUI
 
 struct IncomeTransactionsView: View {
     
-    @ObservedObject var incomeService : BudgetIncomeService
+    var transactions : [Transaction]
+    var coordinator : BudgetEditableCoordinator?
     
-    init(incomeService : BudgetIncomeService){
-        self.incomeService = incomeService
+    
+    init(transactions : [Transaction]){
+        self.transactions = transactions
     }
     
     var body: some View {
-        VStack{
-            ForEach(self.incomeService.getIncomeTransactions(), id: \.self){ transaction in
-                TransactionRow(coordinator: nil, transaction: transaction).padding(.bottom)
-            }
+        NavigationView{
+            ScrollView{
+                ForEach(self.transactions, id: \.self){ transaction in
+                    TransactionRow(coordinator: nil, transaction: transaction).background(Color(.systemGroupedBackground)).cornerRadius(15).padding(.bottom, 5).padding(.horizontal)
+                }.padding(.top)
+            }.padding(.top)
+            .navigationTitle("Past Income").navigationBarItems( trailing:
+            
+                            Button(action: {
+                                self.coordinator?.dismiss()
+                                                      }) {
+                                ColoredActionButton(text: "Done")
+                                             }
+            
+            )
         }
+        
     }
 }
 

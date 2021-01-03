@@ -28,7 +28,7 @@ struct BudgetCardView: View {
         self.budget = budget
         self.viewModel = viewModel
         self.title = CommonUtils.getMonthFromDate(date: self.budget.startDate!)
-        self.spent = CommonUtils.makeMoneyString(number: Int(self.budget.getAmountSpent()))
+        self.spent = CommonUtils.makeMoneyString(number: Int(self.viewModel.budgetTransactionsService.getBudgetExpenses()))
         self.remaining = CommonUtils.makeMoneyString(number:  self.viewModel.getRemaining())
         self.percentage = 1.0 - (self.budget.spent / self.budget.amount)
         self.available = CommonUtils.makeMoneyString(number:(Int(self.budget.getAmountAvailable())))
@@ -63,99 +63,37 @@ struct BudgetCardView: View {
 
     
     var textColor = Color(.black)
-    
-    var remainingText : some View{
-        
-        VStack(alignment: .center){
-            Text("Remaining").foregroundColor(Color(.lightText)).bold()
-            if remaining.count > 6{
-                Text(self.remaining).font(.headline).foregroundColor(Color(.white)).bold()
-            }
-            else{
-                Text(self.remaining).font(.title).foregroundColor(Color(.white)).bold()
-            }
-            //Text("of $5,0000").foregroundColor(Color(.lightText)).font(.caption).bold()
-            
-            
-        }
-        
-    }
-    
 
- 
-    var smallerCircle : some View {
-        ZStack{
-            remainingText
-            Circle().fill(Color.clear).frame(width:140, height: 140)
-                .overlay(Circle()
-                        .rotation(Angle(degrees: -90))
-                    .trim(from: CGFloat(0.0), to: CGFloat(1.0))
-                    .stroke(style: StrokeStyle(lineWidth: CGFloat(11.0), lineCap: .round, lineJoin: .round))
-                    .fill(Color(.lightText))
-                        
-                )
-                .overlay(Circle()
-                    .rotation(Angle(degrees: -90))
-                    .trim(from: CGFloat(0.0), to: CGFloat(self.getPercentage()))
-                    .stroke(style: StrokeStyle(lineWidth: CGFloat(11.0), lineCap: .round, lineJoin: .round))
-                    .fill(Color(.white))
-                
-                    
-            )
-
-            
-        }
-    }
-    
-    
-    
-    
-
-    
-
-    var regular: some View{
-        
-        HStack{
-            Spacer()
-            VStack{
-                VStack(alignment: .leading){
-                    Text(self.title).font(.title).foregroundColor(Color(.white)).bold()
-                    Text(self.daysLeft!).bold().foregroundColor(Color(.lightText))
-                    Spacer()
-
-                    Text("Total").foregroundColor(Color(.white)).bold()
-                    Text(self.available).bold().foregroundColor(Color(.lightText))
-                }.padding(.vertical, 3)
-            }
-            Spacer()
-            smallerCircle
-            Spacer()
-        }.padding(.vertical, 30)
-    }
     
     var new: some View{
-        VStack(spacing: 8){
+        VStack(spacing: 2){
             HStack{
-                
-
-                HStack{
-                    Image(systemName: "calendar").foregroundColor(Color(.black))
-                    Text("17 Days Left in Budget").foregroundColor(Color(.black)).font(.system(size: 16)).bold()
-                }
+                //.padding(.vertical, 3).padding(.horizontal).background(AppTheme().themeColorPrimary).cornerRadius(20)
+ 
                 Spacer()
             }.padding(.horizontal, 20)//.background(AppTheme().themeColorSecondary)
+            
+            
+        
             HStack{
                     
                     HStack(alignment: .bottom, spacing: 0){
-                        Text(self.spent).font(.system(size: 44, design: .rounded)).foregroundColor(Color(.black)).bold()
-                        Text("  of " + self.available).font(.system(size: 24, design: .rounded)).foregroundColor(Color(.gray)).padding(.bottom, 4)
+                        Text(self.spent).font(.system(size: 35)).foregroundColor(Color(.black)).bold()
+                        
+                        Spacer()
+                        HStack(spacing: 4){
+                            Image(systemName: "checkmark.circle.fill").foregroundColor(AppTheme().themeColorPrimary).font(Font.system(size: 14, weight: .semibold))
+                            //Text("of " + self.available).font(.system(size: 15)).bold().foregroundColor(AppTheme().themeColorPrimary)
+                            Text(self.remaining + " Remaining").font(.system(size: 15)).foregroundColor(AppTheme().themeColorPrimary)
+                        }.padding(4).padding(.horizontal, 10)
+                        
                     }
 
                 
                 Spacer()
-            }.padding(.leading, 20)
+            }.padding(.leading)
             
-            BudgetStatusBarView(viewData: self.viewModel.getBudgetStatusBarViewData()).padding(.bottom)//.padding(.top, 5)
+            BudgetStatusBarView(viewData: self.viewModel.getBudgetStatusBarViewData()).padding(.top, 7)
         }
     }
     

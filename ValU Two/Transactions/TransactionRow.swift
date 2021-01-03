@@ -18,6 +18,9 @@ struct TransactionRow: View {
     var presentationDate: String?
     var icons : [String]
     var categoryName : String
+    var budgetName : String?
+    var budgetColorInt : Int?
+    var budgetIconName : String?
     
     @State var showingDetail = false
     
@@ -28,8 +31,12 @@ struct TransactionRow: View {
         
         self.categoryName = transactionService.getCategoryName(categories: transaction.categoryMatches?.allObjects as! [CategoryMatch])
         self.icons = transactionService.getIcons(categories: transaction.categoryMatches?.allObjects as! [CategoryMatch])
-        
+        self.budgetName = self.transactionService.getBudgetName()
+        self.budgetColorInt = self.transactionService.getBudgetColorInt()
+        self.budgetIconName = self.transactionService.getBudgetIconName()
         self.presentationDate = getPresentationDate(date: transaction.date!)
+        
+        
         
         
         
@@ -61,7 +68,15 @@ struct TransactionRow: View {
                     ZStack{
                         
                         //Text(viewData.icon).font(.largeTitle)
-                        TransactionIconView(icons: self.icons)
+                        //TransactionIconView(icons: self.icons)
+                        if budgetColorInt == 13{
+                            BudgetSectionIconLarge(color: colorMap[self.budgetColorInt ?? 0] as! Color, icon: self.budgetIconName ?? "book", size: 44, multiColor: true)
+                        }
+                        else{
+                            BudgetSectionIconLarge(color: colorMap[self.budgetColorInt ?? 0] as! Color, icon: self.budgetIconName ?? "book", size: 44)
+                        }
+                        
+                        
                     }
                     }.buttonStyle(BorderlessButtonStyle())
 
@@ -71,7 +86,16 @@ struct TransactionRow: View {
                             Spacer()
                         }
                         HStack{
-                            Text(self.categoryName).font(.subheadline).foregroundColor(Color(.lightGray))
+                            
+                            /*
+                            if self.budgetName != nil && self.budgetColorInt != nil && self.budgetIconName != nil {
+                                Image(systemName: self.budgetIconName!).font(Font.caption.weight(.bold)).foregroundColor(colorMap[self.budgetColorInt!])
+                                Text(budgetName!).lineLimit(1).font(.subheadline).foregroundColor(colorMap[self.budgetColorInt!])
+                                //Circle().foregroundColor(Color(.lightGray)).frame(width: 2, height: 2, alignment: .center)
+                            }
+                            */
+                            Text(self.categoryName).font(.subheadline).foregroundColor(Color(.lightGray)).lineLimit(1)
+
                             Spacer()
                         }
                         
@@ -89,7 +113,7 @@ struct TransactionRow: View {
                         
                     }.frame(maxWidth: 70)
 
-                }.padding().background(Color(.white)).cornerRadius(10).shadow(radius: 0).padding(1)
+                }.padding(10).background(Color(.white)).cornerRadius(15).shadow(radius: 0).padding(1)
             }.buttonStyle(PlainButtonStyle())
              
         }

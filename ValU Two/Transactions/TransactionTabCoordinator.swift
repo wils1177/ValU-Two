@@ -16,6 +16,12 @@ class TransactionsTabCoordinator : Coordinator, TransactionRowDelegate{
     var view : UIViewController?
     var navigationController = UINavigationController()
     var presentorStack = [Presentor]()
+    
+    var budget: Budget?
+    
+    init(budget: Budget? = nil){
+        self.budget = budget
+    }
 
 
     func start() {
@@ -31,7 +37,9 @@ class TransactionsTabCoordinator : Coordinator, TransactionRowDelegate{
         
     }
     
-
+    
+    
+    
     
 
     
@@ -42,7 +50,7 @@ extension TransactionRowDelegate{
     
     func showEditCategory(transaction: Transaction) {
         
-        let presentor = EditCategoryViewModel(transaction: transaction)
+        let presentor = EditCategoryViewModel(transaction: transaction, budget: self.budget)
         self.presentorStack.append(presentor)
         presentor.coordinator = self
         let vc = presentor.configure()
@@ -50,9 +58,18 @@ extension TransactionRowDelegate{
         
     }
     
+    func showFilterEditView(filterModel : TransactionFilterModel){
+        
+        let view = TransactionFilterEditView(filterModel: filterModel)
+        let vc = UIHostingController(rootView: view)
+        vc.title = "Edit Filters"
+        self.navigationController.present(vc, animated: true)
+        
+    }
+    
     func showTransactionDetail(transaction: Transaction){
         
-        let presentor = TransactionDetailViewModel(transaction: transaction)
+        let presentor = TransactionDetailViewModel(transaction: transaction, service: TransactionService(transaction: transaction))
         presentor.coordinator = self
         let vc = presentor.configure()
         
@@ -66,11 +83,21 @@ extension TransactionRowDelegate{
     
     
     func showSplitTransaction(transaction: Transaction){
+        let presentor = SplitTransactionCategoryViewModel(transaction: transaction, budget: self.budget ?? nil)
+        self.presentorStack.append(presentor)
+        let view = SplitTransactionCategoriesView(viewModel: presentor)
+        presentor.coordinator = self
+        let vc = UIHostingController(rootView: view)
+        
+        self.navigationController.present(vc, animated: true)
+    }
+    
+    
+    func showShareTransaction(transaction: Transaction){
         let view = SplitTransactionView()
         let vc = UIHostingController(rootView: view)
         self.navigationController.present(vc, animated: true)
     }
-    
 
     
     func dismissEditCategory() {

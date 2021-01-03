@@ -46,89 +46,122 @@ struct EnterIncomeView: View {
     
     var body: some View {
         
-        List{
+        VStack{
             VStack(alignment: .leading){
+                
+                StepTitleText(header: "Step 2 of 4", title: self.getTimeFrameText() + " Income", description: "Enter the income to use for your budget.")
+          
                     
-                HStack{
-                    Spacer()
-                    Text("Enter Your " + self.getTimeFrameText() + " Income").font(.system(size: 32)).bold().lineLimit(2).fixedSize(horizontal: false, vertical: true).multilineTextAlignment(.center).padding(.bottom,25)
-                    Spacer()
-                }
-                
-                
-               /*
-                HStack{
-                    Spacer()
-                    Text("This is the available income you will use for your budget.").multilineTextAlignment(.center).fixedSize(horizontal: false, vertical: true)
-                    Spacer()
-                }.padding(.bottom, 25)
-                */
-                
-                HStack{
-                    Spacer()
-                    Text("We've estimted you income based on your previous transactions, as a starting point.").multilineTextAlignment(.center).fixedSize(horizontal: false, vertical: true)
-                    Spacer()
-                }.padding(.bottom, 25)
+                VStack (alignment: .leading){
+                    ZStack{
+                        CustomInputTextField(text: self.$incomeService.currentIncomeEntry, placeHolderText: "Your Income", textSize: .systemFont(ofSize: 18), alignment: .left, delegate: nil, key: nil)
+                            .padding(.horizontal)
+                        .frame(height: 45).background(Color(.systemGroupedBackground)).cornerRadius(15)
+                        HStack{
+                            Spacer()
+                            Text("USD").foregroundColor(AppTheme().themeColorPrimary).bold().padding(.trailing)
+                        }.frame(height: 45)
+                    }
                     
-                
-                
-                    
-                VStack{
-                    CustomInputTextField(text: self.$incomeService.currentIncomeEntry, placeHolderText: "Your Income", textSize: .systemFont(ofSize: 27), alignment: .center, delegate: nil, key: nil)
-                        .padding(.horizontal)
-                    .frame(height: 60).background(Color(.lightText)).cornerRadius(10)
                         
                         errorState
-                }
                     
-            
+                    Text("Tap to enter your income. ").font(.caption).lineLimit(3).multilineTextAlignment(.leading).foregroundColor(Color(.gray)).padding(.horizontal).padding(.top, 5)
+                }.padding(.bottom, 30).padding(.top, 15)
                 
-                
-                Spacer().padding(.bottom, 30)
                 
                 if self.incomeService.getIncomeTransactions().count > 0{
-                    VStack{
-                        
-                        HStack{
-                            Text("Past Income").font(.system(size: 22)).bold().lineLimit(2).fixedSize(horizontal: false, vertical: true).foregroundColor(Color(.black))
+                    
+                    Button(action: {
+                        // What to perform
+                        self.coordinator.showIncomeTransactions(transactions: self.incomeService.getIncomeTransactions())
+                    }) {
+                        // How the button looks like
+                        HStack(alignment: .center){
+                            VStack(alignment: .leading, spacing: 5){
+                                Text("Estimated Income").font(.headline).foregroundColor(AppTheme().themeColorPrimary).bold()
+                                Text(CommonUtils.makeMoneyString(number: Int(self.incomeService.incomePredictionService.getTotalIncome()))).font(.title3)
+                                
+                            }
                             Spacer()
-                        }.padding(.leading)
-                        
-                        
-                        VStack{
-                            IncomeTransactionsView(incomeService: self.incomeService).padding(.vertical)
-                        }
-                    }
+                            Image(systemName: "ellipsis.circle.fill").foregroundColor(AppTheme().themeColorPrimary).font(.system(size: 28))
+                        }.padding().background(Color(.systemGroupedBackground)).cornerRadius(15)
+                    }.buttonStyle(PlainButtonStyle())
+                    
+                    Text("Your esimtated income is based from previous transactions over the last 30 days. Tap to see these transactions.").font(.caption).lineLimit(3).multilineTextAlignment(.leading).foregroundColor(Color(.gray)).padding(.horizontal)
                 }
                 
                 
-                
-            
-
             
             
             }
-        }
-        .listStyle(SidebarListStyle())
-        .navigationBarTitle("").navigationBarItems(
-                                                                       
-                                                                       
-                    trailing: Button(action: {
-                        if self.incomeService.currentIncomeEntry.doubleValue != nil && self.incomeService.currentIncomeEntry.doubleValue != 0.0{
-                            self.incomeService.tryToSetBudgetIncome()
-                            self.coordinator.incomeSubmitted(budget: self.budget)
-                        }
-                    }){
-                    ZStack{
-                        if self.incomeService.currentIncomeEntry.doubleValue != nil && self.incomeService.currentIncomeEntry.doubleValue != 0.0{
-                            Text("Confirm").foregroundColor(AppTheme().themeColorPrimary)
-                        }
-                        else{
-                            Text("Confirm").foregroundColor(Color(.lightGray))
-                        }
-                        
+            
+            Spacer()
+            if self.incomeService.currentIncomeEntry.doubleValue != nil && self.incomeService.currentIncomeEntry.doubleValue != 0.0{
+                Button(action: {
+                              //Button Action
+                    if self.incomeService.currentIncomeEntry.doubleValue != nil && self.incomeService.currentIncomeEntry.doubleValue != 0.0{
+                        self.incomeService.tryToSetBudgetIncome()
+                        self.coordinator.incomeSubmitted(budget: self.budget)
                     }
-            })
+                              }){
+                              HStack{
+                                  Spacer()
+                                  ZStack{
+                                      Text("Done").font(.subheadline).foregroundColor(Color(.systemBackground)).bold().padding()
+                                  }
+                                  Spacer()
+                              }.background(AppTheme().themeColorPrimary).cornerRadius(10).shadow(radius: 10).padding().padding(.bottom)
+                
+                          }
+            }
+            else{
+                HStack{
+                    Spacer()
+                    ZStack{
+                        Text("Done").font(.subheadline).foregroundColor(Color(.systemBackground)).bold().padding()
+                    }
+                    Spacer()
+                }.background(Color(.lightGray)).cornerRadius(15).shadow(radius: 0).padding().padding(.bottom)
+            }
+            
+            
+        }.padding(.horizontal)
+        .listStyle(SidebarListStyle())
+        .navigationBarTitle("")
+        
+    }
+}
+
+
+struct ColoredActionButton: View {
+    
+    var text : String
+    
+    var body: some View {
+        ZStack(alignment: .center){
+            Capsule().foregroundColor(AppTheme().themeColorSecondary).frame(width: 100, height: 29)
+            Text(self.text).foregroundColor(AppTheme().themeColorPrimary).bold()
+            
+        }
+        
+    }
+}
+
+struct StepTitleText: View {
+    
+    var header : String
+    var title : String
+    var description: String
+    
+    var body: some View {
+        VStack(alignment: .leading){
+            Text(self.header).font(.system(size: 15)).bold().lineLimit(3).multilineTextAlignment(.leading).foregroundColor(Color(.lightGray))
+                
+            Text(self.title).font(.system(size: 28)).bold().lineLimit(1).fixedSize(horizontal: false, vertical: true).multilineTextAlignment(.leading)
+
+            Text(self.description).font(.system(size: 15)).fontWeight(.semibold).lineLimit(3).multilineTextAlignment(.leading).foregroundColor(Color(.gray))
+        }.offset(y: -12)
         
     }
 }

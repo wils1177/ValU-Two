@@ -13,66 +13,23 @@ struct TimeFrameView: View {
     @State var monthSelected = true
     @ObservedObject var viewModel : TimeFrameViewModel
     
-    func getSelectionColor(selected: Bool) -> Color{
-        if selected{
-            return AppTheme().themeColorPrimary
-        }
-        else{
-            return Color(.clear)
-        }
-    }
-    
-
-    
 
     
     var month : some View{
         
-        HStack{
-        VStack(alignment: .leading){
-            Text("Monthly").font(.system(size: 22)).bold().padding(.bottom ,5)
-            Text("Starts first of each month").font(.subheadline).foregroundColor(Color(.gray))
-        }.padding()
-        Spacer()
-            Image(systemName: "checkmark.circle.fill").imageScale(.large).foregroundColor(self.getSelectionColor(selected: self.viewModel.isTimeFrameSelected(timeFrame: TimeFrame.monthly))).padding(.trailing).padding(.trailing)
-        }.background(Color(red: 0.96, green: 0.96, blue: 0.96)).cornerRadius(15).overlay(
-        RoundedRectangle(cornerRadius: 10)
-            .stroke(self.getSelectionColor(selected: self.viewModel.isTimeFrameSelected(timeFrame: TimeFrame.monthly)), lineWidth: 3)
-        )
+        TimeFrameRow(title: "Monthly", description: "Starts on the first of each month", timeFrame: TimeFrame.monthly, viewModel: self.viewModel)
     }
         
     
     
     var semiMonth : some View{
-        
-        HStack{
-        VStack(alignment: .leading){
-            Text("Semi-Monthly").font(.system(size: 22)).bold().padding(.bottom ,5)
-            Text("Twice each month").font(.subheadline).foregroundColor(Color(.gray))
-        }.padding()
-        Spacer()
-            Image(systemName: "checkmark.circle.fill").imageScale(.large).foregroundColor(self.getSelectionColor(selected: self.viewModel.isTimeFrameSelected(timeFrame: TimeFrame.semiMonthly))).padding(.trailing).padding(.trailing)
-        }.background(Color(red: 0.96, green: 0.96, blue: 0.96)).cornerRadius(15).overlay(
-        RoundedRectangle(cornerRadius: 10)
-            .stroke(self.getSelectionColor(selected: self.viewModel.isTimeFrameSelected(timeFrame: TimeFrame.semiMonthly)), lineWidth: 3)
-        )
-         
-        
+        TimeFrameRow(title: "Semi-Monthly", description: "1st and 15th of each month", timeFrame: TimeFrame.semiMonthly, viewModel: self.viewModel)
+
     }
     
     var week : some View{
         
-        HStack{
-        VStack(alignment: .leading){
-            Text("Weekly").font(.system(size: 22)).bold().padding(.bottom ,5)
-            Text("Starts every sunday").font(.subheadline).foregroundColor(Color(.gray))
-        }.padding()
-        Spacer()
-            Image(systemName: "checkmark.circle.fill").imageScale(.large).foregroundColor(self.getSelectionColor(selected: self.viewModel.isTimeFrameSelected(timeFrame: TimeFrame.weekly))).padding(.trailing).padding(.trailing)
-        }.background(Color(red: 0.96, green: 0.96, blue: 0.96)).cornerRadius(15).overlay(
-        RoundedRectangle(cornerRadius: 10)
-            .stroke(self.getSelectionColor(selected: self.viewModel.isTimeFrameSelected(timeFrame: TimeFrame.weekly)), lineWidth: 3)
-        )
+        TimeFrameRow(title: "Weekly", description: "Starts every Sunday", timeFrame: TimeFrame.weekly, viewModel: self.viewModel)
          
         
     }
@@ -82,7 +39,13 @@ struct TimeFrameView: View {
             VStack{
                 
                 
-                Text("Select the time frame you'd like to use for your budget. You can always change this later on. ").font(.callout).foregroundColor(Color(.gray)).padding()
+                HStack{
+                    StepTitleText(header: "Step 1 of 4", title: "Time Frame", description: "Enter what time frame to use for your budget.").padding(.bottom, 20)
+                    Spacer()
+                    
+                }.padding(.leading)
+                
+
                 
                 Button(action: {
                     self.viewModel.toggleTimeFrame(timeFrame: TimeFrame.monthly)
@@ -128,7 +91,7 @@ struct TimeFrameView: View {
                     HStack{
                         Spacer()
                         ZStack{
-                            Text("Continue").font(.subheadline).foregroundColor(Color(.systemBackground)).bold().padding()
+                            Text("Done").font(.subheadline).foregroundColor(Color(.systemBackground)).bold().padding()
                         }
                         Spacer()
                     }.background(Color(.lightGray)).cornerRadius(15).shadow(radius: 0).padding().padding(.horizontal).padding(.bottom)
@@ -141,11 +104,49 @@ struct TimeFrameView: View {
                 
 
                 
-            }.navigationBarTitle("Time Frame")
+            }.navigationBarTitle("")
             
             
             
         
     }
+}
+
+struct TimeFrameRow: View {
+    
+    var title : String
+    var description : String
+    var timeFrame : TimeFrame
+    @ObservedObject var viewModel : TimeFrameViewModel
+    
+    func getSelectionColor(selected: Bool) -> Color{
+        if selected{
+            return AppTheme().themeColorPrimary
+        }
+        else{
+            return Color(.gray)
+        }
+    }
+    
+    var body: some View {
+        
+        HStack{
+        VStack(alignment: .leading, spacing: 2){
+            Text(self.title).font(.system(size: 19)).bold()
+            Text(self.description).font(.system(size: 15)).foregroundColor(Color(.gray))
+        }.padding()
+        Spacer()
+            if self.viewModel.isTimeFrameSelected(timeFrame: self.timeFrame){
+                Image(systemName: "checkmark.circle.fill").imageScale(.large).foregroundColor(self.getSelectionColor(selected: self.viewModel.isTimeFrameSelected(timeFrame: self.timeFrame))).padding(.trailing)
+            }
+            
+        }.background(Color(red: 0.96, green: 0.96, blue: 0.96)).cornerRadius(15).overlay(
+        RoundedRectangle(cornerRadius: 15)
+            .stroke(self.getSelectionColor(selected: self.viewModel.isTimeFrameSelected(timeFrame: self.timeFrame)), lineWidth: 3)
+        )
+        
+    }
+    
+    
 }
 

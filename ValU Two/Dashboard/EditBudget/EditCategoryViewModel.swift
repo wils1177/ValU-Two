@@ -15,35 +15,73 @@ class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, Observa
     
     var coordinator: TransactionRowDelegate?
     
-    var selectedCategoryNames = [String]()
+    @Published var selectedCategoryNames = [String]()
     var spendingCategories = [SpendingCategory]()
     var subSpendingCategories = [SpendingCategory]()
     var saveRule : Bool = true
     
+    var budgetSections = [BudgetSection]()
+    var unassignedBudgetCategories = [SpendingCategory]()
+    
     var transaction : Transaction
 
-    init(transaction: Transaction){
+    init(transaction: Transaction, budget : Budget? = nil){
         self.transaction = transaction
         self.spendingCategories = SpendingCategoryService().getParentSpendingCategories()
         self.subSpendingCategories = SpendingCategoryService().getSubSpendingCategories()
+        self.budgetSections = budget?.getBudgetSections() ?? [BudgetSection]()
+        self.unassignedBudgetCategories = self.parentCategoriesToUnassignedCategories(parentCategories: self.spendingCategories)
+        DataManager().saveDatabase()
         
     }
     
-
     
     func configure() -> UIViewController {
+        
         return UIHostingController(rootView: EditCategoriesView(viewModel: self))
     }
     
+    func removeAllExistingCategories(){
+        for match in self.transaction.categoryMatches?.allObjects as! [CategoryMatch]{
+            
+            if !self.selectedCategoryNames.contains(match.spendingCategory!.name!){
+                let predicate = PredicateBuilder().generateByIdPredicate(id: match.id!)
+                
+                do{
+                    
+                    try DataManager().deleteEntity(predicate: predicate, entityName: "CategoryMatch")
+                    print("removed!")
+                    
+                    //DataManager().saveDatabase()
+                    //self.objectWillChange.send()
+                    //transaction.objectWillChange.send()
+                }
+                catch{
+                    print("Could not remove the category match!!")
+                }
+
+            }
+            
+        }
+    }
 
     
     
     func submit() {
         
+        self.removeAllExistingCategories()
+        for name in self.selectedCategoryNames{
+            self.addCategory(name: name)
+        }
+        
+        
         if saveRule{
             createTransactionRule()
         }
+        
         DataManager().saveDatabase()
+        self.objectWillChange.send()
+        transaction.objectWillChange.send()
         
         NotificationCenter.default.post(name: .modelUpdate, object: nil)
         coordinator?.dismissEditCategory()
@@ -81,9 +119,8 @@ class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, Observa
         
     }
     
-    func selectedCategoryName(name:String){
-        
-        
+    
+    func addCategory(name: String){
         for spendingCategory in self.subSpendingCategories{
             if spendingCategory.name! == name{
                 
@@ -94,19 +131,15 @@ class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, Observa
                 print("added!")
                 let categoryMatch = DataManager().createCategoryMatch(transaction: self.transaction, category: spendingCategory, amount: Float(amount))
                 spendingCategory.addToTransactions(self.transaction)
-                DataManager().saveDatabase()
-                spendingCategory.objectWillChange.send()
-                transaction.objectWillChange.send()
+                //DataManager().saveDatabase()
+                //spendingCategory.objectWillChange.send()
+                //transaction.objectWillChange.send()
             }
         }
-        
-        if saveRule{
-            createTransactionRule()
-        }
-        
     }
     
-    func deSelectedCategoryName(name:String){
+    func removeCategory(name: String){
+        
         for match in self.transaction.categoryMatches?.allObjects as! [CategoryMatch]{
             if match.spendingCategory!.name == name{
                 let predicate = PredicateBuilder().generateByIdPredicate(id: match.id!)
@@ -116,9 +149,9 @@ class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, Observa
                     try DataManager().deleteEntity(predicate: predicate, entityName: "CategoryMatch")
                     print("removed!")
                     
-                    DataManager().saveDatabase()
-                    self.objectWillChange.send()
-                    transaction.objectWillChange.send()
+                    //DataManager().saveDatabase()
+                    //self.objectWillChange.send()
+                    //transaction.objectWillChange.send()
                 }
                 catch{
                     print("Could not remove the category match!!")
@@ -126,22 +159,55 @@ class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, Observa
             }
         }
         
-        if saveRule{
-            createTransactionRule()
-        }
+    }
+    
+    func selectedCategoryName(name:String){
+        
+        self.selectedCategoryNames.append(name)
+        
         
     }
     
+    func deSelectedCategoryName(name:String){
+        
+        
+        self.selectedCategoryNames = self.selectedCategoryNames.filter(){$0 != name}
+        
+    }
+    
+    func parentCategoriesToUnassignedCategories(parentCategories: [SpendingCategory]) -> [SpendingCategory]{
+        var newList = [SpendingCategory]()
+        for parent in parentCategories{
+            for subCategory in parent.subSpendingCategories!.allObjects as! [SpendingCategory]{
+                if subCategory.budgetCategory == nil || subCategory.budgetCategory!.budgetSection == nil{
+                    newList.append(subCategory)
+                }
+            }
+        }
+        return newList
+    }
+    
     func isSelected(name: String) -> Bool{
+        
+        if self.selectedCategoryNames.contains(name) {
+            return true
+        }
+        else{
+            return false
+        }
+        
+        /*
         for match in self.transaction.categoryMatches?.allObjects as! [CategoryMatch]{
             if match.spendingCategory!.name == name{
                 return true
             }
         }
         return false
+        */
     }
     
     func dismiss(){
+        self.selectedCategoryNames = [String]()
         self.coordinator?.dismissEditCategory()
     }
     

@@ -37,7 +37,7 @@ class CategoryEditService : ObservableObject, KeyboardDelegate{
         
         budgetCategory.limit = Double(value)
         parentService.objectWillChange.send()
-        parentService.parent.budget!.objectWillChange.send()
+        parentService.parent.objectWillChange.send()
         DataManager().saveDatabase()
     }
     

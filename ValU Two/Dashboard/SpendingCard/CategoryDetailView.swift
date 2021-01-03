@@ -15,13 +15,12 @@ struct CategoryDetailView: View {
     
     var transactionsZeroState : some View{
         VStack{
-            Text("No transaction for this category yet").font(.subheadline)
-        }.padding().background(Color(.white)).cornerRadius(15)
+            Text("No transaction for this category yet.").font(.subheadline)
+        }.padding(.horizontal).padding(.vertical, 5).background(Color(.clear)).cornerRadius(15)
     }
     
     
     var transactionsSection : some View {
-        VStack{
             ForEach(self.sectionModel.categories, id: \.self) { category in
                 Section(header: ChildCategoryCard(budgetCategory: category.category)){
                     
@@ -30,7 +29,7 @@ struct CategoryDetailView: View {
                         
                         ForEach(category.transactions, id: \.self) { transaction in
                             TransactionRow(coordinator: self.coordinator, transaction: transaction).padding(.bottom, 10)
-                        }.listRowInsets(.init(top: 5, leading: 0, bottom: 5, trailing: 0))
+                        }
                     }
                     else{
                         
@@ -44,23 +43,23 @@ struct CategoryDetailView: View {
                     }
                     
                     
-                }.padding(.top)
+                }.listRowInsets(EdgeInsets())
         }
         
-    }
+    
     }
 
 
     var body: some View {
         List{
             
-            ParentCategoryCard(budgetSection: self.sectionModel.section).padding(.top)
+            DetailedParentCategoryCard(budgetSection: self.sectionModel.section).padding(.top)
             
             
-            transactionsSection
+            transactionsSection.listRowInsets(EdgeInsets())
 
   
-            }.listRowInsets(.init(top: 5, leading: 0, bottom: 5, trailing: 0)).listStyle(SidebarListStyle())
+            }.listStyle(SidebarListStyle())
             
 
         }

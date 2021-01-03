@@ -39,18 +39,25 @@ class TransactionsTabViewModel: ObservableObject, Presentor{
     @Published var transactionsThisWeek : TransactionsListViewModel?
     @Published var transactionsToday : TransactionsListViewModel?
     @Published var transactionsThisMonth : TransactionsListViewModel?
-    var coordinator : TransactionsTabCoordinator?
+    var coordinator : TransactionRowDelegate?
+    
+    var filterModel = TransactionFilterModel()
+    
     
     var rows : [ListWrapper]?
     
     init(){
-        generateViewData()
+        //generateViewData()
         NotificationCenter.default.addObserver(self, selector: #selector(update(_:)), name: .modelUpdate, object: nil)
     }
     
     func configure() -> UIViewController {
-        let vc = UIHostingController(rootView: TransactionsTabView(viewModel: self))
+        let vc = UIHostingController(rootView: TransactionsTabView(viewModel: self, filterModel: self.filterModel))
         return vc
+    }
+    
+    func getTransactionsList() -> [Transaction]{
+        return TransactionsListViewModel(predicate: filterModel.getPredicateBasedOnState()).transactions
     }
     
     func generateViewData(){

@@ -15,7 +15,11 @@ struct CreateCustomBudgetCategoryView: View {
     @State var selectedRow = 0
     @State var selectedColumn = 0
     
-    @State var icons = [["🥳", "😎", "🙌", "🏂", "🏂"], ["💪", "🤩", "🍊", "🏋️‍♂️", "🏂"], ["🍣", "🍫", "🍶", "🤽‍♂️", "🏂"], ["💪", "🤩", "🍊", "🏋️‍♂️", "🏂"]]
+    @State var icons = [["🥳", "🍏", "🍴", "🏂", "🐕"],
+                        ["🐙", "🍿", "🎟️", "⚾", "🎹"],
+                        ["🏠", "🚆", "🚗", "🚲", "🛳️"],
+                        ["🗿", "🎉", "💎", "☎️", "🔌"],
+                        ["📺 ", "📷", "📒", "📦", "⛏️"]]
     
     var viewModel : AddCategoriesViewModel
     
@@ -24,15 +28,28 @@ struct CreateCustomBudgetCategoryView: View {
     var body: some View {
         NavigationView{
             ScrollView{
+                
+                
+                
                 VStack{
-                    Text(self.icons[self.selectedRow][self.selectedColumn]).font(.system(size: 60))
+                    Text(self.icons[self.selectedRow][self.selectedColumn]).font(.system(size: 70)).padding(.vertical, 25)
                     
-                    TextField("Category Name", text: self.$nameText).font(Font.system(size: 20, weight: .semibold)).frame(width: 300, height: 30, alignment: .center).padding().background(Color(.systemGroupedBackground)).cornerRadius(10)
+                    
+                    HStack{
+                        Text("Name").font(.title3).bold()
+                        Spacer()
+                    }.padding(.horizontal)
+                    
+                    TextField("Category Name", text: self.$nameText).font(Font.system(size: 20, weight: .semibold)).frame(height: 30, alignment: .center).padding().background(Color(.systemGroupedBackground)).cornerRadius(10).padding()
                 }.padding(.top, 40)
                 
+                HStack{
+                    Text("Icon").font(.title3).bold()
+                    Spacer()
+                }.padding(.horizontal).padding(.top, 15)
 
-                EmojiSelectionGridView(icons: self.$icons, selectedRow: self.$selectedRow, selectedColumn: self.$selectedColumn)
-                    .padding().padding(.top, 30)
+                EmojiSelectionGridView(icons: self.$icons, selectedRow: self.$selectedRow, selectedColumn: self.$selectedColumn).padding(5).background(Color(.systemGroupedBackground)).cornerRadius(20)
+                    .padding()
             }.navigationBarTitle("New Category", displayMode: .inline).navigationBarItems(
                          
                 leading: Button(action: {

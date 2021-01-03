@@ -58,7 +58,7 @@ class MainTabBarController: UITabBarController {
         else{
             print("User Is Onboarded")
             self.homeTabCoordinator = BudgetsTabCoordinator(budget: self.budget)
-            self.transactionTabCoordinator = TransactionsTabCoordinator()
+            self.transactionTabCoordinator = TransactionsTabCoordinator(budget: self.budget)
             self.moneyTabCoordinator = MoneyTabCoordinator()
             self.historyTabCoordinator = HistoryTabCoordiantor()
             

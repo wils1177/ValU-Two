@@ -40,6 +40,78 @@ class PredicateBuilder{
         return NSPredicate(format: "(amount <= %@) AND (date >= %@) AND (date <= %@)", zero as NSNumber, startDate as NSDate, endDate as NSDate)
     }
     
+    func generateExpenseAmountPredicate() -> NSPredicate{
+        let zero = 0.0
+        return NSPredicate(format: "amount <= %@", zero as NSNumber)
+    }
+    
+    func generateIncomeAmountPredicate() -> NSPredicate{
+        let zero = 0.0
+        return NSPredicate(format: "amount > %@", zero as NSNumber)
+    }
+    
+    func generateUnassignedPredicate() -> NSPredicate {
+        return NSPredicate(format: "categoryMatches.@count>%d", 0 as NSNumber)
+    }
+    
+
+    
+    
+    
+    
+    
+    
+    func generateLastWeekPredicate() -> NSPredicate{
+        
+        var dateComponents = DateComponents()
+        dateComponents.setValue(0, for: .day); // +1 day
+        let now = Date() // Current date
+        let yesterday = Calendar.current.date(byAdding: dateComponents, to: now)
+        
+        
+        dateComponents.setValue(-7, for: .day); // +1 day
+        let lastWeek = Calendar.current.date(byAdding: dateComponents, to: now)
+        return NSPredicate(format: "(date >= %@) AND (date < %@)", lastWeek! as NSDate, yesterday! as NSDate)
+        
+            
+    }
+    
+    func generateLastMonthPredicate() -> NSPredicate{
+        
+        var dateComponents = DateComponents()
+        dateComponents.setValue(0, for: .day); // +1 day
+        let now = Date() // Current date
+        let yesterday = Calendar.current.date(byAdding: dateComponents, to: now)
+        
+        
+        dateComponents.setValue(-30, for: .day); // +1 day
+        let lastWeek = Calendar.current.date(byAdding: dateComponents, to: now)
+        return NSPredicate(format: "(date >= %@) AND (date < %@)", lastWeek! as NSDate, yesterday! as NSDate)
+        
+            
+    }
+    
+    func generateLast60daysPredicate() -> NSPredicate{
+        
+        var dateComponents = DateComponents()
+        dateComponents.setValue(0, for: .day); // +1 day
+        let now = Date() // Current date
+        let yesterday = Calendar.current.date(byAdding: dateComponents, to: now)
+        
+        
+        dateComponents.setValue(-60, for: .day); // +1 day
+        let lastWeek = Calendar.current.date(byAdding: dateComponents, to: now)
+        return NSPredicate(format: "(date >= %@) AND (date < %@)", lastWeek! as NSDate, yesterday! as NSDate)
+        
+            
+    }
+    
+    
+    
+    
+    
+    
+    
     func generateThisWeekPredicate() -> NSPredicate{
         
         var dateComponents = DateComponents()

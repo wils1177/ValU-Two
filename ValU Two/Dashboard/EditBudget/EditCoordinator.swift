@@ -74,7 +74,7 @@ extension BudgetEditableCoordinator{
         model.coordinator = self
         let view = TimeFrameView(viewModel: model)
         let vc = UIHostingController(rootView: view)
-        vc.title = "Frequency"
+        //vc.title = "Time Frame"
         self.navigationController.pushViewController(vc, animated: true)
     }
     
@@ -87,11 +87,33 @@ extension BudgetEditableCoordinator{
     
     }
     
+    func showIncomeTransactions(transactions: [Transaction]){
+        var view = IncomeTransactionsView(transactions: transactions)
+        view.coordinator = self
+        let vc = UIHostingController(rootView: view)
+        self.navigationController.present(vc, animated: true)
+    }
+    
     func continueToSetSavings(){
         print("Contine to Set Savings Screen")
         let presentor = SetSavingsPresentor(budget: self.budget!)
         presentor.coordinator = self
+        
+        let view = SavingsSelectionView(viewModel: presentor)
+        let vc = UIHostingController(rootView: view)
+        vc.title = ""
+        self.navigationController.pushViewController(vc, animated: true)
+        
+        
+        //let setSavingsVC = presentor.configure()
+        //self.navigationController.isNavigationBarHidden = true
+        //self.navigationController.pushViewController(setSavingsVC, animated: true)
+        //setSavingsVC.navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+    
+    func userTappedCustomSavings(presentor : SetSavingsPresentor){
         let setSavingsVC = presentor.configure()
+        setSavingsVC.title = "Custom Goal"
         self.navigationController.isNavigationBarHidden = true
         self.navigationController.pushViewController(setSavingsVC, animated: true)
         setSavingsVC.navigationController?.setNavigationBarHidden(true, animated: false)
@@ -99,6 +121,7 @@ extension BudgetEditableCoordinator{
     
     func savingsSubmitted(budget: Budget, sender: SetSavingsPresentor) {
         self.budget = budget
+        sender.objectWillChange.send()
         self.navigationController.popViewController(animated: true)
         DataManager().saveDatabase()
     }
@@ -107,7 +130,7 @@ extension BudgetEditableCoordinator{
 
         let view = BalancerView(budget: self.budget!, coordinator: self)
         let vc = UIHostingController(rootView: view)
-        vc.title = "Set Budget"
+        vc.title = "Set Budgets"
         self.navigationController.pushViewController(vc, animated: true)
     }
     
@@ -158,7 +181,18 @@ extension BudgetEditableCoordinator{
         var view = HistoricalTransactionsView(viewModel: model)
         view.coordinator = self
         let vc = UIHostingController(rootView: view)
+        vc.title = budgetCategory.spendingCategory!.name!
         
+        self.navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func showFullTransactionsList(){
+        let tabModel = TransactionsTabViewModel()
+        tabModel.coordinator = self
+        let filterModel = TransactionFilterModel()
+        let view = TransactionsTabView(viewModel: tabModel, filterModel: filterModel)
+        let vc = UIHostingController(rootView: view)
+        vc.title = "Transactions"
         self.navigationController.pushViewController(vc, animated: true)
     }
     
@@ -188,7 +222,7 @@ extension BudgetEditableCoordinator{
     }
     
     func dimiss() {
-        
+        self.navigationController.dismiss(animated: true)
     }
 
     

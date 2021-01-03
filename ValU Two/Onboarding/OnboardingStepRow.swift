@@ -43,8 +43,7 @@ struct GenericOnboardingStepRow : View{
     private func getBody() -> some View {
         return AnyView(HStack{
             
-            Image(systemName: self.iconName).resizable()
-                .frame(width: 30.0, height: 30.0).foregroundColor(self.iconColor).padding(.leading)
+            Image(systemName: self.iconName).font(.system(size: 32)).foregroundColor(self.iconColor).padding(.leading)
             
             VStack{
                 

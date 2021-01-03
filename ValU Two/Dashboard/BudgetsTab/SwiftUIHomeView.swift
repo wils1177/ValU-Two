@@ -90,7 +90,8 @@ struct BudgetsView: View {
     
     var categoriesHeader: some View{
         HStack(spacing: 0){
-            Text("Budgets").font(.system(size: 22)).bold()
+            Image(systemName: "creditcard").foregroundColor(AppTheme().themeColorPrimary).font(.system(size: 18))
+            Text(" Budgets").font(.system(size: 18)).fontWeight(.medium)
             Spacer()
             
             
@@ -105,31 +106,43 @@ struct BudgetsView: View {
     var body: some View {
         
             ScrollView{
+                
+                HStack{
+                    Image(systemName: "calendar").foregroundColor(Color(.gray)).font(.system(size: 17))
+                    Text("17 Days Left In Budget").foregroundColor(Color(.gray)).font(.system(size: 16)).bold()
+                    Spacer()
+                }.padding(.horizontal).offset(x: 0, y: -5)
                     
                     //fixNowCards
                     
                     //self.topButtons//.padding(.top, 7)
                     
-                    
+                Divider().padding(.leading)
+                
                         
-                        VStack{
+                            
+                        HStack(spacing:2){
+                                Image(systemName: "arrow.down.app").font(.system(size: 18)).foregroundColor(AppTheme().themeColorPrimary)
+                                Text("Spending").font(.system(size: 18)).fontWeight(.medium).foregroundColor(Color(.black))
+                                Spacer()
+                            }.padding(.horizontal, 15).padding(.top ,5)
                             
                             //self.budgetHeader.padding(.bottom,5)
                             
-                            BudgetCardView(budget: self.viewModel.currentBudget, viewModel: self.viewModel).background(Color(.white)).padding(.top)
+                            BudgetCardView(budget: self.viewModel.currentBudget, viewModel: self.viewModel).padding(5).padding(.top, 5)
                             
                             
                             
                             //IncomeSectionView(coordinator: self.viewModel.coordinator, service: self.viewModel.budgetTransactionsService).padding(.top, 10).padding(.horizontal)
                             
-                        }
+                        
                 
                 Divider().padding(.leading)
 
                     
 
-                self.categoriesHeader.padding(.vertical)
-                        SpendingCardView(budget: self.viewModel.currentBudget, viewModel: self.viewModel.spendingModel!, coordinator: self.viewModel.coordinator).padding(.horizontal)
+                self.categoriesHeader.padding(.leading, 5).padding(.top ,5)
+                SpendingCardView(budget: self.viewModel.currentBudget, viewModel: self.viewModel.spendingModel!, coordinator: self.viewModel.coordinator).padding(.horizontal).padding(.bottom)
         
             
 
@@ -140,14 +153,14 @@ struct BudgetsView: View {
             
                   
 
-        .navigationBarTitle("Summary").navigationBarItems(
+            .navigationBarTitle("Summary").navigationBarItems(
             
             leading: Button(action: {
                 self.viewModel.coordinator.editClicked(budgetToEdit: self.viewModel.currentBudget)
             }){
-            ZStack{
-                
-                Image(systemName: "pencil.circle").imageScale(.large).foregroundColor(AppTheme().themeColorPrimary)
+                ZStack(alignment:.center){
+                    Circle().frame(width: 30, height: 30, alignment: .center).foregroundColor(AppTheme().themeColorSecondary)
+                    Image(systemName: "pencil").font(Font.system(size: 15, weight: .bold)).foregroundColor(AppTheme().themeColorPrimary)
             }
                 }
                                                                    
@@ -155,9 +168,9 @@ struct BudgetsView: View {
                 , trailing: Button(action: {
                     self.viewModel.clickedSettingsButton()
                 }){
-                ZStack{
-                    
-                    Image(systemName: "gear").imageScale(.large).foregroundColor(AppTheme().themeColorPrimary)
+                ZStack(alignment:.center){
+                    Circle().frame(width: 30, height: 30, alignment: .center).foregroundColor(AppTheme().themeColorSecondary)
+                    Image(systemName: "gear").font(Font.system(size: 15, weight: .bold)).foregroundColor(AppTheme().themeColorPrimary)
                 }
         })
            

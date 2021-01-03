@@ -58,6 +58,7 @@ protocol StartPageViewDelegate {
 
 protocol SetSavingsViewDelegate {
     func savingsSubmitted(budget : Budget, sender: SetSavingsPresentor)
+    func userTappedCustomSavings(presentor: SetSavingsPresentor)
 }
 
 protocol BudgetCategoriesDelegate {
@@ -97,6 +98,7 @@ protocol TransactionRowDelegate: class {
     
     var navigationController : UINavigationController{ get set }
     var presentorStack : [Presentor]{ get set }
+    var budget : Budget? {get set}
 }
 
 protocol IncomeCoordinator: Coordinator {
@@ -108,6 +110,7 @@ protocol IncomeCoordinator: Coordinator {
     func incomeSubmitted(budget: Budget)
     func continueToTimeFrame()
     func timeFrameSubmitted()
+    func showIncomeTransactions(transactions: [Transaction])
 }
 
 protocol BudgetEditor {

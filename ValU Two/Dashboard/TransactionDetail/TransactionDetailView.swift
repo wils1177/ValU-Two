@@ -34,10 +34,23 @@ struct TransactionDetailView: View {
         return formatter1.string(from: date)
     }
     
+    var trasactionsIcon : some View{
+        VStack{
+            if self.viewModel.service.getBudgetColorInt() == 13{
+                BudgetSectionIconLarge(color: colorMap[self.viewModel.service.getBudgetColorInt()!], icon: self.viewModel.service.getBudgetIconName() ?? "pencil", size: 140, multiColor: true).cornerRadius(35).padding().padding(.top, 20).shadow(radius: 5)
+            }
+            else{
+                BudgetSectionIconLarge(color: colorMap[self.viewModel.service.getBudgetColorInt()!], icon: self.viewModel.service.getBudgetIconName() ?? "pencil", size: 140).cornerRadius(35).padding().padding(.top, 20).shadow(radius: 5)
+            }
+        }
+        
+    }
+    
     var headerTitle : some View{
         VStack(alignment: .center){
             
-            TransactionIconView(icons: viewModel.getIcons(categories: self.transaction.categoryMatches?.allObjects as! [CategoryMatch])).padding().padding(.horizontal).scaleEffect(2).padding(.top, 10)
+            self.trasactionsIcon
+            //TransactionIconView(icons: viewModel.getIcons(categories: self.transaction.categoryMatches?.allObjects as! [CategoryMatch])).padding().padding(.horizontal).scaleEffect(2).padding(.top, 10)
             
             HStack(){
                 Spacer()
@@ -120,6 +133,7 @@ struct TransactionDetailView: View {
             Button(action: {
                 //Button Action
                 self.viewModel.coordinator?.showSplitTransaction(transaction: self.viewModel.transaction)
+                
                 }){
                 HStack{
                     Spacer()

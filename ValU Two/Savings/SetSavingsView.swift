@@ -114,7 +114,7 @@ struct SetSavingsView: View {
                 
             topSummary.padding(.top)
             SetSavingsSlider(viewData: self.viewData, presentor: self.presentor).padding(.horizontal)
-            reccomendation
+            
                 //self.indicator.offset(y: -((CGFloat(0.20) * geometry.size.height) - (geometry.size.height/2)))
                 
                 
@@ -140,14 +140,14 @@ struct SetSavingsView: View {
             }
             */
             
-            }.navigationBarTitle(Text("Savings Goal")).navigationBarItems(
+            }.navigationBarTitle(Text("Custom Goal")).navigationBarItems(
                                                                        
                                                                        
                     trailing: Button(action: {
                         //action
                         self.presentor?.userPressedContinue()
                     }){
-                    Text("Done").bold()
+                    ColoredActionButton(text: "Done")
             })
         
 }

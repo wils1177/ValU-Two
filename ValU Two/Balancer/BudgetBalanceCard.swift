@@ -10,8 +10,8 @@ import SwiftUI
 
 struct BudgetBalanceCard: View {
     
-    @ObservedObject var budgetSection : BudgetSection
-    @ObservedObject var service : BalanceParentService
+    var budgetSection : BudgetSection
+    var service : BalanceParentService
     var coordinator : SetSpendingLimitDelegate
     
     init(service: BalanceParentService, budgetSection: BudgetSection, coordinator: SetSpendingLimitDelegate){
@@ -27,7 +27,7 @@ struct BudgetBalanceCard: View {
         
 
             HStack{
-                BudgetSectionIconLarge(color: colorMap[Int(self.budgetSection.colorCode)], icon: self.budgetSection.icon!, size: CGFloat(45))
+                BudgetSectionIconLarge(color: colorMap[Int(self.budgetSection.colorCode)] as! Color, icon: self.budgetSection.icon!, size: CGFloat(45))
                 CategoryHeader(name: self.budgetSection.name!).padding(.leading)
 
                     Spacer()

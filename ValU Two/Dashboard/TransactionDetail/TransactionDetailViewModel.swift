@@ -30,10 +30,14 @@ class TransactionDetailViewModel: ObservableObject, Presentor, KeyboardDelegate 
     
     var account : AccountData?
     
-    init(transaction: Transaction){
+    var service: TransactionService
+    
+    init(transaction: Transaction, service: TransactionService){
         self.transaction = transaction
         self.isHidden = transaction.isHidden
+        self.service = service
         self.account = getAccount()
+        
     }
     
     

@@ -27,6 +27,12 @@ class TransactionsListViewModel: ObservableObject, Presentor{
 
     }
     
+    init(predicate: NSCompoundPredicate){
+        self.title = ""
+        self.fetchTransactions(predicate: predicate)
+
+    }
+    
     init(transactions: [Transaction], title: String = ""){
         self.title = title
         self.transactions = transactions
@@ -53,6 +59,18 @@ class TransactionsListViewModel: ObservableObject, Presentor{
         }
         self.transactions = self.transactions.sorted(by: {$0.date!.compare($1.date!) == .orderedDescending})
         //print(self.transactions)
+    }
+    
+    func fetchTransactions(predicate: NSCompoundPredicate){
+        self.transactions = [Transaction]()
+        do{
+            self.transactions = try self.dataManager.getTransactions(predicate: predicate)
+        }
+        catch{
+            self.transactions = [Transaction]()
+            
+        }
+        self.transactions = self.transactions.sorted(by: {$0.date!.compare($1.date!) == .orderedDescending})
     }
 
 

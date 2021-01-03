@@ -26,13 +26,16 @@ class SetSavingsViewData : ObservableObject {
     
 }
 
-class SetSavingsPresentor : Presentor {
+class SetSavingsPresentor : Presentor, ObservableObject {
     
     var budget : Budget
     var setSavingsVC : UIViewController?
     var coordinator : SetSavingsViewDelegate?
     var viewData : SetSavingsViewData?
     var roundingLevel : Int
+    
+    let aggressiveTarget : Float = 0.25
+    let moderateTarget : Float = 0.15
     
     
     init (budget : Budget){
@@ -41,7 +44,7 @@ class SetSavingsPresentor : Presentor {
         self.roundingLevel = SetSavingsPresentor.getRoundingLevel(amount: self.budget.amount)
         
         if self.budget.savingsPercent == Float(0.0){
-            self.budget.savingsPercent = 0.5
+            self.budget.savingsPercent = moderateTarget
         }
         
     }
@@ -53,6 +56,103 @@ class SetSavingsPresentor : Presentor {
         self.setSavingsVC = UIHostingController(rootView: SetSavingsView(presentor: self, viewData: viewData))
         self.setSavingsVC?.navigationController?.setNavigationBarHidden(true, animated: false)
         return self.setSavingsVC!
+    }
+    
+    func isGoalSelected(goal: SavingsGoals) -> Bool {
+        if goal == SavingsGoals.Aggressive{
+            if self.budget.savingsPercent == self.aggressiveTarget{
+                return true
+            }
+            else{
+                return false
+            }
+        }
+        else if goal == SavingsGoals.Moderate{
+            if self.budget.savingsPercent == self.moderateTarget{
+                return true
+            }
+            else{
+                return false
+            }
+        }
+        else{
+            if self.budget.savingsPercent != self.aggressiveTarget && self.budget.savingsPercent != self.moderateTarget{
+                return true
+            }
+            else{
+                return false
+            }
+        }
+        
+    }
+    
+    func getSavingsAmountForGoal(goal: SavingsGoals) -> String {
+        if goal == SavingsGoals.Aggressive{
+            return CommonUtils.makeMoneyString(number: Int(self.budget.amount * self.aggressiveTarget))
+        }
+        else if goal == SavingsGoals.Moderate{
+            return CommonUtils.makeMoneyString(number: (Int(self.budget.amount * self.moderateTarget)))
+        }
+        else{
+            if self.budget.savingsPercent != self.aggressiveTarget && self.budget.savingsPercent != self.moderateTarget{
+                return CommonUtils.makeMoneyString(number: (Int(self.budget.savingsPercent * self.budget.amount)))
+            }
+            else{
+                return "-----"
+            }
+        }
+        
+    }
+    
+    func getSpendingAmountForGoal(goal: SavingsGoals) -> String {
+        if goal == SavingsGoals.Aggressive{
+            return CommonUtils.makeMoneyString(number: Int(self.budget.amount * (1-self.aggressiveTarget)))
+        }
+        else if goal == SavingsGoals.Moderate{
+            return CommonUtils.makeMoneyString(number: (Int(self.budget.amount * (1-self.moderateTarget))))
+        }
+        else{
+            if self.budget.savingsPercent != self.aggressiveTarget && self.budget.savingsPercent != self.moderateTarget{
+                return CommonUtils.makeMoneyString(number: (Int((1-self.budget.savingsPercent) * self.budget.amount)))
+            }
+            else{
+                return "-----"
+            }
+        }
+        
+    }
+    
+    func selectedPresetButton(goal: SavingsGoals){
+        if goal == SavingsGoals.Aggressive{
+            if self.budget.savingsPercent == self.aggressiveTarget{
+                return
+            }
+            else{
+                self.budget.savingsPercent = self.aggressiveTarget
+                self.objectWillChange.send()
+            }
+        }
+        else if goal == SavingsGoals.Moderate{
+            if self.budget.savingsPercent == self.moderateTarget{
+                return
+            }
+            else{
+                self.budget.savingsPercent = self.moderateTarget
+                self.objectWillChange.send()
+            }
+        }
+        else{
+            return
+        }
+    }
+    
+    func getCustomDisplayPercentage() -> String{
+        if self.budget.savingsPercent != self.aggressiveTarget && self.budget.savingsPercent != self.moderateTarget{
+            return String(Int(self.budget.savingsPercent * 100)) + "%"
+        }
+        else{
+            return "--"
+        }
     }
     
     func generateViewData() -> SetSavingsViewData{

@@ -21,21 +21,18 @@ struct SpendingLimitSummaryView: View {
     
     var body: some View {
         VStack(spacing: 0){
-            
             HStack{
-                Text("SPENT IN BUDGETS").font(.system(size: 16)).foregroundColor(Color(.gray)).fontWeight(.light).padding(.bottom)
+                Text("Summary").font(.headline).bold()
                 Spacer()
-            }
-            
+            }.padding(.leading).padding(.top).padding(.bottom, 5)
             
             HStack(alignment: .bottom, spacing: 2){
                 
-                Text("$").font(.system(size: 35)).foregroundColor(Color(.black)).bold()
                 Text(self.viewModel.getDisplaySpent()).font(.system(size: 35)).foregroundColor(.black).bold()
-                Text(" / " + self.viewModel.getAvailable()).font(.headline).foregroundColor(Color(.lightGray)).bold().padding(.bottom, 5)
+                Text(" of " + self.viewModel.getAvailable()).font(.headline).foregroundColor(Color(.lightGray)).bold().padding(.bottom, 5)
                 Spacer()
                 
-            }.padding(.bottom).padding(.leading)
+            }.padding(.leading).padding(.bottom, 5)
             
            
             
@@ -44,7 +41,7 @@ struct SpendingLimitSummaryView: View {
             
             
             
-            }.padding().background(Color(.white))
+        }.background(Color(.white)).cornerRadius(15)
     }
 }
 

@@ -152,7 +152,7 @@ class BudgetsTabCoordinator : Coordinator, TransactionRowDelegate, EditBudgetDel
         let viewModel = BudgetDetailViewModel(budgetSection: budgetSection)
         let view = CategoryDetailView(sectionModel: viewModel, coordinator: self)
         let vc = UIHostingController(rootView: view)
-        vc.title = budgetSection.name! + " Budget"
+        vc.title = budgetSection.name!
         self.navigationController.pushViewController(vc, animated: true)
     }
     

@@ -57,7 +57,7 @@ struct SpendingSummaryRow: View {
                     }
                     
                     ZStack(alignment: .leading){
-                        RoundedRectangle(cornerRadius: 10).frame(width: (g.size.width), height: 40).foregroundColor(AppTheme().themeColorPrimary)
+                        RoundedRectangle(cornerRadius: 10).frame(width: (g.size.width), height: 40).overlay(LinearGradient(gradient: Gradient(colors: [AppTheme().themeColorSecondary, AppTheme().themeColorPrimary]), startPoint: .leading, endPoint: .trailing))
                         
                         HStack{
                             Text(self.viewData.icon).font(.headline).padding(.leading, 5)

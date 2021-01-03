@@ -30,29 +30,27 @@ struct EditBudgetCategoriesView: View {
             }) {
                 HStack{
                     Spacer()
-                    Image(systemName: "plus.circle.fill").font(.system(size: 21, weight: .regular)).foregroundColor(AppTheme().themeColorPrimary)
-                    Text("Create Category").foregroundColor(AppTheme().themeColorPrimary).fontWeight(.semibold)
+                    Image(systemName: "scribble").font(.system(size: 21, weight: .regular)).foregroundColor(AppTheme().themeColorPrimary)
+                    Text("Create Custom Category").foregroundColor(AppTheme().themeColorPrimary).fontWeight(.semibold)
                     Spacer()
                 }
                 
-            }.buttonStyle(PlainButtonStyle()).padding().background(Color(.white)).cornerRadius(15)
+            }.buttonStyle(PlainButtonStyle()).padding().background(Color(.systemGroupedBackground)).cornerRadius(15).padding()
                         
     }
     
     var body: some View {
         NavigationView{
-            List{
+            ScrollView{
                 
+                VStack{
+                    newCategoryButton.padding(.vertical).listRowBackground(Color(.systemGroupedBackground))
+  
+                        ForEach(self.viewModel.parentSpendingCategories, id: \.self){ category in
+                            EditCategoryCard(category: category, viewModel: self.viewModel).padding(.bottom).padding(.horizontal).padding(.bottom)
+                        }.listRowBackground(Color(.systemGroupedBackground))
+                }
                 
-                newCategoryButton.padding(.vertical).listRowBackground(Color(.systemGroupedBackground))
-                
-                //SelectedBudgetCategoriesView(spendingCategories: self.viewModel.getAllCurrentlySelected(), viewModel: self.viewModel).padding(.vertical)
-                    
-                
-                
-                    ForEach(self.viewModel.parentSpendingCategories, id: \.self){ category in
-                        EditCategoryCard(category: category, viewModel: self.viewModel).padding(.bottom)
-                    }.listRowBackground(Color(.systemGroupedBackground))
                 
             }
             //.listStyle(SidebarListStyle())

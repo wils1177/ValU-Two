@@ -95,7 +95,7 @@ class BudgetsViewModel: ObservableObject, Presentor{
             let spentInSection = section.getSpent()
             let limitForSection = section.getLimit()
             sectionSpentTotal = spentInSection + sectionSpentTotal
-            let data = BudgetStatusBarViewData(percentage: spentInSection / Double(total), color: colorMap[Int(section.colorCode)], name: section.name!, icon: section.icon!)
+            let data = BudgetStatusBarViewData(percentage: spentInSection / Double(total), color: colorMap[Int(section.colorCode)] as! Color, name: section.name!, icon: section.icon!)
             
             if limitForSection > 0.0 && spentInSection > 0.0{
                 viewDataToReturn.append(data)

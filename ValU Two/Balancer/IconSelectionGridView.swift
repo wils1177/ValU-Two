@@ -14,6 +14,7 @@ struct IconSelectionGridView: View {
     @Binding var selectedRow : Int
     @Binding var selectedColumn : Int
     
+    
     func isSelectedI(row: Int, col: Int) -> Bool{
         if row == self.selectedRow && col == self.selectedColumn{
             return true

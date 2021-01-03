@@ -42,13 +42,13 @@ struct BalancerView: View {
                 
                 HStack{
                     
-                    EditButton()
+                    
 
                     Button(action: {
                         self.viewModel.coordinator?.finishedSettingLimits()
                     }){
                         
-                        Text("Finish")
+                        ColoredActionButton(text: "Finish")
                         
                     }
                 }

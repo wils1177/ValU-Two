@@ -12,12 +12,20 @@ struct SpendingSummary: View {
     
     var spent : Float
     var limit : Float
+    var detailed = false
     
     var body: some View {
         VStack(alignment: .trailing, spacing: 2){
             
-            Text("$" + String(Int(self.spent)) + " spent").font(.headline).foregroundColor(.white).bold()
-            Text("$" + String(Int(self.limit)) + " budgeted").font(.headline).foregroundColor(Color(.white)).bold().padding(.bottom, 2)
+            
+            
+            if detailed{
+                Text("$" + String(Int(self.spent)) + " Spent").font(.headline).foregroundColor(.white).bold()
+                Text("$" + String(Int(self.limit)) + " Budgeted").font(.headline).foregroundColor(Color(.white)).bold()
+            }
+            else{
+                Text("$" + String(Int(self.spent))).font(.subheadline).foregroundColor(.white).bold()
+            }
             Spacer()
             
         }

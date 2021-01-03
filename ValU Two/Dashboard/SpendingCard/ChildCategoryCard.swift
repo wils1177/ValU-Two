@@ -23,9 +23,10 @@ struct ChildCategoryCard: View {
     
     var remainingText : some View{
         HStack{
-            Text( CommonUtils.makeMoneyString(number: self.budgetCategory.getAmountSpent())).font(.system(size: 15))
-            Text (" / " ).font(.system(size: 15))
-            Text(CommonUtils.makeMoneyString(number: self.budgetCategory.limit)).font(.system(size: 15))
+            
+            Text( CommonUtils.makeMoneyString(number: self.budgetCategory.getAmountSpent())).font(.system(size: 15)).bold().foregroundColor(Color(.gray)).lineLimit(1)
+            Text ("/" ).font(.system(size: 15)).bold().foregroundColor(Color(.gray))
+            Text(CommonUtils.makeMoneyString(number: self.budgetCategory.limit)).font(.system(size: 15)).bold().foregroundColor(Color(.gray)).lineLimit(1)
             
         }
     }
@@ -34,9 +35,19 @@ struct ChildCategoryCard: View {
         VStack(spacing: 0){
             
             HStack{
-                Text(self.budgetCategory.spendingCategory!.name!).font(.system(size: 18)).bold()
+                Text(self.budgetCategory.spendingCategory!.icon!).font(.system(size: 35)).padding(.trailing, 3)
+                VStack(alignment: .leading, spacing: 4){
+                    HStack{
+                        
+                        Text(self.budgetCategory.spendingCategory!.name!).font(.system(size: 20)).bold().foregroundColor(Color(.black)).lineLimit(1)
+                        Spacer()
+                    }
+                    
+                    remainingText.padding(.trailing, 20)
+                }
+                
                 Spacer()
-                remainingText.padding(.trailing, 20)
+                
             }.padding(.top).padding(.bottom)
             
             

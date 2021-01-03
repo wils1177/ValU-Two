@@ -28,7 +28,8 @@ class BudgetDetailViewModel {
     func createCategoryData() -> [BudgetDetailCatgeryViewData]{
         
         var data = [BudgetDetailCatgeryViewData]()
-        let categories = self.section.budgetCategories?.allObjects as! [BudgetCategory]
+        var categories = self.section.budgetCategories?.allObjects as! [BudgetCategory]
+        categories = categories.sorted(by: { $0.order > $1.order })
         
         for category in categories{
             //if category.limit > 0.0 {

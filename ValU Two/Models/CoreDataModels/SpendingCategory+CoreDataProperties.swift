@@ -2,7 +2,7 @@
 //  SpendingCategory+CoreDataProperties.swift
 //  ValU Two
 //
-//  Created by Clayton Wilson on 6/21/20.
+//  Created by Clayton Wilson on 12/27/20.
 //  Copyright © 2020 Clayton Wilson. All rights reserved.
 //
 //
@@ -30,6 +30,7 @@ extension SpendingCategory {
     @NSManaged public var subSpendingCategories: NSSet?
     @NSManaged public var transactionMatches: NSSet?
     @NSManaged public var transactions: NSSet?
+    @NSManaged public var budgetCategory: BudgetCategory?
 
 }
 
@@ -81,5 +82,9 @@ extension SpendingCategory {
 
     @objc(removeTransactions:)
     @NSManaged public func removeFromTransactions(_ values: NSSet)
+
+}
+
+extension SpendingCategory : Identifiable {
 
 }

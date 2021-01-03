@@ -10,14 +10,13 @@ import SwiftUI
 
 struct ColorSelectionGridView: View {
     
-    @Binding var colors : [[Int]]
-    @Binding var selectedRow : Int
+    @Binding var colors : [Int]
     @Binding var selectedColumn : Int
     
     
     
-    func isSelectedI(row: Int, col: Int) -> Bool{
-        if row == self.selectedRow && col == self.selectedColumn{
+    func isSelected(col: Int) -> Bool{
+        if col == self.selectedColumn{
             return true
         }
         else{
@@ -26,43 +25,43 @@ struct ColorSelectionGridView: View {
     }
     
     
-    func changeSelection(row: Int, col: Int){
-        self.selectedRow = row
+    func changeSelection(col: Int){
         self.selectedColumn = col
         
     }
     
     var body: some View {
         VStack{
-            ForEach(0..<self.colors.count, id: \.self){ row in
+            ScrollView(.horizontal) {
                 HStack{
-                    ForEach(0..<self.colors[row].count, id: \.self){ col in
-                        
-                        Button(action: {
-                            print(row)
-                            print(col)
-                            self.changeSelection(row: row, col: col)
+                    ForEach(self.colors, id: \.self){ col in
                             
-                                }){
-                                    Spacer()
-                                    if self.isSelectedI(row: row, col: col){
-                                        Circle().frame(width: 40, height: 40).foregroundColor(colorMap[self.colors[row][col]]).padding(4).overlay(
-                                            Circle()
-                                                .stroke(Color.gray, lineWidth: 3).padding(2)
+                            Button(action: {
+                                print(col)
+                                self.changeSelection(col: col)
+                                
+                                    }){
+                                        Spacer()
+                                        if self.isSelected(col: col){
+                                            Circle().frame(width: 45, height: 45).foregroundColor(colorMap[self.colors[col]]).padding(4).overlay(
+                                                Circle()
+                                                    .stroke(Color.black, lineWidth: 3).padding(2)
+                                                ).cornerRadius(12).padding(.vertical, 5)
+                                        }else{
+                                            Circle().frame(width: 45, height: 45).foregroundColor(colorMap[self.colors[col]] as! Color).padding(4).overlay(
+                                                Circle()
+                                                    .stroke(Color.clear, lineWidth: 3).padding(2)
                                             ).cornerRadius(12).padding(.vertical, 5)
-                                    }else{
-                                        Circle().frame(width: 40, height: 40).foregroundColor(colorMap[self.colors[row][col]]).padding(4).overlay(
-                                            Circle()
-                                                .stroke(Color.clear, lineWidth: 3).padding(2)
-                                        ).cornerRadius(12).padding(.vertical, 5)
-                                    }
-                                    Spacer()
-                            }
-                        
-                        
-                    }
+                                        }
+                                        Spacer()
+                                }
+                            
+                            
+                        }
                 }
-            }
+                
+                }
+            
         }
     }
 }
