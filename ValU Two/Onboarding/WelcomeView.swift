@@ -16,14 +16,22 @@ struct WelcomeView: View {
         
         VStack(){
             
-           Spacer()
             
-            Text("Welcome to").font(.largeTitle).bold()
-            Text("Budget App 69 ").font(.largeTitle).bold().foregroundColor(AppTheme().themeColorPrimary).padding(.bottom).padding(.bottom)
+            HStack{
+                VStack(alignment: .leading, spacing: 0){
+                    Text("🎉").font(.system(size: 50))
+                    Text("Welcome to").font(.system(size: 42, design: .rounded)).fontWeight(.heavy)
+                    Text("Budget App  ").font(.system(size: 42, design: .rounded)).fontWeight(.heavy).foregroundColor(AppTheme().themeColorPrimary).padding(.bottom, 5)
+                    Text("An average budgeting app at best.").foregroundColor(Color(.gray)).bold()
+                }
+                
+                Spacer()
+            }.padding(.leading).padding(.bottom).padding(.bottom).padding(.top, 80)
             
-            MarketingRow(imageName: "creditcard", headline: "Budget", description: "Set goals and track your spending over time.").padding(.horizontal).padding(.leading).padding(.bottom, 10)
-            MarketingRow(imageName: "arrow.clockwise.circle", headline: "Automated", description: "Connect to your bank and never worry about manually entering your spending.").padding(.horizontal).padding(.leading).padding(.bottom, 10)
-            MarketingRow(imageName: "lock.circle", headline: "Private", description: "Your financial date stays on your device").padding(.horizontal).padding(.leading).padding(.bottom, 10)
+            
+            MarketingRow(imageName: "💰", headline: "Budget", description: "Set goals and track your spending over time.").padding(.horizontal).padding(.leading).padding(.bottom, 10)
+            MarketingRow(imageName: "🌀", headline: "Automated", description: "Connect to your bank and never worry about manually entering your spending.").padding(.horizontal).padding(.leading).padding(.bottom, 10)
+            MarketingRow(imageName: "🔐", headline: "Private", description: "Your financial data stays on your device.").padding(.horizontal).padding(.leading).padding(.bottom, 10)
 
 
             Spacer()
@@ -31,13 +39,7 @@ struct WelcomeView: View {
                 //Button Action
                 self.coordinator?.continueToOnboarding()
                 }){
-                HStack{
-                    Spacer()
-                    ZStack{
-                        Text("Get Started").font(.subheadline).foregroundColor(Color(.systemBackground)).bold().padding()
-                    }
-                    Spacer()
-                }.background(AppTheme().themeColorPrimary).cornerRadius(10).shadow(radius: 10).padding().padding(.horizontal).padding(.bottom)
+                ActionButtonLarge(text: "Get Started")
                 
                 
             }

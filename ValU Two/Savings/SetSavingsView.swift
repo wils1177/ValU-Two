@@ -147,7 +147,7 @@ struct SetSavingsView: View {
                         //action
                         self.presentor?.userPressedContinue()
                     }){
-                    ColoredActionButton(text: "Done")
+                    NavigationBarTextButton(text: "Done")
             })
         
 }

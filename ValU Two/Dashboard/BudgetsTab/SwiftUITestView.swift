@@ -11,28 +11,28 @@ import SwiftUI
 
 struct BudgetCardView: View {
     
-    let budget : Budget
+    @ObservedObject var budget : Budget
     var viewModel : BudgetsViewModel
     
     var title: String
     var spent : String
-    var remaining: String
     var percentage: Float
     var available : String
     var daysLeft : String?
     
-    
     var savingsGoal : String
     
+    @State var isLarge = false
+    
     init(budget : Budget, viewModel: BudgetsViewModel){
+        print("BudgetCard view created")
         self.budget = budget
         self.viewModel = viewModel
-        self.title = CommonUtils.getMonthFromDate(date: self.budget.startDate!)
-        self.spent = CommonUtils.makeMoneyString(number: Int(self.viewModel.budgetTransactionsService.getBudgetExpenses()))
-        self.remaining = CommonUtils.makeMoneyString(number:  self.viewModel.getRemaining())
-        self.percentage = 1.0 - (self.budget.spent / self.budget.amount)
-        self.available = CommonUtils.makeMoneyString(number:(Int(self.budget.getAmountAvailable())))
-        self.savingsGoal = "$" + String(Int(self.budget.amount * self.budget.savingsPercent))
+        self.title = CommonUtils.getMonthFromDate(date: budget.startDate!)
+        self.spent = CommonUtils.makeMoneyString(number: Int(viewModel.budgetTransactionsService.getBudgetExpenses()))
+        self.percentage = 1.0 - (budget.spent / budget.amount)
+        self.available = CommonUtils.makeMoneyString(number:(Int(budget.getAmountAvailable())))
+        self.savingsGoal = "$" + String(Int(budget.amount * budget.savingsPercent))
         self.daysLeft = getDaysLeftInMonth(date: Date())
         
     }
@@ -65,37 +65,62 @@ struct BudgetCardView: View {
     var textColor = Color(.black)
 
     
-    var new: some View{
+    var large: some View{
         VStack(spacing: 2){
-            HStack{
-                //.padding(.vertical, 3).padding(.horizontal).background(AppTheme().themeColorPrimary).cornerRadius(20)
- 
-                Spacer()
-            }.padding(.horizontal, 20)//.background(AppTheme().themeColorSecondary)
             
+            Button(action: {
+                // What to perform
+                withAnimation{
+                    self.isLarge.toggle()
+                }
+            }) {
+                // How the button looks like
+                HStack{
+                    SectionHeader(title: "Spending", image: "arrow.down.circle")
+                    Spacer()
+                    
+                    
+                    if !isLarge{
+                        
+                        Text(self.spent).font(.system(size: 22, design: .rounded)).bold().lineLimit(1).padding(.trailing)
+                    }
+                    
+                    Image(systemName: "chevron.right").font(.system(size: 20)).foregroundColor(AppTheme().themeColorPrimary).rotationEffect(.degrees(isLarge ? 90 : 0))
+                        
+                    
+                    
+                    
+                    
+                }.padding(.horizontal, 10)
+            }.buttonStyle(PlainButtonStyle())
+
             
         
-            HStack{
-                    
-                    HStack(alignment: .bottom, spacing: 0){
-                        Text(self.spent).font(.system(size: 35)).foregroundColor(Color(.black)).bold()
-                        
-                        Spacer()
-                        HStack(spacing: 4){
-                            Image(systemName: "checkmark.circle.fill").foregroundColor(AppTheme().themeColorPrimary).font(Font.system(size: 14, weight: .semibold))
-                            //Text("of " + self.available).font(.system(size: 15)).bold().foregroundColor(AppTheme().themeColorPrimary)
-                            Text(self.remaining + " Remaining").font(.system(size: 15)).foregroundColor(AppTheme().themeColorPrimary)
-                        }.padding(4).padding(.horizontal, 10)
-                        
-                    }
-
-                
-                Spacer()
-            }.padding(.leading)
             
-            BudgetStatusBarView(viewData: self.viewModel.getBudgetStatusBarViewData()).padding(.top, 7)
+            
+            if isLarge{
+                HStack{
+                        
+                        HStack(alignment: .bottom, spacing: 0){
+                            Text(self.spent).font(.system(size: 35, design: .rounded)).bold()
+                            
+                            Spacer()
+                            
+                            //Remaining Budget Indicator
+                            RemainingBudgetIndicatorView(viewModel: self.viewModel, budget: self.budget)
+                        }
+
+                    
+                    Spacer()
+                }.padding(.leading).padding(.top, 15)
+                
+                BudgetStatusBarView(viewData: self.viewModel.getBudgetStatusBarViewData()).padding(.top, 7)
+            }
+            
         }
     }
+    
+    
     
     
     
@@ -104,17 +129,10 @@ struct BudgetCardView: View {
     
     var body: some View {
         
-        //detailedView
-           //coolCircle
-        //option2
+        large
+
         
-        //megaCircle.padding(.bottom)
-            
-        new
-        //regular
-        //partialCircle.padding().frame(height: 200).clipped()
-        //textOnly
-        //TextAndBar.padding()
+       
         
     }
 }

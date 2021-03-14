@@ -2,8 +2,8 @@
 //  SpendingCategory+CoreDataProperties.swift
 //  ValU Two
 //
-//  Created by Clayton Wilson on 12/27/20.
-//  Copyright © 2020 Clayton Wilson. All rights reserved.
+//  Created by Clayton Wilson on 1/31/21.
+//  Copyright © 2021 Clayton Wilson. All rights reserved.
 //
 //
 
@@ -27,10 +27,27 @@ extension SpendingCategory {
     @NSManaged public var name: String?
     @NSManaged public var selected: Bool
     @NSManaged public var spent: Float
+    @NSManaged public var budgetCategory: NSSet?
     @NSManaged public var subSpendingCategories: NSSet?
     @NSManaged public var transactionMatches: NSSet?
     @NSManaged public var transactions: NSSet?
-    @NSManaged public var budgetCategory: BudgetCategory?
+
+}
+
+// MARK: Generated accessors for budgetCategory
+extension SpendingCategory {
+
+    @objc(addBudgetCategoryObject:)
+    @NSManaged public func addToBudgetCategory(_ value: BudgetCategory)
+
+    @objc(removeBudgetCategoryObject:)
+    @NSManaged public func removeFromBudgetCategory(_ value: BudgetCategory)
+
+    @objc(addBudgetCategory:)
+    @NSManaged public func addToBudgetCategory(_ values: NSSet)
+
+    @objc(removeBudgetCategory:)
+    @NSManaged public func removeFromBudgetCategory(_ values: NSSet)
 
 }
 

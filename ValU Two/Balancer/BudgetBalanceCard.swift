@@ -10,14 +10,22 @@ import SwiftUI
 
 struct BudgetBalanceCard: View {
     
-    var budgetSection : BudgetSection
-    var service : BalanceParentService
+    @ObservedObject var budgetSection : BudgetSection
     var coordinator : SetSpendingLimitDelegate
+    var viewModel : BudgetBalancerPresentor
     
-    init(service: BalanceParentService, budgetSection: BudgetSection, coordinator: SetSpendingLimitDelegate){
+    var color : Color
+    var colorSeconday : Color
+    var colorTertiary : Color
+    
+    init(budgetSection: BudgetSection, coordinator: SetSpendingLimitDelegate, viewModel: BudgetBalancerPresentor){
         self.budgetSection = budgetSection
-        self.service = BalanceParentService(budgetSection: budgetSection)
         self.coordinator = coordinator
+        self.viewModel = viewModel
+        
+        self.color = colorMap[Int(budgetSection.colorCode)]
+        self.colorSeconday = Color(colorMapUIKit[Int(budgetSection.colorCode)].lighter()!)
+        self.colorTertiary = Color(colorMapUIKit[Int(budgetSection.colorCode)].darker()!)
     }
     
     
@@ -27,25 +35,22 @@ struct BudgetBalanceCard: View {
         
 
             HStack{
-                BudgetSectionIconLarge(color: colorMap[Int(self.budgetSection.colorCode)] as! Color, icon: self.budgetSection.icon!, size: CGFloat(45))
-                CategoryHeader(name: self.budgetSection.name!).padding(.leading)
-
+                BudgetSectionIconLarge(color: colorMap[Int(self.budgetSection.colorCode)], icon: self.budgetSection.icon ?? "calendar", size: CGFloat(45))
+                
+                HStack(){
+                    //Text(self.icon).font(.system(size: 22)).bold()
+                    Text(self.budgetSection.name ?? "unknown").font(.system(size: 18, design: .rounded)).bold().foregroundColor(Color(.white)).lineLimit(1)
                     Spacer()
 
-                           
-                Text("$" + String(Int(self.service.getParentLimit()))).font(.system(size: 21)).bold().foregroundColor(Color(.black))
-                Image(systemName: "chevron.right").foregroundColor(Color(.lightGray)).font(Font.system(.headline).bold()).padding(.leading, 5).padding(.trailing, 5)
-            }.padding(10).background(Color(.white)).cornerRadius(15)
+                }
+
+                    Spacer()
                 
-                       
-                       
-                       
-                   
-            
-            
-            
-        
-        
+                           
+                Text(CommonUtils.makeMoneyString(number: Int(self.budgetSection.getLimit()))).font(.system(size: 21, design: .rounded)).foregroundColor(Color(.white)).bold()
+                Image(systemName: "chevron.right").foregroundColor(Color(.white)).font(Font.system(.headline).bold()).padding(.leading, 5).padding(.trailing, 5)
+            }.padding(11).background(LinearGradient(gradient: Gradient(colors: [self.colorSeconday, self.color]), startPoint: .top, endPoint: .bottom)).cornerRadius(20).shadow(radius: 0)
+                
         
     }
     
@@ -53,9 +58,9 @@ struct BudgetBalanceCard: View {
     var body: some View {
         
         Button(action: {
-            self.coordinator.showCategoryDetail(budgetSection: self.budgetSection, service: self.service)
+            self.coordinator.showCategoryDetail(budgetSection: self.budgetSection, viewModel: self.viewModel)
         }) {
             self.card.padding(.vertical, 2)
-        }.buttonStyle(BorderlessButtonStyle())
+        }.buttonStyle(PlainButtonStyle())
     }
 }

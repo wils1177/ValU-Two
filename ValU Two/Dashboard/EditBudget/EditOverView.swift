@@ -17,18 +17,18 @@ struct EditOverView: View {
     var body: some View {
         
                 
-        List{
+        ScrollView{
             VStack{
                 
-                GenericOnboardingStepRow(title: "Edit Time Frame", description: self.viewModel.getTimeFrameDescription(), iconName: "calendar", iconColor: AppTheme().themeColorPrimary, backgroundColor: Color(.black), subTectColor: Color(.gray), completionHandler: self.viewModel.editTimeFrame).padding(.bottom, 5)
+                GenericOnboardingStepRow(title: "Edit Time Frame", description: self.viewModel.getTimeFrameDescription(), iconName: "calendar", iconColor: AppTheme().themeColorPrimary, backgroundColor: Color(.black), subTectColor: Color(.gray), completionHandler: self.viewModel.editTimeFrame).padding(.bottom, 5).padding(.horizontal)
                 
                 
-                GenericOnboardingStepRow(title: "Edit Income", description: "$" + String(Int(self.viewModel.budget.amount)), iconName: "arrow.down.circle", iconColor: AppTheme().themeColorPrimary, backgroundColor: Color(.black), subTectColor: Color(.gray), completionHandler: self.viewModel.editIncome).padding(.bottom, 5)
+                GenericOnboardingStepRow(title: "Edit Income", description: "$" + String(Int(self.viewModel.budget.amount)), iconName: "arrow.down.circle.fill", iconColor: AppTheme().themeColorPrimary, backgroundColor: Color(.black), subTectColor: Color(.gray), completionHandler: self.viewModel.editIncome).padding(.bottom, 5).padding(.horizontal)
                 
                 
-                GenericOnboardingStepRow(title: "Edit Savings Goal", description: "$" + String(Int(self.viewModel.budget.amount * self.viewModel.budget.savingsPercent)), iconName: "dollarsign.circle", iconColor: AppTheme().themeColorPrimary, backgroundColor: Color(.black), subTectColor: Color(.gray), completionHandler: self.viewModel.editSavings).padding(.bottom, 5)
+                GenericOnboardingStepRow(title: "Edit Savings Goal", description: "$" + String(Int(self.viewModel.budget.amount * self.viewModel.budget.savingsPercent)), iconName: "dollarsign.circle.fill", iconColor: AppTheme().themeColorPrimary, backgroundColor: Color(.black), subTectColor: Color(.gray), completionHandler: self.viewModel.editSavings).padding(.bottom, 5).padding(.horizontal)
                 
-                GenericOnboardingStepRow(title: "Edit Categories", description: "temp", iconName: "creditcard", iconColor: AppTheme().themeColorPrimary, backgroundColor: Color(.black), subTectColor: Color(.gray), completionHandler: self.viewModel.editBudget).padding(.bottom, 5)
+                GenericOnboardingStepRow(title: "Edit Budgets", description: "temp", iconName: "creditcard.fill", iconColor: AppTheme().themeColorPrimary, backgroundColor: Color(.black), subTectColor: Color(.gray), completionHandler: self.viewModel.editBudget).padding(.bottom, 5).padding(.horizontal)
 
 
                 
@@ -36,9 +36,9 @@ struct EditOverView: View {
                 
                 Spacer()
             }.padding(.top)
-        }.listStyle(SidebarListStyle())
+        }
         
-        .navigationBarTitle("Edit Budgets", displayMode: .large).navigationBarItems(trailing:
+        .navigationBarTitle("Edit", displayMode: .large).navigationBarItems(trailing:
                 
                 HStack{
 
@@ -46,7 +46,7 @@ struct EditOverView: View {
                         self.viewModel.dismiss()
                     }){
                         
-                        Text("Done")
+                        NavigationBarTextButton(text: "Done")
                         
                     }
                 }

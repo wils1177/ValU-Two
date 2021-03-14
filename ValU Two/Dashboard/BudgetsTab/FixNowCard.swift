@@ -34,7 +34,7 @@ struct FixNowCard: View {
             Spacer()
             Text("Fix Now").foregroundColor(AppTheme().themeColorPrimary).font(.callout)
             
-            }
+        }.padding(.trailing)
     }
     
     var loadingState : some View{
@@ -70,7 +70,7 @@ struct FixNowCard: View {
             else if self.service.state == FixNowLoadingState.loading{
                 loadingState
             }
-        }.padding(10).background(Color(.white)).cornerRadius(15)
+        }.padding(10).background(Color(.white)).cornerRadius(15).shadow(radius: 5)
         
     }
 }

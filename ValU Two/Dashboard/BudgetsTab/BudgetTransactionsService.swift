@@ -114,18 +114,41 @@ class BudgetTransactionsService : ObservableObject {
         
     }
     
+    func getTransactionsForDate(date: Date) -> [Transaction]{
+        var transactions = [Transaction]()
+        for transaction in self.budgetTransactions{
+            if transaction.date == date{
+                transactions.append(transaction)
+            }
+        }
+        return transactions
+    }
+    
+    func sumTransactionsForDate(date: Date) -> Float{
+        var total = 0.0
+        for transaction in self.budgetTransactions{
+            if transaction.date == date{
+                total = transaction.amount + total
+            }
+        }
+        
+        return Float(total * -1)
+        
+    }
+    
     func checkIfCategoryIsBudgeted(budget: Budget, transaction: Transaction) -> Bool{
         let allCategoryMatches = transaction.categoryMatches!.allObjects as! [CategoryMatch]
         
         for match in allCategoryMatches{
             let id = match.spendingCategory!.id!
             for budgetCategory in budget.getBudgetCategories(){
-                if budgetCategory.spendingCategory!.id! == id && budgetCategory.limit > 0.0{
+                if budgetCategory.spendingCategory!.id! == id && budgetCategory.budgetSection!.getLimit() > 0.0{
                     return true
                 }
             }
         }
-        
+        print(transaction.name!)
+        print(transaction.amount)
         return false
     }
     

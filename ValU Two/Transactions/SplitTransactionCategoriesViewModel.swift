@@ -99,12 +99,28 @@ class SplitTransactionCategoryViewModel: CategoryListViewModel, UserSubmitViewMo
         var newList = [SpendingCategory]()
         for parent in parentCategories{
             for subCategory in parent.subSpendingCategories!.allObjects as! [SpendingCategory]{
-                if subCategory.budgetCategory == nil || subCategory.budgetCategory!.budgetSection == nil{
+                if checkForActiveBudgetSection(category: subCategory).count == 0{
                     newList.append(subCategory)
                 }
             }
         }
         return newList
+    }
+    
+    //Checks the category matches to see if there are associated active budget sections
+    func checkForActiveBudgetSection(category: SpendingCategory) -> [BudgetSection]{
+        var activeBudgetSections = [BudgetSection]()
+        
+        let BudgetCategories = category.budgetCategory?.allObjects as! [BudgetCategory]
+        
+        for budgetCategory in BudgetCategories{
+            if budgetCategory.budgetSection!.budget!.active{
+                activeBudgetSections.append(budgetCategory.budgetSection!)
+            }
+        }
+        
+
+        return activeBudgetSections
     }
     
     func dismiss(){

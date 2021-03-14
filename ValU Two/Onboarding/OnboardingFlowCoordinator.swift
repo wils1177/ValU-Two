@@ -123,16 +123,17 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, PlaidLinkD
     }
     
     func continueToOnboardingConfirmation(){
-        let vc = UIHostingController(rootView: OnboardingConfirmationView(coordinator: self))
-        self.navigationController.pushViewController(vc, animated: true)
+        //let vc = UIHostingController(rootView: OnboardingConfirmationView(coordinator: self))
+        //self.navigationController.pushViewController(vc, animated: true)
+        onboardingComplete()
     }
     
     func onboardingComplete(){
         
         print("onboarding finished")
         
-        self.parent?.currentBudget = self.budget
-        self.parent?.onboardingComplete(self)
+        self.parent!.currentBudget = self.budget
+        self.parent!.onboardingComplete(self)
         
 
         

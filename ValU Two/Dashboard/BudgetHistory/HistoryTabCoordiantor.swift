@@ -16,25 +16,40 @@ class HistoryTabCoordiantor : Coordinator{
     var navigationController = UINavigationController()
     var presentorStack = [Presentor]()
 
-    
+    var budget : Budget?
     
     func start() {
         
-        let viewModel = HistoryViewModel()
+        self.budget = try? DataManager().getBudget()
+        let viewModel = HistoryViewModel(budget: self.budget)
+        viewModel.coordinator = self
         let vc = UIHostingController(rootView: HistoryTabView(viewModel: viewModel))
 
         self.navigationController.navigationBar.prefersLargeTitles = true
-        self.navigationController.tabBarItem = UITabBarItem(title: "History", image: UIImage(systemName: "clock"), selectedImage: UIImage(named: "tab_icon_seelcted"))
+        self.navigationController.tabBarItem = UITabBarItem(title: "History", image: UIImage(systemName: "book.closed"), selectedImage: UIImage(named: "tab_icon_seelcted"))
         self.navigationController.pushViewController(vc, animated: false)
         
         
         
     }
     
-
+    func showBudgetDetail(budget: Budget, service: BudgetStatsService, title: String) {
+        
+        let view = HistoricalBudgetDetailView(budget: budget, service: service, title: title)
+        let vc = UIHostingController(rootView: view)
+        vc.title = title
+        self.navigationController.pushViewController(vc, animated: true)
+        
+    }
     
 
     
+
+    func stop(){
+        childCoordinators = [Coordinator]()
+        self.navigationController = UINavigationController()
+        self.presentorStack = [Presentor]()
+    }
 
 
     

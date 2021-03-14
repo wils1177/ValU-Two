@@ -11,13 +11,13 @@ import Foundation
 class CategoryEditService : ObservableObject, KeyboardDelegate{
     
     var budgetCategory : BudgetCategory
-    var parentService : BalanceParentService
     @Published var editText : String = ""
     
-    init(budgetCategory: BudgetCategory, parentService: BalanceParentService){
+    var viewModel: BudgetBalancerPresentor
+    
+    init(budgetCategory: BudgetCategory, viewModel: BudgetBalancerPresentor){
         self.budgetCategory = budgetCategory
-        self.parentService = parentService
-        
+        self.viewModel = viewModel
         if budgetCategory.limit > 0{
             editText = String(Int(budgetCategory.limit))
         }
@@ -36,9 +36,9 @@ class CategoryEditService : ObservableObject, KeyboardDelegate{
     func updateSpendingLimit(value: Float){
         
         budgetCategory.limit = Double(value)
-        parentService.objectWillChange.send()
-        parentService.parent.objectWillChange.send()
         DataManager().saveDatabase()
+        self.budgetCategory.budgetSection?.objectWillChange.send()
+        self.viewModel.budget.objectWillChange.send()
     }
     
     

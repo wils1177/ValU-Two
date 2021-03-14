@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 class BudgetStatsService{
     
@@ -25,7 +26,13 @@ class BudgetStatsService{
         for budget in self.budgets{
             total = total + getAmountSavedForBudget(budget: budget)
         }
-        return total
+        
+        if total > 0 {
+            return Int(total)
+        }
+        else{
+            return 0
+        }
     }
     
     func getSavingsGoalsHit() -> Int{
@@ -51,15 +58,11 @@ class BudgetStatsService{
     }
     
     func getAmountSavedForBudget(budget: Budget) -> Int{
-        let saved = budget.amount - budget.spent
-        
-        if saved > 0 {
-            return Int(saved)
-        }
-        else{
-            return 0
-        }
- 
+        let budgetTransactionsService = BudgetTransactionsService(budget: budget)
+        let spent = budgetTransactionsService.getBudgetExpenses()
+        let saved = Double(budget.amount) - spent
+    
+        return Int(saved)
     }
     
     func didHitSavingsGoal(budget: Budget) -> Bool{
@@ -69,6 +72,71 @@ class BudgetStatsService{
         }
         
         return false
+    }
+    
+    func getSpentAmount(budget: Budget) -> Int {
+        var budgetTransactionsService = BudgetTransactionsService(budget: budget)
+        let spentTotal = budgetTransactionsService.getBudgetExpenses()
+        return Int(spentTotal)
+        
+    }
+    
+    func getEarnedAmount(budget: Budget) -> Int {
+        var budgetTransactionsService = BudgetTransactionsService(budget: budget)
+        let earnedTotal = budgetTransactionsService.getBudgetIncome() * -1
+        return Int(earnedTotal)
+    }
+    
+    
+    
+    
+    func getBudgetStatusBarViewData(budget: Budget) -> [BudgetStatusBarViewData]{
+        
+        var viewDataToReturn = [BudgetStatusBarViewData]()
+        var budgetTransactionsService = BudgetTransactionsService(budget: budget)
+        
+        let amountAvailable = budget.getAmountAvailable()
+        let spentTotal = budgetTransactionsService.getBudgetExpenses()
+        let otherTotal = budgetTransactionsService.getOtherSpentTotal()
+        var total = amountAvailable
+        
+        if spentTotal > Double(amountAvailable){
+            total = Float(spentTotal)
+        }
+        
+        
+        var sectionSpentTotal = 0.0
+        for section in budget.getBudgetSections(){
+            let spentInSection = section.getSpent()
+            let limitForSection = section.getLimit()
+            sectionSpentTotal = spentInSection + sectionSpentTotal
+            let data = BudgetStatusBarViewData(percentage: spentInSection / Double(total), color: colorMap[Int(section.colorCode)], name: section.name!, icon: section.icon!)
+            
+            if limitForSection > 0.0 && spentInSection > 0.0{
+                viewDataToReturn.append(data)
+            }
+            
+        }
+        
+        
+        let otherPercentage = Float(otherTotal) / total
+        let otherData = BudgetStatusBarViewData(percentage: Double(otherPercentage), color: AppTheme().otherColor, name: "Other", icon: "book")
+        viewDataToReturn.append(otherData)
+        
+        viewDataToReturn.sort(by: { $0.percentage > $1.percentage })
+        
+        
+        if !(spentTotal > Double(amountAvailable)){
+            viewDataToReturn.sort(by: { $0.percentage > $1.percentage })
+            let remainingPercentage = Float((total - Float(spentTotal)) / total)
+            let remainingData = BudgetStatusBarViewData(percentage: Double(remainingPercentage), color: Color(.systemGreen), name: "Savings", icon: "dollarsign.circle")
+            
+            viewDataToReturn.insert(remainingData, at: 0)
+        }
+        
+        
+        
+        return viewDataToReturn
     }
     
 }

@@ -31,7 +31,7 @@ struct TransactionsCategoryFetcher{
             if transaction.categoryMatches?.allObjects.count == 0{
                 otherTransactions.append(transaction)
             }
-            if !checkIfCategoryIsBudgeted(budget: budget, transaction: transaction){
+            else if !checkIfCategoryIsBudgeted(budget: budget, transaction: transaction){
                 otherTransactions.append(transaction)
             }
         }

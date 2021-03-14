@@ -14,6 +14,8 @@ struct AccountDetailView: View {
     var transactions = [Transaction]()
     var coordinator : MoneyTabCoordinator?
     
+    var transactionsService = TransactionService()
+    
     init(coordinator: MoneyTabCoordinator?, account : AccountData){
         self.account = account
         self.coordinator = coordinator
@@ -22,18 +24,33 @@ struct AccountDetailView: View {
         
     }
     
+    var zeroState: some View {
+        VStack(alignment: .center){
+            Text("No Transactions").font(.title2).bold()
+        }
+    }
+    
     var body: some View {
         
-        List{
-                SwiftUIAccountCardView(account: self.account)
-                ForEach(self.transactions, id: \.self){ transaction in
-                    
-                    TransactionRow(coordinator: self.coordinator, transaction: transaction)
-                    
+        ScrollView{
+            LazyVStack{
+                SwiftUIAccountCardView(account: self.account).padding(.horizontal).padding(.vertical).shadow(radius: 15)
                 
-            }.listRowInsets(.init(top: 5, leading: 0, bottom: 5, trailing: 0))
+                if self.transactions.count > 0 {
+                    ForEach(self.transactions, id: \.self){ transaction in
+                        
+                        TransactionRow(coordinator: self.coordinator, transaction: transaction, transactionService: self.transactionsService).padding(.horizontal)
+                    }
+                }
+                else{
+                    zeroState.padding(.top, 50)
+                }
+                
+                
+                     
+            }
 
-        }.listStyle(SidebarListStyle()).navigationBarTitle(self.account.name!)
+        }.navigationBarTitle(self.account.name!)
         
         
     }

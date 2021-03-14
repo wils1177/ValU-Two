@@ -32,11 +32,14 @@ class TransactionDetailViewModel: ObservableObject, Presentor, KeyboardDelegate 
     
     var service: TransactionService
     
-    init(transaction: Transaction, service: TransactionService){
+    var budget: Budget?
+    
+    init(transaction: Transaction, service: TransactionService, budget: Budget? = nil){
         self.transaction = transaction
         self.isHidden = transaction.isHidden
         self.service = service
         self.account = getAccount()
+        self.budget = budget
         
     }
     
@@ -112,10 +115,28 @@ class TransactionDetailViewModel: ObservableObject, Presentor, KeyboardDelegate 
     func toggleHidden(){
         self.transaction.isHidden.toggle()
         DataManager().saveDatabase()
-        for match in transaction.categoryMatches?.allObjects as! [CategoryMatch]{
-            match.spendingCategory!.objectWillChange.send()
+        self.budget?.objectWillChange.send()
+    }
+    
+    func getLabelViewData(category: SpendingCategory) -> TransactionBudgetLabelViewData?{
+        
+        self.service.getBudgetLabels(transaction: self.transaction)
+        
+        let budgetCategories = category.budgetCategory?.allObjects as! [BudgetCategory]
+        
+        for budgetCategory in budgetCategories{
+            if budgetCategory.budgetSection!.budget!.active{
+                let name = budgetCategory.budgetSection!.name!
+                let icon = budgetCategory.budgetSection!.icon!
+                let color = colorMap[Int(budgetCategory.budgetSection!.colorCode)]
+                
+                let entry = TransactionBudgetLabelViewData(name: name, icon: icon, color: color)
+                return entry
+            }
         }
-        DataManager().saveDatabase()
+        
+        return nil
+        
     }
     
     

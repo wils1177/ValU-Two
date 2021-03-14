@@ -70,7 +70,7 @@ class AppCoordinator: Coordinator{
             }
         }
         
-        self.rootController.setupViews()
+        self.rootController.onboardingCanLaod = true
         
         //Redraw the View
         //let model = DashboardViewModel()

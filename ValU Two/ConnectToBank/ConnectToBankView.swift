@@ -40,7 +40,7 @@ struct ConnectToBankView: View {
                         Text("Sure, dude!").font(.subheadline).foregroundColor(.white).bold().padding()
                     }
                     Spacer()
-                }.background(AppTheme().themeColorPrimary).cornerRadius(10).shadow(radius: 10).padding().padding(.horizontal).padding(.bottom)
+                }.background(AppTheme().themeColorPrimary).cornerRadius(15).shadow(radius: 10).padding().padding(.horizontal).padding(.bottom)
                 
                 
             }

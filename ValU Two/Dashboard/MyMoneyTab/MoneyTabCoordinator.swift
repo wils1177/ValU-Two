@@ -19,7 +19,7 @@ class MoneyTabCoordinator : Coordinator, TransactionRowDelegate{
     
     
     func start() {
-        
+        self.navigationController = UINavigationController()
         let viewModel = MyMoneyViewModel(coordinator: self)
         let vc = viewModel.configure()
 
@@ -38,6 +38,13 @@ class MoneyTabCoordinator : Coordinator, TransactionRowDelegate{
         self.navigationController.pushViewController(vc, animated: true)
     }
     
+    
+    func stop(){
+        childCoordinators = [Coordinator]()
+        self.navigationController = UINavigationController()
+        self.presentorStack = [Presentor]()
+        self.budget = nil
+    }
     
 
     

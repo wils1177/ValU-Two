@@ -26,8 +26,8 @@ class DataManager {
         
     }
     
-    func createNewBudget() -> Budget {
-        let newBudget = Budget(context: self.context)
+    func createNewBudget(copy: Bool) -> Budget {
+        let newBudget = Budget(copy: copy, context: self.context)
         saveDatabase()
         return newBudget
     }
@@ -211,7 +211,7 @@ class DataManager {
     func getTransactions(startDate: Date, endDate: Date) throws -> [Transaction]{
         
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Transaction")
-        request.predicate = NSPredicate(format: "(date > %@) AND (date <= %@)", startDate as NSDate, endDate as NSDate)
+        request.predicate = NSPredicate(format: "(date >= %@) AND (date <= %@)", startDate as NSDate, endDate as NSDate)
         
         do{
             let result = try context.fetch(request) as! [Transaction]

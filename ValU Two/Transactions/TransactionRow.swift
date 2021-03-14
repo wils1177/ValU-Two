@@ -13,31 +13,19 @@ struct TransactionRow: View {
     var coordinator : TransactionRowDelegate?
     var transactionService : TransactionService
     
-    
+    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var transaction : Transaction
     var presentationDate: String?
-    var icons : [String]
-    var categoryName : String
-    var budgetName : String?
-    var budgetColorInt : Int?
-    var budgetIconName : String?
     
     @State var showingDetail = false
     
-    init(coordinator: TransactionRowDelegate?, transaction : Transaction){
+    init(coordinator: TransactionRowDelegate?, transaction : Transaction, transactionService: TransactionService){
         self.coordinator = coordinator
         self.transaction = transaction
-        self.transactionService = TransactionService(transaction: transaction)
+        self.transactionService = transactionService
         
-        self.categoryName = transactionService.getCategoryName(categories: transaction.categoryMatches?.allObjects as! [CategoryMatch])
-        self.icons = transactionService.getIcons(categories: transaction.categoryMatches?.allObjects as! [CategoryMatch])
-        self.budgetName = self.transactionService.getBudgetName()
-        self.budgetColorInt = self.transactionService.getBudgetColorInt()
-        self.budgetIconName = self.transactionService.getBudgetIconName()
+
         self.presentationDate = getPresentationDate(date: transaction.date!)
-        
-        
-        
         
         
     }
@@ -51,8 +39,6 @@ struct TransactionRow: View {
 
     
     var body: some View {
-        //Text("sdfasd")
-        
         
         Button(action: {
             // What to perform
@@ -61,41 +47,25 @@ struct TransactionRow: View {
                 // How the button looks like
                 HStack{
 
-                    Button(action: {
-                        print("clicked the category button")
-                        self.coordinator?.showEditCategory(transaction: self.transaction)
-                    }){
+                   
                     ZStack{
                         
                         //Text(viewData.icon).font(.largeTitle)
-                        //TransactionIconView(icons: self.icons)
-                        if budgetColorInt == 13{
-                            BudgetSectionIconLarge(color: colorMap[self.budgetColorInt ?? 0] as! Color, icon: self.budgetIconName ?? "book", size: 44, multiColor: true)
-                        }
-                        else{
-                            BudgetSectionIconLarge(color: colorMap[self.budgetColorInt ?? 0] as! Color, icon: self.budgetIconName ?? "book", size: 44)
-                        }
-                        
+                        TransactionIconView(icons: self.transactionService.getIcons(categories: transaction.categoryMatches?.allObjects as! [CategoryMatch]))
+                       
                         
                     }
-                    }.buttonStyle(BorderlessButtonStyle())
+                    
 
-                    VStack{
+                    VStack(spacing: 5){
                         HStack{
-                            Text(transaction.name ?? "missing" ).font(.headline).bold().lineLimit(1)
+                            Text(self.transaction.name ?? "missing" ).font(.system(size: 20, design: .rounded)).fontWeight(.semibold).foregroundColor(colorScheme == .dark ? Color.white : Color.black).lineLimit(1)
                             Spacer()
                         }
                         HStack{
                             
-                            /*
-                            if self.budgetName != nil && self.budgetColorInt != nil && self.budgetIconName != nil {
-                                Image(systemName: self.budgetIconName!).font(Font.caption.weight(.bold)).foregroundColor(colorMap[self.budgetColorInt!])
-                                Text(budgetName!).lineLimit(1).font(.subheadline).foregroundColor(colorMap[self.budgetColorInt!])
-                                //Circle().foregroundColor(Color(.lightGray)).frame(width: 2, height: 2, alignment: .center)
-                            }
-                            */
-                            Text(self.categoryName).font(.subheadline).foregroundColor(Color(.lightGray)).lineLimit(1)
-
+                            
+                            TransactionBudgetLabelsView(transaction: self.transaction, transactionService: self.transactionService)
                             Spacer()
                         }
                         
@@ -105,7 +75,7 @@ struct TransactionRow: View {
                     Spacer()
                     VStack(alignment: .trailing){
 
-                            Text(self.transactionService.getAmount()).font(.headline).bold().lineLimit(1).fixedSize(horizontal: true, vertical: false)
+                        Text(self.transactionService.getAmount(transaction: self.transaction)).font(.headline).bold().lineLimit(1).fixedSize(horizontal: true, vertical: false).foregroundColor(colorScheme == .dark ? Color.white : Color.black)
                             
                             Text(self.presentationDate ?? "Missing" ).font(.subheadline).lineLimit(1).foregroundColor(Color(.lightGray))
                             
@@ -113,8 +83,8 @@ struct TransactionRow: View {
                         
                     }.frame(maxWidth: 70)
 
-                }.padding(10).background(Color(.white)).cornerRadius(15).shadow(radius: 0).padding(1)
-            }.buttonStyle(PlainButtonStyle())
+                }.background(Color(.clear))
+            }.buttonStyle(BorderlessButtonStyle())
              
         }
          

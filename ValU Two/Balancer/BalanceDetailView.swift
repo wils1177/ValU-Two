@@ -11,15 +11,16 @@ import SwiftUI
 struct BalanceDetailView: View {
     
     @ObservedObject var budgetSection : BudgetSection
-    @ObservedObject var service : BalanceParentService
     var coordinator : BudgetEditableCoordinator
+    @ObservedObject var viewModel : BudgetBalancerPresentor
     
     
-    init(budgetSection : BudgetSection, service : BalanceParentService, coordinator: BudgetEditableCoordinator){
+    init(budgetSection : BudgetSection, coordinator: BudgetEditableCoordinator, viewModel: BudgetBalancerPresentor){
         self.coordinator = coordinator
         self.budgetSection = budgetSection
-        self.service = service
+        self.viewModel = viewModel
         
+        UITableView.appearance().backgroundColor = .clear
 
     }
     
@@ -66,7 +67,7 @@ struct BalanceDetailView: View {
         let source = offsets.first!
         let categories = self.budgetSection.getBudgetCategories()
         let toDelete = categories[source]
-        self.service.deleteCategory(id: toDelete.id!)
+        self.viewModel.deleteCategory(id: toDelete.id!, budgetSection: self.budgetSection)
 
     }
     
@@ -75,9 +76,25 @@ struct BalanceDetailView: View {
             
             self.coordinator.showNewCategoryView(budgetSection: self.budgetSection)
         }) {
-            Image(systemName: "plus.circle.fill").font(.system(size: 28, weight: .regular)).foregroundColor(AppTheme().themeColorPrimary)
-            Text("Add Category").foregroundColor(AppTheme().themeColorPrimary).bold()
+            Image(systemName: "plus.circle.fill").font(.system(size: 28, weight: .regular)).foregroundColor(colorMap[Int(self.budgetSection.colorCode)])
+            Text("Add Category").foregroundColor(colorMap[Int(self.budgetSection.colorCode)]).bold()
         }.buttonStyle(PlainButtonStyle())
+    }
+    
+    
+    var summarySection: some View{
+        HStack{
+            Spacer()
+            HStack{
+                Text(self.viewModel.getDisplayAmountRemaining()).font(.system(size: 16, design: .rounded)).fontWeight(.semibold)
+            }.padding(7).padding(.horizontal, 15).frame(minWidth: 165).background(Color(.tertiarySystemBackground)).cornerRadius(10).shadow(radius: 2)
+            Spacer()
+            HStack(spacing: 0){
+                Text(self.viewModel.getDisplayPercentageForSection(section: self.budgetSection)).font(.system(size: 16, design: .rounded)).foregroundColor(colorMap[Int(self.budgetSection.colorCode)]).fontWeight(.semibold)
+                Text(" of Total").font(.system(size: 16, design: .rounded)).fontWeight(.semibold)
+            }.padding(7).padding(.horizontal, 15).frame(minWidth: 165).background(Color(.tertiarySystemBackground)).cornerRadius(10).shadow(radius: 2)
+            Spacer()
+        }
     }
     
     
@@ -99,7 +116,7 @@ struct BalanceDetailView: View {
             
             HStack{
                 Spacer()
-                Text("$" + String(Int(self.service.getParentLimit()))).font(.system(size: 42)).bold()
+                Text(CommonUtils.makeMoneyString(number: Int(self.budgetSection.getLimit()))).font(.system(size: 42, design: .rounded)).foregroundColor(colorMap[Int(self.budgetSection.colorCode)]).bold()
                 Spacer()
             }
             HStack{
@@ -119,7 +136,7 @@ struct BalanceDetailView: View {
     var sectionHeader : some View{
         VStack{
             HStack{
-                BudgetSectionIconLarge(color: colorMap[Int(self.budgetSection.colorCode)] as! Color, icon: self.budgetSection.icon!, size: 40)
+                BudgetSectionIconLarge(color: colorMap[Int(self.budgetSection.colorCode)], icon: self.budgetSection.icon!, size: 40)
                 Text("Budget Detail").font(.system(size: 22)).bold().padding(.leading, 5)
                 Spacer()
             }.padding(.top)
@@ -163,10 +180,12 @@ struct BalanceDetailView: View {
     
     var body: some View {
         
+      
+        
         
         List{
-            
-            topCard.padding(.vertical)
+            summarySection
+            topCard.padding(.vertical, 20)
                            
                        
             
@@ -174,34 +193,35 @@ struct BalanceDetailView: View {
                 //self.sectionHeader
                     ForEach((self.budgetSection.getBudgetCategories()), id: \.self) { child in
                             VStack{
-                                BudgetDetailCard(budgetCategory: child, parentService: self.service, coordinator: self.coordinator).padding(.vertical, 10).padding(.horizontal, 5)
+                                BudgetDetailCard(budgetCategory: child, coordinator: self.coordinator, viewModel: self.viewModel, color: colorMap[Int(self.budgetSection.colorCode)]).padding(.vertical, 10).padding(.horizontal, 25)
                             }.listRowInsets(EdgeInsets())
                         
                         
-                    }.onDelete(perform: delete).onMove(perform: move)
+                    }.onMove(perform: move)
                 
             }
             else{
                 emptyState
             }
             
-            BalanceDetailHelpCard(coordinator: self.coordinator)
+            //BalanceDetailHelpCard(coordinator: self.coordinator)
             
             
             
                 
                 
-        }
+        }.padding(.horizontal, -20)
         
         
         .listStyle(SidebarListStyle())
+    
             .navigationBarTitle(Text(self.budgetSection.name!)).navigationBarItems(trailing: Button(action: {
-                self.coordinator.goBack()
+                self.coordinator.categoryDetailDone()
                     }){
                         
                     HStack{
                                                 
-                        ColoredActionButton(text: "Done")
+                        NavigationBarTextButton(text: "Done", color: colorMap[Int(self.budgetSection.colorCode)])
                     }
             })
         .toolbar {
@@ -214,7 +234,7 @@ struct BalanceDetailView: View {
             ToolbarItem(placement: .bottomBar) {
                 HStack{
                     Spacer()
-                    EditButton().foregroundColor(AppTheme().themeColorPrimary)
+                    EditButton().foregroundColor(colorMap[Int(self.budgetSection.colorCode)])
                 }
                 
             }

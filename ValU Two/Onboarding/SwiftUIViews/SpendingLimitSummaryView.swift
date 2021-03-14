@@ -10,7 +10,7 @@ import SwiftUI
 
 struct SpendingLimitSummaryView: View {
     
-    @ObservedObject var viewModel : BudgetBalancerPresentor
+    var viewModel : BudgetBalancerPresentor
     @ObservedObject var budget : Budget
     
     init(viewModel: BudgetBalancerPresentor){
@@ -21,18 +21,21 @@ struct SpendingLimitSummaryView: View {
     
     var body: some View {
         VStack(spacing: 0){
+            
+            /*
             HStack{
-                Text("Summary").font(.headline).bold()
+                Text("Summary").font(.system(size: 21, design: .rounded)).bold()
                 Spacer()
-            }.padding(.leading).padding(.top).padding(.bottom, 5)
+            }.padding(.leading).padding(.bottom, 5)
+            */
             
             HStack(alignment: .bottom, spacing: 2){
                 
-                Text(self.viewModel.getDisplaySpent()).font(.system(size: 35)).foregroundColor(.black).bold()
-                Text(" of " + self.viewModel.getAvailable()).font(.headline).foregroundColor(Color(.lightGray)).bold().padding(.bottom, 5)
+                Text(self.viewModel.getDisplaySpent()).font(.system(size: 35, design: .rounded)).bold()
+                Text(" of " + self.viewModel.getAvailable()).font(.system(size: 20, design: .rounded)).bold().foregroundColor(Color(.lightGray)).bold().padding(.bottom, 5)
                 Spacer()
                 
-            }.padding(.leading).padding(.bottom, 5)
+            }.padding(.leading).padding(.bottom, 8)
             
            
             
@@ -41,7 +44,7 @@ struct SpendingLimitSummaryView: View {
             
             
             
-        }.background(Color(.white)).cornerRadius(15)
+        }//.padding(.vertical, 5).padding(.top, 10).background(Color(.systemBackground)).cornerRadius(15).shadow(radius: 5)
     }
 }
 

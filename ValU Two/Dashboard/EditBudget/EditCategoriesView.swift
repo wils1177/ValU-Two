@@ -30,7 +30,7 @@ struct EditCategoriesView: View {
                                 HStack{
                                    Image(systemName: "bookmark.fill").padding(.horizontal, 8)
                                     Toggle(isOn: $viewModel.saveRule) {
-                                        Text("Remember changes")
+                                        Text("Remember for Merchant")
                                     }.padding(.trailing, 5)
                                 }.padding(10).background(Color(.systemGroupedBackground)).cornerRadius(10).padding(.horizontal).padding(.top)
                                
@@ -38,7 +38,7 @@ struct EditCategoriesView: View {
                             
                             
                             HStack{
-                                Text("When selected, ValU will remeber your choices for future transactions with the same name.").font(.footnote).foregroundColor(Color(.lightGray))
+                                Text("When selected, ValU will remeber your choices for future transactions from the same merchant.").font(.footnote).foregroundColor(Color(.lightGray))
                             }.padding(.horizontal, 10).padding(.bottom)
                              
                              /*
@@ -77,7 +77,7 @@ struct EditCategoriesView: View {
                                      self.viewModel.dismiss()
                                  }){
                 
-                        Text("Cancel").font(.subheadline).bold().foregroundColor(AppTheme().themeColorPrimary).padding(7)
+                        NavigationBarTextButton(text: "Cancel")
                                              
                 }
                 
@@ -85,7 +85,7 @@ struct EditCategoriesView: View {
                                  self.viewModel.submit()
                              }){
             
-                Text("Done").font(.subheadline).bold().foregroundColor(AppTheme().themeColorPrimary).padding(7)
+                    NavigationBarTextButton(text: "Done")
                                          
             })
             

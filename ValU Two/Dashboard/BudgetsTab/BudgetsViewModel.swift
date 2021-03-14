@@ -14,17 +14,17 @@ import SwiftUI
 class BudgetsViewModel: ObservableObject, Presentor{
     
     
-    var coordinator : BudgetsTabCoordinator
+    weak var coordinator : BudgetsTabCoordinator?
     var spendingModel : SpendingCardViewModel?
     var budgetTransactionsService : BudgetTransactionsService
     @Published var currentBudget : Budget
     @Published var selected = 0
     
-    init(budget: Budget, budgetService: BudgetTransactionsService, coordinator: BudgetsTabCoordinator){
+    init(budget: Budget, coordinator: BudgetsTabCoordinator? = nil, service: BudgetTransactionsService){
         self.currentBudget = budget
         self.coordinator = coordinator
-        self.budgetTransactionsService = budgetService
-        self.spendingModel = generateSpendingCardViewModel(budget: budget, coordinator: coordinator)
+        self.budgetTransactionsService = service
+        self.spendingModel = generateSpendingCardViewModel(budget: budget)
         NotificationCenter.default.addObserver(self, selector: #selector(update(_:)), name: .modelUpdate, object: nil)
     }
     
@@ -38,23 +38,23 @@ class BudgetsViewModel: ObservableObject, Presentor{
     }
     
     func configure() -> UIViewController {
-        let vc = UIHostingController(rootView: BudgetsView(viewModel: self))
+        let vc = UIHostingController(rootView: BudgetsView(viewModel: self, budget: self.currentBudget))
         return vc
     }
     
 
-    func generateSpendingCardViewModel(budget: Budget, coordinator: BudgetsTabCoordinator) -> SpendingCardViewModel{
+    func generateSpendingCardViewModel(budget: Budget) -> SpendingCardViewModel{
         let viewModel = SpendingCardViewModel(budget: budget, budgetTransactionsService: self.budgetTransactionsService)
-        viewModel.coordinator = coordinator
+        viewModel.coordinator = self.coordinator
         return viewModel
     }
     
     func clickedSettingsButton(){
-        self.coordinator.settingsClicked()
+        self.coordinator?.settingsClicked()
     }
     
     func editBudget(budget: Budget){
-        self.coordinator.editClicked(budgetToEdit: budget)
+        self.coordinator?.editClicked(budgetToEdit: budget)
     }
     
     
@@ -76,7 +76,7 @@ class BudgetsViewModel: ObservableObject, Presentor{
     }
     
     func getBudgetStatusBarViewData() -> [BudgetStatusBarViewData]{
-        
+        print("getting budget status bar view data")
         var viewDataToReturn = [BudgetStatusBarViewData]()
         let amountAvailable = self.currentBudget.getAmountAvailable()
         let spentTotal = self.budgetTransactionsService.getBudgetExpenses()
@@ -84,7 +84,6 @@ class BudgetsViewModel: ObservableObject, Presentor{
         var total = amountAvailable
         
         if spentTotal > Double(amountAvailable){
-            print("CLASJDHASLKDHKLAS")
             total = Float(spentTotal)
         }
         
@@ -95,7 +94,8 @@ class BudgetsViewModel: ObservableObject, Presentor{
             let spentInSection = section.getSpent()
             let limitForSection = section.getLimit()
             sectionSpentTotal = spentInSection + sectionSpentTotal
-            let data = BudgetStatusBarViewData(percentage: spentInSection / Double(total), color: colorMap[Int(section.colorCode)] as! Color, name: section.name!, icon: section.icon!)
+            let data = BudgetStatusBarViewData(percentage: spentInSection / Double(total), color: colorMap[Int(section.colorCode)], name: section.name!, icon: section.icon!, action: self.coordinator?.showIndvidualBudget(budgetSection:), section: section)
+            
             
             if limitForSection > 0.0 && spentInSection > 0.0{
                 viewDataToReturn.append(data)
@@ -103,14 +103,14 @@ class BudgetsViewModel: ObservableObject, Presentor{
             
         }
         
-        if !(spentTotal > Double(amountAvailable)){
-            viewDataToReturn.sort(by: { $0.percentage > $1.percentage })
-        }
+        
+        
         
         let otherPercentage = Float(otherTotal) / total
-        let otherData = BudgetStatusBarViewData(percentage: Double(otherPercentage), color: AppTheme().themeColorSecondary, name: "Other", icon: "book")
+        let otherData = BudgetStatusBarViewData(percentage: Double(otherPercentage), color: AppTheme().otherColor, name: "Other", icon: "book")
         viewDataToReturn.append(otherData)
         
+        viewDataToReturn.sort(by: { $0.percentage > $1.percentage })
         
         
         if !(spentTotal > Double(amountAvailable)){
@@ -144,12 +144,7 @@ class BudgetsViewModel: ObservableObject, Presentor{
         
         let remaining = Int(self.currentBudget.getAmountAvailable() - Float(self.budgetTransactionsService.getBudgetExpenses()))
         
-        if remaining > 0{
-            return remaining
-        }
-        else{
-            return 0
-        }
+        return remaining
     
     }
 

@@ -65,30 +65,7 @@ struct SpendingSummaryView: View {
         
         }.padding()
             
-            /*
-            if self.viewModel.viewData.count > 5 {
-                Divider().padding(.bottom, 5)
-                Button(action: {
-                    withAnimation{
-                        self.showMore.toggle()
-                    }
-                    
-                }){
-                    HStack{
-                        Text(self.viewModel.buttonText).foregroundColor(Color(.white))
-                        Spacer()
-                        if !self.showMore{
-                            Image(systemName: "arrow.down").padding(.trailing).foregroundColor(Color(.white))
-                        }
-                        else{
-                            Image(systemName: "arrow.up").padding(.trailing).foregroundColor(Color(.white))
-                        }
-                        
-                    }
-                    
-                }.buttonStyle(PlainButtonStyle()).padding(.bottom).padding(.leading)
-            }
-            */
+
                 
                 
             

@@ -10,10 +10,14 @@ import SwiftUI
 
 struct BalancerBodyView: View {
     
-    @ObservedObject var viewModel : BudgetBalancerPresentor
-    var budget : Budget
+    var viewModel : BudgetBalancerPresentor
+    @ObservedObject var budget : Budget
     
     @State private var editMode = EditMode.inactive
+    
+    @State var showNothingBudgetedAlert = false
+    
+    @State var showOverBudgetAlert = false
       
     init(viewModel: BudgetBalancerPresentor, budget: Budget){
           
@@ -21,6 +25,8 @@ struct BalancerBodyView: View {
         self.budget = budget
            
         UITableView.appearance().separatorStyle = .none
+        
+        UITableView.appearance().backgroundColor = .clear
       }
     
     var newSectionButton : some View{
@@ -29,36 +35,146 @@ struct BalancerBodyView: View {
         }) {
             HStack{
                 Image(systemName: "plus.circle.fill").font(.system(size: 28, weight: .regular)).foregroundColor(AppTheme().themeColorPrimary)
-                Text("New Section").foregroundColor(AppTheme().themeColorPrimary).bold()
+                Text("New Budget").foregroundColor(AppTheme().themeColorPrimary).bold()
             }
             
         }.buttonStyle(PlainButtonStyle())
     }
     
-    var budgetsHeader : some View{
-        HStack{
-            Text("Budgets").font(.system(size: 21)).foregroundColor(Color(.black)).bold()
-            Spacer()
+    
+    
+    
+      
+      var body: some View {
+        VStack{
+            
+            List{
+                
+                VStack{
+                    //Divider().padding(.leading)
+                    SectionHeader(title: "Summary", image: "house").padding(.horizontal).padding(.top, 10)
+                    
+                                 
+                    SpendingLimitSummaryView(viewModel: self.viewModel).padding(.top, 15)
+                    
+                    Divider().padding(.leading)
+
+                    SectionHeader(title: "Budgets", image: "creditcard").padding(.horizontal).padding(.top, 10)
+                }
+                
+                
+                        
+                BalanceBudgetCardList(viewModel: self.viewModel, sections: self.budget.getBudgetSections()).padding(.horizontal)
+                            
+                        
+                Spacer().padding(.top)
+                                                
+                
+                      
+                            
+                        
+                    }.listStyle(SidebarListStyle()).padding(.horizontal, -20)
             
             
-            
-            //newSectionButton
-            //EditButton()
-        }.padding(.top, 10)
         
+        }
+        
+        .alert(isPresented: $showNothingBudgetedAlert) {
+                    Alert(title: Text("Budget is Still Empty"), message: Text("Set some categories for your budget first!"), dismissButton: .default(Text("Got it!")))
+        }
+        
+       
+        .navigationBarTitle("Set Budgets", displayMode: .large).navigationBarItems(trailing:
+            
+            HStack{
+                
+                
+
+                Button(action: {
+                    print("user requested to continue from budget balancing")
+                    let result = self.viewModel.requestToContinue()
+                    print(result)
+                    if result == BudgetContinueResponse.CanContinue{
+                        self.viewModel.coordinator?.finishedSettingLimits()
+                    }
+                    else if result == BudgetContinueResponse.OverBudget{
+                        self.showOverBudgetAlert = true
+                    }
+                    else if result == BudgetContinueResponse.BudgetEmpty{
+                        print("budget empty")
+                        self.showNothingBudgetedAlert = true
+                    }
+                    
+                    
+                }){
+                    
+                    NavigationBarTextButton(text: "Done")
+                    
+                }
+            }
+                                                                                   
+            .alert(isPresented:$showOverBudgetAlert) {
+                Alert(title: Text("Over Budget!"), message: Text("You've budgeted more than you've set for your income!"), dismissButton: .default(Text("I'll fix it!")))
+                }
+        
+        
+        
+        
+        
+    )
+        
+        
+        
+        .toolbar {
+            
+            ToolbarItem(placement: .bottomBar) {
+                newSectionButton
+                
+            }
+            
+            ToolbarItem(placement: .bottomBar) {
+                HStack{
+                    Spacer()
+                    EditButton().foregroundColor(AppTheme().themeColorPrimary)
+                }
+                
+            }
+            
+
+        }
+        
+        
+
     }
+           
+      
+}
+
+
+struct BalanceBudgetCardList : View {
+    
+    var viewModel : BudgetBalancerPresentor
+    @ObservedObject var budget: Budget
+    var sections : [BudgetSection]
+    
+    @State var showDeleteAlert = false
+    
+    init(viewModel: BudgetBalancerPresentor, sections: [BudgetSection]){
+        self.viewModel = viewModel
+        self.sections = sections
+        self.budget = viewModel.budget
+    }
+    
+    
     
     func delete(at offsets: IndexSet) {
         
         print("delete triggered")
         
         let source = offsets.first!
-        let sections = viewModel.budget.getBudgetSections()
-        let toDelete = sections[source]
+        let toDelete = self.sections[source]
         self.viewModel.deleteBudgetSection(section: toDelete)
-        
-
-    
+            
     }
     
     
@@ -67,7 +183,7 @@ struct BalancerBodyView: View {
         
         let source = source.first!
         
-        let items = self.budget.getBudgetSections()
+        let items = self.sections
         
         if source < destination {
             var startIndex = source + 1
@@ -94,69 +210,20 @@ struct BalancerBodyView: View {
         }
         
         DataManager().saveDatabase()
-        
+        self.viewModel.budget.objectWillChange.send()
     }
-      
-      var body: some View {
-        VStack{
-            
-            List{
-                        /*
-                HStack{
-                    StepTitleText(header: "Step 4 of 4", title: "Set Budgets", description: "Divide up your spending plan.")
-                    Spacer()
-                }.padding(.vertical, 10).listRowInsets(EdgeInsets())
-                  */
-                             
-                SpendingLimitSummaryView(viewModel: self.viewModel).frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading).cornerRadius(15).padding(.bottom, 10).shadow(radius: 0).listRowInsets(EdgeInsets())
-
-                budgetsHeader
-                
-                        
-                ForEach(self.viewModel.budget.getBudgetSections(), id: \.self) { section in
-                                VStack(spacing: 0){
-                                    
-                                    BudgetBalanceCard(service: BalanceParentService(budgetSection: section), budgetSection: section, coordinator: self.viewModel.coordinator!).padding(.bottom, 10)
-                                    
-            
-                                }.listRowInsets(EdgeInsets())
-
-                           }.onDelete(perform: delete).onMove(perform: move)
+    
+    var body: some View{
+        ForEach(self.sections, id: \.self) { section in
+                        VStack(spacing: 0){
                             
-                        
-                Spacer().padding(.top)
-                                                
-                
-                      
+                            BudgetBalanceCard(budgetSection: section, coordinator: self.viewModel.coordinator!, viewModel: self.viewModel).padding(.vertical, 5)
                             
-                        
-                    }.listStyle(SidebarListStyle())
-            
-            
-        
-        }.toolbar {
-            
-            ToolbarItem(placement: .bottomBar) {
-                newSectionButton
-                
-            }
-            
-            ToolbarItem(placement: .bottomBar) {
-                HStack{
-                    Spacer()
-                    EditButton().foregroundColor(AppTheme().themeColorPrimary)
-                }
-                
-            }
-            
+    
+                        }.listRowInsets(EdgeInsets())
 
-        }
-        
-        
-
+        }.onDelete(perform: delete).onMove(perform: move)
     }
-           
-      
 }
 
 

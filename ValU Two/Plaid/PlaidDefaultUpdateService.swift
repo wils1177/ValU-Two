@@ -13,6 +13,8 @@ class PlaidDefaultUpdateService{
     let plaidConnection = PlaidConnection()
     let itemId : String
     
+    var completion : ((Result<String, Error>) -> ())?
+    
     init(itemId: String){
         self.itemId = itemId
     }
@@ -35,7 +37,7 @@ class PlaidDefaultUpdateService{
     
     func historicalUpdatePull(){
         let today = Date()
-        var mostRecentTransaction = Calendar.current.date(byAdding: .day, value: -60, to: today)
+        let mostRecentTransaction = Calendar.current.date(byAdding: .day, value: -60, to: today)
 
         try? self.plaidConnection.getTransactions(itemId : self.itemId, startDate: mostRecentTransaction!, endDate: today, completion: self.defatulUpdatePullFinished(result:))
     }
@@ -50,15 +52,21 @@ class PlaidDefaultUpdateService{
             case .failure(let error):
                 print("UPDATE PULL FAILED")
                 print(error)
+                self.completion?(Result.failure(PlaidConnectionError.BadRequest))
             case .success(let dataResult):
                 //Todo : Try-Catch this
                 let budget = try? DataManager().getBudget()
+                budget?.objectWillChange.send()
                 do{
                     try PlaidProccessor(spendingCategories: SpendingCategoryService().getSubSpendingCategories()).aggregate(response: dataResult, isInitial: false)
                     print("UPDATE PULL WOKED")
+                    self.completion?(.success(self.itemId))
                 }catch{
                     print("error occurred when proccessing default update transacions")
+                    self.completion?(Result.failure(PlaidConnectionError.ProccessingError))
                 }
+                
+                
                 
             }
         }

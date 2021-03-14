@@ -13,37 +13,19 @@ struct CategoryDetailView: View {
     var sectionModel : BudgetDetailViewModel
     var coordinator : BudgetsTabCoordinator
     
-    var transactionsZeroState : some View{
-        VStack{
-            Text("No transaction for this category yet.").font(.subheadline)
-        }.padding(.horizontal).padding(.vertical, 5).background(Color(.clear)).cornerRadius(15)
-    }
+    @ObservedObject var section: BudgetSection
     
+    init(sectionModel: BudgetDetailViewModel, coordinator: BudgetsTabCoordinator){
+        self.sectionModel = sectionModel
+        self.coordinator = coordinator
+        self.section = sectionModel.section
+    }
     
     var transactionsSection : some View {
             ForEach(self.sectionModel.categories, id: \.self) { category in
-                Section(header: ChildCategoryCard(budgetCategory: category.category)){
-                    
-                    
-                    if category.transactions.count > 0{
-                        
-                        ForEach(category.transactions, id: \.self) { transaction in
-                            TransactionRow(coordinator: self.coordinator, transaction: transaction).padding(.bottom, 10)
-                        }
-                    }
-                    else{
-                        
-                        HStack{
-                            Spacer()
-                            self.transactionsZeroState.padding(.bottom)
-                            Spacer()
-                        }
-                        
-                        
-                    }
-                    
-                    
-                }.listRowInsets(EdgeInsets())
+                
+                CategoryDetailTransactionsSection(category: category, coordinator: self.coordinator).padding(.bottom)
+                
         }
         
     
@@ -51,15 +33,25 @@ struct CategoryDetailView: View {
 
 
     var body: some View {
-        List{
+        ScrollView{
+            LazyVStack{
+                DetailedParentCategoryCard(budgetSection: self.sectionModel.section).padding(.top).padding(.horizontal).shadow(radius: 15).padding(.bottom, 35)
+                
+                
+                transactionsSection.listRowInsets(EdgeInsets()).padding(.horizontal, 5)
+            }
             
-            DetailedParentCategoryCard(budgetSection: self.sectionModel.section).padding(.top)
-            
-            
-            transactionsSection.listRowInsets(EdgeInsets())
 
   
-            }.listStyle(SidebarListStyle())
+            }
+        
+        .navigationBarItems(
+            trailing: Button(action: {
+                self.coordinator.showEditBudgetSectionIndividually(section: self.sectionModel.section)
+            }){
+            
+                NavigationBarTextButton(text: "Edit", color: colorMap[Int(sectionModel.section.colorCode)])
+    })
             
 
         }

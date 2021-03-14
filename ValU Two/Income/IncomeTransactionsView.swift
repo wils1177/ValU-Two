@@ -13,6 +13,7 @@ struct IncomeTransactionsView: View {
     var transactions : [Transaction]
     var coordinator : BudgetEditableCoordinator?
     
+    var transactionsService = TransactionService()
     
     init(transactions : [Transaction]){
         self.transactions = transactions
@@ -22,7 +23,7 @@ struct IncomeTransactionsView: View {
         NavigationView{
             ScrollView{
                 ForEach(self.transactions, id: \.self){ transaction in
-                    TransactionRow(coordinator: nil, transaction: transaction).background(Color(.systemGroupedBackground)).cornerRadius(15).padding(.bottom, 5).padding(.horizontal)
+                    TransactionRow(coordinator: nil, transaction: transaction, transactionService: self.transactionsService).padding(.bottom, 5).padding(.horizontal)
                 }.padding(.top)
             }.padding(.top)
             .navigationTitle("Past Income").navigationBarItems( trailing:

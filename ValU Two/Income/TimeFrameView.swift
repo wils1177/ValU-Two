@@ -76,25 +76,13 @@ struct TimeFrameView: View {
                                   //Button Action
                         self.viewModel.submitResult()
                                   }){
-                                  HStack{
-                                      Spacer()
-                                      ZStack{
-                                          Text("Done").font(.subheadline).foregroundColor(Color(.systemBackground)).bold().padding()
-                                      }
-                                      Spacer()
-                                  }.background(AppTheme().themeColorPrimary).cornerRadius(10).shadow(radius: 10).padding().padding(.horizontal).padding(.bottom)
+                        ActionButtonLarge(text: "Done")
                     
                               }
                 }
                 else{
                     
-                    HStack{
-                        Spacer()
-                        ZStack{
-                            Text("Done").font(.subheadline).foregroundColor(Color(.systemBackground)).bold().padding()
-                        }
-                        Spacer()
-                    }.background(Color(.lightGray)).cornerRadius(15).shadow(radius: 0).padding().padding(.horizontal).padding(.bottom)
+                    ActionButtonLarge(text: "Done", enabled: false)
                     
                 }
                 
@@ -124,7 +112,7 @@ struct TimeFrameRow: View {
             return AppTheme().themeColorPrimary
         }
         else{
-            return Color(.gray)
+            return Color(.systemGray4)
         }
     }
     
@@ -140,7 +128,7 @@ struct TimeFrameRow: View {
                 Image(systemName: "checkmark.circle.fill").imageScale(.large).foregroundColor(self.getSelectionColor(selected: self.viewModel.isTimeFrameSelected(timeFrame: self.timeFrame))).padding(.trailing)
             }
             
-        }.background(Color(red: 0.96, green: 0.96, blue: 0.96)).cornerRadius(15).overlay(
+        }.background(Color(.tertiarySystemGroupedBackground)).cornerRadius(15).overlay(
         RoundedRectangle(cornerRadius: 15)
             .stroke(self.getSelectionColor(selected: self.viewModel.isTimeFrameSelected(timeFrame: self.timeFrame)), lineWidth: 3)
         )

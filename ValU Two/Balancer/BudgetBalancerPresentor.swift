@@ -11,6 +11,12 @@ import SwiftUI
 
 
 
+enum BudgetContinueResponse {
+    case CanContinue
+    case BudgetEmpty
+    case OverBudget
+}
+
 class BudgetBalancerPresentor : ObservableObject {
     
     
@@ -38,23 +44,37 @@ class BudgetBalancerPresentor : ObservableObject {
             spent = spent + Float(section.getLimit())
         }
         
+        spent = spent + (self.budget.savingsPercent * self.budget.amount)
+        
         return spent
         
+    }
+    
+    func getAmountRemaining() -> Float{
+        let spent = getSpent()
+        let amountAvailable = self.budget.getAmountAvailable()
+        return amountAvailable - spent
+    }
+    
+    func getDisplayAmountRemaining() -> String{
+        return CommonUtils.makeMoneyString(number: Int(getAmountRemaining())) + " Left"
     }
     
     func getDisplaySpent() -> String{
         return CommonUtils.makeMoneyString(number: Int(getSpent()))
     }
     
-    func getLeftToSpend() -> String{
-    
-        let available = self.budget.getAmountAvailable()
+    func getDisplayPercentageForSection(section: BudgetSection) -> String{
+        let limit = section.getLimit()
+        let total = self.budget.amount
+        let percentage = (limit / Double(total)) * 100.0
         
-        let spent = getSpent()
+        return String(Int(percentage)) + "%"
         
-        return CommonUtils.makeMoneyString(number: Int(available - spent))
         
     }
+    
+    
     
     
     func getPercentage() -> Float{
@@ -131,17 +151,18 @@ class BudgetBalancerPresentor : ObservableObject {
         do{
             self.budget.removeFromBudgetSection(section)
             DataManager().saveDatabase()
+            self.budget.objectWillChange.send()
+            
             
             try DataManager().deleteEntity(predicate: PredicateBuilder().generateByIdPredicate(id: section.id!), entityName: "BudgetSection")
             print("section deleted")
             
             DataManager().saveDatabase()
-            self.objectWillChange.send()
+            
         }
         catch{
             print("Could Not Delete Budget Section")
         }
-        
         
         
         
@@ -154,7 +175,43 @@ class BudgetBalancerPresentor : ObservableObject {
     }
 
     
+    func deleteCategory(id: UUID, budgetSection: BudgetSection) {
+        
+        for category in budgetSection.budgetCategories?.allObjects as! [BudgetCategory]{
+            if category.id! == id{
+                budgetSection.removeFromBudgetCategories(category)
+                let predicate = PredicateBuilder().generateByIdPredicate(id: category.id!)
+                category.spendingCategory!.objectWillChange.send()
+                self.objectWillChange.send()
+                do{
+                    try DataManager().deleteEntity(predicate: predicate, entityName: "BudgetCategory")
+                }
+                catch{
+                    print("WARNING: Could delete budget category entity")
+                }
+            
+                
+            }
+        }
+        self.objectWillChange.send()
+        
+    }
     
+    
+    func requestToContinue() -> BudgetContinueResponse{
+        let amountLimited = self.budget.getAmountLimited()
+        let available = self.budget.getAmountAvailable()
+        
+        if amountLimited > 0.0 && amountLimited <= available {
+            return BudgetContinueResponse.CanContinue
+        }
+        else if amountLimited > 0.0 && amountLimited > available{
+            return BudgetContinueResponse.OverBudget
+        }
+        else {
+            return BudgetContinueResponse.BudgetEmpty
+        }
+    }
  
     
 }

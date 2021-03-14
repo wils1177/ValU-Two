@@ -14,12 +14,15 @@ struct CategoryAmountRowView: View {
     var viewModel : TransactionDetailViewModel
     @State var amountText : String
     
+    var labelData : TransactionBudgetLabelViewData?
     
     init(viewData: CategoryMatch, viewModel: TransactionDetailViewModel){
         self.viewData = viewData
         self.viewModel = viewModel
         
         self._amountText = State(initialValue: String(viewData.amount))
+        
+        self.labelData = viewModel.getLabelViewData(category: viewData.spendingCategory!)
         
     }
     
@@ -28,13 +31,28 @@ struct CategoryAmountRowView: View {
     }
     
     var body: some View {
-        HStack{
-            Text(viewData.spendingCategory?.icon ?? "icon gone").font(.title)
-            Text(getCategoryName())
-            Spacer()
-            CustomInputTextField(text: self.$amountText, placeHolderText: "Amount", textSize: .systemFont(ofSize: 15), alignment: .right, delegate: self.viewModel, key: self.viewData.id?.uuidString ?? "", style: UITextField.BorderStyle.roundedRect)
-            .frame(width: 80)
+        VStack{
+            
+            HStack{
+                TransactionIconView(icons: [viewData.spendingCategory?.icon ?? "icon gone"]).padding(.trailing, 2)
+                VStack(alignment: .leading){
+                    Text(getCategoryName()).font(.system(size: 18, design: .rounded)).bold()
+                    if labelData != nil{
+                        SingleBudgetLabel(label: labelData!)
+                    }
+                }
+                
+                Spacer()
+                CustomInputTextField(text: self.$amountText, placeHolderText: "Amount", textSize: .systemFont(ofSize: 18), alignment: .right, delegate: self.viewModel, key: self.viewData.id?.uuidString ?? "", style: UITextField.BorderStyle.roundedRect)
+                .frame(width: 80)
+            }
+            
+
+            
+            
+            
         }
+        
     }
 }
 

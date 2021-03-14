@@ -33,9 +33,10 @@ class NewBudgetCoordinator : Coordinator, BudgetEditableCoordinator {
         print("new budget flow started")
         self.navigationController.navigationBar.prefersLargeTitles = true
         
-        self.budget = DataManager().createNewBudget()
+        self.budget = DataManager().createNewBudget(copy: false)
         
-        self.navigationController.modalPresentationStyle = .fullScreen
+        self.navigationController.modalPresentationStyle = .pageSheet
+        self.navigationController.isModalInPresentation = true
         self.newBudgetDependencies.onboardingSummaryPresentor = OnboardingSummaryPresentor(budget: self.budget!, itemManagerService: self.newBudgetDependencies.itemManager)
         self.newBudgetDependencies.onboardingSummaryPresentor!.coordinator = self
         let vc = self.newBudgetDependencies.onboardingSummaryPresentor!.configure()
@@ -115,16 +116,22 @@ class NewBudgetCoordinator : Coordinator, BudgetEditableCoordinator {
     func finishedSettingLimits() {
         
         self.newBudgetDependencies.onboardingSummaryPresentor?.generateViewData()
-        self.navigationController.popViewController(animated: true)
+        //self.navigationController.popViewController(animated: true)
+        
+        var view = BudgetConfirmationView(coordinator: self)
+        view.coordinator = self
+        let vc = UIHostingController(rootView: view)
+        self.navigationController.pushViewController(vc, animated: true)
         
     }
     
     
     func finishSettingUpBudget(){
+        print("coordinator finished setting up budget")
         self.budget!.active = true
         self.navigationController.dismiss(animated: true)
         DataManager().saveDatabase()
-        self.parent?.dismissNewBudgetCoordinator()
+        self.parent?.completedNewBudget()
     }
 
     

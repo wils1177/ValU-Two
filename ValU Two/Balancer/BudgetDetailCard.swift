@@ -12,7 +12,6 @@ struct BudgetDetailCard: View {
     
     @ObservedObject var budgetCategory : BudgetCategory
     var spendingCategory : SpendingCategory
-    var parentService : BalanceParentService
     var coordinator: BudgetEditableCoordinator
     @ObservedObject var service : CategoryEditService
     
@@ -20,18 +19,19 @@ struct BudgetDetailCard: View {
     
     var color : Color
     
+    var viewModel : BudgetBalancerPresentor
     
     
     @State var test = "test"
      
     
-    init(budgetCategory: BudgetCategory, parentService: BalanceParentService, coordinator: BudgetEditableCoordinator){
+    init(budgetCategory: BudgetCategory, coordinator: BudgetEditableCoordinator, viewModel: BudgetBalancerPresentor, color: Color){
         self.coordinator = coordinator
         self.budgetCategory = budgetCategory
+        self.viewModel = viewModel
         self.spendingCategory = budgetCategory.spendingCategory!
-        self.parentService = parentService
-        self.color = colorMap[Int(spendingCategory.colorCode)]
-        self.service = CategoryEditService(budgetCategory: budgetCategory, parentService: parentService)
+        self.color = color
+        self.service = CategoryEditService(budgetCategory: budgetCategory, viewModel: self.viewModel)
         self.historicalTransactions = HistoricalTransactionsViewModel(category: budgetCategory)
     }
 
@@ -40,7 +40,7 @@ struct BudgetDetailCard: View {
         
         Menu {
             Button(action: {
-                self.parentService.deleteCategory(id: self.budgetCategory.id!)
+                self.viewModel.deleteCategory(id: self.budgetCategory.id!, budgetSection: self.budgetCategory.budgetSection!)
             }) {
                 Text("Remove Category").foregroundColor(Color(.red))
                 Image(systemName: "x.circle").foregroundColor(Color(.placeholderText)).imageScale(.large)
@@ -53,7 +53,7 @@ struct BudgetDetailCard: View {
                 Image(systemName: "info.circle").foregroundColor(Color(.placeholderText)).imageScale(.large)
             }.buttonStyle(PlainButtonStyle())
         } label: {
-            Image(systemName: "ellipsis.circle").foregroundColor(self.color).font(.title3)
+            CircleButtonIcon(icon: "ellipsis", color: self.color, circleSize: 27, fontSize: 13)
         }
             
         
@@ -73,16 +73,15 @@ struct BudgetDetailCard: View {
     var pill : some View {
         
         VStack(){
-            Divider()
             HStack{
                 
                 
-                Text(historicalTransactions.getDisplayText()).foregroundColor(colorMap[Int(self.budgetCategory.budgetSection!.colorCode)]).bold().padding(.leading)
+                Text(historicalTransactions.getDisplayText()).font(.system(size: 15, design: .rounded)).foregroundColor(self.color).bold().padding(.leading)
                 
                 Spacer()
-                Image(systemName: "chevron.right").foregroundColor(Color(.lightGray)).font(Font.system(.headline).bold()).padding(.trailing)
-            }.padding(.bottom, 10)
-        }
+                Image(systemName: "chevron.right").foregroundColor(self.color).font(Font.system(.headline).bold()).padding(.trailing)
+            }.padding(.vertical, 10)
+        }.background(self.color.opacity(0.2))
         
         
     }
@@ -91,18 +90,18 @@ struct BudgetDetailCard: View {
     var card: some View{
         VStack(spacing: 0){
             HStack{
-                Text(self.spendingCategory.icon!).font(.headline)
-                Text(self.spendingCategory.name!.uppercased()).font(.system(size: 12)).foregroundColor(Color(.gray)).fontWeight(.light)
+                Text(self.spendingCategory.icon!).font(.system(size: 17))
+                Text(self.spendingCategory.name!).font(.system(size: 17, design: .rounded)).fontWeight(.semibold).lineLimit(1)
                 Spacer()
                 deleteButton
-            }.padding(.horizontal, 10).padding(.top, 10)
+            }.padding(.horizontal, 13).padding(.top, 10)
                    
                     
      
             
                 
                 HStack{
-                    CustomInputTextField(text: self.$service.editText, placeHolderText: "Amount", textSize: .systemFont(ofSize: 20), alignment: .left, delegate: self.service, key: self.spendingCategory.name!).id(self.spendingCategory.id!).background(Color(.white)).padding(.horizontal).padding(.trailing)
+                    CustomInputTextField(text: self.$service.editText, placeHolderText: "Amount", textSize: .systemFont(ofSize: 20), alignment: .left, delegate: self.service, key: self.spendingCategory.name!).id(self.spendingCategory.id!).padding(.horizontal).padding(.trailing)
                     Spacer()
                 }.padding(.leading).padding(.top, 10).padding(.vertical, 5).padding(.bottom)
                 
@@ -126,7 +125,7 @@ struct BudgetDetailCard: View {
             
                    
                    
-            }.background(Color(.white)).cornerRadius(15).shadow(radius: 5)
+        }.background(Color(.tertiarySystemBackground)).cornerRadius(18).shadow(radius: 8)
     }
     
     
@@ -138,11 +137,11 @@ struct BudgetDetailCard: View {
 
 extension UIColor {
 
-    func lighter(by percentage: CGFloat = 30.0) -> UIColor? {
+    func lighter(by percentage: CGFloat = 7.0) -> UIColor? {
         return self.adjust(by: abs(percentage) )
     }
 
-    func darker(by percentage: CGFloat = 30.0) -> UIColor? {
+    func darker(by percentage: CGFloat = 7.0) -> UIColor? {
         return self.adjust(by: -1 * abs(percentage) )
     }
 

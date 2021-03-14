@@ -11,7 +11,7 @@ import SwiftUI
 struct HistoryTabView: View {
     
     @ObservedObject var viewModel : HistoryViewModel
-    
+    @State var showStatsView = true
     init(viewModel: HistoryViewModel){
         self.viewModel = viewModel
         
@@ -25,28 +25,54 @@ struct HistoryTabView: View {
     }
     
     var body: some View {
-        List{
+        ScrollView{
             
-            HStack{
-                VStack(alignment: .leading){
-                    Text("Statistics").font(.system(size: 22)).bold()
-                    Text("SINCE USING VALU TWO").font(.caption).foregroundColor(Color(.gray)).padding(.top, 3)
+            LazyVStack{
+                
+                Button(action: {
+                    // What to perform
+                    withAnimation{
+                        self.showStatsView.toggle()
+                    }
+                }) {
+                    HStack{
+                            SectionHeader(title: "Stats", image: "chart.pie")
+                            
+                        
+                        Image(systemName: "chevron.right").font(.system(size: 20)).foregroundColor(AppTheme().themeColorPrimary).rotationEffect(.degrees(showStatsView ? 90 : 0))
+                        Spacer()
+                    }.padding(.top).padding(.horizontal)
+                }.buttonStyle(PlainButtonStyle())
+                
+                
+                
+                if showStatsView{
+                    HistoryStatsView(service : self.viewModel.service).padding(.horizontal).padding(.bottom, 10)
                 }
-                Spacer()
-            }.padding(.leading, 10)
-            
-            
-            HistoryStatsView(service : self.viewModel.service).padding(.horizontal, 5)
-            
-            HStack{
-                VStack(alignment: .leading){
-                    Text("Past Budgets").font(.system(size: 22)).bold()
+                
+                Divider().padding(.leading).padding(.top, 10)
+                
+                
+                
+                
+                HStack{
+                    
 
-                }
-                Spacer()
-            }.padding(.leading, 10).padding(.top)
+                    
+                    VStack(alignment: .leading, spacing: 2){
+                        SectionHeader(title: "Past Budgets", image: "clock")
+                        //Text("SINCE USING VALU TWO").font(.caption).foregroundColor(Color(.gray)).padding(.leading, 25)
+                    }
+                    Spacer()
+                }.padding(.top).padding(.horizontal)
+                
+                PastBudgetsView(viewModel: self.viewModel)
+                
+            }
             
-            PastBudgetsView(viewModel: self.viewModel)
+            
+            
+            
             
             /*
             HStack{

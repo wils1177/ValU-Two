@@ -67,8 +67,9 @@ protocol BudgetCategoriesDelegate {
 
 protocol SetSpendingLimitDelegate {
     func finishedSettingLimits()
-    func showCategoryDetail(budgetSection: BudgetSection, service: BalanceParentService)
+    func showCategoryDetail(budgetSection: BudgetSection, viewModel: BudgetBalancerPresentor)
     func showNewSectionView()
+    
     
 }
 
@@ -132,7 +133,7 @@ protocol BudgetEditableCoordinator: IncomeCoordinator, SetSavingsViewDelegate, S
     func continueToBudgetCategories()
     func continueToPlaid()
     func continueToSetSavings()
-    
+    func categoryDetailDone()
     
     func dimiss()
 }

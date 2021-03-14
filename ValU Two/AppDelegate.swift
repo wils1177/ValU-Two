@@ -24,6 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
+        
         if launchedBefore  {
             print("Not first launch.")
             
@@ -32,11 +33,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UserDefaults.standard.set(true, forKey: "launchedBefore")
             //TimeFrameManager().createTransactionCaches()
             SpendingCategoryService.generateSpendingCategories()
-            TimeFrameManager().createInitialBudgetTimeFrames()
+            //TimeFrameManager().createInitialBudgetTimeFrames()
         }
         
-        //Checks if a new budget needs to be generate or not
-        //BudgetCopyer().checkIfBudgetIsOutdated()
+        //Checks if a new budget needs to be generated or not
+        BudgetCopyer().checkIfBudgetIsOutdated()
         
         //let dashboardPresentor = DashboardViewModel()
         let rootView = MainTabBarController()

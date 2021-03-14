@@ -12,32 +12,32 @@ import SwiftUI
 var saturation = 0.666
 var brightness = 0.99
 
-var colorMap = [Color(#colorLiteral(red: 0.2745098039, green: 0.1333333333, blue: 0.3333333333, alpha: 1)), Color(#colorLiteral(red: 0.1921568627, green: 0.231372549, blue: 0.4470588235, alpha: 1)), Color(#colorLiteral(red: 0.9647058824, green: 0.3176470588, blue: 0.1137254902, alpha: 1)), Color(#colorLiteral(red: 1, green: 0.7058823529, blue: 0, alpha: 1)), Color(#colorLiteral(red: 0.4941176471, green: 0.8784313725, blue: 0.5058823529, alpha: 1)), Color(.systemPink),
+var colorMap = [Color(#colorLiteral(red: 1, green: 0.6291666667, blue: 0.11, alpha: 1)), Color(#colorLiteral(red: 0.4324, green: 0.92, blue: 0.5136666667, alpha: 1)), Color(#colorLiteral(red: 0.3267, green: 0.868395, blue: 0.99, alpha: 1)), Color(#colorLiteral(red: 0.1, green: 0.4133294802, blue: 1, alpha: 1)), Color(#colorLiteral(red: 0.1771, green: 0.77, blue: 0.71071, alpha: 1)), Color(#colorLiteral(red: 0.26, green: 0.2262, blue: 0.24479, alpha: 1)),
                 Color(.systemBlue), Color(.systemTeal), Color(.systemIndigo), Color(.systemGray4), Color(.systemOrange), Color(.systemPink),
                 Color(.gray), Color(.lightGray)
 ] as [Color]
 
-var colorMapSecondary = [Color(#colorLiteral(red: 0.2983135962, green: 0.2142662273, blue: 0.3333333333, alpha: 1)), Color(#colorLiteral(red: 0.286117647, green: 0.3102588235, blue: 0.4470588235, alpha: 1)), Color(#colorLiteral(red: 0.9647058824, green: 0.5539278937, blue: 0.4244705883, alpha: 1)), Color(#colorLiteral(red: 1, green: 0.7058823529, blue: 0, alpha: 1)), Color(#colorLiteral(red: 0.3811764717, green: 0.9529411793, blue: 0.6336731318, alpha: 1)), Color(.systemPink), Color(.systemGreen), Color(.systemPink),
-                Color(.systemBlue), Color(.systemTeal), Color(.systemIndigo), Color(.systemGray4), Color(.systemOrange), Color(.systemPink),
-                Color(.gray), Color(.quaternarySystemFill)
-]
-
-var colorMapTertiaruy = [Color(#colorLiteral(red: 0.2352941176, green: 0, blue: 0.3333333333, alpha: 1)), Color(#colorLiteral(red: 0, green: 0.06877828058, blue: 0.4470588235, alpha: 1)), Color(#colorLiteral(red: 0.9647058824, green: 0.7079696395, blue: 0.6270588236, alpha: 1)), Color(#colorLiteral(red: 1, green: 0.8970588235, blue: 0.65, alpha: 1)), Color(#colorLiteral(red: 0, green: 0.9529411793, blue: 0.4208277668, alpha: 1)), Color(.systemPink), Color(.systemGreen), Color(.systemPink),
-                Color(.systemBlue), Color(.systemTeal), Color(.systemIndigo), Color(.systemGray4), Color(.systemOrange), Color(.systemPink),
-                Color(.gray), Color(.quaternarySystemFill)
-]
 
 
-
+var colorMapUIKit = [UIColor(#colorLiteral(red: 1, green: 0.6291666667, blue: 0.11, alpha: 1)), UIColor(#colorLiteral(red: 0.4324, green: 0.92, blue: 0.5136666667, alpha: 1)), UIColor(#colorLiteral(red: 0.3267, green: 0.868395, blue: 0.99, alpha: 1)), UIColor(#colorLiteral(red: 0.1, green: 0.4133294802, blue: 1, alpha: 1)), UIColor(#colorLiteral(red: 0.1771, green: 0.77, blue: 0.71071, alpha: 1)), UIColor(#colorLiteral(red: 0.26, green: 0.2262, blue: 0.24479, alpha: 1)),
+                     UIColor(#colorLiteral(red: 0.4941176471, green: 0.8784313725, blue: 0.5058823529, alpha: 1)), UIColor(#colorLiteral(red: 0.4941176471, green: 0.8784313725, blue: 0.5058823529, alpha: 1)), UIColor(#colorLiteral(red: 0.4941176471, green: 0.8784313725, blue: 0.5058823529, alpha: 1)), UIColor(#colorLiteral(red: 0.4941176471, green: 0.8784313725, blue: 0.5058823529, alpha: 1)), UIColor(#colorLiteral(red: 0.4941176471, green: 0.8784313725, blue: 0.5058823529, alpha: 1)), UIColor(#colorLiteral(red: 0.4941176471, green: 0.8784313725, blue: 0.5058823529, alpha: 1)),
+                     UIColor(#colorLiteral(red: 0.4941176471, green: 0.8784313725, blue: 0.5058823529, alpha: 1)), UIColor(#colorLiteral(red: 0.4941176471, green: 0.8784313725, blue: 0.5058823529, alpha: 1)), UIColor(#colorLiteral(red: 0.4941176471, green: 0.8784313725, blue: 0.5058823529, alpha: 1)), UIColor(#colorLiteral(red: 0.4941176471, green: 0.8784313725, blue: 0.5058823529, alpha: 1))
+     ]
 
 
 struct AppTheme {
     
-    var themeColorPrimary = Color(#colorLiteral(red: 0.568627451, green: 0.1843137255, blue: 0.337254902, alpha: 1))
+    var themeColorPrimary = Color(.systemBlue)
     
-    var themeColorPrimaryUIKit = UIColor(#colorLiteral(red: 0.568627451, green: 0.1843137255, blue: 0.337254902, alpha: 1))
+    var themeColorPrimaryUIKit = UIColor(#colorLiteral(red: 0.2196078449, green: 0.007843137719, blue: 0.8549019694, alpha: 1))
 
-    var themeColorSecondary = Color(#colorLiteral(red: 0.9176470588, green: 0.9490196078, blue: 0.937254902, alpha: 1))
+    var themeColorSecondary = Color(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1))
+    
+    var otherColor = Color(#colorLiteral(red: 0.8039215803, green: 0.01909826458, blue: 0.3330275909, alpha: 1))
+    
+    var otherColorSecondary = Color(#colorLiteral(red: 0.9630680514, green: 0.02287900823, blue: 0.3989546255, alpha: 1))
+    
+    var otherColorTertiary = Color(#colorLiteral(red: 0.7673038082, green: 0.01822835896, blue: 0.3178585387, alpha: 1))
     
 
 }

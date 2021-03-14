@@ -39,35 +39,43 @@ class HistoryEntryViewData: Hashable{
 class HistoryViewModel : ObservableObject {
     
     @Published var historicalBudgets : [Budget]
-    var coordinator : MoneyTabCoordinator?
+    var coordinator : HistoryTabCoordiantor?
     var viewData = [HistoryEntryViewData]()
     
     var service : BudgetStatsService
+    
+    var activeBudget: Budget?
 
-    init(){
+    init(budget: Budget? = nil){
         
         let pastQuery = PredicateBuilder().generatePastBudgetPredicate(currentDate: Date())
         
         let budgets = try! DataManager().getBudgets(predicate: pastQuery)
         self.historicalBudgets = budgets
         self.service = BudgetStatsService(budgets: budgets)
+        self.activeBudget = budget
         generateViewData()
     }
     
     
     
-    /*
+    
     func testBudgetCopy(){
         
-        let copier = BudgetCopyer()
-        let oldBudget = self.budget
-        let newBudget = copier.copyBudgetForNextPeriod(budget: self.budget)
-        self.budget = newBudget
-        self.historicalBudgets.append(oldBudget)
-        DataManager().saveDatabase()
+        if activeBudget != nil {
+            let copier = BudgetCopyer()
+            let oldBudget = self.activeBudget!
+            let newBudget = copier.copyBudgetForNextPeriod(budget: self.activeBudget!)
+            self.historicalBudgets.append(oldBudget)
+            DataManager().saveDatabase()
+        }
+        else{
+            print("no active budget available!")
+        }
+        
  
     }
-    */
+    
     
     func generateViewData(){
         

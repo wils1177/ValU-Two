@@ -32,8 +32,8 @@ struct EditCategoryCardBudgetSection<ViewModel>: View where ViewModel: CategoryL
         
         HStack(spacing: 0.0){
             
-            BudgetSectionIconLarge(color: colorMap[Int(self.budgetSection.colorCode)] as! Color, icon: self.budgetSection.icon!, size: 35).padding(.trailing)
-            Text(self.budgetSection.name!).foregroundColor(colorMap[Int(self.budgetSection.colorCode)] as! Color).font(.system(size: 20)).bold()
+            BudgetSectionIconLarge(color: colorMap[Int(self.budgetSection.colorCode)] as! Color, icon: self.budgetSection.icon!, size: 35).padding(.trailing, 10)
+            Text(self.budgetSection.name!).foregroundColor(colorMap[Int(self.budgetSection.colorCode)] as! Color).font(.system(size: 22, design: .rounded)).bold()
                Spacer()
                //CategoryButtonView(text: "Add Section")
         }

@@ -13,32 +13,33 @@ class TransactionsTabCoordinator : Coordinator, TransactionRowDelegate{
     
 
     var childCoordinators = [Coordinator]()
-    var view : UIViewController?
     var navigationController = UINavigationController()
     var presentorStack = [Presentor]()
     
     var budget: Budget?
     
-    init(budget: Budget? = nil){
-        self.budget = budget
-    }
-
-
     func start() {
+        self.navigationController = UINavigationController()
+        self.presentorStack = [Presentor]()
+        self.budget = try? DataManager().getBudget()
         
         let viewModel = TransactionsTabViewModel()
         viewModel.coordinator = self
         let vc = viewModel.configure()
-        self.view = vc
         
         self.navigationController.navigationBar.prefersLargeTitles = true
-        self.navigationController.tabBarItem = UITabBarItem(title: "Transactions", image: UIImage(systemName: "arrow.up.arrow.down"), selectedImage: UIImage(named: "tab_icon_seelcted"))
+        self.navigationController.tabBarItem = UITabBarItem(title: "Transactions", image: UIImage(systemName: "arrow.up.and.down.circle"), selectedImage: UIImage(named: "tab_icon_seelcted"))
         self.navigationController.pushViewController(vc, animated: false)
         
     }
     
     
-    
+    func stop(){
+        childCoordinators = [Coordinator]()
+        self.navigationController = UINavigationController()
+        self.presentorStack = [Presentor]()
+        self.budget = nil
+    }
     
     
 
@@ -69,13 +70,13 @@ extension TransactionRowDelegate{
     
     func showTransactionDetail(transaction: Transaction){
         
-        let presentor = TransactionDetailViewModel(transaction: transaction, service: TransactionService(transaction: transaction))
+        let presentor = TransactionDetailViewModel(transaction: transaction, service: TransactionService(), budget: self.budget)
         presentor.coordinator = self
         let vc = presentor.configure()
         
-        self.navigationController.navigationBar.shadowImage = UIImage()
-        self.navigationController.navigationBar.isTranslucent = true
-        self.navigationController.view.backgroundColor = .systemGroupedBackground
+        //self.navigationController.navigationBar.shadowImage = UIImage()
+        //self.navigationController.navigationBar.isTranslucent = true
+        //self.navigationController.view.backgroundColor = .systemGroupedBackground
 
         
         self.navigationController.pushViewController(vc, animated: true)

@@ -53,7 +53,8 @@ struct CreateCustomBudgetCategoryView: View {
             }.navigationBarTitle("New Category", displayMode: .inline).navigationBarItems(
                          
                 leading: Button(action: {
-                            self.presentationMode.wrappedValue.dismiss()
+                    self.presentationMode.wrappedValue.dismiss()
+                    self.presentationMode.wrappedValue.dismiss()
                         }){
                         ZStack{
                             

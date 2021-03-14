@@ -38,26 +38,7 @@ struct BalancerView: View {
         
         
         self.balancerBody
-            .navigationBarTitle("Set Budgets", displayMode: .large).navigationBarItems(trailing:
-                
-                HStack{
-                    
-                    
-
-                    Button(action: {
-                        self.viewModel.coordinator?.finishedSettingLimits()
-                    }){
-                        
-                        ColoredActionButton(text: "Finish")
-                        
-                    }
-                }
             
-            
-            
-            
-            
-        )
         
     }
     

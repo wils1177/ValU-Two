@@ -13,13 +13,18 @@ struct HistoricalTransactionsView: View {
     var viewModel : HistoricalTransactionsViewModel
     var coordinator : BudgetEditableCoordinator?
     
+    var transactionsService = TransactionService()
+    
     var body: some View {
         
-        List{
-            ForEach(viewModel.transactions, id: \.self) { transaction in
-                TransactionRow(coordinator: self.coordinator!, transaction: transaction)
+        ScrollView{
+            VStack{
+                ForEach(viewModel.transactions, id: \.self) { transaction in
+                    TransactionRow(coordinator: self.coordinator!, transaction: transaction, transactionService: self.transactionsService).padding(.horizontal).padding(.bottom, 5)
+                }
             }
-        }.listStyle(SidebarListStyle())
+            
+        }
         .navigationBarTitle(self.viewModel.budgetCategory.spendingCategory!.name!)
         .toolbar {
                     ToolbarItem(placement: .bottomBar) {

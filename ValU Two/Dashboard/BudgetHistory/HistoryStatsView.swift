@@ -12,35 +12,42 @@ struct HistoryStatsView: View {
     
     var service : BudgetStatsService
     
+    @State var isLarge = false
+    
     var body: some View {
         
-        VStack{
+        VStack(alignment: .center){
+            
             HStack{
-                
-                HStack{
-                    Spacer()
-                    VStack{
-                    
-                    Text("Money Saved").font(.caption)
-                        Text("$" + String(self.service.getTotalAmountSaved())).font(.largeTitle).foregroundColor(Color(.systemGreen)).fontWeight(.semibold).padding(.top, 10)
-                    Text("Saved")
+                VStack{
+                    HStack{
+                        Image(systemName: "rosette").font(.system(size: 21)).foregroundColor(Color(.systemGreen))
+                        Text("Total Savings").font(.system(size: 18, design: .rounded)).fontWeight(.bold)
+                        Spacer()
                     }
-                    Spacer()
-                }.padding(10).background(Color(.white)).cornerRadius(15).padding(.trailing, 10)
                 
-                HStack{
-                    Spacer()
-                    VStack{
+                    Text("$" + String(self.service.getTotalAmountSaved())).font(.system(size: 44, design: .rounded)).bold().foregroundColor(Color(.systemGreen)).fontWeight(.semibold).padding(.top, 10)
+                    Text("Saved").font(.subheadline).bold().frame(maxWidth: 100)
+                }
+                Spacer()
+            }.padding().background(Color(.tertiarySystemBackground)).cornerRadius(15).padding(.horizontal, 10).padding(.vertical, 5).shadow(radius: 10)
+            
+            HStack{
+                VStack{
                     
-                    Text("Budgets").font(.caption)
-                        Text(String(self.service.getCompletedBudgets())).font(.largeTitle).foregroundColor(AppTheme().themeColorPrimary).fontWeight(.semibold).padding(.top, 10)
-                    Text("Completed")
+                    HStack{
+                        Image(systemName: "creditcard").font(.system(size: 21)).foregroundColor(AppTheme().themeColorPrimary)
+                        Text("Budgets Completed").font(.system(size: 18, design: .rounded)).fontWeight(.bold)
+                        Spacer()
                     }
-                    Spacer()
-                }.padding(10).background(Color(.white)).cornerRadius(15).padding(.leading, 10)
                 
-
-            }.padding(.bottom)
+                    Text(String(self.service.getCompletedBudgets())).font(.system(size: 44, design: .rounded)).bold().foregroundColor(AppTheme().themeColorPrimary).fontWeight(.semibold).padding(.top, 10)
+                    Text("Budget(s)").font(.subheadline).bold().multilineTextAlignment(.center).frame(maxWidth: 100)
+                }
+                Spacer()
+            }.padding().background(Color(.tertiarySystemBackground)).cornerRadius(15).padding(.horizontal, 10).padding(.vertical, 5).shadow(radius: 10)
+            
+            
             
             /*
             HStack{

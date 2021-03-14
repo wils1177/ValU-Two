@@ -10,11 +10,14 @@ import SwiftUI
 
 struct ChildCategoryCard: View {
     
-    @ObservedObject var budgetCategory : BudgetCategory
+    var limit : Double
+    var spent : Double
+    var icon : String
+    var name : String
     
     func getPercentage() -> Double{
-        if self.budgetCategory.limit != 0.0{
-            return self.budgetCategory.getAmountSpent() / self.budgetCategory.limit
+        if self.limit != 0.0{
+            return spent / limit
         }
         else{
             return 0.0
@@ -24,9 +27,12 @@ struct ChildCategoryCard: View {
     var remainingText : some View{
         HStack{
             
-            Text( CommonUtils.makeMoneyString(number: self.budgetCategory.getAmountSpent())).font(.system(size: 15)).bold().foregroundColor(Color(.gray)).lineLimit(1)
-            Text ("/" ).font(.system(size: 15)).bold().foregroundColor(Color(.gray))
-            Text(CommonUtils.makeMoneyString(number: self.budgetCategory.limit)).font(.system(size: 15)).bold().foregroundColor(Color(.gray)).lineLimit(1)
+
+                
+                Text(CommonUtils.makeMoneyString(number: limit)).font(.system(size: 15)).bold().foregroundColor(Color(.gray)).lineLimit(1)
+            Text ("budgeted" ).font(.system(size: 15)).bold().foregroundColor(Color(.gray))
+            
+            
             
         }
     }
@@ -34,12 +40,12 @@ struct ChildCategoryCard: View {
     var body: some View {
         VStack(spacing: 0){
             
-            HStack{
-                Text(self.budgetCategory.spendingCategory!.icon!).font(.system(size: 35)).padding(.trailing, 3)
+            HStack(alignment: .center){
+                Text(self.icon).font(.system(size: 40, design: .rounded)).padding(.trailing, 8)
                 VStack(alignment: .leading, spacing: 4){
                     HStack{
                         
-                        Text(self.budgetCategory.spendingCategory!.name!).font(.system(size: 20)).bold().foregroundColor(Color(.black)).lineLimit(1)
+                        Text(self.name).font(.system(size: 20, design: .rounded)).bold().lineLimit(1)
                         Spacer()
                     }
                     
@@ -48,7 +54,9 @@ struct ChildCategoryCard: View {
                 
                 Spacer()
                 
-            }.padding(.top).padding(.bottom)
+                Text(CommonUtils.makeMoneyString(number: spent)).font(.system(size: 20, design: .rounded)).bold().padding(.trailing, 5)
+                
+            }
             
             
             
@@ -58,7 +66,7 @@ struct ChildCategoryCard: View {
             
             //Divider()
             
-        }
+        }.padding(15).background(Color(.tertiarySystemBackground)).cornerRadius(15).shadow(radius: 5)
         
     }
 }

@@ -11,7 +11,7 @@ import Foundation
 import CoreData
 
 @objc(BudgetSection)
-public class BudgetSection: NSManagedObject {
+public class BudgetSection: NSManagedObject, NSCopying {
     
     convenience init(name : String, icon: String, colorCode: Int, order: Int, context: NSManagedObjectContext!){
         
@@ -26,10 +26,23 @@ public class BudgetSection: NSManagedObject {
 
     }
     
+    public func copy(with zone: NSZone? = nil) -> Any {
+        
+        let newBudgetSection = DataManager().createBudgetSection(name: self.name!, icon: self.icon!, colorCode: Int(self.colorCode), order: Int(self.order))
+        
+        for budgetCategory in self.budgetCategories?.allObjects as! [BudgetCategory]{
+            let newBudgetCategory = budgetCategory.copy() as! BudgetCategory
+            newBudgetSection.addToBudgetCategories(newBudgetCategory)
+        }
+        
+        return newBudgetSection
+        
+    }
+    
     func getLimit() -> Double{
         
         var total = 0.0
-        for child in self.budgetCategories?.allObjects as! [BudgetCategory]{
+        for child in self.budgetCategories?.allObjects as? [BudgetCategory] ?? [BudgetCategory](){
             total = child.limit + total
         }
         return total

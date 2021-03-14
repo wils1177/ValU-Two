@@ -11,9 +11,11 @@ import SwiftUI
 struct SwiftUIAccountCardView: View {
     
     let account : AccountData
+    var isSmall = false
     
-    init(account: AccountData){
+    init(account: AccountData, isSmall: Bool = false){
         self.account = account
+        self.isSmall = isSmall
     }
     
     func getBalance() -> String{
@@ -25,20 +27,20 @@ struct SwiftUIAccountCardView: View {
         }
     }
     
-    var body: some View {
+    var largeCard: some View {
         HStack{
             VStack(alignment: .leading){
                 HStack{
                     Text(account.name!).font(.title).foregroundColor(.white).bold()
                     Spacer()
-                    Image(systemName: "creditcard.fill").foregroundColor(Color(.white)).font(.system(size: 25))
+                    Image(systemName: "creditcard.fill").foregroundColor(Color(.white)).font(.system(size: 30))
                 }
                 
                 Spacer()
                 
                 //Divider().foregroundColor(Color(.white))
                 HStack{
-                    Text("$" + getBalance()).font(.title).bold().foregroundColor(.white)
+                    Text(CommonUtils.makeMoneyString(number: Int(getBalance())!)).font(.title).bold().foregroundColor(.white)
                 }
                 HStack{
                     Text("XXXX" + (account.mask ?? "XXXX")).font(.headline).foregroundColor(Color(.lightText))
@@ -48,8 +50,44 @@ struct SwiftUIAccountCardView: View {
                 
             }
             Spacer()
-        }.frame(height: 170).padding(10).background(LinearGradient(gradient:  Gradient(colors: [AppTheme().themeColorSecondary, AppTheme().themeColorPrimary]), startPoint: .topTrailing, endPoint: .center))
+        }.frame(height: 180).padding(10).background(LinearGradient(gradient:  Gradient(colors: [AppTheme().themeColorSecondary, AppTheme().themeColorPrimary]), startPoint: .topTrailing, endPoint: .center))
             .cornerRadius(20)
+    }
+    
+    var smallCard : some View {
+        HStack{
+            VStack(alignment: .leading){
+                HStack{
+                    Text(account.name!).font(.headline).foregroundColor(.white).bold()
+                    Spacer()
+                    Image(systemName: "creditcard.fill").foregroundColor(Color(.white)).font(.system(size: 17))
+                }
+                
+                Spacer()
+                
+                //Divider().foregroundColor(Color(.white))
+                HStack{
+                    Text("$" + getBalance()).font(.headline).bold().foregroundColor(.white)
+                }
+                HStack{
+                    Text("XXXX" + (account.mask ?? "XXXX")).font(.subheadline).foregroundColor(Color(.lightText))
+                   Spacer().frame(width: 35)
+                }
+                
+                
+            }
+            Spacer()
+        }.frame(height: 110).padding(10).background(LinearGradient(gradient:  Gradient(colors: [AppTheme().themeColorSecondary, AppTheme().themeColorPrimary]), startPoint: .topTrailing, endPoint: .center))
+            .cornerRadius(20)
+    }
+    
+    var body: some View {
+        if isSmall{
+            smallCard
+        }
+        else{
+            largeCard
+        }
     }
 }
 

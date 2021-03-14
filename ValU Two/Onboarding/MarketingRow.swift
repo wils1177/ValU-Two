@@ -17,12 +17,13 @@ struct MarketingRow: View {
     var body: some View {
         HStack{
             
-            Image(systemName: self.imageName).font(.system(size: 30)).foregroundColor(AppTheme().themeColorPrimary).padding(.trailing)
+            //Image(systemName: self.imageName).font(.system(size: 35)).foregroundColor(AppTheme().themeColorPrimary).padding(.trailing)
+            Text(self.imageName).font(.system(size: 45)).padding(.horizontal, 10).padding(. trailing, 5)
             VStack(alignment: .leading){
                 
-                Text(self.headline).font(.headline).padding(.bottom, 5)
-                Text(self.description).font(.callout).foregroundColor(Color(.lightGray))
-            }
+                Text(self.headline).font(.headline)//.padding(.bottom, 2)
+                Text(self.description).font(.callout)//.foregroundColor(Color(.lightGray))
+            }.padding(.trailing, 10)
             Spacer()
         }
     }

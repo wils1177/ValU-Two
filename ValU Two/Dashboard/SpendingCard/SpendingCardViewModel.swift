@@ -57,24 +57,26 @@ class SpendingCardViewModel: ObservableObject {
     var budgetCategories = [BudgetCategory]()
     @Published var otherCategory : SpendingCategoryViewData?
     var viewData = SpendingCardViewData()
-    var services  = [BalanceParentService]()
     var budgetTransactionsService : BudgetTransactionsService
     
     init(budget: Budget, budgetTransactionsService: BudgetTransactionsService){
         self.budget = budget
         self.budgetTransactionsService = budgetTransactionsService
-        self.budgetSections = budget.getBudgetSections()
+        self.budgetSections = getBudgetedSections(sections: budget.getBudgetSections())
         self.budgetCategories = budget.getBudgetCategories()
         makeOtherCategory()
-        makeServices()
     }
     
-    func makeServices(){
-        for budgetSection in budgetSections{
-            let service = BalanceParentService(budgetSection: budgetSection)
-            self.services.append(service)
+    func getBudgetedSections(sections: [BudgetSection]) -> [BudgetSection]{
+        var toReturn = [BudgetSection]()
+        for section in sections{
+            if section.getLimit() > 0.0 {
+                toReturn.append(section)
+            }
         }
+        return toReturn
     }
+    
     
     func makeOtherCategory(){
         
@@ -116,6 +118,10 @@ class SpendingCardViewModel: ObservableObject {
     func getOtherSpent() -> Float{
         
         return Float(self.budgetTransactionsService.getOtherSpentTotal())
+    }
+    
+    func getRemainig() -> Int {
+        return Int(self.budget.getAmountAvailable() - Float(self.budgetTransactionsService.getBudgetExpenses()))
     }
     
 

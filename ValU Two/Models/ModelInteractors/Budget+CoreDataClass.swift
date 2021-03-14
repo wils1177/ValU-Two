@@ -29,7 +29,7 @@ public class Budget: NSManagedObject, NSCopying, Identifiable {
     
     
     public func copy(with zone: NSZone? = nil) -> Any {
-        let newBudget = DataManager().createNewBudget()
+        let newBudget = DataManager().createNewBudget(copy: true)
         newBudget.active = self.active
         newBudget.amount = self.amount
         newBudget.endDate = self.endDate
@@ -42,12 +42,19 @@ public class Budget: NSManagedObject, NSCopying, Identifiable {
         newBudget.repeating = self.repeating
         newBudget.id = UUID()
         
+        newBudget.setTimeFrame(timeFrame: TimeFrame(rawValue: self.timeFrame)!)
+        
+        for budgetSection in self.budgetSection?.allObjects as! [BudgetSection]{
+            let newBudgetSection = budgetSection.copy() as! BudgetSection
+            newBudget.addToBudgetSection(newBudgetSection)
+        }
+        
         return newBudget
     }
     
     
     
-    convenience init(context: NSManagedObjectContext){
+    convenience init(copy: Bool, context: NSManagedObjectContext){
         
         print("creating budget")
         let entity = NSEntityDescription.entity(forEntityName: "Budget", in: context)
@@ -57,7 +64,11 @@ public class Budget: NSManagedObject, NSCopying, Identifiable {
         self.id = UUID()
         self.name = "Placeholder"
         self.timeFrame = -1
-        self.generateDefaultBudgetSections()
+        
+        if !copy{
+            self.generateDefaultBudgetSections()
+        }
+        
 
     }
     
@@ -124,7 +135,7 @@ public class Budget: NSManagedObject, NSCopying, Identifiable {
         if timeFrame == TimeFrame.monthly{
             self.timeFrame = TimeFrame.monthly.rawValue
             self.startDate = today.startOfMonth!
-            self.endDate = today.endOfMonth!
+            self.endDate = Calendar.current.date(byAdding: .day, value: 1, to: today.endOfMonth!)!
         }
         else if timeFrame == TimeFrame.semiMonthly{
             

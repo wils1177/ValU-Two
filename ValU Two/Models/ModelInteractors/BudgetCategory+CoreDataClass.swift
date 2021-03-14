@@ -11,7 +11,7 @@ import Foundation
 import CoreData
 
 @objc(BudgetCategory)
-public class BudgetCategory: NSManagedObject {
+public class BudgetCategory: NSManagedObject, NSCopying {
     
     convenience init(category : SpendingCategory, order: Int, context: NSManagedObjectContext!){
         
@@ -24,6 +24,14 @@ public class BudgetCategory: NSManagedObject {
         self.id = UUID()
         
 
+    }
+    
+    public func copy(with zone: NSZone? = nil) -> Any {
+        
+        let newBudgetCategory = DataManager().createBudgetCategory(category: self.spendingCategory!, order: Int(self.order))
+        newBudgetCategory.limit = self.limit
+        return newBudgetCategory
+        
     }
     
     func getAmountSpent() -> Double{

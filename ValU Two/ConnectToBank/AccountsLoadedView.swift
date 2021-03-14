@@ -28,6 +28,11 @@ struct AccountsLoadedView: View {
         return cards
     }
     
+    private var columns: [GridItem] = [
+            GridItem(.flexible(), spacing: 16),
+            GridItem(.flexible(), spacing: 16),
+        ]
+    
     var body: some View {
         
             VStack(alignment: .center){
@@ -35,43 +40,54 @@ struct AccountsLoadedView: View {
                 
                 Text("Accounts Successfully Connected").font(.title).bold().lineLimit(nil).padding().multilineTextAlignment(.center).padding(.top).padding(.top)
                 
-                //LoadedAccountsList(accounts: self.accounts)
-                //SnapCarousel(accounts: self.accounts).environmentObject(UIStateModel())
+                
                 if !self.cardsHidden{
                     CarouselView(itemHeight: 190, views: makeCardViews())
                 }
                 
+                /*
+                ScrollView{
+                    LazyVGrid(
+                                    columns: columns,
+                                    alignment: .center,
+                                    spacing: 16,
+                                    pinnedViews: [.sectionHeaders, .sectionFooters]
+                                )
+                    {
+                        ForEach(self.accounts, id: \.self) { account in
+                            SwiftUIAccountCardView(account: account, isSmall: true)
+                                }
+                    }.padding(5)
+                }
+                */
                 Spacer()
                 
-                Button(action: {
-                    //Button Action
-                    self.presentor?.userPressedContinue()
-                    //self.cardsHidden = true
-                    }){
-                    HStack{
-                        Spacer()
-                        ZStack{
-                            Text("Continue").font(.subheadline).foregroundColor(.white).bold().padding()
-                        }
-                        Spacer()
-                    }.background(AppTheme().themeColorPrimary).cornerRadius(10).shadow(radius: 10).padding(.horizontal).padding(.horizontal).padding(.bottom)
-                    
-                    
+                VStack(spacing: 0){
+                    Button(action: {
+                        //Button Action
+                        self.presentor?.userPressedContinue()
+                        //self.cardsHidden = true
+                        }){
+                        ActionButtonLarge(text: "Done")
+                        
+                        
+                    }
+                    Button(action: {
+                        //Button Action
+                        self.presentor?.userSelectedAddMoreAccounts()
+                        }){
+                        HStack{
+                            Spacer()
+                            ZStack{
+                                Text("Add More Accounts").font(.headline).foregroundColor(AppTheme().themeColorPrimary).bold().padding()
+                            }
+                            Spacer()
+                        }.background(Color(.tertiarySystemGroupedBackground)).cornerRadius(20).shadow(radius: 0).padding(.horizontal).padding(.horizontal).padding(.bottom).padding(.bottom)
+                        
+                        
+                    }
                 }
-                Button(action: {
-                    //Button Action
-                    self.presentor?.userSelectedAddMoreAccounts()
-                    }){
-                    HStack{
-                        Spacer()
-                        ZStack{
-                            Text("Add More Accounts").font(.subheadline).foregroundColor(AppTheme().themeColorPrimary).bold().padding()
-                        }
-                        Spacer()
-                    }.background(Color(red: 0.9, green: 0.9, blue: 0.9)).cornerRadius(10).shadow(radius: 0).padding(.horizontal).padding(.horizontal).padding(.bottom).padding(.bottom)
-                    
-                    
-                }
+                
      
                 }
 

@@ -7,14 +7,10 @@
 //
 
 import Foundation
+import SwiftUI
 
 class TransactionService{
     
-    var transaction : Transaction
-    
-    init(transaction: Transaction){
-        self.transaction = transaction
-    }
     
     
     func getIcons(categories: [CategoryMatch]) -> [String]{
@@ -48,8 +44,8 @@ class TransactionService{
         }
     }
     
-    func getAmount() -> String{
-        if let categories = self.transaction.categoryMatches?.allObjects as? [CategoryMatch]{
+    func getAmount(transaction: Transaction) -> String{
+        if let categories = transaction.categoryMatches?.allObjects as? [CategoryMatch]{
             var amount = Float(0.0)
             if categories.count > 0{
                 for match in categories{
@@ -57,7 +53,7 @@ class TransactionService{
                 }
             }
             else{
-                amount = Float(self.transaction.amount)
+                amount = Float(transaction.amount)
             }
             return getPresentationAmount(amount: Double(amount))
         }
@@ -85,66 +81,75 @@ class TransactionService{
         }
     }
     
-    func getBudgetName() -> String? {
-        let categories = self.transaction.categoryMatches!.allObjects as! [CategoryMatch]
-        if categories.count > 1 {
-            return "Multiple Budgets"
+    
+    func getBudgetLabels(transaction: Transaction) -> [TransactionBudgetLabelViewData]{
+        var results = [TransactionBudgetLabelViewData]()
+        let categories = transaction.categoryMatches!.allObjects as! [CategoryMatch]
+        
+        if transaction.isHidden{
+            let moreEntry = TransactionBudgetLabelViewData(name: "Hidden", icon: "eye.circle", color: Color(.lightGray))
+            results.append(moreEntry)
+            return results
         }
-        else if categories.count == 1{
+        
+        if transaction.amount < 0.0 {
+            let moreEntry = TransactionBudgetLabelViewData(name: "Income", icon: "arrow.up.circle.fill", color: Color(.systemGreen))
+            results.append(moreEntry)
+            return results
+        }
+        
+        let activeBudgetSections = checkForActiveBudgetSection(categories: categories)
+        
+        if activeBudgetSections.count == 0 {
+            let moreEntry = TransactionBudgetLabelViewData(name: "No Budget", icon: "book", color: Color(.lightGray))
+            results.append(moreEntry)
+            return results
+        }
+        else if activeBudgetSections.count == 1 {
+            let name = activeBudgetSections[0].name!
+            let icon = activeBudgetSections[0].icon!
+            let color = colorMap[Int((activeBudgetSections[0].colorCode))]
             
-            if categories[0].spendingCategory?.budgetCategory != nil{
-                return categories[0].spendingCategory!.budgetCategory!.budgetSection!.name!
-            }
-            else{
-                return "No Budget"
-            }
-            
+            let entry = TransactionBudgetLabelViewData(name: name, icon: icon, color: color)
+            results.append(entry)
+            return results
         }
         else{
-            return "No Budget"
+            let name = activeBudgetSections[0].name!
+            let icon = activeBudgetSections[0].icon!
+            let color = colorMap[Int((activeBudgetSections[0].colorCode))]
+            
+            let entry = TransactionBudgetLabelViewData(name: name, icon: icon, color: color)
+            results.append(entry)
+            
+            let moreEntry = TransactionBudgetLabelViewData(name: "More", icon: "ellipsis", color: Color(.lightGray))
+            results.append(moreEntry)
+            return results
+            
+            return results
+            
         }
+        
+        
     }
     
-    func getBudgetIconName() -> String?{
-        let categories = self.transaction.categoryMatches!.allObjects as! [CategoryMatch]
-        if categories.count > 1 {
-            return "infinity.circle"
-        }
-        else if categories.count == 1{
+    //Checks the category matches to see if there are associated active budget sections
+    func checkForActiveBudgetSection(categories: [CategoryMatch]) -> [BudgetSection]{
+        var activeBudgetSections = [BudgetSection]()
+        for category in categories{
+            let BudgetCategories = category.spendingCategory?.budgetCategory?.allObjects as! [BudgetCategory]
             
-            if categories[0].spendingCategory?.budgetCategory != nil{
-                return categories[0].spendingCategory!.budgetCategory!.budgetSection!.icon!
-            }
-            else{
-                return "pencil"
+            for budgetCategory in BudgetCategories{
+                if budgetCategory.budgetSection!.budget!.active{
+                    activeBudgetSections.append(budgetCategory.budgetSection!)
+                }
             }
             
         }
-        else{
-            return "pencil"
-        }
+        return activeBudgetSections
     }
     
     
-    func getBudgetColorInt() -> Int? {
-        let categories = self.transaction.categoryMatches!.allObjects as! [CategoryMatch]
-        if categories.count > 1 {
-            return 13
-        }
-        else if categories.count == 1{
-            
-            if categories[0].spendingCategory?.budgetCategory != nil{
-                return Int(categories[0].spendingCategory!.budgetCategory!.budgetSection!.colorCode)
-            }
-            else{
-                return 12
-            }
-            
-        }
-        else{
-            return 12
-        }
-    }
     
     
 }

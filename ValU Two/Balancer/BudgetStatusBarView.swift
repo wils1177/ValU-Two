@@ -9,11 +9,23 @@
 import SwiftUI
 
 struct BudgetStatusBarViewData: Hashable {
+    
+
     var percentage : Double
     var color : Color
     var name : String
     var icon : String
+    var action : ((BudgetSection) -> ())?
+    var section : BudgetSection?
     var id = UUID()
+    
+    static func == (lhs: BudgetStatusBarViewData, rhs: BudgetStatusBarViewData) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
 }
 
 struct BudgetStatusBarView: View {
@@ -28,55 +40,46 @@ struct BudgetStatusBarView: View {
         
     ]
     
+    init(viewData: [BudgetStatusBarViewData]){
+        self.viewData = viewData
+        print("BudgetStatusBarView INIT")
+    }
+    
     var maxHeight = CGFloat(12)
     
     
-    func getLegendArray() -> [[BudgetStatusBarViewData]]{
-        return self.viewData.chunked(into: 3)
-    }
+   
     
-    
-    var legend : some View{
-        VStack{
-            ForEach(self.getLegendArray(), id: \.self) {row in
-                HStack{
-                    ForEach(row, id: \.self) {entry in
-                        HStack{
-                            Text(entry.name).font(.system(size: 13)).lineLimit(1).foregroundColor(Color(.white))
-                        }.padding(.horizontal, 7).padding(.vertical, 3).background(entry.color).cornerRadius(5)
-
-                    }
-                    Spacer()
-                }
-                
-            }
-               
-        }.padding(.top, 5)
-                
+    func getWidthOfBar(totalSize: CGFloat, barCount: Int, percentage: Double) -> CGFloat{
+        //return (totalSize * CGFloat(percentage)) - CGFloat((4 * (barCount)) / barCount)
+        return totalSize * CGFloat(percentage)
     }
     
     var legendV2 : some View {
         
         ScrollView(.horizontal){
             HStack(alignment: .bottom, spacing: 0){
-                ForEach(self.getLegendArray(), id: \.self) {row in
-                        ForEach(row, id: \.self) {entry in
-                            
-                            VStack(alignment: .leading, spacing: 5){
-                                HStack{
-                                    Image(systemName: entry.icon).foregroundColor(entry.color).font(.system(size: 23)).padding(.trailing, 20)
-                                }
-                                
-                                //BudgetSectionIconLarge(color: entry.color, icon: entry.icon, size: CGFloat(44))
-                                Text(entry.name).font(.system(size: 12)).foregroundColor(Color(.black)).bold().lineLimit(1).padding(.trailing, 11).padding(.top, 1)
-                                Text( String(Int(entry.percentage * 100)) + "%").font(.system(size: 18)).bold().foregroundColor(entry.color).padding(.trailing, 15)
-                            }.padding(.trailing,5).padding(.bottom, 15)
+                ForEach(self.viewData, id: \.self) {entry in
+                    
+                    if entry.action != nil {
+                        
+                        Button(action: {
+                            // What to perform
+                            entry.action!(entry.section!)
+                        }) {
+                            // How the button looks like
+                            LegendEntry(icon: entry.icon, name: entry.name, percentage: entry.percentage, color: entry.color)
+                        }.buttonStyle(PlainButtonStyle())
+                        
+                    }
+                    else{
+                        LegendEntry(icon: entry.icon, name: entry.name, percentage: entry.percentage, color: entry.color)
+                    }
+                    
+                    
 
-                        }
-                    
-                    
                 }
-            }
+            }.padding(.leading)
         }
     }
     
@@ -84,30 +87,36 @@ struct BudgetStatusBarView: View {
     
     var backgroundRectangle : some View{
         HStack{
-            Rectangle().foregroundColor(Color(.systemGroupedBackground))
+            Rectangle().foregroundColor(Color(.clear))
         }.frame(maxHeight: self.maxHeight).clipShape(Capsule())
     }
     
     var foreGroundBars : some View{
-        GeometryReader{ g in
-            HStack(spacing: 0) {
-                ForEach(self.viewData, id: \.self) {data in
-                    Rectangle().frame(width: g.size.width * CGFloat(data.percentage)).foregroundColor(data.color)
-              }
-                Spacer()
-            }
-            
-        }.frame(height: self.maxHeight).clipShape(RoundedRectangle(cornerRadius: 8))
+        
+            GeometryReader{ g in
+                HStack(spacing: 0) {
+                    ForEach(self.viewData, id: \.self) {data in
+                        if g.size.height < g.size.width{
+                            RoundedRectangle(cornerRadius: 0).frame(width: self.getWidthOfBar(totalSize: g.size.width, barCount: self.viewData.count, percentage: data.percentage)).foregroundColor(data.color).opacity(g.size.height < g.size.width ? 1 : 0)
+                        }
+                        
+                  }
+                    Spacer()
+                }
+                
+            }.frame(height: self.maxHeight).clipShape(RoundedRectangle(cornerRadius: 7))
+        
     }
     
     var body: some View {
+        
         VStack(spacing: 3){
-            ZStack{
+            ZStack(alignment: .leading){
                 backgroundRectangle
                 foreGroundBars
-            }
+            }.padding(.horizontal)
             legendV2.padding(.top, 15)
-        }.padding(.horizontal)
+        }
         
         
         
@@ -115,8 +124,25 @@ struct BudgetStatusBarView: View {
     }
 }
 
-struct BudgetStatusBarView_Previews: PreviewProvider {
-    static var previews: some View {
-        BudgetStatusBarView()
+struct LegendEntry : View{
+    
+    var icon: String
+    var name: String
+    var percentage: Double
+    var color: Color
+    
+    var body: some View{
+        
+        VStack(alignment: .leading, spacing: 5){
+            HStack{
+                Image(systemName: self.icon).foregroundColor(self.color).font(.system(size: 23, design: .rounded)).padding(.trailing, 20)
+            }
+            
+            //BudgetSectionIconLarge(color: entry.color, icon: entry.icon, size: CGFloat(44))
+            Text(self.name).font(.system(size: 12, design: .rounded)).bold().lineLimit(1).padding(.trailing, 11).padding(.top, 1)
+            Text( String(Int(self.percentage * 100)) + "%").font(.system(size: 18, design: .rounded)).bold().foregroundColor(self.color).padding(.trailing, 15)
+        }.padding(.trailing,5).padding(.bottom, 15)
+        
     }
 }
+

@@ -25,11 +25,11 @@ struct BalanceSummaryView: View {
             VStack(alignment: .center, spacing: 0){
                 
                 HStack{
-                    Image(systemName: "creditcard.fill").foregroundColor(Color(.lightGray))
-                    Text("Available Balance").font(.headline).bold().foregroundColor(Color(.lightGray))
+                    Image(systemName: "creditcard.fill").font(.system(size: 18, design: .rounded)).foregroundColor(Color(.lightGray))
+                    Text("Available Balance").font(.system(size: 18, design: .rounded)).bold().foregroundColor(Color(.lightGray))
                 }
                 
-                Text(balanceTotal).font(.system(size: 43)).bold().padding(.top, 3)
+                Text(balanceTotal).font(.system(size: 43, design: .rounded)).bold().bold().padding(.top, 3)
                 
             }
             Spacer()

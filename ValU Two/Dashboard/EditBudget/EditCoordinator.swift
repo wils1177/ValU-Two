@@ -30,14 +30,15 @@ class EditCoordiantor : BudgetEditableCoordinator{
         vc.title = "Edit Budgets"
         
         self.navigationController.pushViewController(vc, animated: true)
-        self.navigationController.modalPresentationStyle = .fullScreen
+        self.navigationController.modalPresentationStyle = .pageSheet
     }
     
     
     func dimiss(){
+        self.presentorStack.removeAll()
         self.navigationController.dismiss(animated: true)
         self.navigationController = UINavigationController()
-        self.parent?.dismissEdit()
+        self.parent!.dismissEdit()
     }
     
     func continueToPlaid() {
@@ -81,7 +82,7 @@ extension BudgetEditableCoordinator{
     func incomeSubmitted(budget: Budget) {
         
         self.budget = budget
-        self.navigationController.popViewController(animated: false)
+        //self.navigationController.popViewController(animated: false)
         self.navigationController.popViewController(animated: true)
         DataManager().saveDatabase()
     
@@ -198,8 +199,8 @@ extension BudgetEditableCoordinator{
     
 
     
-    func showCategoryDetail(budgetSection: BudgetSection, service: BalanceParentService) {
-        let view = BalanceDetailView(budgetSection: budgetSection, service: service, coordinator: self)
+    func showCategoryDetail(budgetSection: BudgetSection, viewModel: BudgetBalancerPresentor) {
+        let view = BalanceDetailView(budgetSection: budgetSection, coordinator: self, viewModel: viewModel)
         let vc = UIHostingController(rootView: view)
         vc.title = budgetSection.name!
         
@@ -212,6 +213,10 @@ extension BudgetEditableCoordinator{
         self.navigationController.popViewController(animated: true)
     }
     
+    func categoryDetailDone(){
+        goBack()
+    }
+    
     func finishSettingUpBudget(){
         
     }
@@ -221,9 +226,7 @@ extension BudgetEditableCoordinator{
         
     }
     
-    func dimiss() {
-        self.navigationController.dismiss(animated: true)
-    }
+    
 
     
 }

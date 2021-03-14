@@ -18,25 +18,8 @@ class BudgetCopyer{
         newBudget.spent = Float(0.0)
         newBudget.inflow = Float(0.0)
         
-        //TODO: Put back in place functionality to replicate budget sections and categories
-        /*
-        for newCategory in newBudget.getAllSpendingCategories(){
-            
-            for category in budget.getAllSpendingCategories(){
-                if newCategory.name! == category.name!{
-                    newCategory.limit = category.limit
-                    newCategory.selected = category.selected
-                }
-            }
-            
-            
-            newCategory.spent = Float(0.0)
-            newCategory.initialThirtyDaysSpent = Float(0.0)
-        }
-        */
         
-        newBudget.setTimeFrame(timeFrame: TimeFrame.monthly)
-        
+                
         DataManager().saveDatabase()
         return newBudget
     }
@@ -49,14 +32,6 @@ class BudgetCopyer{
         return newBudget
     }
     
-    func copyBudgetForUpcomming(budget: Budget) -> Budget{
-        let newBudget = copyBudget(budget: budget)
-        budget.active = true
-        newBudget.active = false
-        newBudget.incrementTimeFrame()
-        DataManager().saveDatabase()
-        return newBudget
-    }
     
     func checkIfBudgetIsOutdated(){
         
@@ -65,11 +40,14 @@ class BudgetCopyer{
         if currentBudget != nil{
             
             let currentDate = Date()
+            print(currentDate)
             let startDate = currentBudget!.startDate
+            print(startDate)
             let endDate = currentBudget!.endDate
+            print(endDate)
             
             if !(startDate! ... endDate!).contains(currentDate){
-                
+                print("BUDGET IS OUTDATED")
                 self.copyBudgetForNextPeriod(budget: currentBudget!)
                 
             }
@@ -77,26 +55,7 @@ class BudgetCopyer{
         }
     }
     
-    func checkIfUpcomingBudgetExists() -> Budget?{
-        let futureQuery = PredicateBuilder().generateFutureBudgetPredicate(currentDate: Date())
-        let futureBudgets = try! DataManager().getBudgets(predicate: futureQuery)
-        
-        let currentDate = Date()
-        
-        for budget in futureBudgets{
-            let startDate = budget.startDate!
-            let endDate = budget.endDate!
-            
-            if !(startDate ... endDate).contains(currentDate){
-                
-                return budget
-                
-            }
-        }
-        
-        return nil
-        
-    }
+  
     
     
     

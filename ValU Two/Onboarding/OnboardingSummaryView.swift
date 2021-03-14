@@ -36,54 +36,36 @@ struct OnboardingSummaryView: View {
     
     var body: some View {
         
-        List{
+        ScrollView{
+            
+            VStack{
                 
-                HStack{
-                    VStack{
-                        Text("👋").font(.system(size: 39)).padding(.leading).padding(.top)
+                VStack{
+                        Text("👋").font(.system(size: 42)).padding(.top)
                         VStack{
-                            Text("Hi there! Follow these steps to get started creating your very first budget!").font(.callout).padding(.top, 15).padding(.leading).multilineTextAlignment(.center)
+                            Text("Hi, there! Follow these steps to get started creating your very first budget!").font(.callout).fontWeight(.semibold).padding(.top, 15).multilineTextAlignment(.center)
                         }
-                    }
+                }.padding(.vertical, 30).padding(.horizontal)
 
-                    Spacer()
-                }.padding(.bottom, 20)
+    
+                
             
-            GenericOnboardingStepRow(title: self.viewModel.viewData!.steps[0].title, description: self.viewModel.viewData!.steps[0].description, iconName: self.viewModel.viewData!.steps[0].iconName, iconColor: self.viewModel.viewData!.steps[0].iconColor, backgroundColor: self.viewModel.viewData!.steps[0].backgroundColor, subTectColor: self.viewModel.viewData!.steps[0].subTectColor, completionHandler: self.viewModel.viewData!.steps[0].completionHandler)
+                GenericOnboardingStepRow(title: self.viewModel.viewData!.steps[0].title, description: self.viewModel.viewData!.steps[0].description, iconName: self.viewModel.viewData!.steps[0].iconName, iconColor: self.viewModel.viewData!.steps[0].iconColor, backgroundColor: self.viewModel.viewData!.steps[0].backgroundColor, subTectColor: self.viewModel.viewData!.steps[0].subTectColor, completionHandler: self.viewModel.viewData!.steps[0].completionHandler).padding(.horizontal).padding(.bottom, 10)
 
             
-            GenericOnboardingStepRow(title: self.viewModel.viewData!.steps[1].title, description: self.viewModel.viewData!.steps[1].description, iconName: self.viewModel.viewData!.steps[1].iconName, iconColor: self.viewModel.viewData!.steps[1].iconColor, backgroundColor: self.viewModel.viewData!.steps[1].backgroundColor, subTectColor: self.viewModel.viewData!.steps[1].subTectColor, completionHandler: self.viewModel.viewData!.steps[1].completionHandler)
+            GenericOnboardingStepRow(title: self.viewModel.viewData!.steps[1].title, description: self.viewModel.viewData!.steps[1].description, iconName: self.viewModel.viewData!.steps[1].iconName, iconColor: self.viewModel.viewData!.steps[1].iconColor, backgroundColor: self.viewModel.viewData!.steps[1].backgroundColor, subTectColor: self.viewModel.viewData!.steps[1].subTectColor, completionHandler: self.viewModel.viewData!.steps[1].completionHandler).padding(.horizontal).padding(.bottom, 10)
             
-            GenericOnboardingStepRow(title: self.viewModel.viewData!.steps[2].title, description: self.viewModel.viewData!.steps[2].description, iconName: self.viewModel.viewData!.steps[2].iconName, iconColor: self.viewModel.viewData!.steps[2].iconColor, backgroundColor: self.viewModel.viewData!.steps[2].backgroundColor, subTectColor: self.viewModel.viewData!.steps[2].subTectColor, completionHandler: self.viewModel.viewData!.steps[2].completionHandler)
+            GenericOnboardingStepRow(title: self.viewModel.viewData!.steps[2].title, description: self.viewModel.viewData!.steps[2].description, iconName: self.viewModel.viewData!.steps[2].iconName, iconColor: self.viewModel.viewData!.steps[2].iconColor, backgroundColor: self.viewModel.viewData!.steps[2].backgroundColor, subTectColor: self.viewModel.viewData!.steps[2].subTectColor, completionHandler: self.viewModel.viewData!.steps[2].completionHandler).padding(.horizontal).padding(.bottom, 10)
             
-            GenericOnboardingStepRow(title: self.viewModel.viewData!.steps[3].title, description: self.viewModel.viewData!.steps[3].description, iconName: self.viewModel.viewData!.steps[3].iconName, iconColor: self.viewModel.viewData!.steps[3].iconColor, backgroundColor: self.viewModel.viewData!.steps[3].backgroundColor, subTectColor: self.viewModel.viewData!.steps[3].subTectColor, completionHandler: self.viewModel.viewData!.steps[3].completionHandler)
+            GenericOnboardingStepRow(title: self.viewModel.viewData!.steps[3].title, description: self.viewModel.viewData!.steps[3].description, iconName: self.viewModel.viewData!.steps[3].iconName, iconColor: self.viewModel.viewData!.steps[3].iconColor, backgroundColor: self.viewModel.viewData!.steps[3].backgroundColor, subTectColor: self.viewModel.viewData!.steps[3].subTectColor, completionHandler: self.viewModel.viewData!.steps[3].completionHandler).padding(.horizontal).padding(.bottom, 10)
             
           
                 Spacer()
             
-            if viewModel.budget.getAmountLimited() > 0.0{
-                
-                Button(action: {
-                    //Button Action
-                    
-                    self.viewModel.coordinator!.finishSettingUpBudget()
-                    }){
-                    HStack{
-                        Spacer()
-                        ZStack{
-                            Text("Finish!").font(.subheadline).foregroundColor(.white).bold().padding()
-                        }
-                        Spacer()
-                    }.background(AppTheme().themeColorPrimary).cornerRadius(10).shadow(radius: 10).padding(.horizontal).padding(.horizontal).padding(.bottom)
-                    
-                    
-                }.buttonStyle(PlainButtonStyle())
+            
                 
             }
-            
-            
-                
-                
+                  
             
             }
         .listStyle(SidebarListStyle())

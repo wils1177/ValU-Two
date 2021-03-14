@@ -19,28 +19,36 @@ class MainTabBarController: UITabBarController {
     
     
     var budget: Budget?
-
+    var setupCount = 0
+    var onboardingCanLaod = false
 
     
     override func viewWillAppear(_ animated: Bool) {
-        
-        setupViews()
-        
         UITabBar.appearance().tintColor = AppTheme().themeColorPrimaryUIKit
+        if onboardingCanLaod{
+            
+            setupViews()
+            onboardingCanLaod = false
+        }
         
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-
+        
         // Do any additional setup after loading the view.
     }
     
     //The parent coorindator will decide what we load over the dashboard, if anything
     override func viewDidAppear(_ animated: Bool) {
+        
+        if setupCount < 1{
+            
+            setupViews()
+            setupCount = setupCount + 1
+        }
         self.parentCoordinator?.loadDashboard()
-        setupViews()
 
     }
     
@@ -48,28 +56,44 @@ class MainTabBarController: UITabBarController {
     
     func setupViews(){
         
-        self.budget = try? DataManager().getBudget()
+        /*
+        self.moneyTabCoordinator?.stop()
+        self.transactionTabCoordinator?.stop()
+        self.moneyTabCoordinator?.stop()
+        self.historyTabCoordinator?.stop()
+        */
         
-        if UserDefaults.standard.object(forKey: "UserOnboarded") == nil{
-            print("Not onboarded Yet")
-            let vc = UIHostingController(rootView: CouldNotLoadView(errorMessage: ""))
-            viewControllers = [vc]
-        }
-        else{
+        
+        
+
             print("User Is Onboarded")
-            self.homeTabCoordinator = BudgetsTabCoordinator(budget: self.budget)
-            self.transactionTabCoordinator = TransactionsTabCoordinator(budget: self.budget)
+        if self.homeTabCoordinator == nil{
+            self.homeTabCoordinator = BudgetsTabCoordinator()
+            homeTabCoordinator?.parent = self
+        }
+        self.homeTabCoordinator?.start()
+        
+        
+        if self.transactionTabCoordinator == nil{
+            self.transactionTabCoordinator = TransactionsTabCoordinator()
+            
+        }
+        self.transactionTabCoordinator?.start()
+            
+        if self.moneyTabCoordinator == nil {
             self.moneyTabCoordinator = MoneyTabCoordinator()
+            
+        }
+        self.moneyTabCoordinator?.start()
+        
+        if self.historyTabCoordinator == nil {
             self.historyTabCoordinator = HistoryTabCoordiantor()
-            
-            self.homeTabCoordinator?.start()
-            self.transactionTabCoordinator?.start()
-            self.moneyTabCoordinator?.start()
             self.historyTabCoordinator?.start()
-            
+        }
+        
             
             viewControllers = [self.homeTabCoordinator!.navigationController, self.transactionTabCoordinator!.navigationController, self.moneyTabCoordinator!.navigationController, self.historyTabCoordinator!.navigationController]
-        }
+        
         
         
         

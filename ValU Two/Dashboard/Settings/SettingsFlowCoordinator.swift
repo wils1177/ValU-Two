@@ -26,7 +26,7 @@ class SettingsFlowCoordinator : Coordinator, PlaidLinkDelegate{
         let vc = presentor.configure()
         
         self.navigationController.pushViewController(vc, animated: false)
-        self.navigationController.modalPresentationStyle = .fullScreen
+        self.navigationController.modalPresentationStyle = .pageSheet
         
         self.presentorStack.append(presentor)
         

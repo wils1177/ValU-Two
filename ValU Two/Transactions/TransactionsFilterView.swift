@@ -8,43 +8,6 @@
 
 import SwiftUI
 
-struct TransactionsFilterView: View {
-    
-    var filterModel : TransactionFilterModel
-    var coordinator : TransactionRowDelegate
-    
-    var mainFilterPill : some View {
-        
-        HStack{
-            Image(systemName: "line.horizontal.3.decrease.circle").foregroundColor(Color(.white))
-            Text("Filter").foregroundColor(Color(.white))
-        }.padding(.vertical, 3).padding(.horizontal).background(AppTheme().themeColorPrimary).cornerRadius(20)
-        
-    }
-    
-    var body: some View {
-        VStack{
-            HStack{
-                Spacer()
-                Button(action: {
-                    // What to perform
-                    self.coordinator.showFilterEditView(filterModel: self.filterModel)
-                }) {
-                    mainFilterPill
-                }.buttonStyle(PlainButtonStyle())
-                
-                
-            }
-            
-            SelectedFilterPillsView(filterModel: self.filterModel)
-            
-        }
-    }
-    
-}
-
-
-
 
 struct SelectedFilterPillsView: View {
     

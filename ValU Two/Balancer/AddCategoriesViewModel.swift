@@ -79,34 +79,49 @@ class AddCategoriesViewModel: CategoryListViewModel, ObservableObject{
     func createNewBudgetCategory(spendingCategory: SpendingCategory){
         
         //if the spendingcategory already has a budgetCategory, we need to delete it
-        if spendingCategory.budgetCategory != nil{
-            let budgetCategory = spendingCategory.budgetCategory!
-            let id = budgetCategory.id!
-            budgetCategory.budgetSection?.removeFromBudgetCategories(budgetCategory)
-            let predicate = PredicateBuilder().generateByIdPredicate(id: id)
-            do{
-                try DataManager().deleteEntity(predicate: predicate, entityName: "BudgetCategory")
-            }
-            catch{
-                print("WARNING: Could delete budget category entity")
-            }
+        let budget = budgetSection.budget!
+        let budgetCategories = spendingCategory.budgetCategory?.allObjects as! [BudgetCategory]
+        let reduandantBudgetCategory = checkIfCategoryAlreadyExistsInBudget(budgetCategories: budgetCategories, budget: budget)
+        if reduandantBudgetCategory != nil{
+            deleteBudgetCategory(category: reduandantBudgetCategory!)
         }
+        
         
         let dm = DataManager()
         let BC = dm.createBudgetCategory(category: spendingCategory, order: self.budgetSection.budgetCategories!.count)
         self.budgetSection.addToBudgetCategories(BC)
         dm.saveDatabase()
     }
+    
+    
+    //Check to see if any of the categories already exist in the Budget
+    func checkIfCategoryAlreadyExistsInBudget(budgetCategories: [BudgetCategory], budget: Budget) -> BudgetCategory?{
+        for budgetCategory in budgetCategories{
+            if budgetCategory.budgetSection?.budget?.id == budget.id{
+                return budgetCategory
+            }
+        }
+        return nil
+    }
+    
+    func deleteBudgetCategory(category: BudgetCategory){
+        let id = category.id!
+        
+        let predicate = PredicateBuilder().generateByIdPredicate(id: id)
+        do{
+            try DataManager().deleteEntity(predicate: predicate, entityName: "BudgetCategory")
+        }
+        catch{
+            print("WARNING: Could delete budget category entity")
+        }
+        
+    }
+    
+    
 
     
     func createCustomSpendingCategory(icon: String, name: String){
         let newCategory = spendingCategoryService.createCustomSpendingCategory(icon: icon, name: name)
-        
-        let allCategories = (self.budgetSection.budgetCategories!.allObjects as! [BudgetCategory]).sorted(by: { $0.order < $1.order })
-        let order = allCategories.last!.order + 1
-        
-        let newBudgetCategory = DataManager().createBudgetCategory(category: newCategory, order: Int(order))
-        self.budgetSection.addToBudgetCategories(newBudgetCategory)
         
         self.spendingCategoryService.loadCategories()
         

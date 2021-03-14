@@ -56,7 +56,7 @@ struct EnterIncomeView: View {
                     ZStack{
                         CustomInputTextField(text: self.$incomeService.currentIncomeEntry, placeHolderText: "Your Income", textSize: .systemFont(ofSize: 18), alignment: .left, delegate: nil, key: nil)
                             .padding(.horizontal)
-                        .frame(height: 45).background(Color(.systemGroupedBackground)).cornerRadius(15)
+                        .frame(height: 45).background(Color(.tertiarySystemGroupedBackground)).cornerRadius(15)
                         HStack{
                             Spacer()
                             Text("USD").foregroundColor(AppTheme().themeColorPrimary).bold().padding(.trailing)
@@ -85,7 +85,7 @@ struct EnterIncomeView: View {
                             }
                             Spacer()
                             Image(systemName: "ellipsis.circle.fill").foregroundColor(AppTheme().themeColorPrimary).font(.system(size: 28))
-                        }.padding().background(Color(.systemGroupedBackground)).cornerRadius(15)
+                        }.padding().background(Color(.tertiarySystemGroupedBackground)).cornerRadius(15)
                     }.buttonStyle(PlainButtonStyle())
                     
                     Text("Your esimtated income is based from previous transactions over the last 30 days. Tap to see these transactions.").font(.caption).lineLimit(3).multilineTextAlignment(.leading).foregroundColor(Color(.gray)).padding(.horizontal)
@@ -94,7 +94,7 @@ struct EnterIncomeView: View {
                 
             
             
-            }
+            }.padding(.horizontal)
             
             Spacer()
             if self.incomeService.currentIncomeEntry.doubleValue != nil && self.incomeService.currentIncomeEntry.doubleValue != 0.0{
@@ -105,28 +105,16 @@ struct EnterIncomeView: View {
                         self.coordinator.incomeSubmitted(budget: self.budget)
                     }
                               }){
-                              HStack{
-                                  Spacer()
-                                  ZStack{
-                                      Text("Done").font(.subheadline).foregroundColor(Color(.systemBackground)).bold().padding()
-                                  }
-                                  Spacer()
-                              }.background(AppTheme().themeColorPrimary).cornerRadius(10).shadow(radius: 10).padding().padding(.bottom)
+                              ActionButtonLarge(text: "Done", enabled: true)
                 
                           }
             }
             else{
-                HStack{
-                    Spacer()
-                    ZStack{
-                        Text("Done").font(.subheadline).foregroundColor(Color(.systemBackground)).bold().padding()
-                    }
-                    Spacer()
-                }.background(Color(.lightGray)).cornerRadius(15).shadow(radius: 0).padding().padding(.bottom)
+                ActionButtonLarge(text: "Done", enabled: false)
             }
             
             
-        }.padding(.horizontal)
+        }
         .listStyle(SidebarListStyle())
         .navigationBarTitle("")
         

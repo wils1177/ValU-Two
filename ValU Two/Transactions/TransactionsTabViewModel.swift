@@ -39,7 +39,7 @@ class TransactionsTabViewModel: ObservableObject, Presentor{
     @Published var transactionsThisWeek : TransactionsListViewModel?
     @Published var transactionsToday : TransactionsListViewModel?
     @Published var transactionsThisMonth : TransactionsListViewModel?
-    var coordinator : TransactionRowDelegate?
+    weak var coordinator : TransactionRowDelegate?
     
     var filterModel = TransactionFilterModel()
     
@@ -48,7 +48,7 @@ class TransactionsTabViewModel: ObservableObject, Presentor{
     
     init(){
         //generateViewData()
-        NotificationCenter.default.addObserver(self, selector: #selector(update(_:)), name: .modelUpdate, object: nil)
+        //NotificationCenter.default.addObserver(self, selector: #selector(update(_:)), name: .modelUpdate, object: nil)
     }
     
     func configure() -> UIViewController {

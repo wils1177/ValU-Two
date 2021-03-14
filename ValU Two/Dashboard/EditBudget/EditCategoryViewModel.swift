@@ -18,15 +18,18 @@ class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, Observa
     @Published var selectedCategoryNames = [String]()
     var spendingCategories = [SpendingCategory]()
     var subSpendingCategories = [SpendingCategory]()
-    var saveRule : Bool = true
+    var saveRule : Bool = false
     
     var budgetSections = [BudgetSection]()
     var unassignedBudgetCategories = [SpendingCategory]()
     
     var transaction : Transaction
+    
+    var budget : Budget?
 
     init(transaction: Transaction, budget : Budget? = nil){
         self.transaction = transaction
+        self.budget = budget
         self.spendingCategories = SpendingCategoryService().getParentSpendingCategories()
         self.subSpendingCategories = SpendingCategoryService().getSubSpendingCategories()
         self.budgetSections = budget?.getBudgetSections() ?? [BudgetSection]()
@@ -80,10 +83,12 @@ class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, Observa
         }
         
         DataManager().saveDatabase()
-        self.objectWillChange.send()
-        transaction.objectWillChange.send()
+        self.budget?.objectWillChange.send()
+        self.transaction.objectWillChange.send()
         
-        NotificationCenter.default.post(name: .modelUpdate, object: nil)
+        
+        
+        
         coordinator?.dismissEditCategory()
 
     }
@@ -179,12 +184,28 @@ class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, Observa
         var newList = [SpendingCategory]()
         for parent in parentCategories{
             for subCategory in parent.subSpendingCategories!.allObjects as! [SpendingCategory]{
-                if subCategory.budgetCategory == nil || subCategory.budgetCategory!.budgetSection == nil{
+                if checkForActiveBudgetSection(category: subCategory).count == 0{
                     newList.append(subCategory)
                 }
             }
         }
         return newList
+    }
+    
+    //Checks the category matches to see if there are associated active budget sections
+    func checkForActiveBudgetSection(category: SpendingCategory) -> [BudgetSection]{
+        var activeBudgetSections = [BudgetSection]()
+        
+        let BudgetCategories = category.budgetCategory?.allObjects as! [BudgetCategory]
+        
+        for budgetCategory in BudgetCategories{
+            if budgetCategory.budgetSection!.budget!.active{
+                activeBudgetSections.append(budgetCategory.budgetSection!)
+            }
+        }
+        
+
+        return activeBudgetSections
     }
     
     func isSelected(name: String) -> Bool{

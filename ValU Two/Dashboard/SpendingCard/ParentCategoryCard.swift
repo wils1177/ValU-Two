@@ -10,37 +10,69 @@ import SwiftUI
 
 struct ParentCategoryCard: View {
     
-    @ObservedObject var budgetSection : BudgetSection
     var color : Color
     var colorSeconday : Color
     var colorTertiary : Color
+    var icon : String
+    
+    var spent: Float
+    var limit : Float
+    var name: String
+    var percentageSpent: Double
+    
     
     init(budgetSection: BudgetSection){
-        self.budgetSection = budgetSection
-        self.color = colorMap[Int(budgetSection.colorCode)] as! Color
-        self.colorSeconday = colorMapSecondary[Int(budgetSection.colorCode)]
-        self.colorTertiary = colorMapTertiaruy[Int(budgetSection.colorCode)]
-        
+        self.color = colorMap[Int(budgetSection.colorCode)]
+        self.colorSeconday = Color(colorMapUIKit[Int(budgetSection.colorCode)].lighter()!)
+        self.colorTertiary = Color(colorMapUIKit[Int(budgetSection.colorCode)].darker()!)
+        self.icon = budgetSection.icon!
+        self.spent = Float(budgetSection.getSpent())
+        self.limit = Float(budgetSection.getLimit())
+        self.name = budgetSection.name!
+        self.percentageSpent = budgetSection.getPercentageSpent()
     }
     
+    init(color: Color, colorSecondary: Color, colorTertiary: Color, icon: String, spent: Float, limit: Float, name: String, percentageSpent: Double){
+        self.color = color
+        self.colorSeconday = colorSecondary
+        self.colorTertiary = colorTertiary
+        self.icon = icon
+        self.spent = spent
+        self.limit = limit
+        self.name = name
+        self.percentageSpent = percentageSpent
+    }
+    
+    func getDisplayPercent() -> Double{
+        if self.percentageSpent < 0.1{
+            return 0.1
+        }
+        else{
+            return self.percentageSpent
+        }
+    }
+
     
     var body: some View {
         
         
         VStack(alignment: .leading){
             
-            HStack{
-                BudgetSectionIconLarge(color: colorMap[Int(self.budgetSection.colorCode)] as! Color, icon: self.budgetSection.icon!, size: 40)
+            HStack(alignment: .top){
+                BudgetSectionIconLarge(color: self.color, icon: self.icon, size: 40)
                 Spacer()
-                SpendingSummary(spent: Float(self.budgetSection.getSpent()), limit: Float(self.budgetSection.getLimit()))
+                Text(CommonUtils.makeMoneyString(number: Int(self.spent))).foregroundColor(Color(.white)).font(.system(size: 18, design: .rounded)).fontWeight(.bold)
             }.padding(.bottom, 15)
             
             HStack{
-                Text(self.budgetSection.name!).font(.subheadline).bold().foregroundColor(.white).lineLimit(1)
+                Text(self.name).font(.system(size: 15, design: .rounded)).bold().foregroundColor(.white).lineLimit(1)
                 Spacer()
+                if percentageSpent >= 1.0 {
+                    Image(systemName: "exclamationmark.triangle.fill" ).foregroundColor(Color(.white)).font(Font.system(size: 14, weight: .semibold)).padding(.trailing, 10)
+                }
             }
             
-            ProgressBarView(percentage: CGFloat(self.budgetSection.getPercentageSpent()), color: Color(.white), backgroundColor: self.colorTertiary).padding(.trailing, 5).padding(.bottom, 5)
+            ProgressBarView(percentage: CGFloat(getDisplayPercent()), color: Color(.white), backgroundColor: self.colorTertiary).padding(.trailing, 5).padding(.bottom, 5)
             
         }.padding(12)
         
