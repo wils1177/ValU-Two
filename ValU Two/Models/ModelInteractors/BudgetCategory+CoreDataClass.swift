@@ -19,6 +19,7 @@ public class BudgetCategory: NSManagedObject, NSCopying {
         self.init(entity: entity!, insertInto: context)
         self.order = Int64(order)
         self.limit = 0.0
+        self.spent = 0.0
         self.spendingCategory = category
         
         self.id = UUID()
@@ -37,8 +38,9 @@ public class BudgetCategory: NSManagedObject, NSCopying {
     func getAmountSpent() -> Double{
         let startDate = self.budgetSection!.budget!.startDate
         let endDate = self.budgetSection!.budget!.endDate
-        
-        return self.spendingCategory!.getAmountSpentForTimeFrame(startDate: startDate!, endDate: endDate!)
+        let amount = self.spendingCategory!.getAmountSpentForTimeFrame(startDate: startDate!, endDate: endDate!)
+        //self.spent = amount
+        return amount
     }
 
 }

@@ -19,32 +19,33 @@ struct SpendingLimitSummaryView: View {
         self.budget = viewModel.budget
     }
     
+    @State var isLarge = true
+    
     var body: some View {
-        VStack(spacing: 0){
+        VStack(spacing: 7){
             
-            /*
-            HStack{
-                Text("Summary").font(.system(size: 21, design: .rounded)).bold()
-                Spacer()
-            }.padding(.leading).padding(.bottom, 5)
-            */
-            
-            HStack(alignment: .bottom, spacing: 2){
+            VStack(spacing: 0){
                 
-                Text(self.viewModel.getDisplaySpent()).font(.system(size: 35, design: .rounded)).bold()
-                Text(" of " + self.viewModel.getAvailable()).font(.system(size: 20, design: .rounded)).bold().foregroundColor(Color(.lightGray)).bold().padding(.bottom, 5)
-                Spacer()
+                HStack{
+                   
+                    Text("Summary").font(.system(size: 17, design: .rounded)).fontWeight(.semibold).foregroundColor(AppTheme().themeColorPrimary)
+                    Spacer()
+            
+                }.padding(.bottom, 7)
                 
-            }.padding(.leading).padding(.bottom, 8)
-            
-           
-            
-            BudgetStatusBarView(viewData: self.viewModel.getBudgetStatusBarViewData())
-            
-            
-            
-            
-        }//.padding(.vertical, 5).padding(.top, 10).background(Color(.systemBackground)).cornerRadius(15).shadow(radius: 5)
+                HStack{
+                    Text("\(self.viewModel.getDisplaySpent())\(Text(" / \(self.viewModel.getAvailable())").foregroundColor(Color(.lightGray)).font(.system(size: 22, design: .rounded)))").font(.system(size: 30, design: .rounded)).fontWeight(.bold)
+                    Spacer()
+                }.padding(.bottom)
+                
+                
+                BudgetStatusBarView(viewData: self.viewModel.getBudgetStatusBarViewData(), showLegend: true)
+                
+
+                
+            }
+ 
+        }.padding(.horizontal).padding(.top, 10).background(Color(.systemBackground)).cornerRadius(20)
     }
 }
 

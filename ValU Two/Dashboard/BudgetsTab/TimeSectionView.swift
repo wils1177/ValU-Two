@@ -21,6 +21,28 @@ struct TimeSectionView: View {
         self.coordinator = coordinator
     }
     
+    func getDaysLeftIn() -> String{
+        
+        let date = Date()
+        let endDate = self.budget.endDate!
+        
+        let diffInDays = Calendar.current.dateComponents([.day], from: date, to: endDate).day
+        
+        return String(diffInDays!) + " Days Left"
+        
+    }
+    
+    func getToday() -> String{
+        let monthInt = Calendar.current.component(.month, from: Date()) // 4
+        let monthStr = Calendar.current.monthSymbols[monthInt-1]  // April
+        
+        let dayInt = Calendar.current.component(.day, from: Date()) // 4
+        let dayStr = String(dayInt)  // April
+        
+        return monthStr + " " + dayStr
+        
+    }
+    
     var headerView : some View{
         
         Button(action: {
@@ -31,28 +53,68 @@ struct TimeSectionView: View {
             self.coordinator?.showCalendar()
         }) {
             HStack{
-                SectionHeader(title: "January 21st", image: "calendar")
+                Text(self.getToday()).font(.system(size: 24, design: .rounded)).fontWeight(.semibold)
                 Spacer()
                 
                 
                 HStack(alignment:.center, spacing: 2){
-                    Text("23 Days Left").font(Font.system(size: 16, weight: .semibold))
+                    Text(self.getDaysLeftIn()).font(Font.system(size: 16, weight: .semibold))
                     
             }.foregroundColor(AppTheme().themeColorPrimary)
                 .padding(.horizontal, 13).padding(.vertical, 5).background(AppTheme().themeColorPrimary.opacity(0.15)).cornerRadius(20)
                 
-                /*
-                if !isLarge{
-                    Text(self.viewModel.getDaysRemaining() + " days left").font(.system(size: 22, design: .rounded)).fontWeight(.semibold).padding(.trailing)
+                
+                
+            }
+        }.buttonStyle(PlainButtonStyle())
+
+        
+    }
+    
+    
+    var differentView: some View{
+        
+        VStack(spacing: 0){
+            
+            
+            /*
+            HStack{
+                Text("Time").font(.system(size: 21, design: .rounded)).fontWeight(.semibold)
+                Spacer()
+                
+             
+                
+            }.padding(.horizontal, 13).padding(.top, 10)//.background(Color(AppTheme().themeColorPrimaryUIKit).opacity(0.35))
+            */
+            VStack(spacing: 0){
+                
+                HStack{
+                    Text(self.getToday()).font(.system(size: 24, design: .rounded)).fontWeight(.semibold)
+                    Spacer()
+                    
+                    
+                    HStack(alignment:.center, spacing: 2){
+                        Text(self.getDaysLeftIn()).font(Font.system(size: 16, weight: .semibold))
+                        
+                }.foregroundColor(AppTheme().themeColorPrimary)
+                    .padding(.horizontal, 13).padding(.vertical, 5).background(AppTheme().themeColorPrimary.opacity(0.15)).cornerRadius(20)
+                    
+                    
+                    
                 }
                 
                 
-                Image(systemName: "chevron.right").font(.system(size: 20)).foregroundColor(AppTheme().themeColorPrimary).rotationEffect(.degrees(isLarge ? 90 : 0))
-                */
-                
-            }.padding(.horizontal, 10)
-        }.buttonStyle(PlainButtonStyle())
-
+            }
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        }
         
     }
     
@@ -63,12 +125,11 @@ struct TimeSectionView: View {
 
     
     var body: some View {
-        VStack{
-            headerView
+            differentView
             
            
             
-        }
+        
         
     }
 }
@@ -84,7 +145,7 @@ struct CalendarEntryView: View {
             Text(self.dayName).font(.system(size: 16, design: .rounded)).fontWeight(.bold).padding(.bottom, 3)
             
             Text(amountName).font(.system(size: 25, design: .rounded)).fontWeight(.bold).foregroundColor(self.color).padding(.bottom, 3)
-        }.padding(10).frame(minWidth: 90).background(Color(.tertiarySystemGroupedBackground).opacity(0.55)).cornerRadius(18)
+        }.padding(10).frame(minWidth: 90).background(AppTheme().themeColorPrimary).cornerRadius(18)
     }
     
 }

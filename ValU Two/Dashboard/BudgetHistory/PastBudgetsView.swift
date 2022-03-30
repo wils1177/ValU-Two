@@ -42,7 +42,7 @@ struct PastBudgetsView: View {
                 if self.viewModel.historicalBudgets.count > 0 {
                     ForEach(viewModel.historicalBudgets, id: \.self) { budget in
                         VStack(spacing: 0){
-                            HistoryEntryView(budget: budget, service: self.viewModel.service, coordinator: self.viewModel.coordinator)
+                            HistoryEntryView(budget: budget, service: self.viewModel.service, coordinator: self.viewModel.coordinator).padding(.horizontal).padding(.bottom)
                         }
                     }
                 }

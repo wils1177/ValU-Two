@@ -18,6 +18,7 @@ enum PlaidURLs{
     case GetIncome
     case RemoveItem
     case GetPublicToken
+    case GetLinkToken
 }
 
 enum PlaidConnectionError: Error {
@@ -33,14 +34,16 @@ struct Keys : Codable{
     
     enum CodingKeys : String, CodingKey {
         case clientID =  "CLIENT_ID"
-        case clientSecret =  "SANDBOX_CLIENT_SECRET"
+        case clientSecret =  "DEVELOPMENT_CLIENT_SECRET"
     }
 }
 
 class PlaidConnection{
     
-    var rootURL = "https://sandbox.plaid.com"
+    var rootURL = "https://development.plaid.com"
+    let webhookURL = "https://us-central1-valu-2.cloudfunctions.net/plaidWebhook"
     var URLdict : [PlaidURLs : URL]
+    var clientName = "ValU-Two"
     
     typealias successHandler = (_ response : Data)  -> Any
         
@@ -54,8 +57,8 @@ class PlaidConnection{
         self.URLdict[PlaidURLs.GetIncome] = URL(string : (rootURL + "/income/get"))!
         self.URLdict[PlaidURLs.RemoveItem] = URL(string : (rootURL + "/item/remove"))!
         self.URLdict[PlaidURLs.GetPublicToken] = URL(string : (rootURL + "/item/public_token/create"))!
+        self.URLdict[PlaidURLs.GetLinkToken] = URL(string : (rootURL + "/link/token/create"))
         
-
 
     }
     
@@ -69,7 +72,26 @@ class PlaidConnection{
             throw PlaidConnectionError.AccessTokenNotFound
         }
         
+        
+        
         let json: [String: Any] = ["client_id" : keys.clientID, "secret" : keys.clientSecret, "public_token" : publicKey]
+        
+        try postRequest(url: URL, jsonBody: json, completion: completion)
+        
+        
+    }
+    
+    // TODO
+    func getLinkToken(completion : @escaping (Result<Data, Error>) -> ()) throws{
+        
+        let URL = PlaidURLs.GetLinkToken
+        let keys = getAPIKeys()
+        
+        let userId = UserDefaults.standard.string(forKey: "userID") ?? "no user id"
+        let user: [String : Any] = ["client_user_id" : userId]
+        
+        let json: [String: Any] = ["client_id" : keys.clientID, "secret" : keys.clientSecret, "client_name" : self.clientName, "language" : "en", "country_codes" : ["US"], "user" : user, "products" : ["transactions"], "webhook" : self.webhookURL]
+        
         
         try postRequest(url: URL, jsonBody: json, completion: completion)
         

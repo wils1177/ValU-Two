@@ -11,6 +11,7 @@ import CoreData
 import Firebase
 import UserNotifications
 import SwiftUI
+import BackgroundTasks
 //import FirebaseFirestoreSwift
 
 @UIApplicationMain
@@ -31,6 +32,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             print("First launch, setting UserDefault.")
             UserDefaults.standard.set(true, forKey: "launchedBefore")
+            
+            //Set a unique user ID for this user
+            UserDefaults.standard.set(UUID().uuidString, forKey: "userID")
+            
             //TimeFrameManager().createTransactionCaches()
             SpendingCategoryService.generateSpendingCategories()
             //TimeFrameManager().createInitialBudgetTimeFrames()
@@ -77,6 +82,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         application.registerForRemoteNotifications()
+        
+       
         
         return true
     }
@@ -214,6 +221,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       // Messaging.messaging().appDidReceiveMessage(userInfo)
 
       // Print message ID.
+        
+        print("recieved a foreground message")
+        
       if let messageID = userInfo[gcmMessageIDKey] {
         print("Message ID: \(messageID)")
       }
@@ -233,6 +243,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
 
     }
+    
+    
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any],
                      fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
@@ -242,7 +254,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
       // With swizzling disabled you must let Messaging know about the message, for Analytics
       // Messaging.messaging().appDidReceiveMessage(userInfo)
-
+        
+        print("recieved a background message")
+    
       // Print message ID.
       if let messageID = userInfo[gcmMessageIDKey] {
         print("Message ID: \(messageID)")
@@ -254,17 +268,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 print("Webhook recieved")
                 let itemId = userInfo["itemId"] as! String
                 let webhookCode = userInfo["webhookCode"] as! String
-                PlaidWebhookProccesor().consumeWebhookMessage(webhookCode: webhookCode, itemId: itemId)
+                
+                
+                PlaidWebhookProccesor(backGroundHandler: completionHandler).consumeWebhookMessage(webhookCode: webhookCode, itemId: itemId)
             }
         }
         
 
-
-      completionHandler(UIBackgroundFetchResult.newData)
     }
 
 
 }
+
+
 
 extension AppDelegate : MessagingDelegate{
     
@@ -304,6 +320,18 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
 
     // Print full message.
     print(userInfo)
+      
+      if let type = userInfo["type"]{
+          print("message with a type recieved")
+          if type as! String == "webhook"{
+              print("Webhook recieved")
+              let itemId = userInfo["itemId"] as! String
+              let webhookCode = userInfo["webhookCode"] as! String
+              
+              
+              PlaidWebhookProccesor().consumeWebhookMessage(webhookCode: webhookCode, itemId: itemId)
+          }
+      }
 
     // Change this to your preferred presentation option
     completionHandler([])
@@ -320,6 +348,18 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
 
     // Print full message.
     print(userInfo)
+      
+      if let type = userInfo["type"]{
+          print("message with a type recieved")
+          if type as! String == "webhook"{
+              print("Webhook recieved")
+              let itemId = userInfo["itemId"] as! String
+              let webhookCode = userInfo["webhookCode"] as! String
+              
+              
+              PlaidWebhookProccesor().consumeWebhookMessage(webhookCode: webhookCode, itemId: itemId)
+          }
+      }
 
     completionHandler()
   }

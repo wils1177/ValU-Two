@@ -75,6 +75,7 @@
 					<array>
 						<string>Food and Drink</string>
 						<string>Food and Beverage</string>
+						<string>Food and Beverage Store</string>
 					</array>
 				</dict>
 			</array>
@@ -118,6 +119,7 @@
 					<key>contains</key>
 					<array>
 						<string>Healthcare</string>
+						<string>Pharmacies</string>
 					</array>
 				</dict>
 				<dict>
@@ -244,20 +246,6 @@
 				</dict>
 				<dict>
 					<key>name</key>
-					<string>Shopping</string>
-					<key>icon</key>
-					<string>🛍️</string>
-					<key>colorCode</key>
-					<integer>4</integer>
-					<key>matchDepth</key>
-					<integer>0</integer>
-					<key>contains</key>
-					<array>
-						<string>Shops</string>
-					</array>
-				</dict>
-				<dict>
-					<key>name</key>
 					<string>Subscriptions</string>
 					<key>icon</key>
 					<string>🌐</string>
@@ -272,7 +260,7 @@
 				</dict>
 				<dict>
 					<key>name</key>
-					<string>Other Fun</string>
+					<string>Other Entertainment</string>
 					<key>icon</key>
 					<string>🎟️</string>
 					<key>colorCode</key>
@@ -282,6 +270,7 @@
 					<key>contains</key>
 					<array>
 						<string>Recreation</string>
+						<string>Entertainment</string>
 					</array>
 				</dict>
 			</array>
@@ -314,6 +303,7 @@
 					<array>
 						<string>Car Service</string>
 						<string>Ride Share</string>
+						<string>Taxi</string>
 					</array>
 				</dict>
 				<dict>
@@ -384,12 +374,11 @@
 					<key>contains</key>
 					<array>
 						<string>Automotive</string>
-						<string></string>
 					</array>
 				</dict>
 				<dict>
 					<key>name</key>
-					<string>Other Travel</string>
+					<string>Travel</string>
 					<key>icon</key>
 					<string>🛫</string>
 					<key>colorCode</key>
@@ -502,6 +491,167 @@ Internet</string>
 					<key>contains</key>
 					<array>
 						<string>Utilities</string>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Shopping</string>
+			<key>icon</key>
+			<string>bag</string>
+			<key>colorCode</key>
+			<integer>5</integer>
+			<key>matchDepth</key>
+			<integer>0</integer>
+			<key>contains</key>
+			<array>
+				<string>Shops</string>
+			</array>
+			<key>subCategories</key>
+			<array>
+				<dict>
+					<key>name</key>
+					<string>Clothing</string>
+					<key>icon</key>
+					<string>👕</string>
+					<key>colorCode</key>
+					<integer>0</integer>
+					<key>matchDepth</key>
+					<integer>0</integer>
+					<key>contains</key>
+					<array>
+						<string>Clothing and Accessories</string>
+						<string>Vintage and Thrift</string>
+						<string>Outlet</string>
+						<string>Shopping Centers and Malls</string>
+						<string>Costumes</string>
+						<string>Jewelry and Watches</string>
+						<string>Department Stores</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Electronics</string>
+					<key>icon</key>
+					<string>🖥️</string>
+					<key>colorCode</key>
+					<integer>0</integer>
+					<key>matchDepth</key>
+					<integer>0</integer>
+					<key>contains</key>
+					<array>
+						<string>Computers and Electronics</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Online Shopping</string>
+					<key>icon</key>
+					<string>💿</string>
+					<key>colorCode</key>
+					<integer>0</integer>
+					<key>matchDepth</key>
+					<integer>0</integer>
+					<key>contains</key>
+					<array>
+						<string>Digital Purchase</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Home Supplies</string>
+					<key>icon</key>
+					<string>🛋️</string>
+					<key>colorCode</key>
+					<integer>0</integer>
+					<key>matchDepth</key>
+					<integer>1</integer>
+					<key>contains</key>
+					<array>
+						<string>Furniture and Home Decor</string>
+						<string>Lawn and Garden</string>
+						<string>Office Supplies</string>
+						<string>Arts and Crafts</string>
+						<string>Cards and Stationery</string>
+						<string>Florists</string>
+						<string>Hardware Store</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Sporting Goods</string>
+					<key>icon</key>
+					<string>⚽</string>
+					<key>colorCode</key>
+					<integer>0</integer>
+					<key>matchDepth</key>
+					<integer>1</integer>
+					<key>contains</key>
+					<array>
+						<string>Sporting Goods</string>
+						<string>Bicycles</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Beauty</string>
+					<key>icon</key>
+					<string>💄</string>
+					<key>colorCode</key>
+					<integer>0</integer>
+					<key>matchDepth</key>
+					<integer>1</integer>
+					<key>contains</key>
+					<array>
+						<string>Beauty Products</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Music &amp; Dance</string>
+					<key>icon</key>
+					<string>🎵</string>
+					<key>colorCode</key>
+					<integer>0</integer>
+					<key>matchDepth</key>
+					<integer>1</integer>
+					<key>contains</key>
+					<array>
+						<string>Dance and Music</string>
+						<string>Music, Video and DVD</string>
+						<string>Musical Instruments</string>
+					</array>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>Other Shopping</string>
+					<key>icon</key>
+					<string>🛍️</string>
+					<key>colorCode</key>
+					<integer>0</integer>
+					<key>matchDepth</key>
+					<integer>1</integer>
+					<key>contains</key>
+					<array>
+						<string>Antiques</string>
+						<string>Bookstores</string>
+						<string>Boat Dealers</string>
+						<string>Children</string>
+						<string>Construction Supplies</string>
+						<string>Convenience Stores</string>
+						<string>Discount Stores</string>
+						<string>Electrical Equipment</string>
+						<string>Equipment Rental</string>
+						<string>Flea Markets</string>
+						<string>Gift and Novelty</string>
+						<string>Glasses and Optometrist</string>
+						<string>Hobby and Collectibles</string>
+						<string>Luggage</string>
+						<string>Newsstands</string>
+						<string>Photos and Frames</string>
+						<string>Toys</string>
+						<string>Warehouses and Wholesale Stores</string>
 					</array>
 				</dict>
 			</array>

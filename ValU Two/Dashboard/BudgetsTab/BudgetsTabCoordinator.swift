@@ -34,10 +34,12 @@ class BudgetsTabCoordinator : Coordinator, TransactionRowDelegate, EditBudgetDel
     
     func start() {
         self.budget = try? DataManager().getBudget()
-        print(budget?.startDate)
-        print(budget?.endDate)
         self.presentorStack.removeAll()
         self.navigationController = UINavigationController()
+        
+        //navigationController.navigationBar.barTintColor = UIColor(Color(hex:"FFF0E6"))
+        
+        
         
         if self.budget != nil && budget!.active{
             self.budgetTransactionsService = BudgetTransactionsService(budget: self.budget!)
@@ -55,12 +57,13 @@ class BudgetsTabCoordinator : Coordinator, TransactionRowDelegate, EditBudgetDel
         
         
         self.navigationController.navigationBar.prefersLargeTitles = true
-        self.navigationController.tabBarItem = UITabBarItem(title: "This Month", image: UIImage(systemName: "calendar"), selectedImage: UIImage(named: "tab_icon_seelcted"))
+        self.navigationController.tabBarItem = UITabBarItem(title: "Budget", image: UIImage(systemName: "mail.stack", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)), selectedImage: UIImage(named: "tab_icon_seelcted"))
         
         
     }
     
     func editClicked(budgetToEdit: Budget){
+        print("edit clicked!!")
         showEdit(budgetToEdit: budgetToEdit)
     }
     
@@ -69,13 +72,15 @@ class BudgetsTabCoordinator : Coordinator, TransactionRowDelegate, EditBudgetDel
         self.childCoordinators.append(editCoordinator)
         editCoordinator.parent = self
         editCoordinator.start()
-        self.navigationController.present(editCoordinator.navigationController, animated: true)
-        
+        //self.navigationController.present(editCoordinator.navigationController, animated: true)
+        self.parent?.present(editCoordinator.navigationController, animated: true)
     }
     
     func dismissEdit(){
         print("Dismissing Edit Coordinator")
-        self.childCoordinators.popLast()
+        let coord = self.childCoordinators.popLast() as! EditCoordiantor
+        //coord.navigationController.dismiss(animated: true)
+        self.parent?.dismiss(animated: true)
         
         //let owner = parent!
         //owner.onboardingCanLaod = true
@@ -129,7 +134,7 @@ class BudgetsTabCoordinator : Coordinator, TransactionRowDelegate, EditBudgetDel
     
     func showOtherTransactions(otherCardData: SpendingCategoryViewData){
         
-        let viewModel = OtherBudgetViewModel(budgetSections: self.budget!.getBudgetSections(), budget: self.budget!)
+        let viewModel = OtherBudgetViewModel(budgetTransactionsService: self.budgetTransactionsService!)
         let view = OtherDetailView(viewModel: viewModel, coordinator: self, otherCardData: otherCardData)
         let vc = UIHostingController(rootView: view)
         vc.title = "Other"
@@ -175,8 +180,7 @@ class BudgetsTabCoordinator : Coordinator, TransactionRowDelegate, EditBudgetDel
     
     
     func showIndvidualBudget(budgetSection: BudgetSection){
-        let viewModel = BudgetDetailViewModel(budgetSection: budgetSection)
-        let view = CategoryDetailView(sectionModel: viewModel, coordinator: self)
+        let view = CategoryDetailView(section: budgetSection, coordinator: self)
         let vc = UIHostingController(rootView: view)
         vc.title = budgetSection.name!
         self.navigationController.pushViewController(vc, animated: true)
@@ -282,6 +286,7 @@ public extension UIImage {
     self.init(cgImage: cgImage)
   }
 }
+
 
 
 

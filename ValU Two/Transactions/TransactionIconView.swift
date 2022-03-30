@@ -11,7 +11,7 @@ import SwiftUI
 struct TransactionIconView: View {
     
     var icons : [String]
-    var iconSize : CGFloat = 32
+    var iconSize : CGFloat = 30
     
     
     var one : some View{
@@ -112,7 +112,7 @@ struct TransactionIconViewLarge: View {
     
     var body: some View {
         ZStack(alignment: .center){
-            RoundedRectangle(cornerRadius: 35).frame(width: 125, height: 125, alignment: .center).foregroundColor(Color(.tertiarySystemGroupedBackground).opacity(0.6))
+            RoundedRectangle(cornerRadius: 35).frame(width: 125, height: 125, alignment: .center).foregroundColor(Color(.systemBackground).opacity(0.6))
             self.mainPart
         }
         

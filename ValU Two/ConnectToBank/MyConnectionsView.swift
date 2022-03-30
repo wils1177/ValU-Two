@@ -11,7 +11,7 @@ import SwiftUI
 struct MyConnectionsView: View {
     
     @ObservedObject var service : ItemManagerService
-    var coordinator : PlaidLinkDelegate
+    var presentor: LoadingAccountsPresentor
     
     
     
@@ -19,7 +19,7 @@ struct MyConnectionsView: View {
     var actionButton : some View{
         Button(action: {
             //Button Action
-            self.coordinator.launchPlaidLink()
+            self.presentor.launchPlaidLink()
             }){
             HStack{
                 Spacer()

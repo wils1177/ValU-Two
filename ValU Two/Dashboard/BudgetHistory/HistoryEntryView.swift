@@ -14,21 +14,32 @@ struct HistoryEntryView: View {
     var service : BudgetStatsService
     var coordinator : HistoryTabCoordiantor?
     
-    var amountSaved : Int
-    var amountSpent : Int
+    var amountSaved : String
+    var amountSpent : String
     
     var amountEarned : Int
+    
+    @State var showBar = false
     
     init(budget: Budget, service: BudgetStatsService, coordinator: HistoryTabCoordiantor?){
         self.budget = budget
         self.service = service
         self.coordinator = coordinator
-        self.amountSaved = service.getAmountSavedForBudget(budget: budget)
-        self.amountSpent = service.getSpentAmount(budget: self.budget)
+        self.amountSaved = CommonUtils.makeMoneyString(number: service.getAmountSavedForBudget(budget: budget))
+        self.amountSpent = CommonUtils.makeMoneyString(number: Int(budget.spent))
         self.amountEarned = service.getEarnedAmount(budget: self.budget)
     }
     
-
+    func getBudgetName() -> String{
+        let monthInt = Calendar.current.component(.month, from: self.budget.startDate!) // 4
+        let monthStr = Calendar.current.monthSymbols[monthInt-1]  // April
+        
+        let dayInt = Calendar.current.component(.day, from: self.budget.startDate!) // 4
+        let dayStr = String(dayInt)  // April
+        
+        return monthStr + " " + dayStr
+        
+    }
 
     
     func getStartDate() -> String{
@@ -55,107 +66,105 @@ struct HistoryEntryView: View {
     }
     
     var hitGoal : some View{
-        HStack{
-            Spacer()
-            Text("Savings Goal Hit - Saved " + CommonUtils.makeMoneyString(number: self.service.getAmountSavedForBudget(budget: self.budget))).font(.headline).foregroundColor(Color(.systemGreen)).bold()
-            Spacer()
-        }.padding(.vertical, 7).background(Color(.systemGreen).opacity(0.3))
+            Text("Congrats 🎉 ! You beat your budget goal by \(Text("$239").foregroundColor(Color.blue)) and saved \(Text(self.amountSaved).foregroundColor(Color.green))!").font(.system(size: 18, design: .rounded)).fontWeight(.semibold).multilineTextAlignment(.center)
     }
     
     var savedSome : some View {
-        HStack{
-            Spacer()
-            Text("Missed Savings Goal - Saved " + CommonUtils.makeMoneyString(number: self.service.getAmountSavedForBudget(budget: self.budget))).font(.headline).foregroundColor(Color(.systemGray)).bold()
-            Spacer()
-        }.padding(.vertical, 7).background(Color(.systemGray).opacity(0.3))
+        Text("Almost! You didn't quite hit your budget goal, but you did save \(Text(self.amountSaved).foregroundColor(Color.green))!").font(.system(size: 18, design: .rounded)).fontWeight(.semibold).multilineTextAlignment(.center)
     }
     
     var lostMoney : some View {
-        HStack{
-            Spacer()
-            Text("Missed Savings Goal - Lost " + CommonUtils.makeMoneyString(number: self.service.getAmountSavedForBudget(budget: self.budget))).font(.headline).foregroundColor(Color(.systemYellow)).bold()
-            Spacer()
-        }.padding(.vertical, 7).background(Color(.systemYellow).opacity(0.3))
+        Text("Darn! You went over budget this month by \(Text(self.amountSaved).foregroundColor(Color.red))!").font(.system(size: 18, design: .rounded)).fontWeight(.semibold).multilineTextAlignment(.center)
     }
     
     @ViewBuilder
-    var footer : some View {
-        
-        if self.amountSaved >= Int((Float(self.amountSpent) * self.budget.savingsPercent)){
-            hitGoal
-        }
-        else if self.amountSaved <= 0{
-            lostMoney
+    func getBudgetText() -> some View {
+        if self.service.didHitSavingsGoal(budget: self.budget){
+            self.hitGoal
+            
         }
         else{
-            savedSome
+            if self.service.didSaveAnything(budget: self.budget){
+                savedSome
+            }
+            else{
+                lostMoney
+            }
         }
-        
     }
+   
+    
+    var barViewData = [
+        BudgetStatusBarViewData(percentage: 0.15, color: .red, name: "Crime", icon: "doc.text.fill"),
+        BudgetStatusBarViewData(percentage: 0.15, color: .blue, name: "Fun", icon: "dot.radiowaves.right"),
+        BudgetStatusBarViewData(percentage: 0.15, color: .green, name: "Drugs", icon: "folder.fill"),
+        BudgetStatusBarViewData(percentage: 0.15, color: .orange, name: "what", icon: "link.circle.fill"),
+        BudgetStatusBarViewData(percentage: 0.15, color: .purple, name: "Other", icon: "moon.zzz"),
+        BudgetStatusBarViewData(percentage: 0.25, color: Color(.tertiarySystemGroupedBackground), name: "Other", icon: "pencil")
+        
+    ]
     
 
     var body: some View {
         
         Button(action: {
             // What to perform
-            self.coordinator?.showBudgetDetail(budget: self.budget, service: self.service, title: (getStartDate() + " - " + getEndDate()))
+            //self.coordinator?.showBudgetDetail(budget: self.budget, service: self.service, title: (getStartDate() + " - " + getEndDate()))
+            withAnimation{
+                self.showBar.toggle()
+            }
         }) {
             // How the button looks like
             
-            VStack{
+            VStack(spacing: 0){
                 
-                
-                
-                VStack(spacing: 0){
-                    HStack{
-                        Text(getStartDate() + " - " + getEndDate()).font(.system(size: 20, design: .rounded)).fontWeight(.bold).lineLimit(1)
-                        Spacer()
-                    }.padding(.horizontal).padding(.top, 15)
+                HStack{
+                    Image(systemName: "calendar").font(.system(size: 17, design: .rounded)).foregroundColor(AppTheme().themeColorPrimary)
+                    Text(getBudgetName()).font(.system(size: 17, design: .rounded)).fontWeight(.semibold).foregroundColor(AppTheme().themeColorPrimary)
+                    Spacer()
                     
+                    Image(systemName: "chevron.right").font(.system(size: 17, design: .rounded)).foregroundColor(AppTheme().themeColorPrimary).rotationEffect(.degrees(showBar ? 90 : 0))
                     
-                    HStack{
-                        VStack(alignment: .leading, spacing: 2){
-                            
-                            HStack(spacing:2){
-                                Text("Spent").font(.system(size: 15, design: .rounded)).fontWeight(.heavy).foregroundColor(Color(.systemRed)).lineLimit(1)
-                            }
-                            
-                            Text(CommonUtils.makeMoneyString(number: self.amountSpent)).font(.system(size: 31, design: .rounded)).bold()
-                            
-                            
-                        }
-                        
-                        Spacer()
-                        VStack(alignment: .leading, spacing: 2){
-                            
-                            HStack(spacing:2){
-                                Text("Earned").font(.system(size: 15, design: .rounded)).fontWeight(.heavy).foregroundColor(Color(.systemGreen)).lineLimit(1)
-                            }
-                            
-                            Text(CommonUtils.makeMoneyString(number: self.amountEarned)).font(.system(size: 31, design: .rounded)).bold()
-                            
-                            
-                            
-                        }
-                        
-                    }.padding(.horizontal, 40).padding(.vertical, 10).padding(.bottom, 5)
                     
             
-                    
-                    self.footer
-                }.background(Color(.tertiarySystemBackground)).cornerRadius(20).shadow(radius: 5).padding()
+                }.padding(.horizontal).padding(.top, 10).padding(.bottom, 13)
                 
-            }
+                HStack{
+                    Text("\(self.amountSpent)\(Text(" / \(self.service.getAvailableString(budget: self.budget))").foregroundColor(Color(.lightGray)).font(.system(size: 22, design: .rounded)))").font(.system(size: 30, design: .rounded)).fontWeight(.bold)
+                    Spacer()
+                }.padding(.bottom, 12).padding(.horizontal)
+                
+                if self.showBar{
+                    BudgetStatusBarView(viewData: self.service.getBudgetStatusBarViewData(budget: self.budget), showLegend: true).padding(.horizontal)
+                    
+                    
+                }
+                
+                HStack(){
+                    getBudgetText()
+                }.padding(8).padding(.horizontal, 7).background(AppTheme().themeColorPrimary.opacity(0.1)).cornerRadius(15).padding(.horizontal, 5).padding(.bottom)
+                
+            
+            
+                
+                    
+                
+                
+ 
+                
+            }.background(Color(.systemBackground)).cornerRadius(25)
+                
+            }.buttonStyle(PlainButtonStyle())
             
             
             
-        }.buttonStyle(PlainButtonStyle())
+        }
         
         
         
         
         
-    }
+    
 }
 
 

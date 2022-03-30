@@ -14,6 +14,7 @@ struct ChildCategoryCard: View {
     var spent : Double
     var icon : String
     var name : String
+    var color: Color
     
     func getPercentage() -> Double{
         if self.limit != 0.0{
@@ -24,49 +25,26 @@ struct ChildCategoryCard: View {
         }
     }
     
-    var remainingText : some View{
-        HStack{
-            
-
-                
-                Text(CommonUtils.makeMoneyString(number: limit)).font(.system(size: 15)).bold().foregroundColor(Color(.gray)).lineLimit(1)
-            Text ("budgeted" ).font(.system(size: 15)).bold().foregroundColor(Color(.gray))
-            
-            
-            
-        }
-    }
+    
     
     var body: some View {
-        VStack(spacing: 0){
+        HStack(spacing: 0){
             
-            HStack(alignment: .center){
-                Text(self.icon).font(.system(size: 40, design: .rounded)).padding(.trailing, 8)
-                VStack(alignment: .leading, spacing: 4){
-                    HStack{
-                        
-                        Text(self.name).font(.system(size: 20, design: .rounded)).bold().lineLimit(1)
-                        Spacer()
-                    }
-                    
-                    remainingText.padding(.trailing, 20)
-                }
-                
-                Spacer()
-                
-                Text(CommonUtils.makeMoneyString(number: spent)).font(.system(size: 20, design: .rounded)).bold().padding(.trailing, 5)
+            VStack(alignment: .leading){
+                Text(self.name).font(.system(size: 22, design: .rounded)).bold().lineLimit(1)
                 
             }
             
             
+                
+                Spacer()
             
+            Text("\(Text(CommonUtils.makeMoneyString(number: spent)).font(.system(size: 18, design: .rounded)).foregroundColor(self.color).bold()) / \(Text(CommonUtils.makeMoneyString(number: limit)))").font(.system(size: 18, design: .rounded)).bold().foregroundColor(Color(.gray)).lineLimit(1)
+                
             
-            //ProgressBarView(percentage: CGFloat(self.getPercentage()), color: colorMap[Int(budgetCategory.budgetSection!.colorCode)], width: 80, backgroundColor: Color(.white)).padding(.bottom).padding(.horizontal, 20).padding(.top)
-            
-            
-            //Divider()
-            
-        }.padding(15).background(Color(.tertiarySystemBackground)).cornerRadius(15).shadow(radius: 5)
+                
+            }
+
         
     }
 }

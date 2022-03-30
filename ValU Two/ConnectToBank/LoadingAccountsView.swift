@@ -26,7 +26,6 @@ struct LoadingAccountsView: View {
     }
     
     private func isSuccessfull(for state: LoadingAccountsViewState) -> Bool {
-        print("rejigging view")
         switch state {
         case .Loading: return false
         case .Success: return true
@@ -54,7 +53,7 @@ struct LoadingAccountsView: View {
     var body: some View {
         
         if isInitial(for: $viewData.viewState.wrappedValue){
-            ConnectToBankView(coordinator: self.presentor!.coordinator!, itemManager: self.presentor!.itemManager)
+            ConnectToBankView(presentor: self.presentor!, itemManager: self.presentor!.itemManager)
         }
         else if isDoneLoading(for: $viewData.viewState.wrappedValue){
             if isSuccessfull(for: $viewData.viewState.wrappedValue){

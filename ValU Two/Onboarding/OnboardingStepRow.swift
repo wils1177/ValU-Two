@@ -40,19 +40,25 @@ struct GenericOnboardingStepRow : View{
     var subTectColor : Color
     var completionHandler: (()->Void)?
     
+    @Environment(\.colorScheme) var colorScheme
+    
     private func getBody() -> some View {
         return AnyView(HStack{
             
-            Image(systemName: self.iconName).font(.system(size: 32)).foregroundColor(self.iconColor).padding(.leading)
+            ZStack(alignment: .center){
+                Circle().frame(width: 52, height: 52, alignment: .center).foregroundColor(colorScheme == .dark ? Color(.systemBackground) : Color(.systemGroupedBackground))
+                Image(systemName: self.iconName).font(.system(size: 27, weight: .semibold)).foregroundColor(self.iconColor)
+            }.padding(.leading)
             
-            VStack{
+            
+            VStack(spacing: 3){
                 
                 HStack{
-                    Text(self.title).font(.system(size: 17)).bold().padding(.leading).padding(.top)
+                    Text(self.title).font(.system(size: 21, design: .rounded)).foregroundColor(self.subTectColor).bold().padding(.leading).padding(.top)
                     Spacer()
                 }
                 HStack{
-                    Text(self.description).font(.subheadline).foregroundColor(self.subTectColor).padding(.leading).padding(.bottom)
+                    Text(self.description).font(.system(size: 15, design: .rounded)).foregroundColor(self.subTectColor).padding(.leading).padding(.bottom)
                     Spacer()
                 }
                 
@@ -61,7 +67,7 @@ struct GenericOnboardingStepRow : View{
             
             
             
-        }.background(Color(.tertiarySystemGroupedBackground)).cornerRadius(20))
+        }.padding(.vertical, 5).background(self.backgroundColor).cornerRadius(24))
     }
     
     var body: some View {

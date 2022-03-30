@@ -32,23 +32,26 @@ struct AccountDetailView: View {
     
     var body: some View {
         
-        ScrollView{
-            LazyVStack{
-                SwiftUIAccountCardView(account: self.account).padding(.horizontal).padding(.vertical).shadow(radius: 15)
+        List{
+            
+            SwiftUIAccountCardView(account: self.account).padding(.top).listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)).listRowBackground(Color.clear)
                 
+            Section(header: Text("Transactions")){
                 if self.transactions.count > 0 {
                     ForEach(self.transactions, id: \.self){ transaction in
                         
-                        TransactionRow(coordinator: self.coordinator, transaction: transaction, transactionService: self.transactionsService).padding(.horizontal)
+                        TransactionRow(coordinator: self.coordinator, transaction: transaction, transactionService: self.transactionsService)
                     }
                 }
                 else{
                     zeroState.padding(.top, 50)
                 }
+            }
+                
                 
                 
                      
-            }
+            
 
         }.navigationBarTitle(self.account.name!)
         

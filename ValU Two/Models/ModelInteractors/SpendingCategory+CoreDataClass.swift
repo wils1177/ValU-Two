@@ -77,6 +77,7 @@ public class SpendingCategory: NSManagedObject, NSCopying {
     func getAmountSpentForTimeFrame(startDate: Date, endDate: Date) -> Double{
         var amountSpent = 0.0
         for match in self.transactionMatches?.allObjects as! [CategoryMatch]{
+            
             let transaction = match.transaction!
             if CommonUtils.isWithinDates(transaction: transaction, start: startDate, end: endDate) && transaction.amount > 0.0 && !transaction.isHidden{
                 amountSpent = amountSpent + Double(match.amount)

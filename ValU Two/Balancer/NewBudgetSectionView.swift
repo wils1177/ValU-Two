@@ -10,6 +10,8 @@ import SwiftUI
 
 struct NewBudgetSectionView: View {
     
+    @State var showAlertForNoName = false
+    
     @State var nameText = ""
     
     @State var icons = [["flame", "paintbrush", "leaf", "bed.double", "heart"],
@@ -64,31 +66,28 @@ struct NewBudgetSectionView: View {
                     
                     createdIconView.shadow(color: colorMap[self.colors[selectedColorColumn]], radius: 10).padding().padding(.top, 30)
                     
-                    VStack{
-                        HStack{
-                            Text("Name").font(.title3).bold()
-                            Spacer()
-                        }.padding(.horizontal)
-                        
-                        TextField("Category Name", text: self.$nameText).font(Font.system(size: 20, weight: .semibold)).frame(height: 30, alignment: .center).padding().background(Color(.systemGroupedBackground)).cornerRadius(10).padding(.horizontal).padding(.bottom)
+                VStack{
+                    
+                    
+                    TextField("Name", text: self.$nameText).font(Font.system(size: 24, weight: .semibold)).frame(height: 55, alignment: .center).multilineTextAlignment(.center).padding(.horizontal).background(Color(.tertiarySystemGroupedBackground)).cornerRadius(20).padding(.horizontal).padding(.bottom)
                     
  
-                }.padding(.top, 40)
+                }
                 
                 VStack{
                     HStack{
                         Text("Color").font(.title3).bold()
                         Spacer()
                     }.padding(.horizontal)
-                    ColorSelectionGridView(colors: self.$colors, selectedColumn: self.$selectedColorColumn).padding(10).background(Color(.systemGroupedBackground)).cornerRadius(15).padding(.horizontal).padding(.bottom)
-                }
+                    ColorSelectionGridView(colors: self.$colors, selectedColumn: self.$selectedColorColumn).padding(10).background(Color(.tertiarySystemGroupedBackground)).cornerRadius(20).padding(.horizontal).padding(.bottom)
+                }.padding(.top, 15)
                 
                 VStack{
                     HStack{
                         Text("Icon").font(.title3).bold()
                         Spacer()
                     }.padding(.horizontal)
-                    IconSelectionGridView(icons: self.$icons, selectedRow: self.$selectedIconRow, selectedColumn: self.$selectedIconColumn).padding().background(Color(.systemGroupedBackground)).cornerRadius(15).padding(.horizontal).padding(.bottom)
+                    IconSelectionGridView(icons: self.$icons, selectedRow: self.$selectedIconRow, selectedColumn: self.$selectedIconColumn).padding().background(Color(.tertiarySystemGroupedBackground)).cornerRadius(20).padding(.horizontal).padding(.bottom)
                 }
                 
                     
@@ -104,18 +103,29 @@ struct NewBudgetSectionView: View {
                     }){
                     ZStack{
                         
-                        Text("Cancel")
+                        NavigationBarTextButton(text: "Cancel")
                     }
             }
                 ,trailing: Button(action: {
+                        
+                    if self.nameText != ""{
                         self.budgetSectionCreator.addSectionToBudget(name: self.nameText, icon: self.icons[self.selectedIconRow][self.selectedIconColumn], colorCode: self.colors[self.selectedColorColumn])
                         self.coordinator?.dismissPresented()
+                    }else{
+                        self.showAlertForNoName = true
+                    }
+                    
+                        
                     }){
                     ZStack{
                         
-                        Text("Add")
+                        NavigationBarTextButton(text: "Add")
                     }
             })
+                
+            .alert(isPresented: $showAlertForNoName) {
+                Alert(title: Text("You need a name!"), message: Text("Please give a name to your new budget!"), dismissButton: .default(Text("I'll fix it!")))
+                }
         }
         
     }

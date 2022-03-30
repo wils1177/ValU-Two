@@ -30,7 +30,7 @@ class MainTabBarController: UITabBarController {
             setupViews()
             onboardingCanLaod = false
         }
-        
+        //self.tabBar.barTintColor = UIColor(Color(hex:"FFF0E6"))
     }
 
     override func viewDidLoad() {

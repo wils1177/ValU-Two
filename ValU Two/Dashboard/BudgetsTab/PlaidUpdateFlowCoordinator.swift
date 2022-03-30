@@ -32,6 +32,7 @@ class PlaidUpdateFlowCoordinator: Coordinator, PlaidLinkDelegate{
     }
     
     func launchPlaidLink() {
+        /*
         let presentor = PlaidLinkViewPresentor(publicToken: publicToken)
         presentor.coordinator = self
         let vc = presentor.configure()
@@ -41,14 +42,17 @@ class PlaidUpdateFlowCoordinator: Coordinator, PlaidLinkDelegate{
             self.fixNowService.state = FixNowLoadingState.start
         })
         self.presentorStack.append(presentor)
+         */
     }
     
     
     func dismissPlaidLink(sender: PlaidLinkViewPresentor) {
+        /*
         sender.linkViewController?.dismiss(animated: true, completion: {
             print("link dismissed")
         })
         _ = self.presentorStack.popLast()
+         */
     }
     
     func plaidLinkSuccess(sender: PlaidLinkViewPresentor) {
@@ -56,6 +60,7 @@ class PlaidUpdateFlowCoordinator: Coordinator, PlaidLinkDelegate{
         //set the needs login back to false
         //rejig the fix now service?
         //Actually push the defatul update using the service.
+        /*
         print("poopy doopy doo")
         self.fixNowService.markItemAsFixed(itemId: self.itemId)
         self.fixNowService.updateRecentlyFixedItem(itemId: self.itemId)
@@ -64,6 +69,7 @@ class PlaidUpdateFlowCoordinator: Coordinator, PlaidLinkDelegate{
             print("link dismissed")
         })
         _ = self.presentorStack.popLast()
+         */
     }
     
     func plaidIsConnected(){

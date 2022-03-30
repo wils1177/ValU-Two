@@ -16,13 +16,13 @@ struct HistoryStatsView: View {
     
     var body: some View {
         
-        VStack(alignment: .center){
+        HStack(){
             
             HStack{
                 VStack{
                     HStack{
                         Image(systemName: "rosette").font(.system(size: 21)).foregroundColor(Color(.systemGreen))
-                        Text("Total Savings").font(.system(size: 18, design: .rounded)).fontWeight(.bold)
+                        Text("Savings").font(.system(size: 18, design: .rounded)).fontWeight(.bold).lineLimit(1)
                         Spacer()
                     }
                 
@@ -30,22 +30,22 @@ struct HistoryStatsView: View {
                     Text("Saved").font(.subheadline).bold().frame(maxWidth: 100)
                 }
                 Spacer()
-            }.padding().background(Color(.tertiarySystemBackground)).cornerRadius(15).padding(.horizontal, 10).padding(.vertical, 5).shadow(radius: 10)
+            }.padding().background(Color(.tertiarySystemBackground)).cornerRadius(20).padding(.horizontal, 10).padding(.vertical, 5).shadow(radius: 10)
             
-            HStack{
+            HStack(alignment: .center){
                 VStack{
                     
                     HStack{
                         Image(systemName: "creditcard").font(.system(size: 21)).foregroundColor(AppTheme().themeColorPrimary)
-                        Text("Budgets Completed").font(.system(size: 18, design: .rounded)).fontWeight(.bold)
+                        Text("Budgets").font(.system(size: 18, design: .rounded)).fontWeight(.bold).lineLimit(1)
                         Spacer()
                     }
                 
                     Text(String(self.service.getCompletedBudgets())).font(.system(size: 44, design: .rounded)).bold().foregroundColor(AppTheme().themeColorPrimary).fontWeight(.semibold).padding(.top, 10)
-                    Text("Budget(s)").font(.subheadline).bold().multilineTextAlignment(.center).frame(maxWidth: 100)
+                    Text("Budgets").font(.subheadline).bold().multilineTextAlignment(.center).frame(maxWidth: 100)
                 }
                 Spacer()
-            }.padding().background(Color(.tertiarySystemBackground)).cornerRadius(15).padding(.horizontal, 10).padding(.vertical, 5).shadow(radius: 10)
+            }.padding().background(Color(.tertiarySystemBackground)).cornerRadius(20).padding(.horizontal, 10).padding(.vertical, 5).shadow(radius: 10)
             
             
             

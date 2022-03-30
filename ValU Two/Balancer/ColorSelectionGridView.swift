@@ -43,15 +43,15 @@ struct ColorSelectionGridView: View {
                                     }){
                                         Spacer()
                                         if self.isSelected(col: col){
-                                            Circle().frame(width: 45, height: 45).foregroundColor(colorMap[self.colors[col]]).padding(4).overlay(
+                                            Circle().frame(width: 35, height: 35).foregroundColor(colorMap[self.colors[col]]).padding(4).overlay(
                                                 Circle()
-                                                    .stroke(Color.black, lineWidth: 3).padding(2)
-                                                ).cornerRadius(12).padding(.vertical, 5)
+                                                    .stroke(AppTheme().themeColorPrimary, lineWidth: 3).padding(2)
+                                                ).padding(.vertical, 5)
                                         }else{
-                                            Circle().frame(width: 45, height: 45).foregroundColor(colorMap[self.colors[col]] as! Color).padding(4).overlay(
+                                            Circle().frame(width: 35, height: 35).foregroundColor(colorMap[self.colors[col]] as! Color).padding(4).overlay(
                                                 Circle()
                                                     .stroke(Color.clear, lineWidth: 3).padding(2)
-                                            ).cornerRadius(12).padding(.vertical, 5)
+                                            ).padding(.vertical, 5)
                                         }
                                         Spacer()
                                 }

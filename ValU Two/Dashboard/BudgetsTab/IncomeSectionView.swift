@@ -26,8 +26,7 @@ struct IncomeSectionView: View {
         self.income = CommonUtils.makeMoneyString(number: (Int(income)))
         self.budget = budget
         self.percentage = Float(income) / budget.amount
-        self.expected = CommonUtils.makeMoneyString(number: Int(budget.amount)) + " Expected"
-        self.coordinator = coordinator
+        self.expected = CommonUtils.makeMoneyString(number: Int(budget.amount))
     }
     
     func getPercentage() -> Float{
@@ -46,8 +45,8 @@ struct IncomeSectionView: View {
         GeometryReader{ g in
             
             ZStack(alignment: .leading){
-                RoundedRectangle(cornerRadius: 8).foregroundColor(Color(.tertiarySystemGroupedBackground).opacity(0.65)).frame(height: 12).padding(.horizontal)
-                RoundedRectangle(cornerRadius: 8).foregroundColor(Color(.systemGreen)).frame(width: g.size.width * CGFloat(getPercentage()), height: 12).padding(.horizontal)
+                RoundedRectangle(cornerRadius: 8).foregroundColor(Color(.tertiarySystemGroupedBackground).opacity(0.65)).frame(height: 12)
+                RoundedRectangle(cornerRadius: 8).foregroundColor(Color(.systemGreen)).frame(width: g.size.width * CGFloat(getPercentage()), height: 12)
                 
             }.opacity(g.size.height < g.size.width ? 1 : 0)
             
@@ -56,7 +55,7 @@ struct IncomeSectionView: View {
     
     
     var mainView : some View {
-        VStack(alignment: .leading, spacing: 9){
+        VStack(alignment: .leading, spacing: 0){
             
             Button(action: {
                 // What to perform
@@ -75,7 +74,7 @@ struct IncomeSectionView: View {
                     
                     Image(systemName: "chevron.right").font(.system(size: 20)).foregroundColor(AppTheme().themeColorPrimary).rotationEffect(.degrees(isLarge ? 90 : 0))
                     
-                }.padding(.horizontal, 10)
+                }
             }.buttonStyle(PlainButtonStyle())
             
             
@@ -84,7 +83,7 @@ struct IncomeSectionView: View {
                     self.coordinator?.showIncome(transactions: self.model.getIncomeTransactions() )
                 }) {
                  HStack(alignment: .bottom){
-                     Text(self.income).font(.system(size: 35, design: .rounded)).bold().padding(.leading)
+                     Text(self.income).font(.system(size: 35, design: .rounded)).bold()
                      
                      Spacer()
                      HStack(spacing: 4){
@@ -92,7 +91,7 @@ struct IncomeSectionView: View {
                          
                          
                          Text(self.expected).font(.system(size: 16, design: .rounded)).fontWeight(.semibold).foregroundColor(AppTheme().themeColorPrimary)
-                     }.padding(4).padding(.horizontal, 10)
+                     }.padding(4).padding(.leading, 10)
                  }.padding(.vertical, 5)
                 }.buttonStyle(PlainButtonStyle())
             }
@@ -103,9 +102,9 @@ struct IncomeSectionView: View {
             
             
             
-            //if isLarge{
-            //    self.progressBar.padding(.bottom, 5)
-            //}
+            if isLarge{
+                self.progressBar.padding(.bottom, 5)
+            }
             
             
             
@@ -153,10 +152,59 @@ struct IncomeSectionView: View {
         }
     }
     
+    var bubble: some View{
+        
+        VStack(spacing: 7){
+            
+
+                VStack(spacing: 0){
+                    
+                    HStack{
+                        Image(systemName: "l.joystick.down").font(.system(size: 17, design: .rounded)).foregroundColor(Color(.systemGreen))
+                        Text("Income").font(.system(size: 17, design: .rounded)).fontWeight(.semibold).foregroundColor(Color(.systemGreen))
+                        Spacer()
+                        
+                        Image(systemName: "chevron.right").font(.system(size: 17, design: .rounded)).foregroundColor(Color(.systemGreen)).rotationEffect(.degrees(isLarge ? 90 : 0))
+                        
+                        
+                
+                    }.padding(.bottom, 7)
+                    
+                    HStack{
+                        Text("\(self.income)\(Text(" / \(self.expected)").foregroundColor(Color(.lightGray)).font(.system(size: 22, design: .rounded)))").font(.system(size: 30, design: .rounded)).fontWeight(.bold)
+                        Spacer()
+                    }
+                    
+                    if self.isLarge{
+                        self.progressBar.padding(.vertical, 5).padding(.top, 10)
+                    }
+                    
+                    
+                }.padding(.vertical, 10).padding(.bottom, 5).padding(.horizontal).background(Color(.systemBackground)).cornerRadius(20)
+            
+        }
+            .onTapGesture {
+            withAnimation{
+                self.isLarge.toggle()
+            }
+            
+        }
+        
+        
+            
+            
+            
+    }
+    
+            
+            
+        
+    
+    
     
     var body: some View {
         
-        mainView
+        bubble
         
         
         

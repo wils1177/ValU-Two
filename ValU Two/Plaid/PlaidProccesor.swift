@@ -100,11 +100,8 @@ class PlaidProccessor{
         do {
             let parsedResponse = try decoder.decode(TransactionsResponse.self, from: response)
             
-            if isInitial{
-                proccessAccounts(response: parsedResponse.accounts, itemId: parsedResponse.item.itemId)
-            }
-            
-            
+            proccessAccounts(response: parsedResponse.accounts, itemId: parsedResponse.item.itemId)
+
             //check to make sure there are some transactions before proccessing
             if parsedResponse.trasactions != nil{
                 proccessTransactions(response: parsedResponse.trasactions!, itemId: parsedResponse.item.itemId)
@@ -148,9 +145,30 @@ class PlaidProccessor{
         
         let dataManager = DataManager()
         
+        let existingAccounts = dataManager.getAccounts()
+        
         for account in response{
             
-            dataManager.saveAccount(account: account, itemId: itemId)
+            // Check if an account already exists, if so, update the balances.
+            var accountAlreadyExists = false
+            for existingAccount in existingAccounts{
+                if existingAccount.accountId == account.accountId{
+                    accountAlreadyExists = true
+                    if account.balances.available != nil{
+                        existingAccount.balances?.available = account.balances.available!
+                    }
+                    if account.balances.limit != nil {
+                        existingAccount.balances?.limit = account.balances.limit!
+                    }
+                    existingAccount.balances?.current = account.balances.current
+                    
+                }
+            }
+            
+            if !accountAlreadyExists{
+                dataManager.saveAccount(account: account, itemId: itemId)
+            }
+            
             
         }
         
@@ -164,16 +182,19 @@ class PlaidProccessor{
         let dataManager = DataManager()
         
         for transaction in response{
-            
+            print("printing transaction datetime: \(transaction.dateTime)")
             for account in dataManager.getAccounts(){
                 if account.accountId == transaction.accountId{
                     
                     let newTransaction = dataManager.saveTransaction(transaction: transaction, itemId: itemId)
+                    let transactionProcessor = TransactionProccessor(spendingCategories: self.spendingCategories, transactionRules: self.transactionRules)
 
-
-                    TransactionProccessor(spendingCategories: self.spendingCategories, transactionRules: self.transactionRules).proccessTransactionToCategory(transaction: newTransaction, spendingCategories: self.spendingCategories)
-
+                    transactionProcessor.proccessTransactionToCategory(transaction: newTransaction, spendingCategories: self.spendingCategories)
                     
+                    //If this is replacing a pending transaction, delete the pending one.
+                    if transaction.pendingTransactionId != nil{
+                        transactionProcessor.removePendingTransaction(pendingTransactionId: transaction.pendingTransactionId!)
+                    }
                     
                 }
             }
@@ -206,6 +227,8 @@ class PlaidProccessor{
         
         let token = Messaging.messaging().fcmToken!
         
+        print("printing fcm token")
+        print(token)
         //Configure the remote storeage with firebase
         let db = Firestore.firestore()
         db.collection("items").document(itemID).setData(["clientId" : token]){ err in

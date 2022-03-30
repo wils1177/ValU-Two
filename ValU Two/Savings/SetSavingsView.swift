@@ -140,7 +140,9 @@ struct SetSavingsView: View {
             }
             */
             
-            }.navigationBarTitle(Text("Custom Goal")).navigationBarItems(
+            }
+        
+        .navigationBarTitle(Text("Custom Goal")).navigationBarItems(
                                                                        
                                                                        
                     trailing: Button(action: {

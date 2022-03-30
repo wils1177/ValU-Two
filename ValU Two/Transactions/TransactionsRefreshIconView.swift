@@ -26,7 +26,7 @@ struct TransactionsRefreshIconView: View {
         if viewData.viewState != LoadingAccountsViewState.Loading{
             Button(action: {
                 // What to perform
-                self.viewModel.startLoadingAccounts()
+                //self.viewModel.startLoadingAccounts()
             }) {
                 // How the button looks like
                 CircleButtonIcon(icon: "arrow.2.circlepath", color: AppTheme().themeColorPrimary)

@@ -68,7 +68,7 @@ struct HistoricalBudgetDetailView: View {
                 Divider().padding(.leading)
 
                 SectionHeader(title: "Budgets", image: "creditcard").padding(.top ,5).padding(.horizontal)
-                SpendingCardView(budget: self.budget, viewModel: self.spendingCardViewModel).padding(.horizontal).padding(.bottom)
+                SpendingCardView(budget: self.budget, budgetTransactionsService: self.transactionsService).padding(.horizontal).padding(.bottom)
             }
         }.navigationTitle(self.title)
         

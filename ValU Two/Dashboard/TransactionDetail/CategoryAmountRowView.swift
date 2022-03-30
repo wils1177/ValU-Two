@@ -35,7 +35,7 @@ struct CategoryAmountRowView: View {
             
             HStack{
                 TransactionIconView(icons: [viewData.spendingCategory?.icon ?? "icon gone"]).padding(.trailing, 2)
-                VStack(alignment: .leading){
+                VStack(alignment: .leading, spacing: 3){
                     Text(getCategoryName()).font(.system(size: 18, design: .rounded)).bold()
                     if labelData != nil{
                         SingleBudgetLabel(label: labelData!)

@@ -15,18 +15,19 @@ struct SpendingCardView: View {
     
     @State var isLarge : Bool = true
     
-    init(budget : Budget, viewModel: SpendingCardViewModel){
+    var coordinator : BudgetsTabCoordinator?
+    
+    init(budget : Budget, budgetTransactionsService: BudgetTransactionsService, coordinator: BudgetsTabCoordinator? = nil){
         //print("Spending Card init")
-        self.viewModel = viewModel
+        self.viewModel = SpendingCardViewModel(budget: budget, budgetTransactionsService: budgetTransactionsService)
         self.budget = budget
-        //viewModel.coordinator = coordinator
-        
+        self.coordinator = coordinator
         // To remove only extra separators below the list:
         UITableView.appearance().tableFooterView = UIView()
 
                // To remove all separators including the actual ones:
         UITableView.appearance().separatorStyle = .none
-        
+        print("spending card view created")
     }
     
     func getRemainingDisplayText() -> String {
@@ -45,36 +46,46 @@ struct SpendingCardView: View {
     }
     
     private var columns: [GridItem] = [
-        GridItem(.flexible(), spacing: 13),
-            GridItem(.flexible(), spacing: 13)
+        GridItem(.flexible(), spacing: 17),
+            GridItem(.flexible(), spacing: 17)
         ]
     
-    
+    var menuItems: some View {
+            Group {
+                Button("Action 1", action: {})
+                Button("Action 2", action: {})
+                Button("Action 3", action: {})
+            }
+        }
 
     
     var large : some View{
         VStack{
             
-            Button(action: {
-                // What to perform
-                withAnimation{
-                    self.isLarge.toggle()
-                }
-            }) {
-                
-                HStack{
-                    SectionHeader(title: "Budgets", image: "creditcard")
-                    Spacer()
-                    
-                    //if !isLarge{
-                        Text(getRemainingDisplayText()).font(.system(size: 22, design: .rounded)).bold().lineLimit(1).padding(.trailing)
-                    //}
-                    
-                    Image(systemName: "chevron.right").font(.system(size: 20)).foregroundColor(AppTheme().themeColorPrimary).rotationEffect(.degrees(isLarge ? 90 : 0))
-                    
-                }
-            }.buttonStyle(PlainButtonStyle())
             
+            ForEach(self.budget.getBudgetSections(), id: \.self){ section in
+                                      
+                                  
+                                      
+                    VStack(spacing: 0){
+                                              
+                            Button(action: {
+                                    // your action here
+                                    self.coordinator?.showIndvidualBudget(budgetSection: section)
+                                }) {
+                                    ParentCategoryCard(budgetSection: section)
+                                        
+                                    }.buttonStyle(PlainButtonStyle())
+                        
+                        
+
+                    }.padding(.bottom, 10)
+                
+                //Divider().padding(.bottom, 10)
+            }
+            
+            
+            /*
             if isLarge{
                 
                 LazyVGrid(      columns: columns,
@@ -90,37 +101,43 @@ struct SpendingCardView: View {
                                                       
                                     Button(action: {
                                             // your action here
-                                            self.viewModel.coordinator?.showIndvidualBudget(budgetSection: section)
+                                            self.coordinator?.showIndvidualBudget(budgetSection: section)
                                         }) {
-                                                ParentCategoryCard(budgetSection: section)
+                                            ParentCategoryCard(budgetSection: section)//.shadow(radius: 7)
+                                                
                                             }.buttonStyle(PlainButtonStyle())
                     
 
                         }
                 }
                     
+                    
                     Button(action: {
                             // your action here
-                        self.viewModel.coordinator?.showOtherTransactions(otherCardData: self.viewModel.otherCategory!)
+                        self.coordinator?.showOtherTransactions(otherCardData: self.viewModel.otherCategory!)
                         }) {
-                        ParentCategoryCard(color: AppTheme().otherColor, colorSecondary: AppTheme().otherColorSecondary, colorTertiary: AppTheme().otherColorTertiary, icon: "book", spent: self.viewModel.otherCategory!.spent, limit: self.viewModel.otherCategory!.limit, name: "Other", percentageSpent: Double(self.viewModel.otherCategory!.percentage))
+                        ParentCategoryCard(color: AppTheme().otherColor, colorSecondary: AppTheme().otherColorSecondary, colorTertiary: AppTheme().otherColorTertiary, icon: "book", spent: self.viewModel.otherCategory!.spent, limit: self.viewModel.otherCategory!.limit, name: "Other", percentageSpent: Double(self.viewModel.otherCategory!.percentage))//.shadow(radius: 7)
+                            
+                                
+                            
                             }.buttonStyle(PlainButtonStyle())
                     
+                        
                     
                     
-                }.padding(.top, 13)
+                }
             }
             
-                
+               
             
-            
+            */
             
         }
     }
     
     var body: some View {
         
-        large
+        large//.padding().padding(.vertical, 5).background(Color(.tertiarySystemBackground)).cornerRadius(25)
         
         
     }

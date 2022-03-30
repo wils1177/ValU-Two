@@ -15,34 +15,8 @@ struct BudgetDetailCatgeryViewData: Hashable{
 }
 
 
-class BudgetDetailViewModel {
-    
-    var categories = [BudgetDetailCatgeryViewData]()
-    var section : BudgetSection
-    
-    init(budgetSection: BudgetSection){
-        self.section = budgetSection
-        self.categories = createCategoryData()
-    }
-    
-    func createCategoryData() -> [BudgetDetailCatgeryViewData]{
-        
-        var data = [BudgetDetailCatgeryViewData]()
-        var categories = self.section.budgetCategories?.allObjects as! [BudgetCategory]
-        categories = categories.sorted(by: { $0.order > $1.order })
-        
-        for category in categories{
-            //if category.limit > 0.0 {
-                let transactions = getTransactionsForCategory(category: category)
-                let newData = BudgetDetailCatgeryViewData(category: category, transactions: transactions)
-                data.append(newData)
-            //}
-            
-        }
-        
-        return data
-        
-    }
+struct BudgetDetailViewModel {
+
     
     func getTransactionsForCategory(category: BudgetCategory) -> [Transaction]{
         

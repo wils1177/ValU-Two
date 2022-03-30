@@ -32,7 +32,7 @@ struct EditCategoriesView: View {
                                     Toggle(isOn: $viewModel.saveRule) {
                                         Text("Remember for Merchant")
                                     }.padding(.trailing, 5)
-                                }.padding(10).background(Color(.systemGroupedBackground)).cornerRadius(10).padding(.horizontal).padding(.top)
+                                }.padding(10).background(Color(.tertiarySystemBackground)).cornerRadius(10).padding(.horizontal).padding(.top)
                                
                                
                             
@@ -41,11 +41,7 @@ struct EditCategoriesView: View {
                                 Text("When selected, ValU will remeber your choices for future transactions from the same merchant.").font(.footnote).foregroundColor(Color(.lightGray))
                             }.padding(.horizontal, 10).padding(.bottom)
                              
-                             /*
-                            if self.viewModel.transaction.categoryMatches!.allObjects.count > 0{
-                                CurrentlySelectedView(transaction: viewModel.transaction, viewModel: self.viewModel).padding(.horizontal).padding(.bottom).padding(.bottom)
-                            }
-                             */
+                             
                             
                             if self.viewModel.budgetSections.count != 0{
                                 ForEach(self.viewModel.budgetSections, id: \.self){ section in
@@ -68,7 +64,9 @@ struct EditCategoriesView: View {
                             
                             
                          }.listStyle(SidebarListStyle())
-            }.navigationBarTitle("Change Category", displayMode: .large)
+            }
+            .background(Color(.systemGroupedBackground))
+            .navigationBarTitle("Change Category", displayMode: .large)
             .navigationBarItems(
                 
                 leading:

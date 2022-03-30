@@ -11,9 +11,18 @@ import SwiftUI
 
 class TransactionService{
     
+    func getDisplayName(transaction: Transaction) -> String{
+        if transaction.merchantName != nil{
+            return transaction.merchantName!
+        }
+        else{
+            return transaction.name ?? "No Name Available"
+        }
+    }
     
     
     func getIcons(categories: [CategoryMatch]) -> [String]{
+        
         
         var icons = [String]()
         if categories.count == 0{
@@ -126,7 +135,6 @@ class TransactionService{
             results.append(moreEntry)
             return results
             
-            return results
             
         }
         
@@ -140,9 +148,13 @@ class TransactionService{
             let BudgetCategories = category.spendingCategory?.budgetCategory?.allObjects as! [BudgetCategory]
             
             for budgetCategory in BudgetCategories{
-                if budgetCategory.budgetSection!.budget!.active{
-                    activeBudgetSections.append(budgetCategory.budgetSection!)
+                if budgetCategory.budgetSection?.budget != nil && budgetCategory.budgetSection!.budget!.active == true{
+                    let budget = budgetCategory.budgetSection!.budget!
+                    if CommonUtils.budgetIsActive(budget: budget){
+                        activeBudgetSections.append(budgetCategory.budgetSection!)
+                    }
                 }
+                
             }
             
         }

@@ -17,14 +17,17 @@ class SettingsFlowCoordinator : Coordinator, PlaidLinkDelegate{
     var childCoordinators = [Coordinator]()
     var navigationController = UINavigationController()
     var presentorStack = [Presentor]()
+    
+    var settingsViewModel : SettingsViewModel?
 
     
     func start(){
         
         let presentor = SettingsViewModel()
+        self.settingsViewModel = presentor
         presentor.coordinator = self
         let vc = presentor.configure()
-        
+        navigationController.navigationBar.prefersLargeTitles = true
         self.navigationController.pushViewController(vc, animated: false)
         self.navigationController.modalPresentationStyle = .pageSheet
         
@@ -43,27 +46,30 @@ class SettingsFlowCoordinator : Coordinator, PlaidLinkDelegate{
     }
     
     func launchPlaidLink() {
+        /*
         let presentor = PlaidLinkViewPresentor()
         presentor.coordinator = self
         self.presentorStack.append(presentor)
         let linkVC = presentor.configure()
         linkVC.modalPresentationStyle = .fullScreen
         self.navigationController.present(linkVC, animated: true)
+         */
     }
     
     func dismissPlaidLink(sender: PlaidLinkViewPresentor) {
-        
+        /*
         sender.linkViewController?.dismiss(animated: true, completion: {
             print("link dismissed")
         })
         
         _ = self.presentorStack.popLast()
-        
+        */
 
     }
     
     func plaidLinkSuccess(sender: PlaidLinkViewPresentor) {
         
+        /*
         self.presentorStack.popLast()
         let loadingAccountsPresentor = self.presentorStack.last! as! LoadingAccountsPresentor
         loadingAccountsPresentor.startLoadingAccounts()
@@ -71,17 +77,31 @@ class SettingsFlowCoordinator : Coordinator, PlaidLinkDelegate{
             print("link dismissed")
             
         })
+         */
         
     }
     
     func plaidIsConnected() {
         self.navigationController.popViewController(animated: true)
         self.presentorStack.popLast()
+        self.settingsViewModel?.updateView()
+        self.settingsViewModel?.objectWillChange.send()
+        
     }
     
     func connectMoreAccounts(){
         launchPlaidLink()
     }
+    
+    
+    func showTransactionRuleDetail(rule: TransactionRule){
+        let model = TransactionRuleViewModel(rule: rule)
+        model.coordinator = self
+        let vc = UIHostingController(rootView: TransactionRuleDetailView(viewModel: model))
+        vc.title = "New Rule"
+        self.navigationController.pushViewController(vc, animated: true)
+    }
+    
     
     func dismissSettings(){
         
@@ -91,6 +111,20 @@ class SettingsFlowCoordinator : Coordinator, PlaidLinkDelegate{
         self.parent?.dismissSettings()
         
         
+    }
+    
+    func dismissTransactionDetail(){
+        self.navigationController.popViewController(animated: true)
+        self.settingsViewModel?.getTransactionRules()
+        self.settingsViewModel?.objectWillChange.send()
+        
+    }
+    
+    func newTransactionRule(){
+        let model = TransactionRuleViewModel()
+        model.coordinator = self
+        let vc = UIHostingController(rootView: TransactionRuleDetailView(viewModel: model))
+        self.navigationController.pushViewController(vc, animated: true)
     }
 
 }

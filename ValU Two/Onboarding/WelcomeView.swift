@@ -37,7 +37,7 @@ struct WelcomeView: View {
             Spacer()
             Button(action: {
                 //Button Action
-                self.coordinator?.continueToOnboarding()
+                self.coordinator?.continueFromWelcome()
                 }){
                 ActionButtonLarge(text: "Get Started")
                 

@@ -25,10 +25,14 @@ class BudgetBalancerPresentor : ObservableObject {
     var coordinator : SetSpendingLimitDelegate?
     @Published var percentage : Float = 0.0
     
+    var sections : [BudgetSection]
+    
+    var historicalTransactionsModel : HistoricalTransactionsViewModel
+    
     init(budget: Budget, coordinator: SetSpendingLimitDelegate){
         self.budget = budget
-        let sections = budget.getBudgetSections()
-
+        self.sections = budget.getBudgetSections()
+        self.historicalTransactionsModel = HistoricalTransactionsViewModel(timeFrame: self.budget.timeFrame)
         self.coordinator = coordinator
         
 
@@ -51,8 +55,9 @@ class BudgetBalancerPresentor : ObservableObject {
     }
     
     func getAmountRemaining() -> Float{
+
+        let amountAvailable = self.budget.amount
         let spent = getSpent()
-        let amountAvailable = self.budget.getAmountAvailable()
         return amountAvailable - spent
     }
     
@@ -117,9 +122,9 @@ class BudgetBalancerPresentor : ObservableObject {
             let limitForSection = section.getLimit()
             let data = BudgetStatusBarViewData(percentage: limitForSection / Double(total), color: colorMap[Int(section.colorCode)] , name: section.name!, icon: section.icon!)
             sectionSpentTotal = sectionSpentTotal + limitForSection
-            if limitForSection > 0.0 && limitForSection > 0.0{
+            //if limitForSection > 0.0 && limitForSection > 0.0{
                 viewDataToReturn.append(data)
-            }
+            //}
             
         }
         
@@ -134,7 +139,7 @@ class BudgetBalancerPresentor : ObservableObject {
         
         let otherTotal = total - Float(sectionSpentTotal) - (self.budget.savingsPercent * total)
         let otherPercentage = Float(otherTotal) / total
-        let otherData = BudgetStatusBarViewData(percentage: Double(otherPercentage), color: Color(.systemGroupedBackground), name: "Free Spending", icon: "book")
+        let otherData = BudgetStatusBarViewData(percentage: Double(otherPercentage), color: Color(.tertiarySystemGroupedBackground), name: "Free Spending", icon: "book")
         viewDataToReturn.append(otherData)
         
         

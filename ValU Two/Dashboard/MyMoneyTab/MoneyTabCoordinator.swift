@@ -24,7 +24,7 @@ class MoneyTabCoordinator : Coordinator, TransactionRowDelegate{
         let vc = viewModel.configure()
 
         self.navigationController.navigationBar.prefersLargeTitles = true
-        self.navigationController.tabBarItem = UITabBarItem(title: "Accounts", image: UIImage(systemName: "dollarsign.circle"), selectedImage: UIImage(named: "tab_icon_seelcted"))
+        self.navigationController.tabBarItem = UITabBarItem(title: "Accounts", image: UIImage(systemName: "dollarsign.circle", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)), selectedImage: UIImage(named: "tab_icon_seelcted"))
         self.navigationController.pushViewController(vc, animated: false)
         
         

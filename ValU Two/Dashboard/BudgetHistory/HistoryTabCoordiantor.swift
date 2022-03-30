@@ -26,7 +26,7 @@ class HistoryTabCoordiantor : Coordinator{
         let vc = UIHostingController(rootView: HistoryTabView(viewModel: viewModel))
 
         self.navigationController.navigationBar.prefersLargeTitles = true
-        self.navigationController.tabBarItem = UITabBarItem(title: "History", image: UIImage(systemName: "book.closed"), selectedImage: UIImage(named: "tab_icon_seelcted"))
+        self.navigationController.tabBarItem = UITabBarItem(title: "History", image: UIImage(systemName: "book.closed", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)), selectedImage: UIImage(named: "tab_icon_seelcted"))
         self.navigationController.pushViewController(vc, animated: false)
         
         

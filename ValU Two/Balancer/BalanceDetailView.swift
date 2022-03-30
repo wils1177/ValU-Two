@@ -14,13 +14,14 @@ struct BalanceDetailView: View {
     var coordinator : BudgetEditableCoordinator
     @ObservedObject var viewModel : BudgetBalancerPresentor
     
+    var focusedCategoryId : UUID?
     
     init(budgetSection : BudgetSection, coordinator: BudgetEditableCoordinator, viewModel: BudgetBalancerPresentor){
         self.coordinator = coordinator
         self.budgetSection = budgetSection
         self.viewModel = viewModel
         
-        UITableView.appearance().backgroundColor = .clear
+       
 
     }
     
@@ -76,7 +77,7 @@ struct BalanceDetailView: View {
             
             self.coordinator.showNewCategoryView(budgetSection: self.budgetSection)
         }) {
-            Image(systemName: "plus.circle.fill").font(.system(size: 28, weight: .regular)).foregroundColor(colorMap[Int(self.budgetSection.colorCode)])
+            Image(systemName: "plus.circle.fill").font(.system(size: 22, weight: .regular)).foregroundColor(colorMap[Int(self.budgetSection.colorCode)])
             Text("Add Category").foregroundColor(colorMap[Int(self.budgetSection.colorCode)]).bold()
         }.buttonStyle(PlainButtonStyle())
     }
@@ -211,7 +212,7 @@ struct BalanceDetailView: View {
                 
                 
         }.padding(.horizontal, -20)
-        
+            .background(Color(.systemGroupedBackground))
         
         .listStyle(SidebarListStyle())
     
@@ -239,12 +240,25 @@ struct BalanceDetailView: View {
                 
             }
             
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
 
+                Button("Order") {
+                    UIApplication.shared.endEditing()
+                }
+            }
         }
+        
+        
     
     }
 }
 
+extension UIApplication {
+    func endEditing() {
+        sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
 
 
 struct BalanceDetailHelpCard: View {

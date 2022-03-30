@@ -17,6 +17,8 @@ class OnDemandRefreshViewModel {
     var aggregationServices = [PlaidDefaultUpdateService]()
     var completionCount = 0
     
+    var somethingToDoWhenRefrehIsDone : (() -> ())?
+    
     init(){
         self.viewData.viewState = LoadingAccountsViewState.Initial
         self.itemManager = ItemManagerService()
@@ -33,14 +35,14 @@ class OnDemandRefreshViewModel {
         
     }
     
-    func startLoadingAccounts(){
+    func startLoadingAccounts()  {
         self.viewData.viewState = LoadingAccountsViewState.Loading
         for service in self.aggregationServices{
             service.initiateDefaultUpdatePull()
         }
     }
     
-    func handleAggregationResult(result: Result<String, Error>){
+    func handleAggregationResult(result: Result<String, Error>) {
         switch result {
         case .failure(let _):
             
@@ -55,6 +57,10 @@ class OnDemandRefreshViewModel {
             if self.completionCount == self.aggregationServices.count{
                 self.viewData.viewState = LoadingAccountsViewState.Success
             }
+            if somethingToDoWhenRefrehIsDone != nil{
+                somethingToDoWhenRefrehIsDone!()
+            }
+            
         }
     }
     

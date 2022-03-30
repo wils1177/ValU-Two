@@ -18,6 +18,8 @@ struct BudgetBalanceCard: View {
     var colorSeconday : Color
     var colorTertiary : Color
     
+    @State var showingDeleteAlert = false
+    
     init(budgetSection: BudgetSection, coordinator: SetSpendingLimitDelegate, viewModel: BudgetBalancerPresentor){
         self.budgetSection = budgetSection
         self.coordinator = coordinator
@@ -54,13 +56,63 @@ struct BudgetBalanceCard: View {
         
     }
     
+    var row: some View{
+        HStack{
+            BudgetSectionIconLarge(color: colorMap[Int(self.budgetSection.colorCode)], icon: self.budgetSection.icon ?? "calendar", size: 43)
+            Text(self.budgetSection.name ?? "unknown").font(.system(size: 17, design: .rounded)).bold().foregroundColor(colorMap[Int(self.budgetSection.colorCode)]).lineLimit(1)
+            Spacer()
+            Text(CommonUtils.makeMoneyString(number: Int(self.budgetSection.getLimit()))).foregroundColor(colorMap[Int(self.budgetSection.colorCode)]).font(.system(size: 23, design: .rounded)).fontWeight(.bold)
+            Image(systemName: "chevron.right").font(.system(size: 15, design: .rounded)).foregroundColor(colorMap[Int(self.budgetSection.colorCode)])
+        }.padding(.horizontal).padding(.vertical, 10).background(Color(.tertiarySystemBackground)).cornerRadius(21)
+    }
+    
+    
+    var cardGrid: some View{
+        VStack(alignment: .leading){
+            
+            HStack(alignment: .top){
+                BudgetSectionIconLarge(color: colorMap[Int(self.budgetSection.colorCode)], icon: self.budgetSection.icon ?? "calendar", size: 40)
+                Spacer()
+                
+                Button(action: {
+                    // What to perform
+                    self.showingDeleteAlert.toggle()
+                    print("delete budget section")
+                }) {
+                    // How the button looks like
+                    CircleButtonIcon(icon: "x.circle.fill", color: Color(.white), circleSize: 0, fontSize: 18)
+                }.buttonStyle(PlainButtonStyle())
+                    
+                
+                
+            }.padding(.bottom, 15)
+            
+            HStack{
+                Text(self.budgetSection.name ?? "unknown").font(.system(size: 15, design: .rounded)).bold().foregroundColor(.white).lineLimit(1)
+                Spacer()
+                
+            }
+            
+            Text(CommonUtils.makeMoneyString(number: Int(self.budgetSection.getLimit()))).foregroundColor(Color(.white)).font(.system(size: 23, design: .rounded)).fontWeight(.bold)
+            
+        }.padding(12)
+        
+        .background(LinearGradient(gradient: Gradient(colors: [self.colorSeconday, self.color]), startPoint: .top, endPoint: .bottom)).cornerRadius(23)
+    }
+    
     
     var body: some View {
         
         Button(action: {
             self.coordinator.showCategoryDetail(budgetSection: self.budgetSection, viewModel: self.viewModel)
         }) {
-            self.card.padding(.vertical, 2)
+            //self.cardGrid
+            self.cardGrid
         }.buttonStyle(PlainButtonStyle())
+            .alert(isPresented:self.$showingDeleteAlert) {
+                Alert(title: Text("Are you sure you want to delete this budget?"), message: Text("All associated data will be deleted"), primaryButton: .destructive(Text("Delete")) {
+                    self.viewModel.deleteBudgetSection(section: self.budgetSection)
+                }, secondaryButton: .cancel())
+            }
     }
 }

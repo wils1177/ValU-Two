@@ -53,6 +53,28 @@ class TransactionProccessor{
         
     }
     
+    func removePendingTransaction(pendingTransactionId: String){
+        do{
+            
+            //Find the transaction, and delete the categories first
+            let transactionToDelete = try dataManager.getEntity(predicate: PredicateBuilder().generateTransactionIdPredicate(transactionId: pendingTransactionId), entityName: "Transaction") as! [Transaction]
+            if transactionToDelete.count == 1 {
+                let transaction = transactionToDelete[0]
+                for match in transaction.categoryMatches?.allObjects as! [CategoryMatch]{
+                    try? DataManager().deleteEntity(predicate: PredicateBuilder().generateByIdPredicate(id: match.id!), entityName: "CategoryMatch")
+                    DataManager().saveDatabase()
+                }
+            }
+            
+            try! dataManager.deleteEntity(predicate: PredicateBuilder().generateTransactionIdPredicate(transactionId: pendingTransactionId), entityName: "Transaction")
+            dataManager.saveDatabase()
+            print("deleted a pending transaction with ID:\(pendingTransactionId)")
+        }
+        catch{
+            print("tried to delete a pending transaction, but it did not exist.")
+        }
+    }
+    
     
     func proccessTransactionToCategory(transaction: Transaction, spendingCategories: [SpendingCategory]){
         
@@ -64,6 +86,11 @@ class TransactionProccessor{
             // If there are no matches from existing rules, match on default logic 
             if spendingCategoryMatches.count == 0{
                 spendingCategoryMatches = matchTransactionToSpendingCategory(transaction: transaction, spendingCategories: spendingCategories)
+            }
+            
+            //Check if the transaction should be auto-hidden
+            if checkIfTransactionShouldBeHidden(transaction: transaction){
+                transaction.isHidden = true
             }
             
             //Turn the spending category matches into category match objects
@@ -88,14 +115,16 @@ class TransactionProccessor{
         
         var matches = [SpendingCategory]()
         for rule in self.transactionRules{
-            if rule.name == transaction.name!{
+            if transaction.name!.contains(rule.name!){
                 
                 for spendingCategory in spendingCategories{
-                    for ruleCategory in rule.categories!{
-                        if spendingCategory.name == ruleCategory{
+                    
+                    for ruleSpendingCategory in rule.spendingCategories?.allObjects as! [SpendingCategory]{
+                        if ruleSpendingCategory.id == spendingCategory.id{
                             matches.append(spendingCategory)
                         }
                     }
+                    
                 }
                 
             }
@@ -124,6 +153,19 @@ class TransactionProccessor{
     }
     
     
+    func checkIfTransactionShouldBeHidden(transaction: Transaction) -> Bool{
+        
+        if transaction.plaidCategories != nil {
+            if transaction.plaidCategories!.contains("Transfer"){
+                return true
+            }
+            if transaction.plaidCategories!.contains("Payment") && transaction.plaidCategories!.contains("Credit Card"){
+                return true
+            }
+        }
+        
+        return false
+    }
     
     //Determines which categories match a transaction
     func matchTransactionToSpendingCategory(transaction: Transaction, spendingCategories: [SpendingCategory]) -> [SpendingCategory]{

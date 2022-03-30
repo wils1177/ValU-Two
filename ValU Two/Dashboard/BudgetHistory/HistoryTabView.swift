@@ -29,6 +29,7 @@ struct HistoryTabView: View {
             
             LazyVStack{
                 
+                /*
                 Button(action: {
                     // What to perform
                     withAnimation{
@@ -51,20 +52,20 @@ struct HistoryTabView: View {
                 }
                 
                 Divider().padding(.leading).padding(.top, 10)
+                */
                 
                 
                 
-                
-                HStack{
+               // HStack{
                     
 
                     
-                    VStack(alignment: .leading, spacing: 2){
-                        SectionHeader(title: "Past Budgets", image: "clock")
+                    //VStack(alignment: .leading, spacing: 2){
+                      //  SectionHeader(title: "Past Budgets", image: "clock")
                         //Text("SINCE USING VALU TWO").font(.caption).foregroundColor(Color(.gray)).padding(.leading, 25)
-                    }
-                    Spacer()
-                }.padding(.top).padding(.horizontal)
+                    //}
+                    //Spacer()
+                //}.padding(.top).padding(.horizontal)
                 
                 PastBudgetsView(viewModel: self.viewModel)
                 
@@ -74,7 +75,7 @@ struct HistoryTabView: View {
             
             
             
-            /*
+            
             HStack{
                 Spacer()
                 Button(action: {
@@ -86,10 +87,12 @@ struct HistoryTabView: View {
                 }
                 Spacer()
             }
-            */
             
             
-        }.listStyle(SidebarListStyle())
+            
+        }
+        .background(Color(.systemGroupedBackground))
+        .listStyle(SidebarListStyle())
         .navigationBarTitle("History")
     }
 }

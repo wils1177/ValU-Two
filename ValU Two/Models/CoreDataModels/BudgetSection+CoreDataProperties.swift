@@ -2,8 +2,8 @@
 //  BudgetSection+CoreDataProperties.swift
 //  ValU Two
 //
-//  Created by Clayton Wilson on 8/29/20.
-//  Copyright © 2020 Clayton Wilson. All rights reserved.
+//  Created by Clayton Wilson on 2/11/22.
+//  Copyright © 2022 Clayton Wilson. All rights reserved.
 //
 //
 
@@ -22,6 +22,7 @@ extension BudgetSection {
     @NSManaged public var id: UUID?
     @NSManaged public var name: String?
     @NSManaged public var order: Int64
+    @NSManaged public var spent: Double
     @NSManaged public var budget: Budget?
     @NSManaged public var budgetCategories: NSSet?
 
@@ -41,5 +42,9 @@ extension BudgetSection {
 
     @objc(removeBudgetCategories:)
     @NSManaged public func removeFromBudgetCategories(_ values: NSSet)
+
+}
+
+extension BudgetSection : Identifiable {
 
 }

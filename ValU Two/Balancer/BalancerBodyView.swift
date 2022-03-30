@@ -24,9 +24,7 @@ struct BalancerBodyView: View {
           self.viewModel = viewModel
         self.budget = budget
            
-        UITableView.appearance().separatorStyle = .none
         
-        UITableView.appearance().backgroundColor = .clear
       }
     
     var newSectionButton : some View{
@@ -34,8 +32,9 @@ struct BalancerBodyView: View {
             self.viewModel.showNewSectionView()
         }) {
             HStack{
-                Image(systemName: "plus.circle.fill").font(.system(size: 28, weight: .regular)).foregroundColor(AppTheme().themeColorPrimary)
+                Image(systemName: "plus.circle.fill").font(.system(size: 22, weight: .regular)).foregroundColor(AppTheme().themeColorPrimary)
                 Text("New Budget").foregroundColor(AppTheme().themeColorPrimary).bold()
+                
             }
             
         }.buttonStyle(PlainButtonStyle())
@@ -46,25 +45,22 @@ struct BalancerBodyView: View {
     
       
       var body: some View {
-        VStack{
+        
             
-            List{
+            ScrollView{
                 
                 VStack{
-                    //Divider().padding(.leading)
-                    SectionHeader(title: "Summary", image: "house").padding(.horizontal).padding(.top, 10)
+                    
                     
                                  
-                    SpendingLimitSummaryView(viewModel: self.viewModel).padding(.top, 15)
+                    SpendingLimitSummaryView(viewModel: self.viewModel).padding(.top, 5).padding(.horizontal, 10)
                     
-                    Divider().padding(.leading)
-
-                    SectionHeader(title: "Budgets", image: "creditcard").padding(.horizontal).padding(.top, 10)
-                }
+                    
+                            
+                    BalanceBudgetCardList(viewModel: self.viewModel, sections: self.budget.getBudgetSections()).padding(.horizontal, 10).padding(.top, 15)
+                }.padding(.horizontal, 25)
+            
                 
-                
-                        
-                BalanceBudgetCardList(viewModel: self.viewModel, sections: self.budget.getBudgetSections()).padding(.horizontal)
                             
                         
                 Spacer().padding(.top)
@@ -77,12 +73,10 @@ struct BalancerBodyView: View {
             
             
         
-        }
         
-        .alert(isPresented: $showNothingBudgetedAlert) {
-                    Alert(title: Text("Budget is Still Empty"), message: Text("Set some categories for your budget first!"), dismissButton: .default(Text("Got it!")))
-        }
         
+        
+        .background(Color(.systemGroupedBackground))
        
         .navigationBarTitle("Set Budgets", displayMode: .large).navigationBarItems(trailing:
             
@@ -117,7 +111,9 @@ struct BalancerBodyView: View {
                 Alert(title: Text("Over Budget!"), message: Text("You've budgeted more than you've set for your income!"), dismissButton: .default(Text("I'll fix it!")))
                 }
         
-        
+                                                                                    .alert(isPresented: $showNothingBudgetedAlert) {
+                                                                                        Alert(title: Text("Budget is Still Empty"), message: Text("Set some categories for your budget first!"), dismissButton: .default(Text("Got it!")))
+                                                                            }
         
         
         
@@ -128,17 +124,15 @@ struct BalancerBodyView: View {
         .toolbar {
             
             ToolbarItem(placement: .bottomBar) {
-                newSectionButton
+                HStack{
+                    newSectionButton
+                    Spacer()
+                }
+                
+                
                 
             }
             
-            ToolbarItem(placement: .bottomBar) {
-                HStack{
-                    Spacer()
-                    EditButton().foregroundColor(AppTheme().themeColorPrimary)
-                }
-                
-            }
             
 
         }
@@ -158,6 +152,11 @@ struct BalanceBudgetCardList : View {
     var sections : [BudgetSection]
     
     @State var showDeleteAlert = false
+    
+    private var columns: [GridItem] = [
+        GridItem(.flexible(), spacing: 13),
+            GridItem(.flexible(), spacing: 13)
+        ]
     
     init(viewModel: BudgetBalancerPresentor, sections: [BudgetSection]){
         self.viewModel = viewModel
@@ -214,15 +213,44 @@ struct BalanceBudgetCardList : View {
     }
     
     var body: some View{
-        ForEach(self.sections, id: \.self) { section in
-                        VStack(spacing: 0){
-                            
-                            BudgetBalanceCard(budgetSection: section, coordinator: self.viewModel.coordinator!, viewModel: self.viewModel).padding(.vertical, 5)
-                            
-    
-                        }.listRowInsets(EdgeInsets())
+        
+        //VStack{
+            HStack{
+                Text("Budgets").font(.system(size: 22, design: .rounded)).bold()
+                Spacer()
+            }.padding(.leading, 5)
+            
+            /*
+            ForEach(self.sections, id: \.self) { section in
+                            VStack(spacing: 0){
+                                
+                                BudgetBalanceCard(budgetSection: section, coordinator: self.viewModel.coordinator!, viewModel: self.viewModel)
+                                
+        
+                            }
 
-        }.onDelete(perform: delete).onMove(perform: move)
+            }.onDelete(perform: delete).onMove(perform: move)
+             */
+        //}
+        
+        
+        LazyVGrid(      columns: columns,
+                        alignment: .center,
+                        spacing: 15,
+                        pinnedViews: [.sectionHeaders, .sectionFooters]
+        ){
+            ForEach(self.sections, id: \.self) { section in
+                            VStack(spacing: 0){
+                                
+                                BudgetBalanceCard(budgetSection: section, coordinator: self.viewModel.coordinator!, viewModel: self.viewModel)
+                                
+        
+                            }
+
+            }.onDelete(perform: delete).onMove(perform: move)
+        }.padding(.top, -13)
+        
+        
     }
 }
 

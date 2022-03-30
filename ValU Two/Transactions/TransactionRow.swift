@@ -25,7 +25,7 @@ struct TransactionRow: View {
         self.transactionService = transactionService
         
 
-        self.presentationDate = getPresentationDate(date: transaction.date!)
+        self.presentationDate = getPresentationDate(date: transaction.date ?? Date())
         
         
     }
@@ -48,18 +48,20 @@ struct TransactionRow: View {
                 HStack{
 
                    
-                    ZStack{
-                        
+  
                         //Text(viewData.icon).font(.largeTitle)
+                    if transaction.categoryMatches != nil{
                         TransactionIconView(icons: self.transactionService.getIcons(categories: transaction.categoryMatches?.allObjects as! [CategoryMatch]))
+                    }
+                    
                        
                         
-                    }
+                    
                     
 
                     VStack(spacing: 5){
                         HStack{
-                            Text(self.transaction.name ?? "missing" ).font(.system(size: 20, design: .rounded)).fontWeight(.semibold).foregroundColor(colorScheme == .dark ? Color.white : Color.black).lineLimit(1)
+                            Text(self.transactionService.getDisplayName(transaction: self.transaction)).font(.system(size: 17, design: .rounded)).fontWeight(.semibold).foregroundColor(colorScheme == .dark ? Color.white : Color.black).lineLimit(1)
                             Spacer()
                         }
                         HStack{
@@ -69,21 +71,26 @@ struct TransactionRow: View {
                             Spacer()
                         }
                         
-                    }.padding(.leading, 5)
+                    }//.padding(.leading, 5)
                     
                     
                     Spacer()
                     VStack(alignment: .trailing){
 
-                        Text(self.transactionService.getAmount(transaction: self.transaction)).font(.headline).bold().lineLimit(1).fixedSize(horizontal: true, vertical: false).foregroundColor(colorScheme == .dark ? Color.white : Color.black)
-                            
-                            Text(self.presentationDate ?? "Missing" ).font(.subheadline).lineLimit(1).foregroundColor(Color(.lightGray))
+                        Text(self.transactionService.getAmount(transaction: self.transaction)).font(.system(size: 17, weight: .semibold, design: .rounded)).lineLimit(1).fixedSize(horizontal: true, vertical: false).foregroundColor(colorScheme == .dark ? Color.white : Color.black)
+                        
+                        if transaction.pending{
+                            Text("PENDING").font(.system(size: 13, weight: .medium, design: .rounded)).italic().lineLimit(1).foregroundColor(Color(.lightGray))
+                        }
+                        else{
+                            Text(getPresentationDate(date:transaction.date ?? Date())).font(.system(size: 15, weight: .medium, design: .rounded)).italic().lineLimit(1).foregroundColor(Color(.lightGray))
+                        }
                             
                         
                         
                     }.frame(maxWidth: 70)
 
-                }.background(Color(.clear))
+                }
             }.buttonStyle(BorderlessButtonStyle())
              
         }

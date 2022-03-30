@@ -15,7 +15,9 @@ struct BudgetDetailCard: View {
     var coordinator: BudgetEditableCoordinator
     @ObservedObject var service : CategoryEditService
     
-    var historicalTransactions : HistoricalTransactionsViewModel
+    @ObservedObject var historicalTransactions : HistoricalTransactionsViewModel
+    
+    
     
     var color : Color
     
@@ -23,7 +25,6 @@ struct BudgetDetailCard: View {
     
     
     @State var test = "test"
-     
     
     init(budgetCategory: BudgetCategory, coordinator: BudgetEditableCoordinator, viewModel: BudgetBalancerPresentor, color: Color){
         self.coordinator = coordinator
@@ -32,29 +33,24 @@ struct BudgetDetailCard: View {
         self.spendingCategory = budgetCategory.spendingCategory!
         self.color = color
         self.service = CategoryEditService(budgetCategory: budgetCategory, viewModel: self.viewModel)
-        self.historicalTransactions = HistoricalTransactionsViewModel(category: budgetCategory)
+        self.historicalTransactions = viewModel.historicalTransactionsModel
     }
 
     
     var deleteButton: some View{
         
-        Menu {
+        
             Button(action: {
-                self.viewModel.deleteCategory(id: self.budgetCategory.id!, budgetSection: self.budgetCategory.budgetSection!)
+                withAnimation{
+                    self.viewModel.deleteCategory(id: self.budgetCategory.id!, budgetSection: self.budgetCategory.budgetSection!)
+                }
+                
             }) {
-                Text("Remove Category").foregroundColor(Color(.red))
-                Image(systemName: "x.circle").foregroundColor(Color(.placeholderText)).imageScale(.large)
+                Image(systemName: "multiply.circle.fill").foregroundColor(self.color.opacity(0.4)).imageScale(.large)
             }.buttonStyle(PlainButtonStyle())
             
-            Button(action: {
             
-            }) {
-                Text("Show Details")
-                Image(systemName: "info.circle").foregroundColor(Color(.placeholderText)).imageScale(.large)
-            }.buttonStyle(PlainButtonStyle())
-        } label: {
-            CircleButtonIcon(icon: "ellipsis", color: self.color, circleSize: 27, fontSize: 13)
-        }
+        
             
         
         
@@ -76,7 +72,7 @@ struct BudgetDetailCard: View {
             HStack{
                 
                 
-                Text(historicalTransactions.getDisplayText()).font(.system(size: 15, design: .rounded)).foregroundColor(self.color).bold().padding(.leading)
+                Text(historicalTransactions.getDisplayTextForCategory(budgetCategory: self.budgetCategory)).font(.system(size: 15, design: .rounded)).foregroundColor(self.color).bold().padding(.leading)
                 
                 Spacer()
                 Image(systemName: "chevron.right").foregroundColor(self.color).font(Font.system(.headline).bold()).padding(.trailing)
@@ -85,6 +81,9 @@ struct BudgetDetailCard: View {
         
         
     }
+    
+    
+    
     
     
     var card: some View{
@@ -101,14 +100,16 @@ struct BudgetDetailCard: View {
             
                 
                 HStack{
-                    CustomInputTextField(text: self.$service.editText, placeHolderText: "Amount", textSize: .systemFont(ofSize: 20), alignment: .left, delegate: self.service, key: self.spendingCategory.name!).id(self.spendingCategory.id!).padding(.horizontal).padding(.trailing)
+                    
+                    
+                    CustomInputTextField(text: self.$service.editText, placeHolderText: "Enter amount", textSize: .systemFont(ofSize: 20), alignment: .left, delegate: self.service, key: self.spendingCategory.name!).id(self.spendingCategory.id!).padding(.horizontal).padding(.trailing)
+                    
+                    //TextField("Enter a limit", text: self.$service.editText).keyboardType(.numberPad)
+                                        
                     Spacer()
                 }.padding(.leading).padding(.top, 10).padding(.vertical, 5).padding(.bottom)
                 
-                
-                
-                
-                if self.historicalTransactions.getPreviouslySpent() > 0.0 {
+        
                 
                 Button(action: {
                     self.coordinator.showHistoricalTransactions(budgetCategory: self.budgetCategory, model: self.historicalTransactions)
@@ -117,7 +118,7 @@ struct BudgetDetailCard: View {
                     self.pill
                     
                 }.buttonStyle(BorderlessButtonStyle())
-                }
+                
                 
             
             
@@ -125,19 +126,19 @@ struct BudgetDetailCard: View {
             
                    
                    
-        }.background(Color(.tertiarySystemBackground)).cornerRadius(18).shadow(radius: 8)
+        }.background(Color(.tertiarySystemBackground)).cornerRadius(23).shadow(radius: 8)
     }
     
     
     var body: some View {
-        card
+        card.transition(.move(edge: .leading))
     }
 }
 
 
 extension UIColor {
 
-    func lighter(by percentage: CGFloat = 7.0) -> UIColor? {
+    func lighter(by percentage: CGFloat = 20.0) -> UIColor? {
         return self.adjust(by: abs(percentage) )
     }
 

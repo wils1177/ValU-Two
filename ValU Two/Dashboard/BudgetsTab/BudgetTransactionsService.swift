@@ -12,6 +12,7 @@ class BudgetTransactionsService : ObservableObject {
     
     @Published var budget: Budget
     @Published var budgetTransactions : [Transaction]
+    var lastMonthTransactions : [Transaction]
     
     init(budget: Budget){
         self.budget = budget
@@ -26,6 +27,15 @@ class BudgetTransactionsService : ObservableObject {
             self.budgetTransactions = [Transaction]()
         }
             
+        do{
+            let start = Calendar.current.date(byAdding: .month, value: -1, to: startDate!)!
+            let end = startDate
+            
+            self.lastMonthTransactions = try DataManager().getTransactions(startDate: start, endDate: end!)
+        }
+        catch{
+            self.lastMonthTransactions = [Transaction]()
+        }
             
         
     }
@@ -50,6 +60,8 @@ class BudgetTransactionsService : ObservableObject {
     }
     
     func getBudgetExpenses() -> Double {
+        
+        
         var expenses = 0.0
 
         for transaction in self.budgetTransactions{
@@ -78,6 +90,27 @@ class BudgetTransactionsService : ObservableObject {
         return transactionsToReturn
     }
     
+    func getLastMonthExpenseTransactions() -> [Transaction]{
+        var transactionsToReturn = [Transaction]()
+        for transaction in self.lastMonthTransactions{
+            if (transaction.amount > 0 && !transaction.isHidden){
+                transactionsToReturn.append(transaction)
+            }
+        }
+        return transactionsToReturn
+    }
+    
+    func getLastMonthIncomeTransactions() -> [Transaction]{
+        var transactionsToReturn = [Transaction]()
+        for transaction in self.lastMonthTransactions{
+            if (transaction.amount < 0 && !transaction.isHidden){
+                transactionsToReturn.append(transaction)
+            }
+        }
+        
+        return transactionsToReturn
+    }
+    
     func getIncomeTransactions() -> [Transaction]{
         var transactionsToReturn = [Transaction]()
         for transaction in self.budgetTransactions{
@@ -99,16 +132,20 @@ class BudgetTransactionsService : ObservableObject {
         return total
     }
     
+    
+    
     func getOtherTransactionsInBudget() -> [Transaction]{
         
+        let transactionsForBudget = self.budgetTransactions
         var otherTransactions = [Transaction]()
         
-        for transaction in self.budgetTransactions{
-            // A Transcation if it has no matches or if it has only non-budgeted matches
-            if transaction.categoryMatches?.allObjects.count == 0 || !checkIfCategoryIsBudgeted(budget: budget, transaction: transaction){
+        for transaction in transactionsForBudget{
+            if transaction.categoryMatches?.allObjects.count == 0{
                 otherTransactions.append(transaction)
             }
-
+            else if !checkIfCategoryIsBudgeted(budget: budget, transaction: transaction){
+                otherTransactions.append(transaction)
+            }
         }
         return otherTransactions
         
@@ -137,19 +174,69 @@ class BudgetTransactionsService : ObservableObject {
     }
     
     func checkIfCategoryIsBudgeted(budget: Budget, transaction: Transaction) -> Bool{
-        let allCategoryMatches = transaction.categoryMatches!.allObjects as! [CategoryMatch]
+        
+        let allCategoryMatches = transaction.categoryMatches?.allObjects as! [CategoryMatch]
         
         for match in allCategoryMatches{
-            let id = match.spendingCategory!.id!
+            let name = match.spendingCategory!.name!
             for budgetCategory in budget.getBudgetCategories(){
-                if budgetCategory.spendingCategory!.id! == id && budgetCategory.budgetSection!.getLimit() > 0.0{
+                if budgetCategory.spendingCategory!.name! == name{
                     return true
                 }
             }
         }
-        print(transaction.name!)
-        print(transaction.amount)
+        
         return false
     }
+    
+    func getThisMonthSpending() -> [Double]{
+        
+        let start = self.budget.startDate!
+        let end = Date()
+        
+        return ThisMonthLastMonthService.createDataPoints(start: start, end: end, transactions: self.getExpenseTransactions())
+        
+    }
+    
+    func getLastMonthSpending() -> [Double]{
+        let start = Calendar.current.date(byAdding: .month, value: -1, to: self.budget.startDate!)!
+        let end = self.budget.startDate!
+        
+        return ThisMonthLastMonthService.createDataPoints(start: start, end: end, transactions: self.getLastMonthExpenseTransactions())
+    }
+    
+    func getThisMonthIncome() -> [Double]{
+        
+        let start = self.budget.startDate!
+        let end = Date()
+        
+        return ThisMonthLastMonthService.createDataPoints(start: start, end: end, transactions: self.getIncomeTransactions()).map { $0 * -1 }
+        
+    }
+    
+    func getLastMonthIncome() -> [Double]{
+        
+        let start = Calendar.current.date(byAdding: .month, value: -1, to: self.budget.startDate!)!
+        let end = self.budget.startDate!
+        
+        return ThisMonthLastMonthService.createDataPoints(start: start, end: end, transactions: self.getLastMonthIncomeTransactions()).map { $0 * -1 }
+        
+    }
+    
+    func getGraphLabels() -> [Date]{
+        let start =  self.budget.startDate!
+        let end = self.budget.endDate!
+        
+        return ThisMonthLastMonthService.createLegendValues(start: start, end: end)
+    }
+    
+    
+    
+
+    
+    
+    
+    
+    
     
 }

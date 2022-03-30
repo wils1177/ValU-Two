@@ -33,7 +33,17 @@ class NewBudgetCoordinator : Coordinator, BudgetEditableCoordinator {
         print("new budget flow started")
         self.navigationController.navigationBar.prefersLargeTitles = true
         
-        self.budget = DataManager().createNewBudget(copy: false)
+        //See if the user already tried creating a budget earlier, and would like to continue from where they left off
+        let existingBudget = checkIfBudgetAlreadyExists()
+        if existingBudget != nil{
+            print("reusing an incomplete budget")
+            self.budget = existingBudget
+        }else{
+            print("creating a new budget")
+            self.budget = DataManager().createNewBudget(copy: false)
+        }
+        
+        
         
         self.navigationController.modalPresentationStyle = .pageSheet
         self.navigationController.isModalInPresentation = true
@@ -42,6 +52,26 @@ class NewBudgetCoordinator : Coordinator, BudgetEditableCoordinator {
         let vc = self.newBudgetDependencies.onboardingSummaryPresentor!.configure()
         self.navigationController.pushViewController(vc, animated: true)
         
+        
+        
+    }
+    
+    func checkIfBudgetAlreadyExists() -> Budget?{
+        
+        do{
+            let existingBudgets = try DataManager().getBudgets(predicate: PredicateBuilder().generateIncompleteBudgetPredicate())
+        
+            if existingBudgets.count == 1{
+                return existingBudgets[0]
+                
+            }
+            else{
+                return nil
+            }
+        }
+        catch{
+            return nil
+        }
         
         
     }
@@ -102,10 +132,7 @@ class NewBudgetCoordinator : Coordinator, BudgetEditableCoordinator {
     
     func dimiss(){
         self.navigationController.dismiss(animated: true)
-        
-        let id = self.budget!.id!
-        let predicate = PredicateBuilder().generateByIdPredicate(id: id)
-        try! DataManager().deleteEntity(predicate: predicate, entityName: "Budget")
+ 
         
         
         self.parent?.dismissNewBudgetCoordinator()
@@ -129,6 +156,7 @@ class NewBudgetCoordinator : Coordinator, BudgetEditableCoordinator {
     func finishSettingUpBudget(){
         print("coordinator finished setting up budget")
         self.budget!.active = true
+        self.budget!.onboardingComplete = true
         self.navigationController.dismiss(animated: true)
         DataManager().saveDatabase()
         self.parent?.completedNewBudget()

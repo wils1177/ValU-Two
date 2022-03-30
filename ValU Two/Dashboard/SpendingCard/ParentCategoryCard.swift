@@ -19,9 +19,11 @@ struct ParentCategoryCard: View {
     var limit : Float
     var name: String
     var percentageSpent: Double
+    var section: BudgetSection?
     
     
     init(budgetSection: BudgetSection){
+        self.section = budgetSection
         self.color = colorMap[Int(budgetSection.colorCode)]
         self.colorSeconday = Color(colorMapUIKit[Int(budgetSection.colorCode)].lighter()!)
         self.colorTertiary = Color(colorMapUIKit[Int(budgetSection.colorCode)].darker()!)
@@ -51,11 +53,8 @@ struct ParentCategoryCard: View {
             return self.percentageSpent
         }
     }
-
     
-    var body: some View {
-        
-        
+    var colorDesign : some View{
         VStack(alignment: .leading){
             
             HStack(alignment: .top){
@@ -76,8 +75,101 @@ struct ParentCategoryCard: View {
             
         }.padding(12)
         
-        .background(LinearGradient(gradient: Gradient(colors: [self.colorSeconday, self.color]), startPoint: .top, endPoint: .bottom)).cornerRadius(20)
+            .background(LinearGradient(gradient: Gradient(colors: [self.colorSeconday, self.color]), startPoint: .topLeading, endPoint: .bottomTrailing)).cornerRadius(23)
+    }
+    
+    
+    var whiteDesign : some View{
+        VStack(alignment: .leading){
+            
+            HStack(alignment: .top){
+                BudgetSectionIconLarge(color: self.color, icon: self.icon, size: 40)
+                Spacer()
+                Text(CommonUtils.makeMoneyString(number: Int(self.spent))).foregroundColor(Color(.black)).font(.system(size: 18, design: .rounded)).fontWeight(.bold)
+            }.padding(.bottom, 15)
+            
+            HStack{
+                Text(self.name).font(.system(size: 15, design: .rounded)).bold().foregroundColor(.black).lineLimit(1)
+                Spacer()
+                if percentageSpent >= 1.0 {
+                    Image(systemName: "exclamationmark.triangle.fill" ).foregroundColor(Color(.black)).font(Font.system(size: 14, weight: .semibold)).padding(.trailing, 10)
+                }
+            }
+            
+            ProgressBarView(percentage: CGFloat(getDisplayPercent()), color: self.color, backgroundColor: self.color.opacity(0.3)).padding(.trailing, 5).padding(.bottom, 5)
+            
+        }.padding(12)
         
+            .background(color.opacity(0.2)).cornerRadius(23)
+    }
+    
+    var rowDesign: some View{
+        Section(){
+            
+            VStack{
+                HStack{
+                    BudgetSectionIconLarge(color: self.color, icon: self.icon, size: 38).padding(.leading)
+                    VStack(alignment: .leading, spacing: 7){
+                        
+                            Text(self.name).font(.system(size: 17, design: .rounded)).fontWeight(.bold)
+                                 
+                        
+                        
+                        
+                        ProgressBarView(percentage: self.getDisplayPercent(), color: self.color.opacity(0.7), backgroundColor: self.color.opacity(0.3))
+                    }.padding(.horizontal, 5).padding(.trailing)
+                    Spacer()
+                    VStack(alignment: .trailing){
+                        
+                        Text(CommonUtils.makeMoneyString(number: Int(self.spent))).font(.system(size: 18, design: .rounded)).fontWeight(.bold)
+                        
+                        
+                    }.padding(.trailing, 25)
+                    
+                }
+                .padding(.vertical, 12).background(self.color.opacity(0.2))
+                
+                
+                VStack{
+                    
+                    if self.section != nil{
+                        ForEach(self.section!.getBudgetCategories(), id: \.self) { category in
+                                
+                            HStack{
+                                Text(category.spendingCategory!.icon!).font(.system(size: 19, design: .rounded)).fontWeight(.bold)
+                                Text(category.spendingCategory!.name!).font(.system(size: 17, design: .rounded)).fontWeight(.semibold)
+                                Spacer()
+                                Text("\(CommonUtils.makeMoneyString(number: Int(category.getAmountSpent())))").font(.system(size: 17, design: .rounded)).fontWeight(.semibold)
+                                Text("/ \(CommonUtils.makeMoneyString(number: Int(category.limit)))").font(.system(size: 17, design: .rounded)).foregroundColor(Color(.lightGray)).fontWeight(.semibold)
+                            }.padding(.vertical, 10)
+                            
+                            if category.id != self.section?.getBudgetCategories().last!.id{
+                                Divider().padding(.leading, 25).foregroundColor(Color.clear)
+                            }
+                            
+                            
+                        }
+                    }
+                    
+                    
+                    
+                    
+                }.padding(.horizontal)
+                
+            }.background(self.color.opacity(0.06)).cornerRadius(25).listRowSeparator(.hidden)
+            
+        }.listRowBackground(Color.clear)
+        
+        
+        
+    }
+
+    
+    var body: some View {
+        
+        
+        
+        self.rowDesign
 
     }
 }

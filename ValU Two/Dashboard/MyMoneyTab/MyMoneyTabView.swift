@@ -25,7 +25,7 @@ struct MyMoneyTabView: View {
                 
                 SwiftUIAccountsView(coordinator: self.coordinator).padding(.horizontal, 10)
                 
-            }
+            }.background(Color(.systemGroupedBackground))
  
         
         

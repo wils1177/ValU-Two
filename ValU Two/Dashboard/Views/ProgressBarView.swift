@@ -54,13 +54,13 @@ struct ProgressBarView: View {
             }
             
             
-        }.frame(height: 12)
+        }.frame(height: 10)
         
     }
     
     var fullBar : some View{
         
-        Rectangle().frame(height: 12).foregroundColor(self.background)
+        Rectangle().frame(height: 10).foregroundColor(self.background)
         
     }
     

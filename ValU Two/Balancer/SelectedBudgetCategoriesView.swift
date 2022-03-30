@@ -19,7 +19,7 @@ struct SelectedBudgetCategoriesView: View {
     }
     
     func getDisplayArray(categories: [SpendingCategory]) -> [[SpendingCategory]]{
-        return categories.chunked(into: 2)
+        return [[SpendingCategory]]()
     }
     
     var title: some View{

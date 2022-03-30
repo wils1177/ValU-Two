@@ -21,6 +21,7 @@ public class TransactionRule: NSManagedObject {
         self.name = name
         self.amountOverride = 0.0
         self.categories = categoryOverride
+        self.id = UUID()
         
     }
     

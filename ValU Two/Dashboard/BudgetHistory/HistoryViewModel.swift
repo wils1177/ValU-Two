@@ -65,8 +65,11 @@ class HistoryViewModel : ObservableObject {
         if activeBudget != nil {
             let copier = BudgetCopyer()
             let oldBudget = self.activeBudget!
+            
             let newBudget = copier.copyBudgetForNextPeriod(budget: self.activeBudget!)
             self.historicalBudgets.append(oldBudget)
+            oldBudget.startDate = Calendar.current.date(byAdding: .day, value: -60, to: oldBudget.startDate!)
+            oldBudget.endDate = Calendar.current.date(byAdding: .day, value: -60, to: oldBudget.endDate!)
             DataManager().saveDatabase()
         }
         else{
@@ -83,5 +86,7 @@ class HistoryViewModel : ObservableObject {
 
         
     }
+    
+    
 
 }

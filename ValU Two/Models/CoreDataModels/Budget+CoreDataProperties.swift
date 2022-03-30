@@ -2,8 +2,8 @@
 //  Budget+CoreDataProperties.swift
 //  ValU Two
 //
-//  Created by Clayton Wilson on 6/21/20.
-//  Copyright © 2020 Clayton Wilson. All rights reserved.
+//  Created by Clayton Wilson on 2/8/22.
+//  Copyright © 2022 Clayton Wilson. All rights reserved.
 //
 //
 
@@ -28,9 +28,27 @@ extension Budget {
     @NSManaged public var spent: Float
     @NSManaged public var startDate: Date?
     @NSManaged public var timeFrame: Int32
+    @NSManaged public var onboardingComplete: Bool
+    @NSManaged public var budgetSection: NSSet?
     @NSManaged public var budgetTimeFrame: BudgetTimeFrame?
     @NSManaged public var transactions: NSSet?
-    @NSManaged public var budgetSection: NSSet?
+
+}
+
+// MARK: Generated accessors for budgetSection
+extension Budget {
+
+    @objc(addBudgetSectionObject:)
+    @NSManaged public func addToBudgetSection(_ value: BudgetSection)
+
+    @objc(removeBudgetSectionObject:)
+    @NSManaged public func removeFromBudgetSection(_ value: BudgetSection)
+
+    @objc(addBudgetSection:)
+    @NSManaged public func addToBudgetSection(_ values: NSSet)
+
+    @objc(removeBudgetSection:)
+    @NSManaged public func removeFromBudgetSection(_ values: NSSet)
 
 }
 
@@ -51,19 +69,6 @@ extension Budget {
 
 }
 
-// MARK: Generated accessors for budgetSection
-extension Budget {
+//extension Budget : Identifiable {
 
-    @objc(addBudgetSectionObject:)
-    @NSManaged public func addToBudgetSection(_ value: BudgetSection)
-
-    @objc(removeBudgetSectionObject:)
-    @NSManaged public func removeFromBudgetSection(_ value: BudgetSection)
-
-    @objc(addBudgetSection:)
-    @NSManaged public func addToBudgetSection(_ values: NSSet)
-
-    @objc(removeBudgetSection:)
-    @NSManaged public func removeFromBudgetSection(_ values: NSSet)
-
-}
+//}

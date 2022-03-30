@@ -19,6 +19,7 @@ struct BudgetStatusBarViewData: Hashable {
     var section : BudgetSection?
     var id = UUID()
     
+    
     static func == (lhs: BudgetStatusBarViewData, rhs: BudgetStatusBarViewData) -> Bool {
         return lhs.id == rhs.id
     }
@@ -40,12 +41,15 @@ struct BudgetStatusBarView: View {
         
     ]
     
-    init(viewData: [BudgetStatusBarViewData]){
+    var showLegend = true
+    
+    init(viewData: [BudgetStatusBarViewData], showLegend : Bool = true){
         self.viewData = viewData
         print("BudgetStatusBarView INIT")
+        self.showLegend = showLegend
     }
     
-    var maxHeight = CGFloat(12)
+    var maxHeight = CGFloat(13)
     
     
    
@@ -56,6 +60,7 @@ struct BudgetStatusBarView: View {
     }
     
     var legendV2 : some View {
+        
         
         ScrollView(.horizontal){
             HStack(alignment: .bottom, spacing: 0){
@@ -79,7 +84,7 @@ struct BudgetStatusBarView: View {
                     
 
                 }
-            }.padding(.leading)
+            }
         }
     }
     
@@ -97,7 +102,7 @@ struct BudgetStatusBarView: View {
                 HStack(spacing: 0) {
                     ForEach(self.viewData, id: \.self) {data in
                         if g.size.height < g.size.width{
-                            RoundedRectangle(cornerRadius: 0).frame(width: self.getWidthOfBar(totalSize: g.size.width, barCount: self.viewData.count, percentage: data.percentage)).foregroundColor(data.color).opacity(g.size.height < g.size.width ? 1 : 0)
+                            RoundedRectangle(cornerRadius: 0).frame(width: self.getWidthOfBar(totalSize: g.size.width, barCount: self.viewData.count, percentage: data.percentage)).foregroundColor(data.color.opacity(0.7)).opacity(g.size.height < g.size.width ? 1 : 0)
                         }
                         
                   }
@@ -114,8 +119,12 @@ struct BudgetStatusBarView: View {
             ZStack(alignment: .leading){
                 backgroundRectangle
                 foreGroundBars
-            }.padding(.horizontal)
-            legendV2.padding(.top, 15)
+            }
+            
+            if self.showLegend{
+                legendV2.padding(.top, 15)
+            }
+            
         }
         
         

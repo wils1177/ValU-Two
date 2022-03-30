@@ -16,6 +16,9 @@ struct TransactionsTabView: View {
     @State var searchText : String = ""
     @State var isSearching : Bool = false
     
+    @State var isEditing = false
+    @State private var selection = Set<Transaction>()
+    
     var transactionService : TransactionService
     
     init(viewModel: TransactionsTabViewModel, filterModel : TransactionFilterModel){
@@ -31,80 +34,82 @@ struct TransactionsTabView: View {
         
     }
     
-    var searchBar: some View {
-        
-        HStack{
-            
-            HStack{
-                TextField("Search by Name", text: $searchText).padding(.leading, 32)
-            }.padding(.vertical, 7).padding(.horizontal, 10).background(Color(.tertiarySystemGroupedBackground)).cornerRadius(15).padding()
-            .onTapGesture(perform: {
-                isSearching = true
-            })
-            .overlay(
-                HStack{
-                    Image(systemName: "magnifyingglass")
-                    Spacer()
-                    if isSearching{
-                        Button(action: {
-                            self.searchText = ""
-                        }, label: {Image(systemName: "xmark.circle.fill").padding(.vertical)})
-                        
-                    }
-                }.padding(.horizontal, 32).foregroundColor(Color(.gray))
-            )
-            
-            /*
-            if isSearching{
-                Button(action: {
-                    isSearching = false
-                    searchText = ""
-                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                }, label:
-                {
-                    Text("Cancel").padding(.trailing).padding(.leading, -12)
-                
-                }).buttonStyle(PlainButtonStyle()).foregroundColor(AppTheme().themeColorPrimary).transition(.move(edge: .trailing)).animation(.easeInOut)
-            }
-            */
-        
-        
-        }
+    func getDateString(date: Date) -> String{
+        let formatter3 = DateFormatter()
+        formatter3.dateFormat = "EEEE, MMMM dd"
+        return formatter3.string(from: date)
     }
+    
+    
+    var filteredSections : [TransactionDateSection]{
+        let sections = self.viewModel.getTransactionsByDate()
+        if searchText.isEmpty { return sections }
+        
+        return sections.map { dateSection in
+            var dateSectionCopy = dateSection
+            dateSectionCopy.transactions = dateSection.transactions.filter { $0.name!.lowercased().contains(searchText.lowercased()) }
+            return dateSectionCopy
+        }.filter{ !$0.transactions.isEmpty }
+    }
+    
     
     var body: some View {
             
-        ScrollView{
-            self.searchBar
-            SelectedFilterPillsView(filterModel: self.viewModel.filterModel).padding(.horizontal, 20)
-            LazyVStack{
-                
+        List(selection: $selection){
+            //self.searchBar
+            if self.viewModel.filterModel.areThereAnyFilterEnabled(){
+                SelectedFilterPillsView(filterModel: self.viewModel.filterModel).padding(.horizontal, 20)
+            }
             
-                Divider().padding(.leading, 30).padding(.vertical, 5)
+            ForEach(filteredSections, id: \.self) { dateSection in
+                
+                Section(header: Text(getDateString(date: dateSection.date)).font(.system(size: 21, design: .rounded)).fontWeight(.bold).foregroundColor(Color(.black))){
+                    
+                    ForEach(dateSection.transactions, id: \.self) { transaction in
+                        TransactionRow(coordinator: self.viewModel.coordinator!, transaction : transaction, transactionService: self.transactionService).padding(.vertical, 3)
+                    }
+                    
+                }.textCase(nil)
+                
+                
+            }
+            
+            //LazyVStack{
+
+                /*
                 ForEach(self.viewModel.getTransactionsList().filter({$0.name!.localizedCaseInsensitiveContains(self.searchText) || searchText.isEmpty}), id: \.self) { transaction in
                     
-                    TransactionRow(coordinator: self.viewModel.coordinator!, transaction : transaction, transactionService: self.transactionService).padding(.horizontal).padding(.bottom, 10)
+                    TransactionRow(coordinator: self.viewModel.coordinator!, transaction : transaction, transactionService: self.transactionService).padding(.vertical, 3)
                     
                 }
-            }
+                 */
+            //}.padding(.top, 10)
                 
             
             
 
-        }.listStyle(SidebarListStyle())
+        }
+        
+        .refreshable {
+            print("Do your refresh work here")
+            let refreshModel = OnDemandRefreshViewModel()
+            refreshModel.somethingToDoWhenRefrehIsDone = self.viewModel.refreshCompleted
+            refreshModel.startLoadingAccounts()
+            
+        }
+            .searchable(text: self.$searchText)
+            
             .navigationBarTitle(Text("Transactions"))
-        .navigationBarItems(
-            
-            leading:
-            
-                Button(action: {
-                    //self.viewModel.coordinator?.showFilterEditView(filterModel: self.viewModel.filterModel)
-                }){
-                    TransactionsRefreshIconView()
-                }
-            
-            
-            ,trailing:
+            .navigationBarItems(
+                
+                leading:
+                   
+                    EditButton()
+                
+                ,
+                                
+                                
+                                trailing:
             
             Button(action: {
                 self.viewModel.coordinator?.showFilterEditView(filterModel: self.viewModel.filterModel)
@@ -118,6 +123,7 @@ struct TransactionsTabView: View {
             
             
         )
+            
         
             
         

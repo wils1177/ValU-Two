@@ -106,9 +106,12 @@ struct TransactionJSON : Codable {
     var accountId : String
     var amount : Double
     var date : String
+    var dateTime: String?
     var name : String
+    var merchantName : String?
     var location : LocationJSON
     var pending : Bool
+    var pendingTransactionId : String?
     var transactionId : String
     var plaidCategories : [String]?
     
@@ -119,8 +122,11 @@ struct TransactionJSON : Codable {
         case name = "name"
         case location = "location"
         case pending = "pending"
+        case pendingTransactionId = "pending_transaction_id"
         case transactionId = "transaction_id"
         case plaidCategories = "category"
+        case merchantName = "merchant_name"
+        case dateTime = "authorized_datetime"
         
     }
     
@@ -200,6 +206,22 @@ struct LocationJSON : Codable {
         case region  = "region"
         case storeNumber = "store_number"
     }
+    
+}
+
+
+struct LinkTokenResponse : Codable {
+    var link_token: String
+    var expiration : String
+    var request_id : String
+    
+    enum CodingKeys : String, CodingKey {
+        
+        case link_token = "link_token"
+        case expiration = "expiration"
+        case request_id = "request_id"
+    }
+    
 }
 
 

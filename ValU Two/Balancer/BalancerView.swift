@@ -20,7 +20,7 @@ struct BalancerView: View {
         
         
         // To remove all separators including the actual ones:
-        UITableView.appearance().separatorStyle = .none
+        
         
         
         

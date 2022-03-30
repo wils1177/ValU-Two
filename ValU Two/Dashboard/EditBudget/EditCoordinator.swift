@@ -36,8 +36,8 @@ class EditCoordiantor : BudgetEditableCoordinator{
     
     func dimiss(){
         self.presentorStack.removeAll()
-        self.navigationController.dismiss(animated: true)
-        self.navigationController = UINavigationController()
+        //self.navigationController.dismiss(animated: true)
+        //self.navigationController = UINavigationController()
         self.parent!.dismissEdit()
     }
     
@@ -179,7 +179,7 @@ extension BudgetEditableCoordinator{
     }
     
     func showHistoricalTransactions(budgetCategory: BudgetCategory, model: HistoricalTransactionsViewModel){
-        var view = HistoricalTransactionsView(viewModel: model)
+        var view = HistoricalTransactionsView(viewModel: model, budgetCategory: budgetCategory)
         view.coordinator = self
         let vc = UIHostingController(rootView: view)
         vc.title = budgetCategory.spendingCategory!.name!

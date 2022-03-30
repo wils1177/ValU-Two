@@ -10,48 +10,97 @@ import Foundation
 import UIKit
 import LinkKit
 
-class PlaidLinkViewPresentor : UIViewController, Presentor  {
+class PlaidLinkViewPresentor  {
     
-    var coordinator : PlaidLinkDelegate?
-    var linkViewController: PLKPlaidLinkViewController?
-    var publicToken : String?
-    var presentorStack = [Presentor]()
-    
-    init(publicToken : String? = nil){
-        self.publicToken = publicToken
-        super.init(nibName: nil, bundle: nil)
+    enum PlaidLinkState {
+        case start
+        case fetchingLink
+        case linkTokenFetched
+        case loaded
+        case error
     }
+
+    var coordinator : PlaidLinkDelegate?
+    var linkToken: String?
+    var publicToken : String?
+    var handler : Handler?
+    var state = PlaidLinkState.start
+    
+    var viewController : UIViewController
+    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-
-    
-    func configure() -> UIViewController {
-        // With shared configuration from Info.plist
-        let linkViewDelegate = self
-        
-        if self.publicToken == nil{
-            self.linkViewController = PLKPlaidLinkViewController(delegate:
-            linkViewDelegate)
-        }
-        else{
-            self.linkViewController = PLKPlaidLinkViewController(publicToken: self.publicToken!, delegate: linkViewDelegate)
-        }
-        
-        if (UI_USER_INTERFACE_IDIOM() == .pad) {
-            self.linkViewController!.modalPresentationStyle = .formSheet;
-        }
-        
-        return self.linkViewController!
+    //Takes the viewcontroller you want to present link over.
+    init(viewControllerToPresentOver: UIViewController){
+        self.state = PlaidLinkState.start
+        self.viewController = viewControllerToPresentOver
     }
     
-
+    func getLinkToken(){
+        let tokenService = PlaidLinkTokenService(completion: handleLinkTokenResult(result:))
+        tokenService.getLinkToken()
+    }
+    
+    func handleLinkTokenResult(result: Result<PlaidLinkTokenResult, Error>){
+        switch result {
+        case .failure(let error):
+            //TODO handle error
+            self.linkToken = nil
+            print(error)
+        case .success(let result):
+            print("Gathered Link Token")
+            self.linkToken = result.linkToken
+            self.openLink()
+        }
+    }
+    
+    
+    func openLink(){
+        
+        let linkConfiguration = LinkTokenConfiguration(token: self.linkToken!, onSuccess: linkSuccess(linkSuccess:))
+        
+        let result = Plaid.create(linkConfiguration)
+        switch result{
+        case .failure(let error):
+             print("Unable to create Plaid handler due to: \(error)")
+        case .success(let handler):
+             self.handler = handler
+        }
+        
+        let method: PresentationMethod = PresentationMethod.viewController(self.viewController)
+        handler!.open(presentUsing: method)
+        
+    }
+    
+    func setupLink(){
+        
+        getLinkToken()
+        
+    }
+    
+    
+    func linkSuccess(linkSuccess: LinkSuccess){
+        
+        print("success In Link Modal")
+        
+        let institution = linkSuccess.metadata.institution
+        let name = institution.name
+        let institutionId = institution.id
+        PlaidProccessor.savePublicToken(publicToken: linkSuccess.publicToken, institutionName: name, institutionId : institutionId)
+        self.coordinator?.plaidLinkSuccess(sender : self)
+        
+        
+    }
+    
+    
     
 
 }
 
+/*
 extension PlaidLinkViewPresentor : PLKPlaidLinkViewDelegate
 {
     func linkViewController(_ linkViewController:
@@ -94,3 +143,4 @@ extension PlaidLinkViewPresentor : PLKPlaidLinkViewDelegate
     }
     
 }
+*/

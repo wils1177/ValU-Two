@@ -31,6 +31,15 @@ class TransactionFilterModel: ObservableObject {
     
     var predicateBuilder = PredicateBuilder()
     
+    func areThereAnyFilterEnabled() -> Bool{
+        if timeFilter == nil && directionFilter == nil{
+            return false
+        }
+        else{
+            return true
+        }
+    }
+    
     
     func getPredicateBasedOnState() -> NSCompoundPredicate {
         

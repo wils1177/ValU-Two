@@ -22,38 +22,21 @@ struct TransactionsCategoryFetcher{
         return matchingTransactions
     }
     
-    static func fetchOtherTransactionsInBudget(budget: Budget) -> [Transaction]{
-        
-        let transactionsForBudget = self.getAllTransactionsForBudget(budget: budget)
-        var otherTransactions = [Transaction]()
-        
-        for transaction in transactionsForBudget{
-            if transaction.categoryMatches?.allObjects.count == 0{
-                otherTransactions.append(transaction)
-            }
-            else if !checkIfCategoryIsBudgeted(budget: budget, transaction: transaction){
-                otherTransactions.append(transaction)
-            }
+    static func getTransactionsForDateRange(startDate: Date, endDate: Date) -> [Transaction]{
+        var toReturn = [Transaction]()
+        do{
+            toReturn = try DataManager().getTransactions(startDate: startDate, endDate: endDate)
         }
-        return otherTransactions
+        catch{
+            toReturn = [Transaction]()
+        }
         
+        return toReturn
     }
     
-    static func checkIfCategoryIsBudgeted(budget: Budget, transaction: Transaction) -> Bool{
-        
-        let allCategoryMatches = transaction.categoryMatches?.allObjects as! [CategoryMatch]
-        
-        for match in allCategoryMatches{
-            let name = match.spendingCategory!.name!
-            for budgetCategory in budget.getBudgetCategories(){
-                if budgetCategory.spendingCategory!.name! == name{
-                    return true
-                }
-            }
-        }
-        
-        return false
-    }
+    
+    
+
     
     static func getAllTransactionsForBudget(budget: Budget) -> [Transaction]{
         

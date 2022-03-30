@@ -22,6 +22,11 @@ class CommonUtils{
         return (start ... end).contains(transaction.date!) && !transaction.isHidden
     }
     
+    static func budgetIsActive(budget: Budget) -> Bool{
+        let today = Date()
+        return (budget.startDate! ... budget.endDate!).contains(today)
+    }
+    
     static func getMonthFromDate(date: Date) -> String{
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "LLLL"

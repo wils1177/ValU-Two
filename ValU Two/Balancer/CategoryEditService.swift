@@ -11,7 +11,7 @@ import Foundation
 class CategoryEditService : ObservableObject, KeyboardDelegate{
     
     var budgetCategory : BudgetCategory
-    @Published var editText : String = ""
+    @Published var editText : String = "" 
     
     var viewModel: BudgetBalancerPresentor
     

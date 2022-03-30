@@ -165,6 +165,10 @@ class PredicateBuilder{
         return NSPredicate(format: "(itemId == %@)", itemId as String)
     }
     
+    func generateTransactionIdPredicate(transactionId: String) -> NSPredicate{
+        return NSPredicate(format: "(transactionId == %@)", transactionId as String)
+    }
+    
     func generatePastBudgetPredicate(currentDate: Date) -> NSPredicate{
         
         return NSPredicate(format: "active == false AND (endDate <= %@)", currentDate as NSDate)
@@ -175,6 +179,14 @@ class PredicateBuilder{
         return NSPredicate(format: "startDate > %@", currentDate as NSDate)
     }
     
+    func generateCurrentBudgetPredicate(currentDate: Date) -> NSPredicate{
+        return NSPredicate(format: "(startDate <= %@) AND (endDate >= %@)", currentDate as NSDate, currentDate as NSDate)
+    }
+    
+    func generateIncompleteBudgetPredicate() -> NSPredicate{
+        return NSPredicate(format: "onboardingComplete == false")
+    }
+    
     func generateByIdPredicate(id: UUID) -> NSPredicate{
         return NSPredicate(format: "id == %@", id as CVarArg)
     }
@@ -182,6 +194,8 @@ class PredicateBuilder{
     func generateByAccountIdPredicate(id: String) -> NSPredicate{
         return NSPredicate(format: "accountId == %@", id as String)
     }
+    
+    
     
 
     

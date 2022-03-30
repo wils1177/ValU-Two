@@ -10,16 +10,16 @@ import SwiftUI
 
 struct ConnectToBankView: View {
     
-    var coordinator : PlaidLinkDelegate?
+    var presentor : LoadingAccountsPresentor?
     var itemService : ItemManagerService
     
-    init(coordinator: PlaidLinkDelegate, itemManager: ItemManagerService){
-        self.coordinator = coordinator
+    init(presentor: LoadingAccountsPresentor, itemManager: ItemManagerService){
+        self.presentor = presentor
         self.itemService = itemManager
     }
     
     var myConnectionsView : some View{
-        MyConnectionsView(service: self.itemService, coordinator: self.coordinator!)
+        MyConnectionsView(service: self.itemService, presentor: self.presentor!)
     }
     
     var noConnectionsView : some View{
@@ -32,7 +32,7 @@ struct ConnectToBankView: View {
             Spacer()
             Button(action: {
                 //Button Action
-                self.coordinator?.launchPlaidLink()
+                self.presentor?.launchPlaidLink()
                 }){
                 HStack{
                     Spacer()

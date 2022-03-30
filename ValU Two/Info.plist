@@ -47,7 +47,7 @@
 		<key>clientName</key>
 		<string>ValU Two</string>
 		<key>env</key>
-		<string>sandbox</string>
+		<string>development</string>
 		<key>key</key>
 		<string>d77e9d8584d9f161593bda890bacbb</string>
 		<key>product</key>
@@ -60,6 +60,7 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
+		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>

@@ -36,7 +36,7 @@ class TransactionsListViewModel: ObservableObject, Presentor{
     init(transactions: [Transaction], title: String = ""){
         self.title = title
         self.transactions = transactions
-        self.transactions = self.transactions.sorted(by: {$0.date!.compare($1.date!) == .orderedDescending})
+        //self.transactions = self.transactions.sorted(by: {$0.date!.compare($1.date!) == .orderedDescending})
     }
     
 
@@ -57,7 +57,7 @@ class TransactionsListViewModel: ObservableObject, Presentor{
             self.transactions = [Transaction]()
             
         }
-        self.transactions = self.transactions.sorted(by: {$0.date!.compare($1.date!) == .orderedDescending})
+        //self.transactions = self.transactions.sorted(by: {$0.date!.compare($1.date!) == .orderedDescending})
         //print(self.transactions)
     }
     
@@ -70,7 +70,7 @@ class TransactionsListViewModel: ObservableObject, Presentor{
             self.transactions = [Transaction]()
             
         }
-        self.transactions = self.transactions.sorted(by: {$0.date!.compare($1.date!) == .orderedDescending})
+        //self.transactions = self.transactions.sorted(by: {$0.date!.compare($1.date!) == .orderedDescending})
     }
 
 

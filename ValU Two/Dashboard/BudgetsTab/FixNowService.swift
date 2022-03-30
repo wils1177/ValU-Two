@@ -88,7 +88,7 @@ class FixNowService: ObservableObject {
         self.exiredItemIds = self.getExpiredItemIds()
     }
     
-    func updateRecentlyFixedItem(itemId: String){
+    func updateRecentlyFixedItem(itemId: String) {
         let updateService = PlaidDefaultUpdateService(itemId: itemId)
         updateService.initiateDefaultUpdatePull()
         

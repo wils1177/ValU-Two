@@ -15,8 +15,7 @@ class BudgetsViewModel: ObservableObject, Presentor{
     
     
     weak var coordinator : BudgetsTabCoordinator?
-    var spendingModel : SpendingCardViewModel?
-    var budgetTransactionsService : BudgetTransactionsService
+    @Published var budgetTransactionsService : BudgetTransactionsService
     @Published var currentBudget : Budget
     @Published var selected = 0
     
@@ -24,14 +23,13 @@ class BudgetsViewModel: ObservableObject, Presentor{
         self.currentBudget = budget
         self.coordinator = coordinator
         self.budgetTransactionsService = service
-        self.spendingModel = generateSpendingCardViewModel(budget: budget)
         NotificationCenter.default.addObserver(self, selector: #selector(update(_:)), name: .modelUpdate, object: nil)
     }
     
     @objc func update(_ notification:Notification){
         print("Spending Card Update Triggered")
-        let dataManager = DataManager()
-        dataManager.context.refreshAllObjects()
+        
+        self.budgetTransactionsService = BudgetTransactionsService(budget: self.currentBudget)
         
         
         
@@ -92,12 +90,14 @@ class BudgetsViewModel: ObservableObject, Presentor{
         var sectionSpentTotal = 0.0
         for section in self.currentBudget.getBudgetSections(){
             let spentInSection = section.getSpent()
-            let limitForSection = section.getLimit()
             sectionSpentTotal = spentInSection + sectionSpentTotal
-            let data = BudgetStatusBarViewData(percentage: spentInSection / Double(total), color: colorMap[Int(section.colorCode)], name: section.name!, icon: section.icon!, action: self.coordinator?.showIndvidualBudget(budgetSection:), section: section)
+            
+            let action: (BudgetSection) -> () = self.coordinator!.showIndvidualBudget
+            
+            let data = BudgetStatusBarViewData(percentage: spentInSection / Double(total), color: colorMap[Int(section.colorCode)], name: section.name!, icon: section.icon!, action: action, section: section)
             
             
-            if limitForSection > 0.0 && spentInSection > 0.0{
+            if spentInSection > 0.0{
                 viewDataToReturn.append(data)
             }
             

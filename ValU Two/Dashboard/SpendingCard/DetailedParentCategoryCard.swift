@@ -48,16 +48,16 @@ struct DetailedParentCategoryCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 3){
             
-            HStack(alignment: .center){
+            HStack(alignment: .top){
                 BudgetSectionIconLarge(color: self.color, icon: self.icon, size: 60, cornerRadius: 20)
                 Spacer()
                 
                 VStack(alignment: .trailing){
-                    Text("Spending").foregroundColor(Color(.lightText)).font(.system(size: 18, design: .rounded)).fontWeight(.semibold)
-                    HStack(alignment: .top){
-                        Text(CommonUtils.makeMoneyString(number: Int(self.spent))).foregroundColor(Color(.white)).font(.system(size: 23, design: .rounded)).fontWeight(.semibold)
+                    Text("Budget").foregroundColor(Color(.lightText)).font(.system(size: 18, design: .rounded)).fontWeight(.semibold)
+                    HStack(alignment: .top, spacing: 0){
+                        Text(CommonUtils.makeMoneyString(number: Int(self.spent))).foregroundColor(Color(.white)).font(.system(size: 19, design: .rounded)).fontWeight(.semibold)
                         
-                        Text("/ " + CommonUtils.makeMoneyString(number: Int(self.limit))).foregroundColor(Color(.white)).font(.system(size: 23, design: .rounded)).fontWeight(.semibold)
+                        Text(" / " + CommonUtils.makeMoneyString(number: Int(self.limit))).foregroundColor(Color(.white)).font(.system(size: 19, design: .rounded)).fontWeight(.semibold)
                     }
                     
                     
@@ -74,9 +74,9 @@ struct DetailedParentCategoryCard: View {
                 
                 if self.percentageSpent >= 1.0{
                     HStack{
-                        Image(systemName: "exclamationmark.triangle.fill" ).foregroundColor(Color(.white)).font(Font.system(size: 27, weight: .semibold)).padding(.trailing, 5)
+                        Image(systemName: "exclamationmark.triangle.fill" ).foregroundColor(Color(.white)).font(Font.system(size: 27, weight: .semibold))
                         //Text("Over Budget").font(.headline).bold().foregroundColor(.white).lineLimit(1).padding(.trailing, 10)
-                    }.padding(.trailing)
+                    }.padding(.trailing, 10)
                     
                 }
                 
@@ -86,7 +86,7 @@ struct DetailedParentCategoryCard: View {
             
         }.padding(.horizontal, 15).padding(.vertical,15)
         
-        .background(LinearGradient(gradient: Gradient(colors: [self.colorSeconday, self.color]), startPoint: .top, endPoint: .bottom)).cornerRadius(20)
+        .background(LinearGradient(gradient: Gradient(colors: [self.colorSeconday, self.color]), startPoint: .top, endPoint: .bottom)).cornerRadius(24)
     }
 }
 

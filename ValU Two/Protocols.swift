@@ -53,7 +53,7 @@ protocol UserSubmitViewModel: class, ViewModel{
 
 
 protocol StartPageViewDelegate {
-    func continueToOnboarding()
+    func continueFromWelcome()
 }
 
 protocol SetSavingsViewDelegate {

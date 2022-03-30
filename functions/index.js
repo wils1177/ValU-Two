@@ -18,15 +18,33 @@ exports.plaidWebhook = functions.https.onRequest((request, response) => {
 		    
 
 		    var message = {
+            
 				  data: {
 				    type: 'webhook',
 				    webhookType: request.body.webhook_type,
 				    webhookCode : request.body.webhook_code,
 				    itemId : request.body.item_id
 				  },
+            apns: {
+                headers: {  // Add these 3 lines
+                  'apns-push-type': 'background',
+                    'apns-priority' : '5'
+                    },
+                  payload: {
+                      aps: {
+                          "content-available": true
+                      }
+                  }
+              },
 				  token: clientId
 				};
-
+              
+              
+             
+              
+              
+              
+              
 
 			// Send a message to the device corresponding to the provided
 			// registration token.

@@ -245,7 +245,7 @@ extension NewBudgetModel{
     
     func getBackgroundColor(selectable: Bool) -> Color{
         if selectable{
-            return Color(.black)
+            return AppTheme().themeColorPrimary
         }
         else{
             return Color(.lightGray)
@@ -254,7 +254,7 @@ extension NewBudgetModel{
     
     func getSubTextColor(selectable: Bool) -> Color{
         if selectable{
-            return Color(.gray)
+            return Color(.black)
         }
         else{
             return Color(.lightGray)

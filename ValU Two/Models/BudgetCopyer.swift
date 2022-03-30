@@ -25,7 +25,9 @@ class BudgetCopyer{
     }
     
     func copyBudgetForNextPeriod(budget: Budget)->Budget{
+        budget.spent = Float(BudgetTransactionsService(budget: budget).getBudgetExpenses())
         let newBudget = copyBudget(budget: budget)
+        
         budget.active = false
         newBudget.active = true
         DataManager().saveDatabase()

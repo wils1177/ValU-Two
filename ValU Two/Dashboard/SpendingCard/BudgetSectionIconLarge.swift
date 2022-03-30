@@ -14,7 +14,7 @@ struct BudgetSectionIconLarge: View {
     var icon : String = "backward.end.fill"
     var size = CGFloat(55)
     var multiColor : Bool = false
-    var cornerRadius = CGFloat(15)
+    var cornerRadius = CGFloat(16)
     
     var body: some View {
         ZStack(alignment: .center){
@@ -22,7 +22,7 @@ struct BudgetSectionIconLarge: View {
                 RoundedRectangle(cornerRadius: self.cornerRadius).frame(width: size, height: size).foregroundColor(Color(.clear)).background(LinearGradient(gradient: Gradient(colors: [colorMap[0], colorMap[1], colorMap[2], colorMap[3]]), startPoint: .top, endPoint: .bottom)).cornerRadius(self.cornerRadius)
             }
             else{
-                RoundedRectangle(cornerRadius: self.cornerRadius).frame(width: size, height: size).foregroundColor(color)
+                RoundedRectangle(cornerRadius: self.cornerRadius).frame(width: size, height: size).foregroundColor(color.opacity(0.7))
             }
             
             Image(systemName: self.icon).font(.system(size: size / 2)).foregroundColor(Color(.white))

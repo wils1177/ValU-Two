@@ -21,12 +21,14 @@ struct RemainingBudgetIndicatorView: View {
     func getRemainingDisplayText() -> String {
         let remaining = self.viewModel.getRemaining()
         if remaining >= 0 {
-            return CommonUtils.makeMoneyString(number: remaining) + " left"
+            return CommonUtils.makeMoneyString(number: remaining) + " Remaining"
         }
         else {
-            return CommonUtils.makeMoneyString(number: remaining * -1) + " over budget"
+            return CommonUtils.makeMoneyString(number: remaining * -1) + " Over Budget"
         }
     }
+    
+   
     
     func getIconName() -> String {
         let remaining = self.viewModel.getRemaining()
@@ -45,7 +47,7 @@ struct RemainingBudgetIndicatorView: View {
             
             
             Text(getRemainingDisplayText()).font(.system(size: 16, design: .rounded)).fontWeight(.semibold).foregroundColor(AppTheme().themeColorPrimary)
-        }.padding(4).padding(.horizontal, 10)
+        }
     }
 }
 

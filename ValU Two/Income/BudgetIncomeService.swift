@@ -11,7 +11,13 @@ import Foundation
 class BudgetIncomeService : ObservableObject{
     var incomePredictionService : IncomePredictionService
     var budget : Budget
-    @Published var currentIncomeEntry : String = ""
+    @Published var currentIncomeEntry : String = "" {
+        didSet {
+            if currentIncomeEntry.prefix(1) != "$" && currentIncomeEntry != "" {
+                currentIncomeEntry = "$" + currentIncomeEntry
+            }
+        }
+    }
     
     init(budget : Budget){
         self.budget = budget
@@ -48,12 +54,22 @@ class BudgetIncomeService : ObservableObject{
     }
     
     func tryToSetBudgetIncome(){
-        let income = Double(self.currentIncomeEntry) ?? 0
+        let incomeString = self.currentIncomeEntry.replacingOccurrences(of: "$", with: "", options: NSString.CompareOptions.literal, range:nil)
+
+         let income = Double(incomeString) ?? 0
         
         if income != 0.0 {
             self.budget.amount = Float(income)
         }
 
+    }
+    
+    func isValidState() -> Bool{
+        let incomeString = self.currentIncomeEntry.replacingOccurrences(of: "$", with: "", options: NSString.CompareOptions.literal, range:nil)
+        if incomeString != "" && (incomeString.doubleValue == nil || incomeString.doubleValue == 0.0){
+            return false
+        }
+        return true
     }
     
 

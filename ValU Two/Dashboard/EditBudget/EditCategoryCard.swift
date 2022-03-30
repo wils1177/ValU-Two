@@ -24,11 +24,16 @@ struct EditCategoryCard<ViewModel>: View where ViewModel: CategoryListViewModel 
         self.viewModel = viewModel
     }
     
-    func getDisplayArray(categories: [SpendingCategory]) -> [[SpendingCategory]]{
-        return categories.chunked(into: 2)
-    }
+    
+    
+    private var columns: [GridItem] = [
+        GridItem(.flexible(), spacing: 11),
+            GridItem(.flexible(), spacing: 11),
+        GridItem(.flexible(), spacing: 11)
+        ]
     
     var body: some View {
+        
         VStack(spacing: 0.0){
                  
                  
@@ -36,46 +41,22 @@ struct EditCategoryCard<ViewModel>: View where ViewModel: CategoryListViewModel 
                    
                 Text(self.category.name!).font(.system(size: 20)).bold()
                    Spacer()
-                   //CategoryButtonView(text: "Add Section")
-            }
-
-                 
-                   
-            //Divider().padding(.horizontal)
+                  
+            }.padding(.bottom)
+            
+            LazyVGrid(      columns: columns,
+                            alignment: .center,
+                            spacing: 10,
+                            pinnedViews: [.sectionHeaders, .sectionFooters]
+            ){
+                
+                ForEach(self.subCategories, id: \.self){entry in
                     
-            VStack(spacing: 0){
-                ForEach(self.getDisplayArray(categories: self.subCategories), id: \.self){pair in
-                    
-                    VStack{
-                        GeometryReader{g in
-                            HStack{
-                                    ForEach(pair, id: \.self){entry in
-                                        
-                                        HStack{
-
-                                            EditCategoryRowView(category: entry, viewModel: self.viewModel).frame(width: (g.size.width / 2))
-                                            
-                                            if pair.count == 1{
-                                                Spacer().frame(width: (g.size.width / 2) + 9)
-                                            }
-                                        }.padding(.bottom, 15)
-                                        
-                                        
-                                        
-                                    }
-                                
-                                
-                            }
-                        }
-                        
-                        
-                    }.padding(.vertical, 24)
-                    
-                        
+                    EditCategoryRowView(category: entry, viewModel: self.viewModel)
+                                    
                 }
             }
-                   
-                                       
+                          
 
 
                  }

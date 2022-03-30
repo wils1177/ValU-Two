@@ -23,11 +23,12 @@ public class BudgetSection: NSManagedObject, NSCopying {
         self.icon = icon
         self.colorCode = Int32(colorCode)
         self.id = UUID()
+        self.spent = 0.0
 
     }
     
     public func copy(with zone: NSZone? = nil) -> Any {
-        
+        self.spent = getSpent()
         let newBudgetSection = DataManager().createBudgetSection(name: self.name!, icon: self.icon!, colorCode: Int(self.colorCode), order: Int(self.order))
         
         for budgetCategory in self.budgetCategories?.allObjects as! [BudgetCategory]{
@@ -58,6 +59,7 @@ public class BudgetSection: NSManagedObject, NSCopying {
             //}
             
         }
+        
         return total
     }
     
@@ -80,7 +82,12 @@ public class BudgetSection: NSManagedObject, NSCopying {
            return spent / limit
         }
         else{
-            return 0.0
+            if spent > 0.0{
+                return 1.0
+            }
+            else{
+                return 0.0
+            }
         }
         
     }

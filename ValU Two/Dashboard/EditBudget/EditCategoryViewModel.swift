@@ -98,8 +98,10 @@ class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, Observa
     func createTransactionRule(){
         
         var categories = [String]()
+        var spendingCategories = NSSet()
         for match in transaction.categoryMatches?.allObjects as! [CategoryMatch]{
             categories.append(match.spendingCategory!.name!)
+            spendingCategories = spendingCategories.adding(match.spendingCategory!) as NSSet
         }
         let name = self.transaction.name
         
@@ -109,11 +111,12 @@ class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, Observa
             if rule != nil{
                 rule!.name = name
                 rule!.categories = categories
+                rule!.addToSpendingCategories(spendingCategories)
             }
             //If there is no existing rule, just make a new one
             else{
-                _ = DataManager().saveTransactionRule(name: name!, amountOverride: Float(0.0), categoryOverride: categories)
-                
+                let newRule = DataManager().saveTransactionRule(name: name!, amountOverride: Float(0.0), categoryOverride: categories)
+                newRule.addToSpendingCategories(spendingCategories)
             }
             
         }

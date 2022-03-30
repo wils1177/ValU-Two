@@ -25,7 +25,8 @@ struct EnterIncomeView: View {
     
     var errorState: some View{
         VStack{
-            if self.incomeService.currentIncomeEntry != "" &&  (self.incomeService.currentIncomeEntry.doubleValue == nil || self.incomeService.currentIncomeEntry.doubleValue == 0.0){
+            
+            if !self.incomeService.isValidState() {
                 Text(self.errorString).foregroundColor(Color(.systemRed))
             }
         }
@@ -47,49 +48,55 @@ struct EnterIncomeView: View {
     var body: some View {
         
         VStack{
-            VStack(alignment: .leading){
+            VStack(alignment: .center){
                 
-                StepTitleText(header: "Step 2 of 4", title: self.getTimeFrameText() + " Income", description: "Enter the income to use for your budget.")
+                VStack(alignment: .center, spacing: 15){
+                    //Text(self.header).font(.system(size: 15, design: .rounded)).bold().lineLimit(3).multilineTextAlignment(.leading).foregroundColor(Color(.lightGray))
+                        
+                    Text("Enter your " + self.getTimeFrameText() + " Income").font(.system(size: 27, design: .rounded)).bold().lineLimit(1).fixedSize(horizontal: false, vertical: true).multilineTextAlignment(.center)
+
+                    Text("This will inform how much you have avilable to spend in your budget.").font(.system(size: 16, design: .rounded)).lineLimit(3).multilineTextAlignment(.center).foregroundColor(Color(.gray))
+                }.offset(y: -12)
+                
+                
           
                     
-                VStack (alignment: .leading){
-                    ZStack{
-                        CustomInputTextField(text: self.$incomeService.currentIncomeEntry, placeHolderText: "Your Income", textSize: .systemFont(ofSize: 18), alignment: .left, delegate: nil, key: nil)
-                            .padding(.horizontal)
-                        .frame(height: 45).background(Color(.tertiarySystemGroupedBackground)).cornerRadius(15)
-                        HStack{
-                            Spacer()
-                            Text("USD").foregroundColor(AppTheme().themeColorPrimary).bold().padding(.trailing)
-                        }.frame(height: 45)
+                VStack (alignment: .center){
+                    
+                    if self.incomeService.getIncomeTransactions().count > 0{
+                        
+                        Button(action: {
+                            // What to perform
+                            self.coordinator.showIncomeTransactions(transactions: self.incomeService.getIncomeTransactions())
+                        }) {
+                            HStack(spacing: 3){
+                                Image(systemName: "info.circle.fill").font(.system(size: 15, weight: .semibold, design: .rounded))
+                                Text("Estimated Income: \(Text(CommonUtils.makeMoneyString(number: Int(self.incomeService.incomePredictionService.getTotalIncome())))) ").font(.system(size: 17, weight: .semibold, design: .rounded)).foregroundColor(AppTheme().themeColorPrimary).bold()
+                            }
+                            
+                        }.padding(.bottom)
+                        
+                        
+                        
+                        
                     }
+                    
+                    
+                        //CustomInputTextField(text: self.$incomeService.currentIncomeEntry, placeHolderText: "$0", textSize: .systemFont(ofSize: 60), alignment: .center, delegate: nil, key: nil)
+                            //.padding(.horizontal)
+                    
+                    TextField("$0", text: self.$incomeService.currentIncomeEntry).font(.system(size: 60, weight: .semibold, design: .rounded)).multilineTextAlignment(.center).foregroundColor(AppTheme().themeColorPrimary).keyboardType(.numberPad).padding(.top, 20)
+                        
+                    
                     
                         
                         errorState
                     
-                    Text("Tap to enter your income. ").font(.caption).lineLimit(3).multilineTextAlignment(.leading).foregroundColor(Color(.gray)).padding(.horizontal).padding(.top, 5)
+                    Text("Tap to enter your income. ").font(.caption).lineLimit(3).multilineTextAlignment(.center).foregroundColor(Color(.gray)).padding(.top, 10)
                 }.padding(.bottom, 30).padding(.top, 15)
+                    
                 
                 
-                if self.incomeService.getIncomeTransactions().count > 0{
-                    
-                    Button(action: {
-                        // What to perform
-                        self.coordinator.showIncomeTransactions(transactions: self.incomeService.getIncomeTransactions())
-                    }) {
-                        // How the button looks like
-                        HStack(alignment: .center){
-                            VStack(alignment: .leading, spacing: 5){
-                                Text("Estimated Income").font(.headline).foregroundColor(AppTheme().themeColorPrimary).bold()
-                                Text(CommonUtils.makeMoneyString(number: Int(self.incomeService.incomePredictionService.getTotalIncome()))).font(.title3)
-                                
-                            }
-                            Spacer()
-                            Image(systemName: "ellipsis.circle.fill").foregroundColor(AppTheme().themeColorPrimary).font(.system(size: 28))
-                        }.padding().background(Color(.tertiarySystemGroupedBackground)).cornerRadius(15)
-                    }.buttonStyle(PlainButtonStyle())
-                    
-                    Text("Your esimtated income is based from previous transactions over the last 30 days. Tap to see these transactions.").font(.caption).lineLimit(3).multilineTextAlignment(.leading).foregroundColor(Color(.gray)).padding(.horizontal)
-                }
                 
                 
             
@@ -97,13 +104,13 @@ struct EnterIncomeView: View {
             }.padding(.horizontal)
             
             Spacer()
-            if self.incomeService.currentIncomeEntry.doubleValue != nil && self.incomeService.currentIncomeEntry.doubleValue != 0.0{
+            if self.incomeService.isValidState(){
                 Button(action: {
                               //Button Action
-                    if self.incomeService.currentIncomeEntry.doubleValue != nil && self.incomeService.currentIncomeEntry.doubleValue != 0.0{
+                    
                         self.incomeService.tryToSetBudgetIncome()
                         self.coordinator.incomeSubmitted(budget: self.budget)
-                    }
+                    
                               }){
                               ActionButtonLarge(text: "Done", enabled: true)
                 
@@ -143,12 +150,12 @@ struct StepTitleText: View {
     var description: String
     
     var body: some View {
-        VStack(alignment: .leading){
-            Text(self.header).font(.system(size: 15)).bold().lineLimit(3).multilineTextAlignment(.leading).foregroundColor(Color(.lightGray))
+        VStack(alignment: .leading, spacing: 10){
+            //Text(self.header).font(.system(size: 15, design: .rounded)).bold().lineLimit(3).multilineTextAlignment(.leading).foregroundColor(Color(.lightGray))
                 
-            Text(self.title).font(.system(size: 28)).bold().lineLimit(1).fixedSize(horizontal: false, vertical: true).multilineTextAlignment(.leading)
+            Text(self.title).font(.system(size: 27, design: .rounded)).bold().lineLimit(1).fixedSize(horizontal: false, vertical: true).multilineTextAlignment(.leading)
 
-            Text(self.description).font(.system(size: 15)).fontWeight(.semibold).lineLimit(3).multilineTextAlignment(.leading).foregroundColor(Color(.gray))
+            Text(self.description).font(.system(size: 16, design: .rounded)).lineLimit(3).multilineTextAlignment(.leading).foregroundColor(Color(.gray))
         }.offset(y: -12)
         
     }

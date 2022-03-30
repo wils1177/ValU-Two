@@ -32,6 +32,18 @@ struct ListWrapper : Hashable{
     var idx : Int
 }
 
+struct TransactionDateSection: Hashable{
+    
+    var date: Date
+    var transactions: [Transaction]
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(date)
+
+    }
+    
+}
+
 class TransactionsTabViewModel: ObservableObject, Presentor{
     
     
@@ -48,7 +60,7 @@ class TransactionsTabViewModel: ObservableObject, Presentor{
     
     init(){
         //generateViewData()
-        //NotificationCenter.default.addObserver(self, selector: #selector(update(_:)), name: .modelUpdate, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(update(_:)), name: .modelUpdate, object: nil)
     }
     
     func configure() -> UIViewController {
@@ -60,89 +72,36 @@ class TransactionsTabViewModel: ObservableObject, Presentor{
         return TransactionsListViewModel(predicate: filterModel.getPredicateBasedOnState()).transactions
     }
     
-    func generateViewData(){
+    func getTransactionsByDate() -> [TransactionDateSection]{
+        var transactionsByDate = [TransactionDateSection]()
+        let transactions = getTransactionsList()
         
-        let spendingSummary = SpendingSummaryViewModel()
+        let datesArray = transactions.compactMap { $0.date }
+        let datesSet = Set(datesArray)
         
-        self.transactionsToday = TransactionsListViewModel(predicate: PredicateBuilder().generateTodayPredicate())
-        self.transactionsToday?.coordinator = self.coordinator
-        self.transactionsThisWeek = TransactionsListViewModel(predicate: PredicateBuilder().generateThisWeekPredicate())
-        self.transactionsThisWeek?.coordinator = self.coordinator
-        self.transactionsThisMonth = TransactionsListViewModel(predicate: PredicateBuilder().generateEarlierThisMonthPredicate())
-        self.transactionsThisMonth?.coordinator = self.coordinator
-        
-        self.rows = [ListWrapper]()
-        var idx = 0
-        let row1 = ListWrapper(spendingSummary: spendingSummary, idx: idx)
-        self.rows!.append(row1)
-        
-        
-        
-        if self.transactionsToday!.transactions.count > 0 {
-            
-            idx = idx + 1
-            let anotherRow = ListWrapper(sectionTitle: "Today", idx: idx)
-            self.rows!.append(anotherRow)
-            
-            idx = idx + 1
-            for transaction in self.transactionsToday!.transactions{
-                let row = ListWrapper(transactionRow: transaction , idx: idx)
-                self.rows!.append(row)
-                idx = idx + 1
-            }
+        datesSet.forEach {
+            let dateKey = $0
+            let filterArray = transactions.filter { $0.date == dateKey }
+            let section = TransactionDateSection(date: dateKey, transactions: filterArray)
+            transactionsByDate.append(section)
         }
         
-        
-        
-        if self.transactionsThisWeek!.transactions.count > 0 {
-            
-            idx = idx + 1
-            let anotherRow = ListWrapper(sectionTitle: "Last 7 Days", idx: idx)
-            self.rows!.append(anotherRow)
-            
-            
-            idx = idx + 1
-            for transaction in self.transactionsThisWeek!.transactions{
-                let row = ListWrapper(transactionRow: transaction , idx: idx)
-                self.rows!.append(row)
-                idx = idx + 1
-            }
-        }
-        
-        
-        
-        
-        
-        if self.transactionsThisMonth!.transactions.count > 0 {
-            
-            idx = idx + 1
-            let anotherRow = ListWrapper(sectionTitle: "Last 30 Days", idx: idx)
-            self.rows!.append(anotherRow)
-            
-            idx = idx + 1
-            for transaction in self.transactionsThisMonth!.transactions{
-                let row = ListWrapper(transactionRow: transaction , idx: idx)
-                self.rows!.append(row)
-                idx = idx + 1
-            }
-        }
-        
-        
-
-        
-
-        
-        
+        return transactionsByDate.sorted(by: { $0.date > $1.date })
+    }
+    
+    func refreshCompleted(){
+        self.objectWillChange.send()
     }
     
     
     
+    
+    
+    
+    
     @objc func update(_ notification:Notification){
-        print("Update Triggered")
-        self.transactionsThisWeek = nil
-        self.transactionsThisMonth = nil
-        self.transactionsToday = nil
-        generateViewData()
+        print("Transaction Tab Update Triggered")
+        self.objectWillChange.send()
         
     }
     

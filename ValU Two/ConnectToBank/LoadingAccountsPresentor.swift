@@ -22,14 +22,17 @@ class LoadingAccountsViewData : ObservableObject{
     @Published var viewState = LoadingAccountsViewState.Loading
 }
 
-class LoadingAccountsPresentor : Presentor {
+class LoadingAccountsPresentor : Presentor, PlaidLinkDelegate {
     
+    
+
     var view : LoadingAccountsView?
     var coordinator : PlaidLinkDelegate?
     var aggregationService : PlaidInitialAggService?
     var viewData = LoadingAccountsViewData()
     var itemId : String?
     var itemManager : ItemManagerService
+    var plaidLinkPresentor : PlaidLinkViewPresentor?
     
     init(itemManager: ItemManagerService){
         self.viewData.viewState = LoadingAccountsViewState.Initial
@@ -41,13 +44,14 @@ class LoadingAccountsPresentor : Presentor {
         let view = LoadingAccountsView(presentor: self, viewData: self.viewData)
         let vc = UIHostingController(rootView: view)
         self.aggregationService = PlaidInitialAggService(completion: self.handleAggregationResult(result:))
-        
-        
-        
+        self.plaidLinkPresentor = PlaidLinkViewPresentor(viewControllerToPresentOver: vc)
+        self.plaidLinkPresentor?.coordinator = self
         return vc
     }
     
-
+    func launchPlaidLink() {
+        self.plaidLinkPresentor!.setupLink()
+    }
     
     func startLoadingAccounts(){
         self.viewData.viewState = LoadingAccountsViewState.Loading
@@ -92,7 +96,26 @@ class LoadingAccountsPresentor : Presentor {
     }
     
     func userSelectedAddMoreAccounts(){
-        self.coordinator?.connectMoreAccounts()
+        self.launchPlaidLink()
+    }
+    
+    
+    
+    func dismissPlaidLink(sender: PlaidLinkViewPresentor) {
+        
+    }
+    
+    func plaidLinkSuccess(sender: PlaidLinkViewPresentor) {
+        startLoadingAccounts()
+        
+    }
+    
+    func plaidIsConnected() {
+        
+    }
+    
+    func connectMoreAccounts() {
+        
     }
     
     

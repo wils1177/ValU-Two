@@ -17,6 +17,11 @@ struct TransactionDetailView: View {
     @ObservedObject var transaction : Transaction
     var account : AccountData?
     
+    var transactionService = TransactionService()
+    
+    @State private var region : MKCoordinateRegion
+    
+    var showMap = false
     
     init(viewModel: TransactionDetailViewModel, transaction: Transaction, account: AccountData?){
         self.viewModel = viewModel
@@ -25,10 +30,21 @@ struct TransactionDetailView: View {
         
         UISwitch.appearance().onTintColor = AppTheme().themeColorPrimaryUIKit
         
-        print(transaction.location?.city)
-        print(transaction.location?.address)
-        print(transaction.location?.lat)
-        print(transaction.location?.lon)
+        print(transaction.location!.lat)
+        if transaction.location != nil && transaction.location!.lat != 0.0 && transaction.location!.lon != 0.0{
+            self.region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: transaction.location!.lat, longitude: transaction.location!.lon), span: MKCoordinateSpan(latitudeDelta: 0.02, longitudeDelta: 0.02))
+            self.showMap = true
+        }
+        else{
+            self.region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
+        }
+        print(self.transaction.name)
+        print(self.transaction.plaidCategories)
+        print(self.transaction.location?.address)
+        print("pending")
+        print(self.transaction.pending)
+        print("date: \(transaction.date!)")
+        
     }
     
     func dateToString(date: Date) -> String{
@@ -42,22 +58,23 @@ struct TransactionDetailView: View {
     var headerTitle : some View{
         VStack(alignment: .center){
             
-            TransactionIconViewLarge(icons: viewModel.getIcons(categories: self.transaction.categoryMatches?.allObjects as! [CategoryMatch])).padding(.horizontal).padding(.top, 10).padding(.bottom,10)
+            if transaction.categoryMatches != nil{
+                TransactionIconViewLarge(icons: viewModel.getIcons(categories: self.transaction.categoryMatches?.allObjects as! [CategoryMatch])).padding(.horizontal).padding(.top, 10).padding(.bottom,10)
+            }
+            
             
             HStack(){
                 Spacer()
-                Text(transaction.name!).font(.system(size: 29, design: .rounded)).fontWeight(.bold).multilineTextAlignment(.center)
+                Text(self.transactionService.getDisplayName(transaction: self.transaction)).font(.system(size: 29, design: .rounded)).fontWeight(.bold).multilineTextAlignment(.center).lineLimit(5)
                 Spacer()
             }.padding(.horizontal)
                        
                        
                        
                        
-            HStack{
-                Spacer()
-                Text(dateToString(date: self.transaction.date!)).font(.subheadline).foregroundColor(Color(.gray))
-                Spacer()
-            }.padding(.horizontal)
+            if transaction.pending{
+                Text("PENDING").font(.system(size: 18, weight: .medium, design: .rounded)).italic().lineLimit(1).foregroundColor(Color(.lightGray))
+            }
             
             /*
             HStack{
@@ -80,6 +97,17 @@ struct TransactionDetailView: View {
         }
     }
     
+    var dateSection : some View{
+        VStack{
+            HStack{
+                Text("Date")
+                Spacer()
+                Text(dateToString(date: transaction.date ?? Date())).fontWeight(.semibold).bold()
+
+            }
+        }
+    }
+    
     var accountSection : some View{
         VStack{
             HStack{
@@ -88,6 +116,16 @@ struct TransactionDetailView: View {
                 Text(self.account?.name ?? "Unknown").bold().lineLimit(1)
 
             }
+        }
+    }
+    
+    var originalNameSection : some View{
+        HStack(){
+                Text("Full Description")
+                Spacer()
+                Text(self.transaction.name ?? "Unknown").foregroundColor(Color(.gray)).fontWeight(.semibold).lineLimit(8).multilineTextAlignment(.trailing).padding(.leading, 8)
+
+            
         }
     }
     
@@ -114,7 +152,7 @@ struct TransactionDetailView: View {
     }
     
     var actionSection : some View{
-        HStack{
+        HStack(spacing: 0){
             
             Button(action: {
                 //Button Action
@@ -127,7 +165,7 @@ struct TransactionDetailView: View {
                     Text("Edit Category").foregroundColor(AppTheme().themeColorPrimary).font(.caption).padding(.bottom, 5)
                     }
                     Spacer()
-                }.padding(.horizontal).padding(.vertical, 5).background(Color(.tertiarySystemGroupedBackground).opacity(0.65)).cornerRadius(15).padding(.leading).padding(.trailing, 5)
+                }.padding(.horizontal).padding(.vertical, 5).background(Color(.systemBackground).opacity(0.65)).cornerRadius(15)
 
             }
             
@@ -145,7 +183,7 @@ struct TransactionDetailView: View {
                         Text("Split").foregroundColor(AppTheme().themeColorPrimary).font(.caption).padding(.bottom, 5)
                         }
                     Spacer()
-                }.padding(.horizontal).padding(.vertical, 5).background(Color(.tertiarySystemGroupedBackground).opacity(0.65)).cornerRadius(15).padding(.trailing).padding(.leading, 5)
+                }.padding(.horizontal).padding(.vertical, 5).background(Color(.systemBackground).opacity(0.65)).cornerRadius(15)
 
             }
             
@@ -154,7 +192,7 @@ struct TransactionDetailView: View {
                 
             
             
-        }.padding(5)
+        }
         
         
         
@@ -166,57 +204,84 @@ struct TransactionDetailView: View {
         VStack(spacing: 0){
             ForEach(self.transaction.categoryMatches!.allObjects as! [CategoryMatch], id: \.self) { category in
                 VStack(spacing: 0){
-                    CategoryAmountRowView(viewData: category, viewModel: self.viewModel).padding(.bottom)
+                    CategoryAmountRowView(viewData: category, viewModel: self.viewModel)
                     
                     
                     
                 }
                 
             }
-        }.padding(.top)
+        }
     }
 
     
     var body: some View {
         
-        ScrollView{
-            VStack{
+        Form{
                 
-                self.headerTitle.padding(.top, 30)
+                
+            self.headerTitle.listRowBackground(Color.clear).listRowSeparator(.hidden).padding(.bottom, 15)
+                
+                
                 
             //Divider().padding(.horizontal)
                 
-                actionSection.padding(.top, 10)
+                actionSection.padding(.top, 20).listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)).listRowBackground(Color.clear).listRowSeparator(.hidden)
                 
-                
-                HStack{
-                    Text("General").font(.system(size: 20, design: .rounded)).bold()
-                    Spacer()
-                }.padding(.top).padding(.horizontal).padding(.bottom, 5)
-                
-                VStack(){
-                    self.amountSection.padding(.bottom, 10).padding(.horizontal)//.background(Color(.systemGroupedBackground).opacity(0.65)).cornerRadius(10).padding(.bottom, 10).padding(.horizontal)
-                    Rectangle().frame(height: 3).foregroundColor(Color(.tertiarySystemGroupedBackground)).padding(.horizontal, 15).padding(.bottom, 10)
-                    self.accountSection.padding(.bottom, 10).padding(.horizontal)//.background(Color(.systemGroupedBackground).opacity(0.65)).cornerRadius(10).padding(.bottom, 10).padding(.horizontal)
-                    Rectangle().frame(height: 3).foregroundColor(Color(.tertiarySystemGroupedBackground)).padding(.horizontal, 15).padding(.bottom, 10)
-                    self.settingsSection.padding(.bottom, 5).padding(.horizontal)//.background(Color(.systemGroupedBackground).opacity(0.65)).cornerRadius(10).padding(.bottom, 10).padding(.horizontal)
-                    Rectangle().frame(height: 3).foregroundColor(Color(.tertiarySystemGroupedBackground)).padding(.horizontal, 15)
-                }.padding(.top).padding(.horizontal)
-                
-                
-            
+            if transaction.categoryMatches != nil{
                 if (self.transaction.categoryMatches?.allObjects as! [CategoryMatch]).count > 0{
                 
-                HStack{
-                    Text("Categories").font(.system(size: 20, design: .rounded)).bold()
-                    Spacer()
-                }.padding(.horizontal).padding(.top)
                 
-                self.categorySection.padding(.horizontal).padding(.horizontal, 5).padding(.bottom, 30)
+                    
+                    Section(header: Text("Categories")){
+                        self.categorySection.padding(.vertical, 5)
+                    }
+                
+                
             }
+            }
+            
+            
+            
+            Section(header: Text("GENERAL")){
+                self.originalNameSection.padding(.vertical, 10)
+                self.dateSection.padding(.vertical, 10)
+                self.amountSection.padding(.vertical, 10)
+                self.accountSection.padding(.vertical, 10)
+                self.settingsSection.padding(.vertical, 10)
+                
+            }
+             
+            
+            
+                
+            
+                
          
-            Spacer()
-        }
+            
+            if self.showMap{
+                Section(header: Text("Location")){
+                    Map(coordinateRegion: $region, interactionModes: [])
+                        .frame(height: 300, alignment: .center).listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)).cornerRadius(15).listRowBackground(Color.clear).listRowSeparator(.hidden)
+                }
+            }
+            
+            
+            
+               
+                Button(action: {
+                    self.viewModel.deleteTransaction(transaction: self.transaction)
+                }) {
+                    HStack{
+                        Spacer()
+                        Image(systemName: "trash").font(.system(size: 21, weight: .regular)).foregroundColor(Color(.red))
+                        Text("delete transaction").fontWeight(.semibold).foregroundColor(Color(.red))
+                        Spacer()
+                    }
+                    
+                }.buttonStyle(PlainButtonStyle()).padding().background(Color(.red).opacity(0.15)).cornerRadius(20).listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)).listRowBackground(Color.clear).listRowSeparator(.hidden)
+                
+        
         
         
         }
@@ -235,7 +300,7 @@ struct MapView: UIViewRepresentable {
     }
 
     func updateUIView(_ view: MKMapView, context: Context) {
-        let span = MKCoordinateSpan(latitudeDelta: 0.02, longitudeDelta: 0.02)
+        let span = MKCoordinateSpan(latitudeDelta: 0.002, longitudeDelta: 0.002)
         let region = MKCoordinateRegion(center: coordinate, span: span)
         view.setRegion(region, animated: true)
     }

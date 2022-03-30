@@ -31,7 +31,7 @@ struct IncomeTransactionsView: View {
                             Button(action: {
                                 self.coordinator?.dismiss()
                                                       }) {
-                                ColoredActionButton(text: "Done")
+                                NavigationBarTextButton(text: "Done")
                                              }
             
             )

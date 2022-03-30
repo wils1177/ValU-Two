@@ -23,13 +23,13 @@ struct TimeFrameView: View {
     
     
     var semiMonth : some View{
-        TimeFrameRow(title: "Semi-Monthly", description: "1st and 15th of each month", timeFrame: TimeFrame.semiMonthly, viewModel: self.viewModel)
+        TimeFrameRow(title: "Semi-Monthly", description: "Starts on the 1st and 15th of each month", timeFrame: TimeFrame.semiMonthly, viewModel: self.viewModel)
 
     }
     
     var week : some View{
         
-        TimeFrameRow(title: "Weekly", description: "Starts every Sunday", timeFrame: TimeFrame.weekly, viewModel: self.viewModel)
+        TimeFrameRow(title: "Weekly", description: "Starts on Sunday every week", timeFrame: TimeFrame.weekly, viewModel: self.viewModel)
          
         
     }
@@ -40,10 +40,10 @@ struct TimeFrameView: View {
                 
                 
                 HStack{
-                    StepTitleText(header: "Step 1 of 4", title: "Time Frame", description: "Enter what time frame to use for your budget.").padding(.bottom, 20)
+                    StepTitleText(header: "Step 1 of 4", title: "Choose a Budget Period", description: "Budgets will begin and end based on the period you select.").padding(.bottom, 20)
                     Spacer()
                     
-                }.padding(.leading)
+                }.padding(.horizontal, 25)
                 
 
                 
@@ -51,21 +51,21 @@ struct TimeFrameView: View {
                     self.viewModel.toggleTimeFrame(timeFrame: TimeFrame.monthly)
                 }) {
                     // How the button looks like
-                    month.padding(.horizontal)
+                    month.padding(.horizontal, 20)
                 }.buttonStyle(PlainButtonStyle()).padding(.bottom, 5)
                 
                 Button(action: {
                     self.viewModel.toggleTimeFrame(timeFrame: TimeFrame.semiMonthly)
                 }) {
                     // How the button looks like
-                    semiMonth.padding(.horizontal)
+                    semiMonth.padding(.horizontal, 20)
                 }.buttonStyle(PlainButtonStyle()).padding(.bottom, 5)
                 
                 Button(action: {
                     self.viewModel.toggleTimeFrame(timeFrame: TimeFrame.weekly)
                 }) {
                     // How the button looks like
-                    week.padding(.horizontal)
+                    week.padding(.horizontal, 20)
                 }.buttonStyle(PlainButtonStyle()).padding(.bottom, 5)
                 
                 
@@ -92,7 +92,9 @@ struct TimeFrameView: View {
                 
 
                 
-            }.navigationBarTitle("")
+            }
+            .background(Color(.systemGroupedBackground))
+            .navigationBarTitle("")
             
             
             
@@ -107,12 +109,32 @@ struct TimeFrameRow: View {
     var timeFrame : TimeFrame
     @ObservedObject var viewModel : TimeFrameViewModel
     
+    @Environment(\.colorScheme) var colorScheme
+    
     func getSelectionColor(selected: Bool) -> Color{
         if selected{
             return AppTheme().themeColorPrimary
         }
         else{
-            return Color(.systemGray4)
+            return Color(.clear)
+        }
+    }
+    
+    func getBackgroundColor(selected: Bool) -> Color{
+        if selected{
+            return AppTheme().themeColorPrimary.opacity(0.15)
+        }
+        else{
+            return Color(.tertiarySystemBackground)
+        }
+    }
+    
+    func getTextColor(selected: Bool) -> Color{
+        if selected{
+            return AppTheme().themeColorPrimary
+        }
+        else{
+            return colorScheme == .dark ? Color.white : Color.black
         }
     }
     
@@ -120,18 +142,16 @@ struct TimeFrameRow: View {
         
         HStack{
         VStack(alignment: .leading, spacing: 2){
-            Text(self.title).font(.system(size: 19)).bold()
-            Text(self.description).font(.system(size: 15)).foregroundColor(Color(.gray))
+            Text(self.title).font(.system(size: 24, design: .rounded)).bold().foregroundColor(getTextColor(selected: self.viewModel.isTimeFrameSelected(timeFrame: self.timeFrame))).padding(.bottom, 3)
+            Text(self.description).font(.system(size: 14)).foregroundColor(getTextColor(selected: self.viewModel.isTimeFrameSelected(timeFrame: self.timeFrame)))
         }.padding()
         Spacer()
             if self.viewModel.isTimeFrameSelected(timeFrame: self.timeFrame){
-                Image(systemName: "checkmark.circle.fill").imageScale(.large).foregroundColor(self.getSelectionColor(selected: self.viewModel.isTimeFrameSelected(timeFrame: self.timeFrame))).padding(.trailing)
+                Image(systemName: "checkmark.circle.fill").font(.system(size: 26)).foregroundColor(self.getSelectionColor(selected: self.viewModel.isTimeFrameSelected(timeFrame: self.timeFrame))).padding(.trailing)
             }
             
-        }.background(Color(.tertiarySystemGroupedBackground)).cornerRadius(15).overlay(
-        RoundedRectangle(cornerRadius: 15)
-            .stroke(self.getSelectionColor(selected: self.viewModel.isTimeFrameSelected(timeFrame: self.timeFrame)), lineWidth: 3)
-        )
+        }.padding(5).frame(height: 100).background(self.getBackgroundColor(selected: self.viewModel.isTimeFrameSelected(timeFrame: self.timeFrame))).cornerRadius(23)
+        
         
     }
     

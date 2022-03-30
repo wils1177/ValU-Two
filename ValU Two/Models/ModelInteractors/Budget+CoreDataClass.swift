@@ -59,6 +59,7 @@ public class Budget: NSManagedObject, NSCopying, Identifiable {
         print("creating budget")
         let entity = NSEntityDescription.entity(forEntityName: "Budget", in: context)
         self.init(entity: entity!, insertInto: context)
+
         self.active = false
         self.spent = 0.0
         self.id = UUID()
@@ -67,7 +68,12 @@ public class Budget: NSManagedObject, NSCopying, Identifiable {
         
         if !copy{
             self.generateDefaultBudgetSections()
+            self.onboardingComplete = false
         }
+        else{
+            self.onboardingComplete = true
+        }
+        
         
 
     }

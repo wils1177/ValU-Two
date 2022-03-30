@@ -38,15 +38,9 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, PlaidLinkD
     
     func start(){
         
-        
-        
         print("onboarding flow started")
         
-        
         self.navigationController.navigationBar.prefersLargeTitles = true
-        
-
-        
         var view = WelcomeView()
         view.coordinator = self
         let vc = UIHostingController(rootView: view)
@@ -56,22 +50,12 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, PlaidLinkD
         
     }
     
-    func continueToOnboarding() {
+    func continueFromWelcome() {
         print("Contionue to onboarding")
-        
-        
-        //showSummary()
         continueToPlaid()
-        
 
     }
     
-
-
-    
-    func successfulAccountsLoaded(){
-        UserDefaults.standard.set(true, forKey: "UserOnboarded")
-    }
     
     func continueToPlaid(){
         
@@ -87,17 +71,24 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, PlaidLinkD
     
 
     func launchPlaidLink(){
+        //let presentor = PlaidLinkViewPresentor()
+        //presentor.coordinator = self
+        //self.presentorStack.append(presentor)
+        //presentor.setupLink()
+       // self.navigationController.present(presentor.configure(), animated: true)
+        /*
         let presentor = PlaidLinkViewPresentor()
         presentor.coordinator = self
         self.presentorStack.append(presentor)
         let linkVC = presentor.configure()
         linkVC.modalPresentationStyle = .fullScreen
         self.navigationController.present(linkVC, animated: true)
-        
+        */
     }
     
     func plaidLinkSuccess(sender: PlaidLinkViewPresentor){
         
+        /*
         print("Plaid LInk SUccess Triggered in Coordiantor")
         self.presentorStack.popLast()
         let loadingAccountsPresentor = self.presentorStack.first! as! LoadingAccountsPresentor
@@ -106,6 +97,7 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, PlaidLinkD
             print("link dismissed")
             
         })
+         */
     }
     
     func plaidIsConnected(){
@@ -144,13 +136,17 @@ class OnboardingFlowCoordinator : Coordinator, StartPageViewDelegate, PlaidLinkD
     
     func dismissPlaidLink(sender: PlaidLinkViewPresentor) {
         
+        /*
         sender.linkViewController?.dismiss(animated: true, completion: {
             print("link dismissed")
         })
+         */
 
     }
     
-    
+    func successfulAccountsLoaded(){
+        UserDefaults.standard.set(true, forKey: "UserOnboarded")
+    }
 
     
     

@@ -8,12 +8,68 @@
 
 import SwiftUI
 
+struct SpendingCategoryLabelView : View{
+    
+    var name : String
+    var icon : String
+    
+    var body : some View{
+        HStack(spacing:2){
+            
+            Text(self.icon).font(.system(size: 12))
+            Text(self.name).font(.system(size: 12, design: .rounded)).fontWeight(.heavy).foregroundColor(Color(.gray)).lineLimit(1)
+        }.padding(.horizontal, 3).padding(5).background(Color(.tertiarySystemGroupedBackground)).cornerRadius(9)
+    }
+}
+
+struct ItemRowView: View{
+    
+    @State var showingAlert = false
+    @ObservedObject var model : ItemDeleteModel
+    
+    
+    var body : some View{
+        
+        
+            HStack{
+                Text(self.model.name)
+                Spacer()
+                
+                if !model.removing{
+                    Button(action: {
+                        self.showingAlert.toggle()
+                        print("show alert")
+                    }) {
+                        Image(systemName: "trash")
+                    }.buttonStyle(PlainButtonStyle())
+                    
+                        .alert(isPresented:self.$showingAlert) {
+                            Alert(title: Text("Are you sure you want to delete this connection?"), message: Text("All associated data will be deleted"), primaryButton: .destructive(Text("Delete")) {
+                                self.model.deleteItem()
+                            }, secondaryButton: .cancel())
+                        }
+                }
+                
+                else{
+                    ProgressView().progressViewStyle(CircularProgressViewStyle())
+                }
+                
+            }
+            
+            
+        
+        
+    }
+}
+
 struct SettingsView: View {
     
     @ObservedObject var viewModel : SettingsViewModel
     @State private var showLink = false
     @State var loadingAccounts = false
-    @State var showingAlert = false
+    
+    
+
     
     init(viewModel: SettingsViewModel){
         print("settings view init")
@@ -22,10 +78,11 @@ struct SettingsView: View {
     
 
     
+    
+    
 
     
     var body: some View {
-            VStack{
                 
                 
                 
@@ -34,53 +91,69 @@ struct SettingsView: View {
                 
                 Section(header: Text("Your Bank Connections")){
                     
-                    
-                    ForEach(self.viewModel.viewData, id: \.self){ item in
-                        HStack{
-                            Text(item.name).padding(.leading)
-                            Spacer()
-                            Button(action: {
-                                self.showingAlert = true
-                            }) {
-                                Image(systemName: "trash").padding(.trailing)
-                            }
-                        }.alert(isPresented:self.$showingAlert) {
-                            Alert(title: Text("Are you sure you want to delete this connection?"), message: Text("All associated data will be deleted"), primaryButton: .destructive(Text("Delete")) {
-                                self.viewModel.deleteItem(itemId: item.id)
-                            }, secondaryButton: .cancel())
-                        }
+                    ForEach(self.viewModel.items!, id: \.self){ item in
+                        ItemRowView(model: ItemDeleteModel(item: item, parent: self.viewModel))
                     }
+                    
                     
                     HStack{
                         
                         Button(action: {
                             self.viewModel.connectAccounts()
                         }) {
-                            Text("Connect More Accounts").padding(.leading)
+                            Text("Connect More Accounts")
                         }
                         //Spacer()
                     }
-                }.padding(.top)
-                    
-                    
-                    
-                    
+                }
                 
-            }.alert(isPresented: self.$viewModel.showError) {
-                Alert(title: Text("Could not Delete Connection"), message: Text("Try Again Later"), dismissButton: .default(Text("OK")))
-             
+                Section(header: Text("Transaction Rules"), footer: Text("With transaction rules, ValU Two can remember what categories should be assigned to transactions.")){
+                    
+                    ForEach(self.viewModel.rules, id: \.self){ rule in
+                        
+                        Button(action: {
+                            // What to perform
+                            self.viewModel.coordinator?.showTransactionRuleDetail(rule: rule)
+                        }) {
+                            HStack{
+                                Text(rule.name!)
+                                Spacer()
+                                ForEach(rule.spendingCategories!.allObjects as! [SpendingCategory], id: \.self){ category in
+                                    
+                                    SpendingCategoryLabelView(name: category.name!, icon: category.icon!)
+                                    
+                                    
+                                }
+                                
+                                
+                            }
+                        }
+                        
+                        
+                        
+                    }
+                    
+                    Button(action: {
+                        self.viewModel.coordinator?.newTransactionRule()
+                    }) {
+                        Text("Create New Transaction Rule")
+                    }
+                    
+                }
+                    
+                    
+                    
+                    
                 
             }
+            
  
-            }.navigationBarTitle("Settings").navigationBarItems(trailing:
+            .navigationBarTitle("Settings", displayMode: .large).navigationBarItems(trailing:
                 
                 Button(action: {
                     self.viewModel.dismiss()
                 }){
-                ZStack{
-                    
-                    Text("Done")
-                }
+                    NavigationBarTextButton(text: "Done")
                 }
                 
                 

@@ -11,7 +11,7 @@ import SwiftKeychainWrapper
 
 struct BudgetsView: View {
     
-    var viewModel: BudgetsViewModel
+    @ObservedObject var viewModel: BudgetsViewModel
     @ObservedObject var budget: Budget
     @ObservedObject var fixNowService : FixNowService
 
@@ -19,7 +19,7 @@ struct BudgetsView: View {
     init(viewModel: BudgetsViewModel, budget: Budget){
         self.viewModel = viewModel
         self.budget = budget
-        self.fixNowService = FixNowService(coordinator: self.viewModel.coordinator!)
+        self.fixNowService = FixNowService(coordinator: viewModel.coordinator!)
         
         // To remove only extra separators below the list:
         UITableView.appearance().tableFooterView = UIView()
@@ -43,14 +43,23 @@ struct BudgetsView: View {
         
         UINavigationBar.appearance().largeTitleTextAttributes = [.font : font]
         
-       
+        
         
         
         
         print("home init")
     }
     
-
+    func getTitle() -> String{
+        let monthInt = Calendar.current.component(.month, from: Date()) // 4
+        let monthStr = Calendar.current.monthSymbols[monthInt-1]  // April
+        
+        let dayInt = Calendar.current.component(.day, from: Date()) // 4
+        let dayStr = String(dayInt)  // April
+        
+        return monthStr
+        
+    }
     
     var fixNowCards: some View{
         
@@ -69,53 +78,67 @@ struct BudgetsView: View {
     
     var body: some View {
         
-            ScrollView{
+            List{
                 
-                fixNowCards
-                
-                
-                TimeSectionView(budget: self.viewModel.currentBudget, service: self.viewModel.budgetTransactionsService, coordinator: self.viewModel.coordinator).padding(5).padding(.top, 5)
-                
-                    
-                    
-                    //self.topButtons//.padding(.top, 7)
-                    
-                Divider().padding(.leading)
-                
-                            
-                            //self.budgetHeader.padding(.bottom,5)
-                            
-                BudgetCardView(budget: self.viewModel.currentBudget, viewModel: self.viewModel).padding(5)
-                            
-                            
-                            
-                            //IncomeSectionView(coordinator: self.viewModel.coordinator, service: self.viewModel.budgetTransactionsService).padding(.top, 10).padding(.horizontal)
-                            
+                    if self.fixNowService.exiredItemIds.count > 0{
+                        fixNowCards
+                    }
                         
                 
-                Divider().padding(.leading)
+                        
+                //TimeSectionView(budget: self.viewModel.currentBudget, service: self.viewModel.budgetTransactionsService, coordinator: self.viewModel.coordinator).padding(.horizontal, 25).listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)).listRowSeparator(.hidden).padding(.top, 10)
+                        
+                            
+                            
+                            //self.topButtons//.padding(.top, 7)
+                            
+                        //Divider()
+                        
+                                    
+                                    //self.budgetHeader.padding(.bottom,5)
+                BudgetCardView(budget: self.budget, viewModel: self.viewModel).listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                    
+                    
+                                    
+                                    
+                                   
+                                    
+                                
+                        
+                        //Divider()
+                        
+                        
+                        
+
+                        
+                    //IncomeSectionView(coordinator: self.viewModel.coordinator, service: self.viewModel.budgetTransactionsService, budget: self.budget).listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)).listRowBackground(Color.clear).listRowSeparator(.hidden).padding(.horizontal)
                 
-                
-                
+                        
+                        
+                       // Divider()
 
                 
-                IncomeSectionView(coordinator: self.viewModel.coordinator, service: self.viewModel.budgetTransactionsService, budget: self.budget).padding(5)
+                
+                Section(){
+                    Text("Spending Breakdown").font(.system(size: 23, design: .rounded)).fontWeight(.bold).listRowSeparator(.hidden)
+                    //BudgetStatusBarView(viewData: self.viewModel.getBudgetStatusBarViewData(), showLegend: false).listRowSeparator(.hidden).listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)).padding(.horizontal, 30)
+                    SpendingCardView(budget: self.viewModel.currentBudget, budgetTransactionsService: self.viewModel.budgetTransactionsService, coordinator: self.viewModel.coordinator).listRowSeparator(.hidden)
+                }.listRowBackground(Color.clear)
                 
                 
-                Divider().padding(.leading)
-
-                
-                SpendingCardView(budget: self.viewModel.currentBudget, viewModel: self.viewModel.spendingModel!).padding(.horizontal).padding(.bottom).padding(.top, 5)
-        
-            
-
             }
+            .listStyle(PlainListStyle())
+            .background(Color(.white))
+            .refreshable {
+                print("try refreshing")
+            }
+        
         
  
         
             
                   
-            .navigationBarTitle("This Month").navigationBarItems(
+            .navigationBarTitle(self.getTitle()).navigationBarItems(
             
             leading: Button(action: {
                 self.viewModel.coordinator!.editClicked(budgetToEdit: self.viewModel.currentBudget)

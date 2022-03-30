@@ -139,6 +139,18 @@ class TransactionDetailViewModel: ObservableObject, Presentor, KeyboardDelegate 
         
     }
     
+    func deleteTransaction(transaction: Transaction){
+        
+        for match in transaction.categoryMatches?.allObjects as! [CategoryMatch]{
+            try? DataManager().deleteEntity(predicate: PredicateBuilder().generateByIdPredicate(id: match.id!), entityName: "CategoryMatch")
+            DataManager().saveDatabase()
+        }
+        
+        try? DataManager().deleteEntity(predicate: PredicateBuilder().generateTransactionIdPredicate(transactionId: transaction.transactionId!), entityName: "Transaction")
+        DataManager().saveDatabase()
+        
+    }
+    
     
     
 }

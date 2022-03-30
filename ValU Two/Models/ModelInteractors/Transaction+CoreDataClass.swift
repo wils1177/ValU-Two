@@ -20,7 +20,13 @@ public class Transaction: NSManagedObject {
         
         self.accountId = (transaction.accountId)
         self.amount = (transaction.amount)
-        self.date = getDate(dateString: transaction.date)
+        if transaction.dateTime != nil{
+            self.date = getDate(dateString: transaction.dateTime!)
+        }
+        else{
+            self.date = getDate(dateString: transaction.date)
+        }
+        
         self.name = transaction.name
         self.location = Location(location: transaction.location, context: context)
         self.pending = transaction.pending
@@ -29,6 +35,8 @@ public class Transaction: NSManagedObject {
         self.itemId = itemId
         self.isHidden = false
         self.categoryMatches = NSSet(array: [CategoryMatch]())
+        self.merchantName = transaction.merchantName
+        self.createdDate = Date()
         
     }
     
@@ -41,6 +49,8 @@ public class Transaction: NSManagedObject {
         
         return date
     }
+    
+    
 
     
 }

@@ -46,11 +46,11 @@ struct EmojiSelectionGridView: View {
                                 }){
                                     Spacer()
                                     if self.isSelectedI(row: row, col: col){
-                                        EmojiIcon(emoji: self.icons[row][col], color: Color(.gray))
+                                        EmojiIcon(emoji: self.icons[row][col], color: Color(.systemFill))
                                         
                                         
                                     }else{
-                                        EmojiIcon(emoji: self.icons[row][col], color: Color(.systemFill))
+                                        EmojiIcon(emoji: self.icons[row][col], color: Color(.clear))
                                     }
                                     Spacer()
                             }
@@ -70,8 +70,8 @@ struct EmojiIcon: View {
     
     var body : some View{
         ZStack{
-            Circle().frame(width: 50, height: 50).foregroundColor(self.color)
-            Text(self.emoji).font(.title2).foregroundColor(Color(.black))
+            RoundedRectangle(cornerRadius: 20).frame(width: 50, height: 50).foregroundColor(self.color)
+            Text(self.emoji).font(.system(size: 26)).foregroundColor(Color(.black))
         }.padding(.vertical, 5)
     }
     

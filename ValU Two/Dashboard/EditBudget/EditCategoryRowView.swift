@@ -13,6 +13,8 @@ struct EditCategoryRowView<ViewModel>: View where ViewModel: CategoryListViewMod
     @ObservedObject var category : SpendingCategory
     @ObservedObject var viewModel : ViewModel
     
+    @Environment(\.colorScheme) var colorScheme
+    
     func getButtonColor() -> Color {
         if self.viewModel.isSelected(name: category.name!){
             
@@ -29,7 +31,7 @@ struct EditCategoryRowView<ViewModel>: View where ViewModel: CategoryListViewMod
             return AppTheme().themeColorPrimary
         }
         else{
-            return .black
+            return (colorScheme == .light ? Color.black : Color.white)
         }
     }
     
@@ -40,6 +42,15 @@ struct EditCategoryRowView<ViewModel>: View where ViewModel: CategoryListViewMod
         }
         else{
             return "plus.circle.fill"
+        }
+    }
+    
+    func getBackgroundColor() -> Color {
+        if self.viewModel.isSelected(name: category.name!){
+            return AppTheme().themeColorPrimary.opacity(0.2)
+        }
+        else{
+            return Color(.tertiarySystemBackground)
         }
     }
     
@@ -64,16 +75,20 @@ struct EditCategoryRowView<ViewModel>: View where ViewModel: CategoryListViewMod
                 
             }){
                 HStack{
-                    Text(category.icon!).font(.headline).padding(.leading, 8).padding(.trailing, 6)
-                    
-                    Text(category.name!).font(.callout).fontWeight(.semibold).lineLimit(1).foregroundColor(self.getTextColor())
                     Spacer()
-                    Image(systemName: "checkmark").foregroundColor(self.getButtonColor()).imageScale(.small).padding(.trailing, 5)
-                    
-                }.padding(5).padding(.vertical, 9).background(Color(.systemGroupedBackground)).cornerRadius(10).overlay(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(self.getButtonColor(), lineWidth: 3)
-                    ).padding(.horizontal, 2)
+                    VStack(alignment: .center){
+                        Text(category.icon!).font(.system(size: 35)).padding(.bottom, 5)
+                        
+                        HStack{
+                            Text(category.name!).font(.system(size: 13)).fontWeight(.semibold).lineLimit(2).multilineTextAlignment(.center).foregroundColor(self.getTextColor())
+                            //Image(systemName: "checkmark").foregroundColor(self.getButtonColor()).imageScale(.small).padding(.trailing, 5)
+                        }
+                        
+                        
+                    }.padding(.vertical, 5)
+                    Spacer()
+                }
+                .padding(5).frame(height: 110).background(self.getBackgroundColor()).cornerRadius(23)
         }.buttonStyle(PlainButtonStyle())
     }
 }

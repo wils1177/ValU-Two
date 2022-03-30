@@ -48,15 +48,21 @@ struct IconSelectionGridView: View {
                                     Spacer()
                                     if self.isSelectedI(row: row, col: col){
                                         ZStack{
-                                            Circle().frame(width: 45, height: 45).foregroundColor(Color(.gray))
-                                            Image(systemName: self.icons[row][col]).font(.headline).foregroundColor(Color(.black))
-                                        }.padding(.vertical, 5)
+                                            Circle().frame(width: 45, height: 45).foregroundColor(Color(.systemFill))
+                                            Image(systemName: self.icons[row][col]).font(Font.system(size: 20)).foregroundColor(Color(.black))
+                                        }.overlay(
+                                            Circle()
+                                                .stroke(AppTheme().themeColorPrimary, lineWidth: 3).padding(2)
+                                            ).padding(.vertical, 5)
                                         
                                     }else{
                                         ZStack{
                                             Circle().frame(width: 45, height: 45).foregroundColor(Color(.systemFill))
-                                            Image(systemName: self.icons[row][col]).font(.headline).foregroundColor(Color(.black))
-                                        }.padding(.vertical, 5)
+                                            Image(systemName: self.icons[row][col]).font(Font.system(size: 20)).foregroundColor(Color(.black))
+                                        }.overlay(
+                                            Circle()
+                                                .stroke(Color(.clear), lineWidth: 3).padding(2)
+                                            ).padding(.vertical, 5)
                                     }
                                     Spacer()
                             }
