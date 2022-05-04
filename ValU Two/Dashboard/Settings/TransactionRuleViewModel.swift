@@ -19,6 +19,8 @@ class TransactionRuleViewModel: CategoryListViewModel, ObservableObject{
     
     @Published var selectedCategoryNames = [String]()
     
+    
+    
     init(rule: TransactionRule? = nil){
         self.transactionRule = rule
         
@@ -104,6 +106,8 @@ class TransactionRuleViewModel: CategoryListViewModel, ObservableObject{
     }
     
     
-    
+    func hide(category: SpendingCategory){
+        
+    }
     
 }

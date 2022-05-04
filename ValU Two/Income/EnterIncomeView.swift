@@ -13,6 +13,7 @@ struct EnterIncomeView: View {
     var budget: Budget
     var coordinator : IncomeCoordinator
     @ObservedObject var incomeService : BudgetIncomeService
+    @ObservedObject var predictionService: IncomePredictionService
     
     var errorString = "Please enter a non-zero income"
     
@@ -20,7 +21,9 @@ struct EnterIncomeView: View {
     init(coordinator: IncomeCoordinator, budget: Budget){
         self.budget = budget
         self.coordinator = coordinator
-        self.incomeService = BudgetIncomeService(budget: budget)
+        let budgetService = BudgetIncomeService(budget: budget)
+        self.incomeService = budgetService
+        self.predictionService = budgetService.incomePredictionService
     }
     
     var errorState: some View{
@@ -50,10 +53,10 @@ struct EnterIncomeView: View {
         VStack{
             VStack(alignment: .center){
                 
-                VStack(alignment: .center, spacing: 15){
+                VStack(alignment: .center, spacing: 10){
                     //Text(self.header).font(.system(size: 15, design: .rounded)).bold().lineLimit(3).multilineTextAlignment(.leading).foregroundColor(Color(.lightGray))
                         
-                    Text("Enter your " + self.getTimeFrameText() + " Income").font(.system(size: 27, design: .rounded)).bold().lineLimit(1).fixedSize(horizontal: false, vertical: true).multilineTextAlignment(.center)
+                    Text("Enter your " + self.getTimeFrameText() + " Income").font(.system(size: 27, design: .rounded)).fontWeight(.heavy).lineLimit(1).fixedSize(horizontal: false, vertical: true).multilineTextAlignment(.center)
 
                     Text("This will inform how much you have avilable to spend in your budget.").font(.system(size: 16, design: .rounded)).lineLimit(3).multilineTextAlignment(.center).foregroundColor(Color(.gray))
                 }.offset(y: -12)
@@ -67,7 +70,7 @@ struct EnterIncomeView: View {
                         
                         Button(action: {
                             // What to perform
-                            self.coordinator.showIncomeTransactions(transactions: self.incomeService.getIncomeTransactions())
+                            self.coordinator.showIncomeTransactions(service: self.incomeService)
                         }) {
                             HStack(spacing: 3){
                                 Image(systemName: "info.circle.fill").font(.system(size: 15, weight: .semibold, design: .rounded))
@@ -112,12 +115,12 @@ struct EnterIncomeView: View {
                         self.coordinator.incomeSubmitted(budget: self.budget)
                     
                               }){
-                              ActionButtonLarge(text: "Done", enabled: true)
+                                  ActionButtonLarge(text: "Done", enabled: true).padding().padding(.horizontal)
                 
                           }
             }
             else{
-                ActionButtonLarge(text: "Done", enabled: false)
+                ActionButtonLarge(text: "Done", enabled: false).padding().padding(.horizontal)
             }
             
             

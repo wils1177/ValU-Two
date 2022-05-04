@@ -13,7 +13,7 @@ struct SpendingCardView: View {
     var viewModel : SpendingCardViewModel
     @ObservedObject var budget : Budget
     
-    @State var isLarge : Bool = true
+    @State var selectedSpendingState = 0
     
     var coordinator : BudgetsTabCoordinator?
     
@@ -60,79 +60,69 @@ struct SpendingCardView: View {
 
     
     var large : some View{
+            
         VStack{
             
+            HStack{
+                if self.selectedSpendingState == 0{
+                    Text("Free Spending").font(.system(size: 23, design: .rounded)).fontWeight(.bold).listRowSeparator(.hidden)
+                }
+                else{
+                    Text("Recurring").font(.system(size: 23, design: .rounded)).fontWeight(.bold).listRowSeparator(.hidden)
+                }
+                
+                Spacer()
+                
+                Picker("", selection: $selectedSpendingState) {
+                                Image(systemName: "play.fill").tag(0)
+                                Image(systemName: "clock.arrow.circlepath").tag(1)
+                                
+                            }
+                .pickerStyle(.segmented).frame(width: 105)
+            }.padding(.bottom, 10).padding(.horizontal, 5)
             
             ForEach(self.budget.getBudgetSections(), id: \.self){ section in
                                       
-                                  
-                                      
-                    VStack(spacing: 0){
+                
+                
                                               
-                            Button(action: {
-                                    // your action here
-                                    self.coordinator?.showIndvidualBudget(budgetSection: section)
-                                }) {
-                                    ParentCategoryCard(budgetSection: section)
-                                        
-                                    }.buttonStyle(PlainButtonStyle())
+                VStack(spacing: 0){
+                    if self.selectedSpendingState == 0 && section.hasAnyFreeCategories(){
+                        ParentCategoryCard(budgetSection: section, coordiantor: self.coordinator, selectedState: self.$selectedSpendingState).padding(.bottom, 20).padding(.horizontal, 2.5)
+                    }
+                    else if self.selectedSpendingState == 1 && section.hasAnyRecurringCategories(){
+                        ParentCategoryCard(budgetSection: section, coordiantor: self.coordinator, selectedState: self.$selectedSpendingState).padding(.bottom, 20).padding(.horizontal, 2.5)
+                    }
+                }
+                
                         
-                        
+                
 
-                    }.padding(.bottom, 10)
+                    
                 
                 //Divider().padding(.bottom, 10)
             }
             
-            
-            /*
-            if isLarge{
-                
-                LazyVGrid(      columns: columns,
-                                alignment: .center,
-                                spacing: 15,
-                                pinnedViews: [.sectionHeaders, .sectionFooters]
-                ){
-                    ForEach(self.budget.getBudgetSections(), id: \.self){ section in
-                                              
-                                          
-                                              
-                            VStack(spacing: 0){
-                                                      
-                                    Button(action: {
-                                            // your action here
-                                            self.coordinator?.showIndvidualBudget(budgetSection: section)
-                                        }) {
-                                            ParentCategoryCard(budgetSection: section)//.shadow(radius: 7)
-                                                
-                                            }.buttonStyle(PlainButtonStyle())
-                    
-
-                        }
-                }
-                    
-                    
-                    Button(action: {
-                            // your action here
-                        self.coordinator?.showOtherTransactions(otherCardData: self.viewModel.otherCategory!)
-                        }) {
-                        ParentCategoryCard(color: AppTheme().otherColor, colorSecondary: AppTheme().otherColorSecondary, colorTertiary: AppTheme().otherColorTertiary, icon: "book", spent: self.viewModel.otherCategory!.spent, limit: self.viewModel.otherCategory!.limit, name: "Other", percentageSpent: Double(self.viewModel.otherCategory!.percentage))//.shadow(radius: 7)
-                            
-                                
-                            
-                            }.buttonStyle(PlainButtonStyle())
-                    
+            if selectedSpendingState == 0{
+                Button(action: {
+                        // your action here
+                    self.coordinator?.showListOfTransactions(title: "Other", list: self.viewModel.budgetTransactionsService.getOtherTransactionsInBudget())
+                    }) {
+                        OtherSectionView(service: self.viewModel.budgetTransactionsService)
                         
-                    
-                    
-                }
+                            
+                        
+                        }.buttonStyle(PlainButtonStyle())
             }
             
-               
-            
-            */
-            
         }
+            
+        
+        
+            
+           
+            
+        
     }
     
     var body: some View {

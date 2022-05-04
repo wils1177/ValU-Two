@@ -15,6 +15,22 @@ struct EditCategoryRowView<ViewModel>: View where ViewModel: CategoryListViewMod
     
     @Environment(\.colorScheme) var colorScheme
     
+    func canShowContext(toCheck: SpendingCategory) -> Bool{
+        
+        return (toCheck.contains?.count == 0)
+        
+    }
+    
+    
+    
+    func hide(){
+        self.viewModel.hide(category: self.category)
+        
+        
+    }
+    
+    
+    
     func getButtonColor() -> Color {
         if self.viewModel.isSelected(name: category.name!){
             
@@ -90,6 +106,12 @@ struct EditCategoryRowView<ViewModel>: View where ViewModel: CategoryListViewMod
                 }
                 .padding(5).frame(height: 110).background(self.getBackgroundColor()).cornerRadius(23)
         }.buttonStyle(PlainButtonStyle())
+            .contextMenu(self.canShowContext(toCheck: self.category) ? ContextMenu {
+                Button("Delete Category", action: hide)
+                
+            } : nil)
     }
 }
+
+
 

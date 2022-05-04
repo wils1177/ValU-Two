@@ -36,6 +36,7 @@
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="limit" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="order" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="recurring" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="spent" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <relationship name="budgetSection" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="BudgetSection" inverseName="budgetCategories" inverseEntity="BudgetSection"/>
         <relationship name="spendingCategory" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SpendingCategory" inverseName="budgetCategory" inverseEntity="SpendingCategory"/>
@@ -98,6 +99,7 @@
     <entity name="SpendingCategory" representedClassName="SpendingCategory" syncable="YES">
         <attribute name="colorCode" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="contains" optional="YES" attributeType="Transformable" customClassName="[String]"/>
+        <attribute name="hidden" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="icon" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="initialThirtyDaysSpent" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -158,7 +160,7 @@
         <element name="AccountData" positionX="-63" positionY="-18" width="128" height="163"/>
         <element name="BalanceData" positionX="199.73046875" positionY="222.078125" width="128" height="88"/>
         <element name="Budget" positionX="-428.38671875" positionY="78.9453125" width="128" height="254"/>
-        <element name="BudgetCategory" positionX="-675" positionY="54" width="128" height="119"/>
+        <element name="BudgetCategory" positionX="-675" positionY="54" width="128" height="134"/>
         <element name="BudgetSection" positionX="-684" positionY="45" width="128" height="149"/>
         <element name="BudgetTimeFrame" positionX="-675" positionY="54" width="128" height="133"/>
         <element name="CategoryMatch" positionX="-675" positionY="54" width="128" height="118"/>
@@ -166,7 +168,7 @@
         <element name="IncomeStreamData" positionX="-661.88671875" positionY="111.8828125" width="128" height="103"/>
         <element name="ItemData" positionX="-733.26171875" positionY="443.62109375" width="128" height="118"/>
         <element name="Location" positionX="242.25390625" positionY="832.32421875" width="128" height="163"/>
-        <element name="SpendingCategory" positionX="-20.54296875" positionY="178.9375" width="128" height="254"/>
+        <element name="SpendingCategory" positionX="-20.54296875" positionY="178.9375" width="128" height="269"/>
         <element name="Transaction" positionX="150.31640625" positionY="508.11328125" width="128" height="254"/>
         <element name="TransactionDateCache" positionX="-684" positionY="45" width="128" height="148"/>
         <element name="TransactionRule" positionX="-353.578125" positionY="-109.52734375" width="128" height="104"/>

@@ -12,6 +12,8 @@ import SwiftUI
 
 class SplitTransactionCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, ObservableObject, Presentor{
     
+    
+    
     var coordinator: TransactionRowDelegate?
     
     @Published var selectedCategoryNames = [String]()
@@ -126,6 +128,13 @@ class SplitTransactionCategoryViewModel: CategoryListViewModel, UserSubmitViewMo
     func dismiss(){
         self.selectedCategoryNames = [String]()
         self.coordinator?.dismissEditCategory()
+    }
+    
+    func hide(category: SpendingCategory) {
+        print(category.hidden)
+        print("hiding the spending category")
+        category.hidden = true
+        DataManager().saveDatabase()
     }
     
 }

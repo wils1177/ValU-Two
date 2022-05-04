@@ -35,37 +35,35 @@ struct BudgetZeroState: View {
         VStack(alignment: .center){
             Spacer()
             
-            VStack(spacing: 1){
-                
-                Image(systemName: "creditcard.fill").font(.system(size: 90, weight: .regular)).foregroundColor(AppTheme().themeColorPrimary).padding(.vertical)
-                
-                VStack(spacing: 5){
-                    Text("Start Budgeting").font(.system(size: 30, design: .rounded)).fontWeight(.bold)
-                    Text("Get started with your first budget").font(.system(size: 16, design: .rounded)).multilineTextAlignment(.center).foregroundColor(Color(.systemGray3))
-                }.padding(.bottom, 10)
-                
-                
+                VStack(alignment: .center, spacing: 10){
+                    Image(systemName: "mail.and.text.magnifyingglass")
+                        .font(.system(size: 95))
+                        .font(.largeTitle.weight(.heavy))
+                        .symbolRenderingMode(.hierarchical)
+                        .foregroundColor(globalAppTheme.themeColorPrimary).padding(.bottom)
+                    Text("Start Budgeting").font(.system(size: 30, weight: .heavy, design: .rounded)).multilineTextAlignment(.center)
+                    Text("Start here to setup your very first budget. This is how you can track your spending!").font(.system(size: 18, weight: .semibold, design: .rounded)).foregroundColor(Color(.lightGray)).multilineTextAlignment(.center).padding(.top, 10)
                 
                 
+                
+            }.padding(.bottom, 50).padding(.horizontal, 25)
+            
+            
                 Button(action: {
                     //Button Action
                     //self.coordinator.onboardingComplete()
                     self.coordinator.createNewBudget()
                     }){
-                        HStack(spacing: 8){
-                        Spacer()
-                        Image(systemName: "plus.circle.fill").font(.system(size: 21, weight: .regular)).foregroundColor(Color(.white)).padding(.leading)
-                            Text("Create Budget").font(.system(size: 18, design: .rounded)).foregroundColor(.white).bold().padding(.vertical).padding(.trailing)
                         
-                        Spacer()
-                        }.background(AppTheme().themeColorPrimary).cornerRadius(18).shadow(radius: 10).padding().padding(.bottom)
+                        
+                        ActionButtonLarge(text: "Create Budget", color: globalAppTheme.themeColorPrimary.opacity(0.25), textColor: globalAppTheme.themeColorPrimary).padding(.horizontal).padding(.horizontal)
                     
                     
                 }
-            }.padding().cornerRadius(18).padding().padding(.bottom, 50)
+            
             
             Spacer()
-        }.navigationBarTitle("Summary")
+        }.navigationBarTitle("Budget")
     }
 }
 

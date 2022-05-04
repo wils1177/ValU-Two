@@ -12,40 +12,63 @@ struct WelcomeView: View {
     
     var coordinator : OnboardingFlowCoordinator?
     
+    private var columns: [GridItem] = [
+        GridItem(.flexible(), spacing: 11),
+            GridItem(.flexible(), spacing: 11),
+        GridItem(.flexible(), spacing: 11),
+        GridItem(.flexible(), spacing: 11)
+        ]
+    
     var body: some View {
         
         VStack(){
             
+            Spacer()
+            
+            
             
             HStack{
-                VStack(alignment: .leading, spacing: 0){
-                    Text("🎉").font(.system(size: 50))
-                    Text("Welcome to").font(.system(size: 42, design: .rounded)).fontWeight(.heavy)
-                    Text("Budget App  ").font(.system(size: 42, design: .rounded)).fontWeight(.heavy).foregroundColor(AppTheme().themeColorPrimary).padding(.bottom, 5)
-                    Text("An average budgeting app at best.").foregroundColor(Color(.gray)).bold()
+                VStack(alignment: .leading, spacing: 10){
+                    
+                    
+                    
+                    
+                    Image(systemName: "mail.stack")
+                        .font(.system(size: 80))
+                        .font(.largeTitle.weight(.heavy))
+                        .symbolRenderingMode(.hierarchical)
+                        .foregroundColor(Color(.white)).padding(.bottom, 10)
+                    
+                    
+                    Text("Welcome to Budget App").font(.system(size: 33, design: .rounded)).fontWeight(.heavy).foregroundColor(Color(.white))
+                    Text("An app to help you budget and save for the future").foregroundColor(Color(.white)).bold().padding(.top, 10)
                 }
                 
                 Spacer()
-            }.padding(.leading).padding(.bottom).padding(.bottom).padding(.top, 80)
+            }.padding(.leading).padding(.bottom, 50).padding(.horizontal, 10)
             
             
-            MarketingRow(imageName: "💰", headline: "Budget", description: "Set goals and track your spending over time.").padding(.horizontal).padding(.leading).padding(.bottom, 10)
-            MarketingRow(imageName: "🌀", headline: "Automated", description: "Connect to your bank and never worry about manually entering your spending.").padding(.horizontal).padding(.leading).padding(.bottom, 10)
-            MarketingRow(imageName: "🔐", headline: "Private", description: "Your financial data stays on your device.").padding(.horizontal).padding(.leading).padding(.bottom, 10)
-
+            
+                
+            
+            
+            
+          
 
             Spacer()
             Button(action: {
                 //Button Action
                 self.coordinator?.continueFromWelcome()
                 }){
-                ActionButtonLarge(text: "Get Started")
+                    ActionButtonLarge(text: "Get Started", color: Color(.white), textColor: globalAppTheme.themeColorPrimary).padding().padding(.horizontal)
                 
                 
             }
             
             
-        }.navigationBarTitle(Text("Welcome"),  displayMode: .large)
+        }
+        .background(globalAppTheme.themeColorPrimary)
+        .navigationBarTitle(Text("Welcome"),  displayMode: .large)
         .navigationBarHidden(true)
         
         

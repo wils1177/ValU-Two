@@ -29,14 +29,23 @@ struct EditBudgetCategoriesView: View {
                 self.isShowingNewBudgetCategory.toggle()
             }) {
                 HStack{
-                    Spacer()
-                    Image(systemName: "plus.circle.fill").font(.system(size: 21, weight: .regular)).foregroundColor(AppTheme().themeColorPrimary)
-                    Text("Create Custom Category").fontWeight(.semibold).foregroundColor(AppTheme().themeColorPrimary)
+                    //Spacer()
+                    Image(systemName: "plus.circle.fill").font(.system(size: 19, weight: .regular, design: .rounded)).foregroundColor(AppTheme().themeColorPrimary).padding(.horizontal, 8)
+                    Text("Create Custom Category").font(.system(size: 15, weight: .regular, design: .rounded)).fontWeight(.bold).foregroundColor(AppTheme().themeColorPrimary)
                     Spacer()
                 }
                 
-            }.buttonStyle(PlainButtonStyle()).padding().background(AppTheme().themeColorPrimary.opacity(0.15)).cornerRadius(20).padding()
+            }.buttonStyle(PlainButtonStyle()).padding(10).padding(.vertical, 3).background(Color(.tertiarySystemBackground)).cornerRadius(10).padding(.horizontal).padding(.top)
                         
+    }
+    
+    var recurringToggle : some View{
+        HStack{
+            Image(systemName: "clock.arrow.circlepath").foregroundColor(globalAppTheme.themeColorPrimary).padding(.horizontal, 8)
+            Toggle(isOn: withAnimation{$viewModel.willBeRecurring}) {
+                Text("Category is Recurring ").font(.system(size: 15, design: .rounded)).fontWeight(.semibold)
+            }.padding(.trailing, 5)
+        }
     }
     
     var body: some View {
@@ -44,7 +53,9 @@ struct EditBudgetCategoriesView: View {
             ScrollView{
                 
                 VStack{
-                    newCategoryButton.padding(.vertical)
+                    newCategoryButton.padding(.top)
+                    
+                    recurringToggle.padding(10).background(Color(.tertiarySystemBackground)).cornerRadius(10).padding(.horizontal).padding(.vertical)
   
                         ForEach(self.viewModel.parentSpendingCategories, id: \.self){ category in
                             EditCategoryCard(category: category, viewModel: self.viewModel).padding(.bottom).padding(.horizontal).padding(.bottom)
@@ -53,6 +64,7 @@ struct EditBudgetCategoriesView: View {
                 
                 
             }
+            .background(Color(.systemGroupedBackground))
             //.listStyle(SidebarListStyle())
             .navigationBarTitle("Add Categories", displayMode: .inline).navigationBarItems(
                 leading: Button(action: {
@@ -73,7 +85,7 @@ struct EditBudgetCategoriesView: View {
                     }
             })
         }.sheet(isPresented: self.$isShowingNewBudgetCategory){
-            CreateCustomBudgetCategoryView(viewModel: self.viewModel)
+            CreateCustomBudgetCategoryView(submitCallBack: self.viewModel.createCustomSpendingCategory)
         }
         
         

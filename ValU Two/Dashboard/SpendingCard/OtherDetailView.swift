@@ -25,25 +25,12 @@ struct OtherDetailView: View {
     
     
     
-    
-    var unassignedTransactionsSection : some View {
-        Section(){
-            ForEach(viewModel.unassignedTransactions, id: \.self) { transaction in
-                TransactionRow(coordinator: self.coordinator, transaction: transaction, transactionService: self.transactionsService).padding(.top,5)
-            }
-        }.listRowInsets(EdgeInsets())
-        
-    }
+  
     
     var body: some View {
         ScrollView{
-            LazyVStack{
-                DetailedParentCategoryCard(color: AppTheme().otherColor, colorSecondary: AppTheme().otherColorSecondary, colorTertiary: AppTheme().otherColorTertiary, icon: "book", spent: self.otherCardData.spent, limit: self.otherCardData.limit, name: "Other", percentageSpent: Double(self.otherCardData.percentage)).padding(.horizontal).padding(.vertical).shadow(radius: 5)
-                if self.viewModel.unassignedTransactions.count > 0{
-                    unassignedTransactionsSection.padding(.horizontal)
-                }
-            }
             
+            Text("Other")
             
         }
         .listStyle(SidebarListStyle())

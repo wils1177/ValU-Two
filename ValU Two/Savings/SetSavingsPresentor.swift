@@ -51,11 +51,7 @@ class SetSavingsPresentor : Presentor, ObservableObject {
     
     func configure() -> UIViewController {
         
-        var viewData = generateViewData()
-        self.viewData = viewData
-        self.setSavingsVC = UIHostingController(rootView: SetSavingsView(presentor: self, viewData: viewData))
-        self.setSavingsVC?.navigationController?.setNavigationBarHidden(true, animated: false)
-        return self.setSavingsVC!
+        return UIViewController()
     }
     
     func isGoalSelected(goal: SavingsGoals) -> Bool {

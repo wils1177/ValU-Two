@@ -19,7 +19,7 @@ struct HistoryEntryView: View {
     
     var amountEarned : Int
     
-    @State var showBar = false
+    
     
     init(budget: Budget, service: BudgetStatsService, coordinator: HistoryTabCoordiantor?){
         self.budget = budget
@@ -39,6 +39,22 @@ struct HistoryEntryView: View {
         
         return monthStr + " " + dayStr
         
+    }
+    
+    func getBudgetIncome() -> String{
+        return CommonUtils.makeMoneyString(number: Int(self.budget.amount))
+    }
+    
+    func getBudgetAvailable() -> String{
+        return service.getAvailableString(budget: self.budget)
+    }
+    
+    func getBudgetSpent() -> String{
+        return CommonUtils.makeMoneyString(number: service.getSpentAmount(budget: self.budget))
+    }
+    
+    func getSavingsGoal() -> String{
+        return CommonUtils.makeMoneyString(number: service.getSavingsGoalAmount(budget: self.budget))
     }
 
     
@@ -109,50 +125,77 @@ struct HistoryEntryView: View {
         
         Button(action: {
             // What to perform
-            //self.coordinator?.showBudgetDetail(budget: self.budget, service: self.service, title: (getStartDate() + " - " + getEndDate()))
-            withAnimation{
-                self.showBar.toggle()
-            }
+            self.coordinator?.showBudgetDetail(budget: self.budget, service: self.service, title: getBudgetName())
+            
         }) {
             // How the button looks like
             
-            VStack(spacing: 0){
+            VStack{
+                HStack{
+                    Text("Budget Overview").font(.system(size: 21, design: .rounded)).fontWeight(.bold)
+                    Spacer()
+                    HStack{
+                        Image(systemName: "rosette").font(.system(size: 23, design: .rounded)).foregroundColor(Color(.systemGreen))
+                    }
+                }
+                
                 
                 HStack{
-                    Image(systemName: "calendar").font(.system(size: 17, design: .rounded)).foregroundColor(AppTheme().themeColorPrimary)
-                    Text(getBudgetName()).font(.system(size: 17, design: .rounded)).fontWeight(.semibold).foregroundColor(AppTheme().themeColorPrimary)
+                    Text("This is some dummy placeholder text").font(.system(size: 15, design: .rounded)).foregroundColor(Color(.lightGray)).fontWeight(.semibold)
                     Spacer()
-                    
-                    Image(systemName: "chevron.right").font(.system(size: 17, design: .rounded)).foregroundColor(AppTheme().themeColorPrimary).rotationEffect(.degrees(showBar ? 90 : 0))
-                    
-                    
-            
-                }.padding(.horizontal).padding(.top, 10).padding(.bottom, 13)
+                }
+                
+                Line()
+                    .stroke(Color(.lightGray), style: StrokeStyle(lineWidth: 1, dash: [5]))
+                    .frame(height: 4).padding(.vertical, 5)
                 
                 HStack{
-                    Text("\(self.amountSpent)\(Text(" / \(self.service.getAvailableString(budget: self.budget))").foregroundColor(Color(.lightGray)).font(.system(size: 22, design: .rounded)))").font(.system(size: 30, design: .rounded)).fontWeight(.bold)
+                    Text("Available Income").font(.system(size: 17, design: .rounded)).foregroundColor(Color(.gray)).fontWeight(.semibold)
                     Spacer()
-                }.padding(.bottom, 12).padding(.horizontal)
-                
-                if self.showBar{
-                    BudgetStatusBarView(viewData: self.service.getBudgetStatusBarViewData(budget: self.budget), showLegend: true).padding(.horizontal)
                     
+                    Text(getBudgetIncome()).font(.system(size: 17, design: .rounded)).fontWeight(.semibold)
                     
                 }
                 
-                HStack(){
-                    getBudgetText()
-                }.padding(8).padding(.horizontal, 7).background(AppTheme().themeColorPrimary.opacity(0.1)).cornerRadius(15).padding(.horizontal, 5).padding(.bottom)
-                
-            
-            
-                
+                HStack{
+                    Text("Budgeted").font(.system(size: 17, design: .rounded)).foregroundColor(Color(.gray)).fontWeight(.semibold)
+                    Spacer()
                     
+                    Text(getBudgetAvailable()).font(.system(size: 17, design: .rounded)).fontWeight(.semibold)
+                    
+                }
+                
+                HStack{
+                    Text("Spent").font(.system(size: 17, design: .rounded)).foregroundColor(Color(.gray)).fontWeight(.semibold)
+                    Spacer()
+                    
+                    Text(getBudgetSpent()).font(.system(size: 17, design: .rounded)).fontWeight(.semibold)
+                    
+                }
+                
+                HStack{
+                    Text("Savings Goal").font(.system(size: 17, design: .rounded)).foregroundColor(Color(.gray)).fontWeight(.semibold)
+                    Spacer()
+                    
+                    Text(getSavingsGoal()).font(.system(size: 17, design: .rounded)).fontWeight(.semibold)
+                    
+                }
+                
+                Line()
+                    .stroke(Color(.lightGray), style: StrokeStyle(lineWidth: 1, dash: [5]))
+                    .frame(height: 4).padding(.vertical, 5)
                 
                 
- 
+                HStack{
+                    Text("Saved").font(.system(size: 17, design: .rounded)).foregroundColor(Color(.gray)).fontWeight(.semibold)
+                    Spacer()
+                    
+                    Text(self.amountSaved).font(.system(size: 20, design: .rounded)).foregroundColor(Color(.systemGreen)).fontWeight(.bold)
+                    
+                }
                 
-            }.background(Color(.systemBackground)).cornerRadius(25)
+                
+            }.padding(15).background(Color(.tertiarySystemBackground)).cornerRadius(25).padding(.bottom)
                 
             }.buttonStyle(PlainButtonStyle())
             

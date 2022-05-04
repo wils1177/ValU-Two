@@ -13,6 +13,8 @@ class BudgetsTabCoordinator : Coordinator, TransactionRowDelegate, EditBudgetDel
     
     
     
+    
+    
 
     var childCoordinators = [Coordinator]()
     var navigationController = UINavigationController()
@@ -94,6 +96,10 @@ class BudgetsTabCoordinator : Coordinator, TransactionRowDelegate, EditBudgetDel
     
     func settingsClicked(){
         showSettings()
+    }
+    
+    func showCategoryDetail(budgetSection: BudgetSection, viewModel: BudgetBalancerPresentor) {
+        
     }
     
     func showSettings(){
@@ -194,14 +200,12 @@ class BudgetsTabCoordinator : Coordinator, TransactionRowDelegate, EditBudgetDel
         self.navigationController.pushViewController(vc, animated: true)
     }
     
-    func showCategoryDetail(budgetSection: BudgetSection, viewModel: BudgetBalancerPresentor) {
-        //let view = BalanceDetailView(budgetSection: budgetSection, service: service, coordinator: self)
-        //let vc = UIHostingController(rootView: view)
-        //vc.title = budgetSection.name!
+    func showCategoryDetail(category: BudgetCategory) {
+        let view = BudgetCategoryDetailView(category: category, coordinator: self)
+        let vc = UIHostingController(rootView: view)
+        vc.title = category.spendingCategory!.name!
         
-
-        
-        //self.navigationController.pushViewController(vc, animated: true)
+        self.navigationController.pushViewController(vc, animated: true)
     }
     
 
@@ -253,6 +257,15 @@ class BudgetsTabCoordinator : Coordinator, TransactionRowDelegate, EditBudgetDel
         coordinator.start()
         self.navigationController.present(coordinator.navigationController, animated: true)
         
+    }
+    
+    func showListOfTransactions(title: String, list: [Transaction]){
+        let model = TransactionsListViewModel(transactions: list.sorted(by: { $0.date! > $1.date! }), title: title)
+        let view = TransactionList(viewModel: model)
+        model.coordinator = self
+        let vc = UIHostingController(rootView: view)
+        vc.title = title
+        self.navigationController.pushViewController(vc, animated: true)
     }
     
     

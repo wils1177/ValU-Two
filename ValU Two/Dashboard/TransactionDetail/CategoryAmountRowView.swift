@@ -11,12 +11,15 @@ import SwiftUI
 struct CategoryAmountRowView: View {
     
     @ObservedObject var viewData : CategoryMatch
-    var viewModel : TransactionDetailViewModel
+    @ObservedObject var viewModel : TransactionDetailViewModel
     @State var amountText : String
+    
+    @State var isEdit : Bool = false
     
     var labelData : TransactionBudgetLabelViewData?
     
     init(viewData: CategoryMatch, viewModel: TransactionDetailViewModel){
+        
         self.viewData = viewData
         self.viewModel = viewModel
         
@@ -43,8 +46,28 @@ struct CategoryAmountRowView: View {
                 }
                 
                 Spacer()
-                CustomInputTextField(text: self.$amountText, placeHolderText: "Amount", textSize: .systemFont(ofSize: 18), alignment: .right, delegate: self.viewModel, key: self.viewData.id?.uuidString ?? "", style: UITextField.BorderStyle.roundedRect)
-                .frame(width: 80)
+                
+                
+                if isEdit || viewData.amount == 0.0{
+                    
+                    CustomInputTextField(text: self.$amountText, placeHolderText: "Amount", textSize: .systemFont(ofSize: 18), alignment: .right, delegate: self.viewModel, key: self.viewData.id?.uuidString ?? "", style: UITextField.BorderStyle.roundedRect).frame(width: 80)
+                }
+                else{
+                    HStack{
+                        Text(CommonUtils.makeMoneyString(number: Double(viewData.amount))).font(.system(size: 18, design: .rounded)).bold().padding(.trailing, 5)
+                        
+                        
+                    }.onTapGesture {
+                        self.isEdit = true
+                    }
+                    
+                }
+                
+                
+                
+                
+                
+                
             }
             
 

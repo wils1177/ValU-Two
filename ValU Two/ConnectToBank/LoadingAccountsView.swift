@@ -16,30 +16,33 @@ struct LoadingAccountsView: View {
     var presentor : LoadingAccountsPresentor?
     @ObservedObject var viewData : LoadingAccountsViewData
     
-    private func isDoneLoading(for state: LoadingAccountsViewState) -> Bool {
+    func isDoneLoading(for state: LoadingAccountsViewState) -> Bool {
         switch state {
         case .Loading: return false
         case .Success: return true
         case .Failure: return true
         case .Initial: return false
+        case .SettingUpLink: return false
         }
     }
     
-    private func isSuccessfull(for state: LoadingAccountsViewState) -> Bool {
+    func isSuccessfull(for state: LoadingAccountsViewState) -> Bool {
         switch state {
         case .Loading: return false
         case .Success: return true
         case .Failure: return false
         case .Initial: return false
+        case .SettingUpLink: return false
         }
     }
     
-    private func isInitial(for state: LoadingAccountsViewState) -> Bool {
+    func isInitial(for state: LoadingAccountsViewState) -> Bool {
         switch state {
         case .Loading: return false
         case .Success: return false
         case .Failure: return false
         case .Initial: return true
+        case .SettingUpLink: return true
         }
     }
     
@@ -53,7 +56,7 @@ struct LoadingAccountsView: View {
     var body: some View {
         
         if isInitial(for: $viewData.viewState.wrappedValue){
-            ConnectToBankView(presentor: self.presentor!, itemManager: self.presentor!.itemManager)
+            ConnectToBankView(presentor: self.presentor!, itemManager: self.presentor!.itemManager, viewData: self.viewData)
         }
         else if isDoneLoading(for: $viewData.viewState.wrappedValue){
             if isSuccessfull(for: $viewData.viewState.wrappedValue){

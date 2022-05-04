@@ -10,75 +10,128 @@ import SwiftUI
 
 struct SetSavingsSlider: View {
     
-    @ObservedObject var viewData : SetSavingsViewData
     var presentor : SetSavingsPresentor?
     
-    func getHeight(viewHeight : CGFloat) -> CGFloat{
+    @Binding var savingPercentage : Double
+    
+    var reccommendedSavingsPercentage = 0.2
+    
+    var scalingFactor : Double
+    
+    func sliderChange(heightDelta: CGFloat, total: CGFloat){
+        let ratio = heightDelta / total
+        if !(ratio <= 0 || ratio >= 1.0){
+            self.savingPercentage = (1 - (heightDelta / total))
+        }
         
-        let height = (viewHeight / 2) + (CGFloat(self.$viewData.savingsPercentage.wrappedValue) * viewHeight) - (viewHeight/2)
-        return height
         
     }
-    
 
-    
-    
-    var body: some View {
-        VStack{
+    var mainRectangles : some View{
+        GeometryReader{ g in
+            let height = g.size.height
+            //let width = g.size.width
             
-            GeometryReader {g in
-            
-                ZStack{
-                      
-                    VStack{
-                        
-                        ZStack{
-                        Rectangle()
-                            .fill(LinearGradient(gradient:  Gradient(colors: [.yellow, .green]), startPoint: .topTrailing, endPoint: .center))
-                            .frame(height: self.getHeight(viewHeight: g.size.height))
-                            
-                            VStack{
-                                Text("\(Int(self.viewData.savingsPercentage * 100))%").foregroundColor(Color(.white)).font(.title).bold()
-                                Text("Savings").foregroundColor(Color(.lightText)).bold()
-                            }
-                            
-                            
-                        }
-                        ZStack{
-                            Rectangle()
-                            .fill(LinearGradient(gradient:  Gradient(colors: [.yellow, .red]), startPoint: .bottomTrailing, endPoint: .center))
-                            .transition(.slide)
-                            VStack{
-                                Text("\(Int((1 - self.viewData.savingsPercentage) * 100))%").font(.title).foregroundColor(Color(.white)).bold()
-                                Text("Spending").foregroundColor(Color(.lightText)).bold()
-                            }
-                        }
-                        
-                    }
-                    
-                    HStack{
-                        Rectangle().frame(width: 220, height: 20 ).foregroundColor(Color(.white))
-                        
-                        }.shadow(radius: 30).cornerRadius(5)
-                        .offset(y: (CGFloat(self.$viewData.savingsPercentage.wrappedValue) * g.size.height) - (g.size.height/2))
-            
-                    .gesture(DragGesture()
-                    .onChanged({ value in
-                        self.presentor?.sliderMoved(sliderVal: (Float((value.location.y + g.size.height/2) / g.size.height)))
-                        print((Float((value.location.y + g.size.height/2) / g.size.height)))
-                        
-                    }))
-                    
-                }
+            VStack(spacing: 0){
                 
-                
-                
+                Rectangle().foregroundColor(Color(.systemRed)).frame( height: height * ( 1.0 - savingPercentage))
+                Rectangle().foregroundColor(Color(.systemGreen)).frame( height: height *  savingPercentage)
                 
             }
             
             
+        }
+    }
+    
+    var sliderBar : some View{
+        GeometryReader{ g in
+            let height = g.size.height
+            //let width = g.size.width
             
-        }.background(Color(.white)).cornerRadius(30).padding().padding(.horizontal, 20.0).shadow(radius: 50)
+            Capsule().frame(height: 30, alignment: .center).padding(.horizontal, 30).shadow(radius: 12)
+
+                .offset(y: (height * ( 1.0 - savingPercentage)) - 15)
+            
+                .gesture(DragGesture()
+                .onChanged({ value in
+                    sliderChange(heightDelta: value.location.y, total: height)
+                    
+                }))
+            
+        }
+    }
+    
+    var reccomendLine : some View{
+        GeometryReader{ g in
+            let height = g.size.height
+            let width = g.size.width
+            
+            let divisions = 5
+            
+            Path { path in
+                
+                for index in 1..<(divisions){
+                    
+                    path.move(to: CGPoint(x: 0, y: height * CGFloat(Double(index) / Double(divisions))))
+                    
+                    path.addLine(to: CGPoint(
+                      x: width,
+                      y: height * CGFloat(Double(index) / Double(divisions))))
+                    
+                }
+  
+            }
+            .stroke(Color(.white), style: StrokeStyle(lineWidth: 2, lineJoin: .round, dash: [5]))
+            
+            
+            
+            
+        }
+    }
+    
+    func getLabel(divisions: Int, index: Int) -> String{
+        let ratio = scalingFactor * (1.0 - (Double(index) / Double(divisions)))
+        var fullNum = ratio * 100
+        fullNum.round()
+        let integer = Int(fullNum)
+        return String(integer) + "%"
+    }
+    
+    var reccomendLabel: some View{
+        GeometryReader{ g in
+            let height = g.size.height
+            let width = g.size.width
+            
+            let divisions = (1...4)
+            
+            ForEach(divisions, id: \.self) { value in
+                ZStack{
+                    Capsule().frame(width: 65, height: 20).foregroundColor(Color(.white)).shadow(radius: 5)
+                    Text(getLabel(divisions: divisions.count + 1, index: value)).foregroundColor(Color(.systemOrange)).font(.system(size: 13, weight: .semibold, design: .rounded))
+                }.offset(x: width - 70, y: (height * CGFloat(Double(value) / Double(divisions.count + 1))) - 10)
+                
+            }
+            
+            
+            ZStack{
+                Capsule().frame(width: 115, height: 20).foregroundColor(Color(.white)).shadow(radius: 5)
+                Text("Reccomended!").foregroundColor(Color(.systemOrange)).font(.system(size: 13, weight: .semibold, design: .rounded))
+            }.offset(x: 7, y: (height * 0.6) - 10)
+            
+            
+            
+        }
+    }
+    
+    var body: some View {
+        
+        ZStack{
+            mainRectangles
+            sliderBar
+            reccomendLine
+            reccomendLabel
+        }.cornerRadius(45).shadow(radius: 10).padding(.horizontal, 40).padding(.vertical)
+        
     }
 }
 

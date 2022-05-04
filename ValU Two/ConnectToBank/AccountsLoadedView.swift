@@ -38,28 +38,20 @@ struct AccountsLoadedView: View {
             VStack(alignment: .center){
                 
                 
-                Text("Accounts Successfully Connected").font(.title).bold().lineLimit(nil).padding().multilineTextAlignment(.center).padding(.top).padding(.top)
+                Text("Accounts Successfully Connected").font(.system(size: 32, design: .rounded)).fontWeight(.heavy).multilineTextAlignment(.center).padding(.top).padding(.top).padding(.horizontal, 10)
                 
                 
-                if !self.cardsHidden{
-                    CarouselView(itemHeight: 190, views: makeCardViews())
-                }
                 
-                /*
+                
+                
                 ScrollView{
-                    LazyVGrid(
-                                    columns: columns,
-                                    alignment: .center,
-                                    spacing: 16,
-                                    pinnedViews: [.sectionHeaders, .sectionFooters]
-                                )
-                    {
-                        ForEach(self.accounts, id: \.self) { account in
-                            SwiftUIAccountCardView(account: account, isSmall: true)
-                                }
-                    }.padding(5)
+                    
+                    
+
+                    SwiftUIAccountsView(accounts: self.accounts).padding(.vertical)
+                    
                 }
-                */
+                
                 Spacer()
                 
                 VStack(spacing: 0){
@@ -68,7 +60,7 @@ struct AccountsLoadedView: View {
                         self.presentor?.userPressedContinue()
                         //self.cardsHidden = true
                         }){
-                        ActionButtonLarge(text: "Done")
+                            ActionButtonLarge(text: "Done", color: globalAppTheme.themeColorPrimary.opacity(0.3), textColor: globalAppTheme.themeColorPrimary).padding(.horizontal).padding(.horizontal).padding(.bottom)
                         
                         
                     }
@@ -76,17 +68,12 @@ struct AccountsLoadedView: View {
                         //Button Action
                         self.presentor?.userSelectedAddMoreAccounts()
                         }){
-                        HStack{
-                            Spacer()
-                            ZStack{
-                                Text("Add More Accounts").font(.headline).foregroundColor(AppTheme().themeColorPrimary).bold().padding()
-                            }
-                            Spacer()
-                        }.background(Color(.tertiarySystemGroupedBackground)).cornerRadius(20).shadow(radius: 0).padding(.horizontal).padding(.horizontal).padding(.bottom).padding(.bottom)
+                        
+                            ActionButtonLarge(text: "Add More Accounts", color: Color(.lightGray).opacity(0.25), textColor: globalAppTheme.themeColorPrimary).padding(.horizontal).padding(.horizontal)
                         
                         
                     }
-                }
+                }.padding(.top).padding(.bottom, 10)
                 
      
                 }

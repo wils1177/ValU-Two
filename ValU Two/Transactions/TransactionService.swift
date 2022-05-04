@@ -76,7 +76,7 @@ class TransactionService{
     func getPresentationAmount(amount : Double) -> String{
         
 
-        if amount > 0 && amount < 100{
+        if amount > 0 && amount <= 100{
             return String(format: "-$%.02f", amount)
         }
         else if amount > 0 && amount > 100{
@@ -93,7 +93,13 @@ class TransactionService{
     
     func getBudgetLabels(transaction: Transaction) -> [TransactionBudgetLabelViewData]{
         var results = [TransactionBudgetLabelViewData]()
-        let categories = transaction.categoryMatches!.allObjects as! [CategoryMatch]
+        
+        var categories = [CategoryMatch]()
+        if transaction.categoryMatches?.allObjects as? [CategoryMatch] != nil{
+            categories = transaction.categoryMatches!.allObjects as! [CategoryMatch]
+        }
+        
+        
         
         if transaction.isHidden{
             let moreEntry = TransactionBudgetLabelViewData(name: "Hidden", icon: "eye.circle", color: Color(.lightGray))

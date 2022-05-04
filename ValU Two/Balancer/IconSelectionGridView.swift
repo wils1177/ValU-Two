@@ -10,13 +10,12 @@ import SwiftUI
 
 struct IconSelectionGridView: View {
     
-    @Binding var icons : [[String]]
-    @Binding var selectedRow : Int
+    @Binding var icons : [String]
     @Binding var selectedColumn : Int
     
     
-    func isSelectedI(row: Int, col: Int) -> Bool{
-        if row == self.selectedRow && col == self.selectedColumn{
+    func isSelectedI(col: Int) -> Bool{
+        if col == self.selectedColumn{
             return true
         }
         else{
@@ -24,53 +23,65 @@ struct IconSelectionGridView: View {
         }
     }
     
-    func changeSelection(row: Int, col: Int){
-        self.selectedRow = row
+    func changeSelection(col: Int){
         self.selectedColumn = col
         
     }
     
     
+    var columns: [GridItem] = [
+        GridItem(.flexible(), spacing: 15),
+            GridItem(.flexible(), spacing: 15),
+        GridItem(.flexible(), spacing: 15),
+        GridItem(.flexible(), spacing: 15),
+        GridItem(.flexible(), spacing: 15),
+        GridItem(.flexible(), spacing: 15)
+        
+        
+        
+        ]
     
+
     var iconSelectionGrid : some View{
         
         VStack{
-            ForEach(0..<self.icons.count, id: \.self){ row in
-                HStack{
-                    ForEach(0..<self.icons[row].count, id: \.self){ col in
-                        
-                        Button(action: {
-                            print(row)
-                            print(col)
-                            self.changeSelection(row: row, col: col)
+            LazyVGrid(columns: columns, spacing: 10) {
+                ForEach(0..<self.icons.count, id: \.self){ col in
                             
-                                }){
-                                    Spacer()
-                                    if self.isSelectedI(row: row, col: col){
-                                        ZStack{
-                                            Circle().frame(width: 45, height: 45).foregroundColor(Color(.systemFill))
-                                            Image(systemName: self.icons[row][col]).font(Font.system(size: 20)).foregroundColor(Color(.black))
-                                        }.overlay(
-                                            Circle()
-                                                .stroke(AppTheme().themeColorPrimary, lineWidth: 3).padding(2)
-                                            ).padding(.vertical, 5)
-                                        
-                                    }else{
-                                        ZStack{
-                                            Circle().frame(width: 45, height: 45).foregroundColor(Color(.systemFill))
-                                            Image(systemName: self.icons[row][col]).font(Font.system(size: 20)).foregroundColor(Color(.black))
-                                        }.overlay(
-                                            Circle()
-                                                .stroke(Color(.clear), lineWidth: 3).padding(2)
-                                            ).padding(.vertical, 5)
-                                    }
-                                    Spacer()
-                            }
+                            Button(action: {
+                                
+                                self.changeSelection(col: col)
+                                
+                                    }){
+                                        Spacer()
+                                        if self.isSelectedI(col: col){
+                                            ZStack{
+                                                Circle().frame(width: 45, height: 45).foregroundColor(Color(.systemFill))
+                                                Image(systemName: self.icons[col]).font(Font.system(size: 20)).foregroundColor(Color(.black))
+                                            }.overlay(
+                                                Circle()
+                                                    .stroke(AppTheme().themeColorPrimary, lineWidth: 3).padding(2)
+                                                ).padding(.vertical, 5)
+                                            
+                                        }else{
+                                            ZStack{
+                                                Circle().frame(width: 45, height: 45).foregroundColor(Color(.systemFill))
+                                                Image(systemName: self.icons[col]).font(Font.system(size: 20)).foregroundColor(Color(.black))
+                                            }.overlay(
+                                                Circle()
+                                                    .stroke(Color(.clear), lineWidth: 3).padding(2)
+                                                ).padding(.vertical, 5)
+                                        }
+                                        Spacer()
+                                }
+                            
+                            
                         
-                        
-                    }
+                    
                 }
+                
             }
+            
         }
         
 

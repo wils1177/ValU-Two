@@ -21,6 +21,18 @@ struct TransactionsTabView: View {
     
     var transactionService : TransactionService
     
+    var isAnySearch : Bool{
+        if searchText != ""{
+            return true
+        }
+        else if filterModel.areThereAnyFilterEnabled(){
+            return true
+        }
+        else {return false}
+    }
+    
+    
+    
     init(viewModel: TransactionsTabViewModel, filterModel : TransactionFilterModel){
         self.viewModel = viewModel
         self.filterModel = filterModel
@@ -34,11 +46,7 @@ struct TransactionsTabView: View {
         
     }
     
-    func getDateString(date: Date) -> String{
-        let formatter3 = DateFormatter()
-        formatter3.dateFormat = "EEEE, MMMM dd"
-        return formatter3.string(from: date)
-    }
+    
     
     
     var filteredSections : [TransactionDateSection]{
@@ -53,26 +61,45 @@ struct TransactionsTabView: View {
     }
     
     
+    
     var body: some View {
             
         List(selection: $selection){
+            
             //self.searchBar
             if self.viewModel.filterModel.areThereAnyFilterEnabled(){
-                SelectedFilterPillsView(filterModel: self.viewModel.filterModel).padding(.horizontal, 20)
+                SelectedFilterPillsView(filterModel: self.viewModel.filterModel).listRowBackground(Color.clear)
             }
             
-            ForEach(filteredSections, id: \.self) { dateSection in
-                
-                Section(header: Text(getDateString(date: dateSection.date)).font(.system(size: 21, design: .rounded)).fontWeight(.bold).foregroundColor(Color(.black))){
+            if filteredSections.count > 0 {
+                ForEach(filteredSections, id: \.self) { dateSection in
                     
-                    ForEach(dateSection.transactions, id: \.self) { transaction in
-                        TransactionRow(coordinator: self.viewModel.coordinator!, transaction : transaction, transactionService: self.transactionService).padding(.vertical, 3)
+                    Section(header: TransactionDateSectionHeader(transactionSection: dateSection, isAnySearch: self.isAnySearch)){
+                        
+                        ForEach(dateSection.transactions, id: \.self) { transaction in
+                            TransactionRow(coordinator: self.viewModel.coordinator!, transaction : transaction, transactionService: self.transactionService).padding(.vertical, 3)
+                        }
+                        
+                    }.textCase(nil)
+                    
+                    
+                }
+            }
+            else{
+                Section(){
+                    HStack{
+                        Spacer()
+                        VStack(alignment: .center){
+                            Text("No Transactions").font(.system(size: 30, design: .rounded)).bold()
+                        }
+                        Spacer()
                     }
                     
-                }.textCase(nil)
-                
-                
+                    
+                }.padding()
             }
+            
+            
             
             //LazyVStack{
 
@@ -91,10 +118,9 @@ struct TransactionsTabView: View {
         }
         
         .refreshable {
-            print("Do your refresh work here")
             let refreshModel = OnDemandRefreshViewModel()
             refreshModel.somethingToDoWhenRefrehIsDone = self.viewModel.refreshCompleted
-            refreshModel.startLoadingAccounts()
+            await refreshModel.refreshAllItems()
             
         }
             .searchable(text: self.$searchText)
@@ -113,6 +139,8 @@ struct TransactionsTabView: View {
             
             Button(action: {
                 self.viewModel.coordinator?.showFilterEditView(filterModel: self.viewModel.filterModel)
+                
+                
             }){
             ZStack{
                 
@@ -131,3 +159,36 @@ struct TransactionsTabView: View {
 }
 
 
+struct TransactionDateSectionHeader: View {
+    
+    var transactionSection: TransactionDateSection
+    
+    var isAnySearch : Bool = false
+    
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
+    
+    func getDateString(date: Date) -> String{
+        
+        if Calendar.current.isDateInToday(date){
+            return "Today"
+        }
+        
+        if Calendar.current.isDateInYesterday(date){
+            return "Yesterday"
+        }
+        
+        let formatter3 = DateFormatter()
+        formatter3.dateFormat = "EEEE, MMMM dd"
+        return formatter3.string(from: date)
+    }
+    
+    var body : some View{
+        HStack{
+            Text(getDateString(date: transactionSection.date)).font(.system(size: 21, design: .rounded)).foregroundColor((colorScheme == .dark) ? Color.white : Color.black).fontWeight(.bold)
+            Spacer()
+            if transactionSection.amount != nil && !isAnySearch{
+                Text(CommonUtils.makeMoneyString(number: Int(transactionSection.amount ?? 0.0))).font(.system(size: 18, design: .rounded)).fontWeight(.bold).foregroundColor(globalAppTheme.themeColorPrimary)
+            }
+        }
+    }
+}

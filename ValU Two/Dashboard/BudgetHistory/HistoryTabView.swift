@@ -12,6 +12,12 @@ struct HistoryTabView: View {
     
     @ObservedObject var viewModel : HistoryViewModel
     @State var showStatsView = true
+    
+    @State private var selection = 0
+    
+    @State var historyGraphState : HistoryGraphViewState = .All
+    @State var historyGraphSection : BudgetSection? = nil
+    
     init(viewModel: HistoryViewModel){
         self.viewModel = viewModel
         
@@ -24,58 +30,144 @@ struct HistoryTabView: View {
     
     }
     
-    var body: some View {
-        ScrollView{
-            
-            LazyVStack{
-                
-                /*
-                Button(action: {
-                    // What to perform
-                    withAnimation{
-                        self.showStatsView.toggle()
-                    }
-                }) {
-                    HStack{
-                            SectionHeader(title: "Stats", image: "chart.pie")
-                            
+    
+        
+    func changeToSection(section: BudgetSection){
+        
+    }
+    
+    func changeToAll(){
+        
+    }
+    
+    func changeToOther(){
+        
+    }
+    
+    var categorySelector: some View{
+        VStack{
+            if self.viewModel.activeBudget != nil{
+                ScrollView(.horizontal){
+                    
+                    HStack(spacing: 5){
                         
-                        Image(systemName: "chevron.right").font(.system(size: 20)).foregroundColor(AppTheme().themeColorPrimary).rotationEffect(.degrees(showStatsView ? 90 : 0))
-                        Spacer()
-                    }.padding(.top).padding(.horizontal)
-                }.buttonStyle(PlainButtonStyle())
+                        Button(action: {
+                            // What to perform
+                            self.historyGraphState = .All
+                            self.historyGraphSection = nil
+                        }) {
+                            // How the button looks like
+                            NavigationBarTextIconButton(text: "All", icon: "globe", color: Color.gray)
+                        }
+                        
+                        
+                        
+                        
+                        
+                        
+                        ForEach(self.viewModel.activeBudget!.getBudgetSections(), id: \.self){ section in
+                            
+                            Button(action: {
+                                // What to perform
+                                self.historyGraphState = HistoryGraphViewState.Section
+                                self.historyGraphSection = section
+                            }) {
+                                // How the button looks like
+                                NavigationBarTextIconButton(text: section.name!, icon: section.icon!, color: colorMap[Int(section.colorCode)])
+                            }
+                            
+                            
+                        }
+                        
+                        
+                        Button(action: {
+                            // What to perform
+                            self.historyGraphState = .Other
+                            self.historyGraphSection = nil
+                        }) {
+                            // How the button looks like
+                            NavigationBarTextIconButton(text: "Other", icon: "book", color: globalAppTheme.otherColor)
+                        }
+                        
+                        
+                    }.padding(.horizontal, 5).padding(.vertical, 5)
+                }
+            }
+        }
+    }
+    
+    var body: some View {
+        List{
+            
+            /*
+            HStack{
+                Text("Spending by Category").font(.system(size: 23, design: .rounded)).fontWeight(.bold).foregroundColor(Color(.black)).listRowSeparator(.hidden)
+                Spacer()
                 
+               
                 
+            }.padding(.horizontal).padding(.top)
+            */
+            
+            
+            
+            VStack(alignment: .leading, spacing: 10){
                 
-                if showStatsView{
-                    HistoryStatsView(service : self.viewModel.service).padding(.horizontal).padding(.bottom, 10)
+                HStack{
+                    Text("Overview").font(.system(size: 23, design: .rounded)).fontWeight(.bold).listRowSeparator(.hidden)
+                    Spacer()
+                    
+                   
+                    
                 }
                 
-                Divider().padding(.leading).padding(.top, 10)
-                */
+                
+                Picker("", selection: $selection) {
+                                Text("Spending").tag(0)
+                                Text("Cash Flow").tag(1)
+                                
+                            }
+                .pickerStyle(.segmented).padding(.bottom, 15)
                 
                 
                 
-               // HStack{
+                if self.selection == 0{
+                    HistoryGraphView(bars: self.viewModel.createSpendingGraphData(state: self.historyGraphState, budgetSection: self.historyGraphSection).reversed(), selectedBar: nil)
                     
+                    categorySelector.padding(.top, 35)
+                }
+                else{
+                    HistoryGraphView(bars: self.viewModel.createCashFlowData().reversed(), sideBySide: true)
+                    
+                    HStack{
+                        
+                        NavigationBarTextIconButton(text: "Income", icon: "arrow.up", color: Color(.systemGreen))
+                        
+                        NavigationBarTextIconButton(text: "Spending", icon: "arrow.down", color: Color(.systemRed))
+                        
+                    }.padding(.top, 35)
+                }
+                
+                
+                
+                
+            }.listRowSeparator(.hidden).listRowBackground(Color.clear).padding(.horizontal).padding(.vertical, 10).background(Color(.tertiarySystemBackground)).cornerRadius(25).padding(.top, 20).listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+            
+            
+            
+            
 
-                    
-                    //VStack(alignment: .leading, spacing: 2){
-                      //  SectionHeader(title: "Past Budgets", image: "clock")
-                        //Text("SINCE USING VALU TWO").font(.caption).foregroundColor(Color(.gray)).padding(.leading, 25)
-                    //}
-                    //Spacer()
-                //}.padding(.top).padding(.horizontal)
+            
                 
                 PastBudgetsView(viewModel: self.viewModel)
                 
-            }
             
             
             
             
             
             
+            /*
             HStack{
                 Spacer()
                 Button(action: {
@@ -87,12 +179,12 @@ struct HistoryTabView: View {
                 }
                 Spacer()
             }
-            
+            */
             
             
         }
         .background(Color(.systemGroupedBackground))
-        .listStyle(SidebarListStyle())
+        
         .navigationBarTitle("History")
     }
 }

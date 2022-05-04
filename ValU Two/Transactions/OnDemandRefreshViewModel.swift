@@ -12,56 +12,75 @@ import Foundation
 class OnDemandRefreshViewModel {
     
     
-    var viewData = LoadingAccountsViewData()
     var itemManager : ItemManagerService
-    var aggregationServices = [PlaidDefaultUpdateService]()
-    var completionCount = 0
     
     var somethingToDoWhenRefrehIsDone : (() -> ())?
     
     init(){
-        self.viewData.viewState = LoadingAccountsViewState.Initial
         self.itemManager = ItemManagerService()
-        generateServices()
     }
     
-    func generateServices(){
+    
+    
+    func refreshAllItems() async{
         let items = self.itemManager.getItems()
         for item in items{
-            let service = PlaidDefaultUpdateService.init(itemId: item.itemId!)
-            service.completion = handleAggregationResult(result:)
-            self.aggregationServices.append(service)
+            
+            let plaidConnection = PlaidConnection()
+            
+            let today = Date()
+            var mostRecentTransaction = Calendar.current.date(byAdding: .day, value: -30, to: today)
+            do{
+                mostRecentTransaction = try DataManager().fetchMostRecentTransactionDate()
+            }
+            catch{
+                print("Could NOT get the most recent trasnsaction, falling back to 30 days")
+                
+            }
+            
+            do {
+                let refreshResult = try await plaidConnection.getTransactionsWithAwait(itemId: item.itemId!, startDate: mostRecentTransaction!, endDate: today)
+                processRefreshResults(result: refreshResult)
+            }
+            catch{
+                print("COULD NOT REFRESH")
+            }
+            
+            
+        }
+    }
+    
+    func processRefreshResults(result: Result<Data, Error>){
+    
+        
+        DispatchQueue.main.async {
+            
+            switch result {
+            case .failure(let error):
+                print("UPDATE PULL FAILED")
+                print(error)
+            case .success(let dataResult):
+                
+                do{
+                    try PlaidProccessor(spendingCategories: SpendingCategoryService().getSubSpendingCategories()).aggregate(response: dataResult, isInitial: false)
+                    print("UPDATE PULL WOKED")
+                    NotificationCenter.default.post(name: .modelUpdate, object: nil)
+                    
+                }
+                catch{
+                    
+                    print("error occurred when proccessing default update transacions")
+                    print(error)
+                }
+                
+            }
+            
         }
         
     }
     
-    func startLoadingAccounts()  {
-        self.viewData.viewState = LoadingAccountsViewState.Loading
-        for service in self.aggregationServices{
-            service.initiateDefaultUpdatePull()
-        }
-    }
+     
     
-    func handleAggregationResult(result: Result<String, Error>) {
-        switch result {
-        case .failure(let _):
-            
-            self.completionCount = completionCount + 1
-            if self.completionCount == self.aggregationServices.count{
-                self.viewData.viewState = LoadingAccountsViewState.Success
-            }
-            
-        case .success(let result):
-            //self.itemId = result
-            self.completionCount = completionCount + 1
-            if self.completionCount == self.aggregationServices.count{
-                self.viewData.viewState = LoadingAccountsViewState.Success
-            }
-            if somethingToDoWhenRefrehIsDone != nil{
-                somethingToDoWhenRefrehIsDone!()
-            }
-            
-        }
-    }
+    
     
 }

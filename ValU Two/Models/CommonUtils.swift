@@ -60,6 +60,46 @@ class CommonUtils{
         return moneyString
     }
     
+    static func getDateTitle(date: Date) -> String{
+        let monthInt = Calendar.current.component(.month, from: date) // 4
+        let monthStr = Calendar.current.monthSymbols[monthInt-1]  // April
+        
+        let dayInt = Calendar.current.component(.day, from: date) // 4
+        
+        return monthStr
+        
+    }
+    
+    static func getDateTitleShort(date: Date) -> String{
+        let dateFormatter = DateFormatter()
+
+        dateFormatter.dateFormat = "MMM"
+
+        return dateFormatter.string(from: date)
+    }
+    
+    static func getMonthDayString(date: Date) -> String{
+        let monthInt = Calendar.current.component(.month, from: date) // 4
+        let monthStr = Calendar.current.monthSymbols[monthInt-1]  // April
+        
+        let dayInt = Calendar.current.component(.day, from: date) // 4
+        let dayStr = String(dayInt)  // April
+        
+        return monthStr + dayStr
+    }
+    
+    func getDate(dateString : String) -> Date? {
+        print(dateString)
+        
+        
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let date = dateFormatter.date(from:dateString)!
+    
+        
+        return date
+    }
     
 }
 

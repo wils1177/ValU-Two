@@ -19,6 +19,7 @@ class ThisMonthLastMonthService : ObservableObject {
             dateList.append(dateIncrement)
             dateIncrement = Calendar.current.date(byAdding: .day, value: 1, to: dateIncrement)!
         }
+        
         return dateList
 
     }
@@ -30,14 +31,15 @@ class ThisMonthLastMonthService : ObservableObject {
         
         var spendingTotalByDay = [Double]()
         var spendingTotal = 0.0
-        spendingTotalByDay.append(spendingTotal)
+        //spendingTotalByDay.append(spendingTotal)
         
-        var dateIncrement = start
+        var dateIncrement = start.stripTime()
+        
         
         for transaction in dateSortedTransactions{
             
                 
-                let transactionDate = transaction.date!
+            let transactionDate = transaction.date!.stripTime()
                 // If we don't have any transactions for the current date, just copy over until we get there.
                 while dateIncrement < transactionDate{
                     spendingTotalByDay.append(spendingTotal)
@@ -72,7 +74,7 @@ class ThisMonthLastMonthService : ObservableObject {
         }
         
         //If we are done with all the transactions, but there still some dates to go.
-        while dateIncrement <= end{
+        while dateIncrement <= end.stripTime(){
             spendingTotalByDay.append(spendingTotal)
             dateIncrement = Calendar.current.date(byAdding: .day, value: 1, to: dateIncrement)!
             //print("Done with transactions, but there are still more days. ")

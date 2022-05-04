@@ -18,7 +18,9 @@ class SpendingCategoryService{
     
     func loadCategories(){
         do{
-            self.spendingCategories = try DataManager().getEntity(entityName: "SpendingCategory") as! [SpendingCategory]
+            let cats = try DataManager().getEntity(entityName: "SpendingCategory") as! [SpendingCategory]
+            
+            self.spendingCategories = cats
         }
         catch{
             print("COULD NOT LOAD SPENDING CATEGORIES!!!")
@@ -41,7 +43,7 @@ class SpendingCategoryService{
             
         }
         
-        return categoriesToReturn
+        return categoriesToReturn.filter {$0.hidden != true}
     }
     
     func getParentSpendingCategories() -> [SpendingCategory]{
@@ -76,7 +78,7 @@ class SpendingCategoryService{
             
         }
         
-        return categoriesToReturn
+        return categoriesToReturn.filter {$0.hidden != true}
         
     }
     
@@ -135,6 +137,7 @@ class SpendingCategoryService{
         return nil
         
     }
+    
     
     func saveCustomSpendingCategory(icon: String, name: String, parent: SpendingCategory) -> SpendingCategory{
         let manager = DataManager()

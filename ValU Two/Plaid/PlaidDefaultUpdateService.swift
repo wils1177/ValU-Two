@@ -35,17 +35,32 @@ class PlaidDefaultUpdateService{
         }
         catch{
             print("Could NOT get the most recent trasnsaction, falling back to 30 days")
+            
         }
 
-        try? self.plaidConnection.getTransactions(itemId: self.itemId, startDate: mostRecentTransaction!, endDate: today, completion: self.defatulUpdatePullFinished(result:))
+        
+        do{
+            try self.plaidConnection.getTransactions(itemId: self.itemId, startDate: mostRecentTransaction!, endDate: today, completion: self.defatulUpdatePullFinished(result:))
+        }
+        catch{
+            print("could not start historical update pull")
+            self.backGroundCompletion?(UIBackgroundFetchResult.noData)
+        }
         
     }
     
     func historicalUpdatePull(){
         let today = Date()
         let mostRecentTransaction = Calendar.current.date(byAdding: .day, value: -60, to: today)
-
-        try? self.plaidConnection.getTransactions(itemId : self.itemId, startDate: mostRecentTransaction!, endDate: today, completion: self.defatulUpdatePullFinished(result:))
+        
+        do{
+            try self.plaidConnection.getTransactions(itemId : self.itemId, startDate: mostRecentTransaction!, endDate: today, completion: self.defatulUpdatePullFinished(result:))
+        }
+        catch{
+            print("could not start historical update pull")
+            self.backGroundCompletion?(UIBackgroundFetchResult.noData)
+        }
+        
     }
 
     
@@ -69,7 +84,9 @@ class PlaidDefaultUpdateService{
                     self.completion?(.success(self.itemId))
                     
                     self.backGroundCompletion?(UIBackgroundFetchResult.newData)
+                    
                     NotificationCenter.default.post(name: .modelUpdate, object: nil)
+                    
                 }catch{
                     print("error occurred when proccessing default update transacions")
                     self.completion?(Result.failure(PlaidConnectionError.ProccessingError))

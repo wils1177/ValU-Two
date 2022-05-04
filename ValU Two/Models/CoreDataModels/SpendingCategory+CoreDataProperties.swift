@@ -2,7 +2,7 @@
 //  SpendingCategory+CoreDataProperties.swift
 //  ValU Two
 //
-//  Created by Clayton Wilson on 2/6/22.
+//  Created by Clayton Wilson on 4/22/22.
 //  Copyright © 2022 Clayton Wilson. All rights reserved.
 //
 //
@@ -27,11 +27,12 @@ extension SpendingCategory {
     @NSManaged public var name: String?
     @NSManaged public var selected: Bool
     @NSManaged public var spent: Float
+    @NSManaged public var hidden: Bool
     @NSManaged public var budgetCategory: NSSet?
     @NSManaged public var subSpendingCategories: NSSet?
     @NSManaged public var transactionMatches: NSSet?
-    @NSManaged public var transactions: NSSet?
     @NSManaged public var transactionRules: NSSet?
+    @NSManaged public var transactions: NSSet?
 
 }
 
@@ -86,23 +87,6 @@ extension SpendingCategory {
 
 }
 
-// MARK: Generated accessors for transactions
-extension SpendingCategory {
-
-    @objc(addTransactionsObject:)
-    @NSManaged public func addToTransactions(_ value: Transaction)
-
-    @objc(removeTransactionsObject:)
-    @NSManaged public func removeFromTransactions(_ value: Transaction)
-
-    @objc(addTransactions:)
-    @NSManaged public func addToTransactions(_ values: NSSet)
-
-    @objc(removeTransactions:)
-    @NSManaged public func removeFromTransactions(_ values: NSSet)
-
-}
-
 // MARK: Generated accessors for transactionRules
 extension SpendingCategory {
 
@@ -117,6 +101,23 @@ extension SpendingCategory {
 
     @objc(removeTransactionRules:)
     @NSManaged public func removeFromTransactionRules(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for transactions
+extension SpendingCategory {
+
+    @objc(addTransactionsObject:)
+    @NSManaged public func addToTransactions(_ value: Transaction)
+
+    @objc(removeTransactionsObject:)
+    @NSManaged public func removeFromTransactions(_ value: Transaction)
+
+    @objc(addTransactions:)
+    @NSManaged public func addToTransactions(_ values: NSSet)
+
+    @objc(removeTransactions:)
+    @NSManaged public func removeFromTransactions(_ values: NSSet)
 
 }
 

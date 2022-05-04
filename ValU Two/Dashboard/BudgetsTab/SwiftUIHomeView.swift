@@ -43,10 +43,14 @@ struct BudgetsView: View {
         
         UINavigationBar.appearance().largeTitleTextAttributes = [.font : font]
         
+        /*
+        UINavigationBar.appearance().barTintColor = globalAppTheme.backgroundColorUIKit
+        UINavigationBar.appearance().backgroundColor =  globalAppTheme.backgroundColorUIKit
         
+        UITabBar.appearance().backgroundColor = globalAppTheme.backgroundColorUIKit
         
-        
-        
+        UITabBar.appearance().barTintColor = globalAppTheme.backgroundColorUIKit
+        */
         print("home init")
     }
     
@@ -119,18 +123,19 @@ struct BudgetsView: View {
 
                 
                 
-                Section(){
-                    Text("Spending Breakdown").font(.system(size: 23, design: .rounded)).fontWeight(.bold).listRowSeparator(.hidden)
+                //Section(){
+                    //Text("Spending Breakdown").font(.system(size: 23, design: .rounded)).fontWeight(.bold).listRowSeparator(.hidden)
                     //BudgetStatusBarView(viewData: self.viewModel.getBudgetStatusBarViewData(), showLegend: false).listRowSeparator(.hidden).listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)).padding(.horizontal, 30)
-                    SpendingCardView(budget: self.viewModel.currentBudget, budgetTransactionsService: self.viewModel.budgetTransactionsService, coordinator: self.viewModel.coordinator).listRowSeparator(.hidden)
-                }.listRowBackground(Color.clear)
+                SpendingCardView(budget: self.viewModel.currentBudget, budgetTransactionsService: self.viewModel.budgetTransactionsService, coordinator: self.viewModel.coordinator).listRowSeparator(.hidden).listRowBackground(Color.clear).padding(.top)
+               //}.listRowBackground(Color.clear).padding(.top)
                 
                 
             }
             .listStyle(PlainListStyle())
-            .background(Color(.white))
+            .background(Color(.systemGroupedBackground))
             .refreshable {
-                print("try refreshing")
+                let refreshModel = OnDemandRefreshViewModel()
+                await refreshModel.refreshAllItems()
             }
         
         

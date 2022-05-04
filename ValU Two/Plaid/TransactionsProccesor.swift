@@ -53,25 +53,38 @@ class TransactionProccessor{
         
     }
     
-    func removePendingTransaction(pendingTransactionId: String){
+    
+    func attemptToReplcePendingTransaction(pendingTransactionId: String, transactionData: TransactionJSON) -> Bool{
         do{
-            
             //Find the transaction, and delete the categories first
-            let transactionToDelete = try dataManager.getEntity(predicate: PredicateBuilder().generateTransactionIdPredicate(transactionId: pendingTransactionId), entityName: "Transaction") as! [Transaction]
-            if transactionToDelete.count == 1 {
-                let transaction = transactionToDelete[0]
-                for match in transaction.categoryMatches?.allObjects as! [CategoryMatch]{
-                    try? DataManager().deleteEntity(predicate: PredicateBuilder().generateByIdPredicate(id: match.id!), entityName: "CategoryMatch")
-                    DataManager().saveDatabase()
+            let transactionToReplace = try dataManager.getEntity(predicate: PredicateBuilder().generateTransactionIdPredicate(transactionId: pendingTransactionId), entityName: "Transaction") as! [Transaction]
+            if transactionToReplace.count == 1 {
+                let transaction = transactionToReplace[0]
+                transaction.transactionId = transactionData.transactionId
+                transaction.amount = transactionData.amount
+                
+                /*
+                if transactionData.authDate != nil{
+                    transaction.date = CommonUtils().getDate(dateString: transactionData.authDate!)
                 }
+                */ 
+                
+                transaction.name = transactionData.name
+                transaction.merchantName = transactionData.merchantName
+                transaction.pending = transactionData.pending
+                dataManager.saveDatabase()
+                print("Sucessfully replaced a pending transaction")
+                return true
+                
             }
-            
-            try! dataManager.deleteEntity(predicate: PredicateBuilder().generateTransactionIdPredicate(transactionId: pendingTransactionId), entityName: "Transaction")
-            dataManager.saveDatabase()
-            print("deleted a pending transaction with ID:\(pendingTransactionId)")
+            else{
+                print("Not 1 exactly transaction came back for multuple transaction search")
+                return false
+            }
         }
         catch{
-            print("tried to delete a pending transaction, but it did not exist.")
+            print("Could not replace a pending transaction")
+            return false
         }
     }
     
@@ -114,8 +127,9 @@ class TransactionProccessor{
     func checkForRuleMatches(transaction: Transaction, spendingCategories: [SpendingCategory]) -> [SpendingCategory]{
         
         var matches = [SpendingCategory]()
+        let nameToCompare = (transaction.merchantName ?? (transaction.name!)).lowercased()
         for rule in self.transactionRules{
-            if transaction.name!.contains(rule.name!){
+            if nameToCompare.contains(rule.name!.lowercased()){
                 
                 for spendingCategory in spendingCategories{
                     
@@ -156,7 +170,7 @@ class TransactionProccessor{
     func checkIfTransactionShouldBeHidden(transaction: Transaction) -> Bool{
         
         if transaction.plaidCategories != nil {
-            if transaction.plaidCategories!.contains("Transfer"){
+            if transaction.plaidCategories!.contains("Internal Account Transfer"){
                 return true
             }
             if transaction.plaidCategories!.contains("Payment") && transaction.plaidCategories!.contains("Credit Card"){

@@ -15,7 +15,7 @@ class PredicateBuilder{
     
     func generateInDatesPredicate(startDate: Date, endDate: Date) -> NSPredicate{
         
-        return NSPredicate(format: "(date > %@) AND (date <= %@)", startDate as NSDate, endDate as NSDate)
+        return NSPredicate(format: "(date >= %@) AND (date <= %@)", startDate as NSDate, endDate as NSDate)
         
     }
     
@@ -89,6 +89,28 @@ class PredicateBuilder{
         return NSPredicate(format: "(date >= %@) AND (date < %@)", lastWeek! as NSDate, yesterday! as NSDate)
         
             
+    }
+    
+    func generatePreviousMonthPredicate() -> NSPredicate{
+        let today = Date()
+        
+        
+        let start = Calendar.current.date(byAdding: .month, value: -2, to: today)!
+        let end = Calendar.current.date(byAdding: .month, value: -1, to: today)!
+        
+        return NSPredicate(format: "(date >= %@) AND (date < %@)", start as NSDate, end as NSDate)
+        
+    }
+    
+    func generatePreviousWeekPredicate() -> NSPredicate{
+        let today = Date()
+        
+        
+        let start = Calendar.current.date(byAdding: .weekOfMonth, value: -2, to: today)!
+        let end = Calendar.current.date(byAdding: .weekOfMonth, value: -1, to: today)!
+        
+        return NSPredicate(format: "(date >= %@) AND (date < %@)", start as NSDate, end as NSDate)
+        
     }
     
     func generateLast60daysPredicate() -> NSPredicate{
@@ -193,6 +215,10 @@ class PredicateBuilder{
     
     func generateByAccountIdPredicate(id: String) -> NSPredicate{
         return NSPredicate(format: "accountId == %@", id as String)
+    }
+    
+    func generateTransactionsForCategoryIdPredicate(ids: [UUID]) -> NSPredicate{
+        return NSPredicate(format: "ANY categoryMatches.spendingCategory.id IN %@", ids)
     }
     
     

@@ -88,8 +88,8 @@ extension BudgetEditableCoordinator{
     
     }
     
-    func showIncomeTransactions(transactions: [Transaction]){
-        var view = IncomeTransactionsView(transactions: transactions)
+    func showIncomeTransactions(service: BudgetIncomeService){
+        var view = IncomeTransactionsView(service: service)
         view.coordinator = self
         let vc = UIHostingController(rootView: view)
         self.navigationController.present(vc, animated: true)
@@ -167,6 +167,7 @@ extension BudgetEditableCoordinator{
     
     func showNewCategoryView(budgetSection: BudgetSection){
         let vm = AddCategoriesViewModel(budgetSection: budgetSection)
+        vm.coordinator = self
         var view  = EditBudgetCategoriesView(budgetSection: budgetSection, viewModel: vm)
         view.coordinator = self
         let vc = UIHostingController(rootView: view)

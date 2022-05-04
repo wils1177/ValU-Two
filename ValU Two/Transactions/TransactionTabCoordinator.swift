@@ -28,7 +28,7 @@ class TransactionsTabCoordinator : Coordinator, TransactionRowDelegate{
         let vc = viewModel.configure()
         
         self.navigationController.navigationBar.prefersLargeTitles = true
-        self.navigationController.tabBarItem = UITabBarItem(title: "Transactions", image: UIImage(systemName: "arrow.up.and.down", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)), selectedImage: UIImage(named: "tab_icon_seelcted"))
+        self.navigationController.tabBarItem = UITabBarItem(title: "Transactions", image: UIImage(systemName: "arrow.up.arrow.down.circle", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)), selectedImage: UIImage(named: "tab_icon_seelcted"))
         self.navigationController.pushViewController(vc, animated: false)
         
     }
@@ -61,7 +61,8 @@ extension TransactionRowDelegate{
     
     func showFilterEditView(filterModel : TransactionFilterModel){
         
-        let view = TransactionFilterEditView(filterModel: filterModel)
+        var view = TransactionFilterEditView(filterModel: filterModel)
+        view.coordinator = self as? TransactionsTabCoordinator
         let vc = UIHostingController(rootView: view)
         vc.title = "Edit Filters"
         self.navigationController.present(vc, animated: true)
@@ -103,6 +104,10 @@ extension TransactionRowDelegate{
     
     func dismissEditCategory() {
         self.presentorStack.popLast()
+        self.navigationController.dismiss(animated: true)
+    }
+    
+    func dismiss() {
         self.navigationController.dismiss(animated: true)
     }
     

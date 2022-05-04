@@ -15,6 +15,10 @@ class AddCategoriesViewModel: CategoryListViewModel, ObservableObject{
     var budgetSection : BudgetSection
     var spendingCategoryService = SpendingCategoryService()
     
+    var coordinator : BudgetEditableCoordinator?
+    
+    @Published var willBeRecurring : Bool = false
+    
     @Published var selectedCategories = [String]()
     
     init(budgetSection: BudgetSection){
@@ -72,7 +76,7 @@ class AddCategoriesViewModel: CategoryListViewModel, ObservableObject{
             }
         }
         
-
+        
         
     }
     
@@ -89,6 +93,7 @@ class AddCategoriesViewModel: CategoryListViewModel, ObservableObject{
         
         let dm = DataManager()
         let BC = dm.createBudgetCategory(category: spendingCategory, order: self.budgetSection.budgetCategories!.count)
+        BC.recurring = self.willBeRecurring
         self.budgetSection.addToBudgetCategories(BC)
         dm.saveDatabase()
     }
@@ -123,12 +128,29 @@ class AddCategoriesViewModel: CategoryListViewModel, ObservableObject{
     func createCustomSpendingCategory(icon: String, name: String){
         let newCategory = spendingCategoryService.createCustomSpendingCategory(icon: icon, name: name)
         
+        
         self.spendingCategoryService.loadCategories()
         
         self.parentSpendingCategories = self.spendingCategoryService.getParentSpendingCategories()
         self.childSpendingCategories = self.spendingCategoryService.getSubSpendingCategories()
         
         self.parentSpendingCategories.sort(by: { $0.name! < $1.name! })
+        
+        
+        self.selectedCategoryName(name: newCategory.name!)
+        self.submit()
+        
+        
+        self.objectWillChange.send()
+        
+        self.coordinator?.dismissPresented()
+    }
+    
+    func hide(category: SpendingCategory) {
+        print(category.hidden)
+        print("hiding the spending category")
+        category.hidden = true
+        DataManager().saveDatabase()
         self.objectWillChange.send()
     }
     

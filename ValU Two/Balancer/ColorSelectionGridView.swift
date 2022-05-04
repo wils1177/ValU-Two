@@ -13,6 +13,17 @@ struct ColorSelectionGridView: View {
     @Binding var colors : [Int]
     @Binding var selectedColumn : Int
     
+    var columns: [GridItem] = [
+        GridItem(.flexible(), spacing: 15),
+            GridItem(.flexible(), spacing: 15),
+        GridItem(.flexible(), spacing: 15),
+        GridItem(.flexible(), spacing: 15),
+        GridItem(.flexible(), spacing: 15),
+        GridItem(.flexible(), spacing: 15)
+        
+        
+        
+        ]
     
     
     func isSelected(col: Int) -> Bool{
@@ -32,8 +43,9 @@ struct ColorSelectionGridView: View {
     
     var body: some View {
         VStack{
-            ScrollView(.horizontal) {
-                HStack{
+            ScrollView() {
+                
+                LazyVGrid(columns: columns, spacing: 10) {
                     ForEach(self.colors, id: \.self){ col in
                             
                             Button(action: {
@@ -58,7 +70,9 @@ struct ColorSelectionGridView: View {
                             
                             
                         }
-                }
+                            }
+                
+                
                 
                 }
             

@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-class MyMoneyViewModel: Presentor{
+class MyMoneyViewModel: Presentor, ObservableObject{
     
     var cashFlowViewModel = CashFlowViewModel()
     var accountsModel = AccountsViewModel()
@@ -17,6 +17,16 @@ class MyMoneyViewModel: Presentor{
     
     init(coordinator :MoneyTabCoordinator){
         self.coordinator = coordinator
+        NotificationCenter.default.addObserver(self, selector: #selector(update(_:)), name: .modelUpdate, object: nil)
+    }
+    
+    @objc func update(_ notification:Notification){
+        print("Update to Accounts Tab Triggered")
+        
+        self.objectWillChange.send()
+        
+        
+        
     }
     
     func configure() -> UIViewController {

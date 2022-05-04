@@ -125,6 +125,7 @@ extension NewBudgetModel{
         let iconColor = getIconColor(selectable: selectable)
         let backgroundColor = getBackgroundColor(selectable: selectable)
         let subTextColor = getSubTextColor(selectable: selectable)
+        let textColor = getTextColor(selectable: selectable)
         var action : (()->Void)?
         if selectable{
             action = getAction(stage: stage)
@@ -133,7 +134,7 @@ extension NewBudgetModel{
             action = nil
         }
         
-        return OnboardingStepViewData(title: title, description: description, iconName: iconName, iconColor: iconColor, backgroundColor: backgroundColor, subTectColor: subTextColor, completionHandler: action)
+        return OnboardingStepViewData(title: title, description: description, iconName: iconName, iconColor: iconColor, backgroundColor: backgroundColor, subTectColor: subTextColor, textColor: textColor, completionHandler: action)
         
     }
     
@@ -178,7 +179,7 @@ extension NewBudgetModel{
     
     func getSavingsDescription() -> String{
         if self.budget.savingsPercent == Float(0.0){
-            return "Set a savings goal"
+            return "How much do you want to save?"
         }
         else {
             return String(Int(self.budget.savingsPercent * 100)) + "%"   + " of income"
@@ -255,6 +256,15 @@ extension NewBudgetModel{
     func getSubTextColor(selectable: Bool) -> Color{
         if selectable{
             return Color(.black)
+        }
+        else{
+            return Color(.lightGray)
+        }
+    }
+    
+    func getTextColor(selectable: Bool) -> Color{
+        if selectable{
+            return globalAppTheme.themeColorPrimary
         }
         else{
             return Color(.lightGray)

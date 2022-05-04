@@ -39,14 +39,27 @@ var theme1UIKit = [UIColor(#colorLiteral(red: 1, green: 0.6291666667, blue: 0.11
 
 
 var theme2 = [Color(#colorLiteral(red: 1, green: 0.6215549111, blue: 0.111124821, alpha: 1)), Color(#colorLiteral(red: 0.8866103292, green: 0.682092905, blue: 0.1947205365, alpha: 1)), Color(#colorLiteral(red: 0.4300732017, green: 0.9208706021, blue: 0.5150589347, alpha: 1)), Color(#colorLiteral(red: 0.3273415565, green: 0.8701939583, blue: 0.991478622, alpha: 1)), Color(#colorLiteral(red: 0.8938070536, green: 0.9993411899, blue: 0.1047025844, alpha: 1)),
-                Color(#colorLiteral(red: 0.750785172, green: 0.9548838735, blue: 0.2252872884, alpha: 1)), Color(#colorLiteral(red: 0.1772289574, green: 0.7678055167, blue: 0.7148787379, alpha: 1)), Color(#colorLiteral(red: 0.7952081561, green: 0.7310792804, blue: 0.2523000538, alpha: 1)), Color(#colorLiteral(red: 0.3438542485, green: 0.8141812086, blue: 0.774463594, alpha: 1)), Color(#colorLiteral(red: 0.7202098966, green: 0.7702155709, blue: 0.304389894, alpha: 1))]
+                Color(#colorLiteral(red: 0.9468521476, green: 0.9369220138, blue: 0.8895645738, alpha: 1)), Color(#colorLiteral(red: 0.7498543859, green: 0.9750258327, blue: 1, alpha: 1)), Color(#colorLiteral(red: 0.7952081561, green: 0.7310792804, blue: 0.2523000538, alpha: 1)), Color(#colorLiteral(red: 0.3438542485, green: 0.8141812086, blue: 0.774463594, alpha: 1)), Color(#colorLiteral(red: 0.7202098966, green: 0.7702155709, blue: 0.304389894, alpha: 1))]
 
 
 var theme2UIKit = [UIColor(#colorLiteral(red: 1, green: 0.6215549111, blue: 0.111124821, alpha: 1)), UIColor(#colorLiteral(red: 0.8866103292, green: 0.682092905, blue: 0.1947205365, alpha: 1)), UIColor(#colorLiteral(red: 0.4300732017, green: 0.9208706021, blue: 0.5150589347, alpha: 1)), UIColor(#colorLiteral(red: 0.3273415565, green: 0.8701939583, blue: 0.991478622, alpha: 1)), UIColor(#colorLiteral(red: 0.8938070536, green: 0.9993411899, blue: 0.1047025844, alpha: 1)),
                    UIColor(#colorLiteral(red: 0.750785172, green: 0.9548838735, blue: 0.2252872884, alpha: 1)), UIColor(#colorLiteral(red: 0.1772289574, green: 0.7678055167, blue: 0.7148787379, alpha: 1)), UIColor(#colorLiteral(red: 0.7952081561, green: 0.7310792804, blue: 0.2523000538, alpha: 1)), UIColor(#colorLiteral(red: 0.3438542485, green: 0.8141812086, blue: 0.774463594, alpha: 1)), UIColor(#colorLiteral(red: 0.337610662, green: 0.6745378375, blue: 0.4100677371, alpha: 1))]
 
 
+var globalAppTheme = AppTheme()
+
+
 struct AppTheme {
+    
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
+    
+    var backgroundColor = Color(.systemBackground)
+    
+   
+    
+    var backgroundColorUIKit = UIColor(Color(.systemBackground))
+    
+    var groupBackgroundColor = Color(.tertiarySystemBackground)
     
     var themeColorPrimary = Color(.systemBlue)
     
@@ -59,6 +72,10 @@ struct AppTheme {
     var otherColorSecondary = Color(#colorLiteral(red: 0.9630680514, green: 0.02287900823, blue: 0.3989546255, alpha: 1))
     
     var otherColorTertiary = Color(#colorLiteral(red: 0.7673038082, green: 0.01822835896, blue: 0.3178585387, alpha: 1))
+    
+    func getPrimaryTextColor() -> Color{
+        return (colorScheme == .dark) ? Color.white : Color.black
+    }
     
 
 }

@@ -12,10 +12,63 @@ struct EditCategoriesView: View {
     
     @ObservedObject var viewModel : EditCategoryViewModel
     
-    @State var saveRule = true
+    
     
     init(viewModel : EditCategoryViewModel){
         self.viewModel = viewModel
+        UITextView.appearance().backgroundColor = .systemGroupedBackground
+    }
+    
+    var transactionRuleSection : some View{
+        
+        VStack{
+            HStack{
+                Image(systemName: "bookmark.fill").foregroundColor(globalAppTheme.themeColorPrimary).padding(.horizontal, 8)
+                Toggle(isOn: withAnimation{$viewModel.saveRule}) {
+                    Text("Remember for Merchant").font(.system(size: 15, design: .rounded)).fontWeight(.semibold)
+                }.padding(.trailing, 5)
+            }
+            
+            if viewModel.saveRule{
+                Divider()
+                VStack{
+                    HStack{
+                        Text("If transaction name contains: ").font(.system(size: 20, design: .rounded)).foregroundColor(globalAppTheme.themeColorPrimary).fontWeight(.semibold)
+                        Spacer()
+                    }
+                    
+                    TextEditor(text: self.$viewModel.transactionRuleName).font(.system(size: 18, design: .rounded)).frame(minWidth: 0, maxWidth: 400, minHeight: 0, maxHeight: 600).padding(10).background(Color(.systemGroupedBackground)).cornerRadius(14)
+                    
+                    HStack{
+                        
+                        Button(action: {
+                            // What to perform
+                            self.viewModel.transactionRuleName = ""
+                        }) {
+                            // How the button looks like
+                            NavigationBarTextButton(text: "Clear")
+                        }
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            // What to perform
+                            self.viewModel.resetRuleName()
+                        }) {
+                            // How the button looks like
+                            NavigationBarTextButton(text: "Reset")
+                        }
+                        
+                        
+                        
+                        
+                        
+                    }.padding(.top, 10)
+                }.padding()
+                
+            }
+        }.padding(10).background(Color(.tertiarySystemBackground)).cornerRadius(10).padding(.horizontal).padding(.top)
+        
     }
     
     var body: some View {
@@ -27,12 +80,7 @@ struct EditCategoriesView: View {
                          VStack{
 
                              
-                                HStack{
-                                   Image(systemName: "bookmark.fill").padding(.horizontal, 8)
-                                    Toggle(isOn: $viewModel.saveRule) {
-                                        Text("Remember for Merchant")
-                                    }.padding(.trailing, 5)
-                                }.padding(10).background(Color(.tertiarySystemBackground)).cornerRadius(10).padding(.horizontal).padding(.top)
+                                transactionRuleSection
                                
                                
                             

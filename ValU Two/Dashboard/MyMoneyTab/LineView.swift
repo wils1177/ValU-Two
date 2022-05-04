@@ -46,19 +46,24 @@ struct LineView: View {
 
   var highestPoint: Double {
       
-      
+      //print(self.dataSet1)
     let max1 = dataSet1.max() ?? 1.0
       let max2 = dataSet2.max() ?? 1.0
       let max = [max1, max2, cutOffValue].max() ?? 1.0
     if max == 0 { return 1.0 }
-      return max * 1.1
+      return max * 1.15
        
   }
     
     var maxCount : Int{
-        
         return self.legendSet.count
         
+    }
+    
+    func debug(){
+        print(self.dataSet1.count)
+        print(self.dataSet2.count)
+        print(self.legendSet.count)
     }
     
     var spendingLabelView : some View{
@@ -69,12 +74,17 @@ struct LineView: View {
             VStack(alignment: .leading){
                 
                 if (Double(dataSet1.count) / Double(maxCount)) > 0.85{
+                    
                     Text(CommonUtils.makeMoneyString(number: Int(dataSet1.last!))).font(.system(size: 13, weight: .bold)).foregroundColor(color1).offset(x: CGFloat((dataSet1.count - 1)) * width / CGFloat(maxCount - 1) - 40,
-                                        y: height * (1 - (dataSet1.last! / highestPoint)) - 16)
+                                        y: height * (1 - (dataSet1.last! / highestPoint)) - 21)
+                }
+                else if (Double(dataSet1.count) / Double(maxCount)) < 0.1{
+                    Text(CommonUtils.makeMoneyString(number: Int(dataSet1.last!))).font(.system(size: 13, weight: .bold)).foregroundColor(color1).offset(x: CGFloat((dataSet1.count - 1)) * width / CGFloat(maxCount - 1) - 5,
+                                        y: (height * (1 - (dataSet1.last! / highestPoint))) - 21)
                 }
                 else{
-                    Text(CommonUtils.makeMoneyString(number: Int(dataSet1.last!))).font(.system(size: 13, weight: .bold)).foregroundColor(color1).offset(x: CGFloat((dataSet1.count - 1)) * width / CGFloat(maxCount - 1) - 23,
-                                        y: height * (1 - (dataSet1.last! / highestPoint)) - 16)
+                    Text(CommonUtils.makeMoneyString(number: Int(dataSet1.last!))).font(.system(size: 13, weight: .bold)).foregroundColor(color1).offset(x: CGFloat((dataSet1.count - 1)) * width / CGFloat(maxCount - 1) - 18,
+                                        y: (height * (1 - (dataSet1.last! / highestPoint))) - 21)
                 }
                 
                 
@@ -214,18 +224,19 @@ struct LineView: View {
 
           for index in 1..<dataSet2.count {
             path.addLine(to: CGPoint(
-              x: CGFloat(index) * width / CGFloat(maxCount - 1),
+                x: CGFloat(index) * width / CGFloat(dataSet2.count - 1),
               y: height * self.ratio2(for: index)))
           }
         }
         .stroke(self.color2.opacity(0.6), style: StrokeStyle(lineWidth: 4, lineJoin: .round))
         
         
-        
+        //Path 1
         Path { path in
           path.move(to: CGPoint(x: 0, y: height * self.ratio1(for: 0)))
 
-          for index in 1..<dataSet1.count {
+          for index in 0..<dataSet1.count {
+              
               if index != (dataSet1.count - 1){
                   path.addLine(to: CGPoint(
                     x: CGFloat(index) * width / CGFloat(maxCount - 1),
@@ -278,8 +289,22 @@ struct LineView: View {
             )
         
     }
-    .padding(.vertical)
+    
   }
+    
+    var cutoffLabel: some View{
+        GeometryReader { geometry in
+            let height = geometry.size.height
+            //let width = geometry.size.width
+            
+            ZStack{
+                Capsule().frame(width: 65, height: 20).foregroundColor(self.cutOffColor)
+                Text(CommonUtils.makeMoneyString(number: Int(self.cutOffValue))).foregroundColor(Color(.white)).font(.system(size: 13, weight: .semibold, design: .rounded))
+            }.offset(x: 4, y: (height * (1 - (self.cutOffValue / highestPoint))) - 10)
+        }
+    }
+
+
     
     var cutOffLine: some View{
         GeometryReader { geometry in
@@ -287,6 +312,7 @@ struct LineView: View {
             let width = geometry.size.width
             
             ZStack{
+                
                 
                 
                 
@@ -307,7 +333,12 @@ struct LineView: View {
                 //Text("test").foregroundColor(Color(.systemOrange)).offset(x: 0, y: height * (1 - (self.cutOffValue / highestPoint)))
                  
             }
+            
+            
         }
+        
+        
+        
         
         
     }
@@ -320,6 +351,7 @@ struct LineView: View {
             self.spendingLabelView
             self.lines
             self.cutOffLine
+            self.cutoffLabel
         }
     }
 

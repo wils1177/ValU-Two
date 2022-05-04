@@ -21,6 +21,7 @@ public class BudgetCategory: NSManagedObject, NSCopying {
         self.limit = 0.0
         self.spent = 0.0
         self.spendingCategory = category
+        self.recurring = false
         
         self.id = UUID()
         
@@ -31,6 +32,7 @@ public class BudgetCategory: NSManagedObject, NSCopying {
         
         let newBudgetCategory = DataManager().createBudgetCategory(category: self.spendingCategory!, order: Int(self.order))
         newBudgetCategory.limit = self.limit
+        newBudgetCategory.recurring = self.recurring
         return newBudgetCategory
         
     }
@@ -40,6 +42,7 @@ public class BudgetCategory: NSManagedObject, NSCopying {
         let endDate = self.budgetSection!.budget!.endDate
         let amount = self.spendingCategory!.getAmountSpentForTimeFrame(startDate: startDate!, endDate: endDate!)
         //self.spent = amount
+        //print(amount)
         return amount
     }
 

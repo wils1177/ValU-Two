@@ -31,7 +31,7 @@ struct SwiftUIAccountCardView: View {
         HStack{
             VStack(alignment: .leading){
                 HStack{
-                    Text(account.name!).font(.title).foregroundColor(.white).bold()
+                    Text(account.name!).font(.system(size: 28, design: .rounded)).foregroundColor(.white).bold()
                     Spacer()
                     Image(systemName: "creditcard.fill").foregroundColor(Color(.white)).font(.system(size: 30))
                 }
@@ -40,45 +40,46 @@ struct SwiftUIAccountCardView: View {
                 
                 //Divider().foregroundColor(Color(.white))
                 HStack{
-                    Text(CommonUtils.makeMoneyString(number: Int(getBalance())!)).font(.title).bold().foregroundColor(.white)
+                    Text(CommonUtils.makeMoneyString(number: Int(getBalance())!)).font(.system(size: 28, design: .rounded)).bold().foregroundColor(.white)
                 }
                 HStack{
-                    Text("XXXX" + (account.mask ?? "XXXX")).font(.headline).foregroundColor(Color(.lightText))
+                    Text("XXXX" + (account.mask ?? "XXXX")).font(.system(size: 20, design: .rounded)).foregroundColor(Color(.lightText))
                    Spacer().frame(width: 60)
                 }
                 
                 
             }
             Spacer()
-        }.frame(height: 180).padding(10).background(LinearGradient(gradient:  Gradient(colors: [AppTheme().themeColorSecondary, AppTheme().themeColorPrimary]), startPoint: .topTrailing, endPoint: .center))
-            .cornerRadius(24)
+        }.frame(height: 180).padding(15).background(LinearGradient(gradient:  Gradient(colors: [AppTheme().themeColorSecondary, AppTheme().themeColorPrimary]), startPoint: .topTrailing, endPoint: .center))
+            .cornerRadius(24).shadow(radius: 7).listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)).padding(5)
     }
     
     var smallCard : some View {
         HStack{
             VStack(alignment: .leading){
                 HStack{
-                    Text(account.name!).font(.headline).foregroundColor(.white).bold()
+                    //Text(account.name!).font(.system(size: 7, design: .rounded)).foregroundColor(.white).bold()
+                    //Spacer()
+                    Image(systemName: "creditcard.fill").foregroundColor(Color(.white)).font(.system(size: 9))
                     Spacer()
-                    Image(systemName: "creditcard.fill").foregroundColor(Color(.white)).font(.system(size: 17))
                 }
                 
                 Spacer()
                 
                 //Divider().foregroundColor(Color(.white))
+                //HStack{
+                //    Text("$" + getBalance()).font(.system(size: 10, design: .rounded)).bold().foregroundColor(.white)
+               // }
                 HStack{
-                    Text("$" + getBalance()).font(.headline).bold().foregroundColor(.white)
-                }
-                HStack{
-                    Text("XXXX" + (account.mask ?? "XXXX")).font(.subheadline).foregroundColor(Color(.lightText))
-                   Spacer().frame(width: 35)
+                    Text("XXXX" + (account.mask ?? "XXXX")).font(.system(size: 8, design: .rounded)).foregroundColor(Color(.lightText))
+                   
                 }
                 
                 
             }
             Spacer()
-        }.frame(height: 110).padding(10).background(LinearGradient(gradient:  Gradient(colors: [AppTheme().themeColorSecondary, AppTheme().themeColorPrimary]), startPoint: .topTrailing, endPoint: .center))
-            .cornerRadius(20)
+        }.frame(width: 55, height: 40).padding(7).background(LinearGradient(gradient:  Gradient(colors: [AppTheme().themeColorSecondary, AppTheme().themeColorPrimary]), startPoint: .topTrailing, endPoint: .center))
+            .cornerRadius(10).shadow(radius: 3)
     }
     
     var body: some View {

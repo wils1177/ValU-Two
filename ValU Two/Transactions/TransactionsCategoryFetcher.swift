@@ -11,15 +11,32 @@ import Foundation
 struct TransactionsCategoryFetcher{
     
     static func fetchTransactionsForCategoryAndDateRange(spendingCategory: SpendingCategory, startDate: Date, endDate: Date) -> [Transaction]{
-        let allTransactions = spendingCategory.transactions?.allObjects as! [Transaction]
-        var matchingTransactions = [Transaction]()
         
-        for transaction in allTransactions{
-            if CommonUtils.isWithinDates(transaction: transaction, start: startDate, end: endDate){
-                matchingTransactions.append(transaction)
-            }
+        let time = PredicateBuilder().generateInDatesPredicate(startDate: startDate, endDate: endDate)
+        let category = PredicateBuilder().generateTransactionsForCategoryIdPredicate(ids: [spendingCategory.id!])
+        
+        let compound = NSCompoundPredicate(andPredicateWithSubpredicates: [time, category])
+        
+        var transactions = [Transaction]()
+        do{
+            transactions = try DataManager().getTransactions(predicate: compound)
         }
-        return matchingTransactions
+        catch{
+            print("Could not fetch transactions for spending category & date")
+    
+        }
+        
+        
+        return transactions
+    }
+    
+    static func fetchTransactionsForBudgetSectionAndDateRange(section: BudgetSection, startDate: Date, endDate: Date) -> [Transaction]{
+        var results = [Transaction]()
+        for category in section.getBudgetCategories(){
+            let categoryTransactions = TransactionsCategoryFetcher.fetchTransactionsForCategoryAndDateRange(spendingCategory: category.spendingCategory!, startDate: startDate, endDate: endDate)
+            results.append(contentsOf: categoryTransactions)
+        }
+        return results
     }
     
     static func getTransactionsForDateRange(startDate: Date, endDate: Date) -> [Transaction]{

@@ -62,8 +62,10 @@ class BudgetBalancerPresentor : ObservableObject {
     }
     
     func getDisplayAmountRemaining() -> String{
-        return CommonUtils.makeMoneyString(number: Int(getAmountRemaining())) + " Left"
+        return CommonUtils.makeMoneyString(number: Int(getAmountRemaining()))
     }
+    
+    
     
     func getDisplaySpent() -> String{
         return CommonUtils.makeMoneyString(number: Int(getSpent()))
@@ -94,7 +96,7 @@ class BudgetBalancerPresentor : ObservableObject {
     }
     
     func getAvailable() ->String{
-        let available = self.budget.amount
+        let available = self.budget.amount * (1 - self.budget.savingsPercent)
 
         return CommonUtils.makeMoneyString(number: Int(available))
     }
@@ -113,7 +115,7 @@ class BudgetBalancerPresentor : ObservableObject {
     func getBudgetStatusBarViewData() -> [BudgetStatusBarViewData]{
         
         var viewDataToReturn = [BudgetStatusBarViewData]()
-        let total = self.budget.amount
+        let total = self.budget.amount * (1.0 - self.budget.savingsPercent)
         
 
         
@@ -122,9 +124,9 @@ class BudgetBalancerPresentor : ObservableObject {
             let limitForSection = section.getLimit()
             let data = BudgetStatusBarViewData(percentage: limitForSection / Double(total), color: colorMap[Int(section.colorCode)] , name: section.name!, icon: section.icon!)
             sectionSpentTotal = sectionSpentTotal + limitForSection
-            //if limitForSection > 0.0 && limitForSection > 0.0{
+            if limitForSection > 0.0{
                 viewDataToReturn.append(data)
-            //}
+            }
             
         }
         
@@ -133,13 +135,11 @@ class BudgetBalancerPresentor : ObservableObject {
         
         
         
-        let savingsPercentage = self.budget.savingsPercent
-        let savingsData = BudgetStatusBarViewData(percentage: Double(savingsPercentage), color: Color(.systemGreen), name: "Savings", icon: "dollarsign.circle")
-        viewDataToReturn.insert(savingsData, at: 0)
         
-        let otherTotal = total - Float(sectionSpentTotal) - (self.budget.savingsPercent * total)
+        
+        let otherTotal = total - Float(sectionSpentTotal)
         let otherPercentage = Float(otherTotal) / total
-        let otherData = BudgetStatusBarViewData(percentage: Double(otherPercentage), color: Color(.tertiarySystemGroupedBackground), name: "Free Spending", icon: "book")
+        let otherData = BudgetStatusBarViewData(percentage: Double(otherPercentage), color: Color(.white), name: "Free Spending", icon: "book")
         viewDataToReturn.append(otherData)
         
         
@@ -186,8 +186,8 @@ class BudgetBalancerPresentor : ObservableObject {
             if category.id! == id{
                 budgetSection.removeFromBudgetCategories(category)
                 let predicate = PredicateBuilder().generateByIdPredicate(id: category.id!)
-                category.spendingCategory!.objectWillChange.send()
-                self.objectWillChange.send()
+                //category.spendingCategory!.objectWillChange.send()
+                
                 do{
                     try DataManager().deleteEntity(predicate: predicate, entityName: "BudgetCategory")
                 }
@@ -198,6 +198,7 @@ class BudgetBalancerPresentor : ObservableObject {
                 
             }
         }
+        budgetSection.objectWillChange.send()
         self.objectWillChange.send()
         
     }

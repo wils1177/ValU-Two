@@ -71,6 +71,22 @@ struct IncomeStreamsJSON : Codable{
     
 }
 
+struct ErrorResponse: Codable{
+    let errorType: String
+    let errorCode: String
+    let errorMessage: String
+    let requestId: String
+    let displayMessage: String?
+    
+    enum CodingKeys: String, CodingKey{
+        case errorType = "error_type"
+        case errorCode = "error_code"
+        case errorMessage = "error_message"
+        case requestId = "request_id"
+        case displayMessage = "display_message"
+    }
+}
+
 
 struct TransactionsResponse : Codable{
     
@@ -114,6 +130,7 @@ struct TransactionJSON : Codable {
     var pendingTransactionId : String?
     var transactionId : String
     var plaidCategories : [String]?
+    var authDate: String?
     
     enum CodingKeys : String, CodingKey {
         case accountId  = "account_id"
@@ -126,6 +143,7 @@ struct TransactionJSON : Codable {
         case transactionId = "transaction_id"
         case plaidCategories = "category"
         case merchantName = "merchant_name"
+        case authDate = "authorized_date"
         case dateTime = "authorized_datetime"
         
     }

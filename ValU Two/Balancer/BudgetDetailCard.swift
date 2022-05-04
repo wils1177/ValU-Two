@@ -11,13 +11,13 @@ import SwiftUI
 struct BudgetDetailCard: View {
     
     @ObservedObject var budgetCategory : BudgetCategory
-    var spendingCategory : SpendingCategory
+    @ObservedObject var spendingCategory : SpendingCategory
     var coordinator: BudgetEditableCoordinator
     @ObservedObject var service : CategoryEditService
     
     @ObservedObject var historicalTransactions : HistoricalTransactionsViewModel
     
-    
+    @State var isShowingEdit = false
     
     var color : Color
     
@@ -56,13 +56,7 @@ struct BudgetDetailCard: View {
         
         
         
-        /*
-        Button(action: {
-            self.parentService.deleteCategory(id: self.budgetCategory.id!)
-        }) {
-            Image(systemName: "multiply.circle.fill").foregroundColor(Color(.placeholderText)).imageScale(.large)
-        }.buttonStyle(PlainButtonStyle())
-        */
+        
     }
     
     
@@ -82,8 +76,71 @@ struct BudgetDetailCard: View {
         
     }
     
+    func editCategory(){
+        self.isShowingEdit = true
+    }
+    
+    func makeRecurring(){
+        self.budgetCategory.recurring = true
+        DataManager().saveDatabase()
+    }
+    
+    func makeFreeSpending(){
+        self.budgetCategory.recurring = false
+        DataManager().saveDatabase()
+    }
+    
+    func removeCategory(){
+        self.viewModel.deleteCategory(id: self.budgetCategory.id!, budgetSection: self.budgetCategory.budgetSection!)
+    }
+    
+    var moreMenu : some View{
+        
+        Menu {
+            if self.budgetCategory.recurring{
+                
+                Button(action: makeFreeSpending) {
+                                                Label("Make Free Spending", systemImage: "play")
+                                            }
+                
+            }
+            else{
+                
+                
+                Button(action: makeRecurring) {
+                                                Label("Make Recurring", systemImage: "clock.arrow.circlepath")
+                                            }
+            }
+            
+            
+            Button(action: editCategory) {
+                                            Label("Edit Category", systemImage: "pencil")
+                                        }
+            
+            
+            
+            
+            Button(role: .destructive, action: removeCategory) {
+                                            Label("Remove", systemImage: "trash")
+                                        }
+                    
+                    
+                } label: {
+                    Image(systemName: "ellipsis.circle.fill").foregroundColor(self.color).font(.system(size: 23, weight: .heavy, design: .rounded)).symbolRenderingMode(.hierarchical)
+                }
+        
+    }
     
     
+    var recurringIndicator: some View{
+        HStack{
+            Image(systemName: "clock.arrow.circlepath").foregroundColor(Color(.lightGray))
+            Text("This category is recurring").font(.system(size: 15, design: .rounded)).fontWeight(.semibold).lineLimit(1).foregroundColor(Color(.lightGray))
+            
+            Spacer()
+            Image(systemName: "info.circle.fill").foregroundColor(Color(.lightGray))
+        }.padding(.horizontal, 5).padding(10).background(Color(.lightGray).opacity(0.25))
+    }
     
     
     var card: some View{
@@ -92,11 +149,11 @@ struct BudgetDetailCard: View {
                 Text(self.spendingCategory.icon!).font(.system(size: 17))
                 Text(self.spendingCategory.name!).font(.system(size: 17, design: .rounded)).fontWeight(.semibold).lineLimit(1)
                 Spacer()
-                deleteButton
+                moreMenu
             }.padding(.horizontal, 13).padding(.top, 10)
                    
                     
-     
+            
             
                 
                 HStack{
@@ -107,17 +164,24 @@ struct BudgetDetailCard: View {
                     //TextField("Enter a limit", text: self.$service.editText).keyboardType(.numberPad)
                                         
                     Spacer()
-                }.padding(.leading).padding(.top, 10).padding(.vertical, 5).padding(.bottom)
-                
-        
-                
-                Button(action: {
-                    self.coordinator.showHistoricalTransactions(budgetCategory: self.budgetCategory, model: self.historicalTransactions)
-                }) {
+                }.padding(.leading).padding(.top, 10).padding(.vertical, 5)
+             
+            VStack(spacing: 0){
+                if self.budgetCategory.recurring{
+                    recurringIndicator
+                }else{
+                    Button(action: {
+                        self.coordinator.showHistoricalTransactions(budgetCategory: self.budgetCategory, model: self.historicalTransactions)
+                    }) {
+                        
+                        self.pill
+                        
+                    }.buttonStyle(BorderlessButtonStyle())
+                }
                     
-                    self.pill
                     
-                }.buttonStyle(BorderlessButtonStyle())
+            }.padding(.top)
+            
                 
                 
             
@@ -132,8 +196,22 @@ struct BudgetDetailCard: View {
     
     var body: some View {
         card.transition(.move(edge: .leading))
+            .sheet(isPresented: self.$isShowingEdit){
+                CreateCustomBudgetCategoryView(submitCallBack: editCategory(icon:name:), category: self.spendingCategory)
+            }
     }
+    
+    
+    func editCategory(icon: String, name: String){
+        self.spendingCategory.name = name
+        self.spendingCategory.icon = icon
+        DataManager().saveDatabase()
+    }
+    
+    
 }
+
+
 
 
 extension UIColor {

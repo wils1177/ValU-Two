@@ -130,6 +130,10 @@ class NewBudgetCoordinator : Coordinator, BudgetEditableCoordinator {
         
     }
     
+    func goBack(){
+        self.navigationController.popViewController(animated: true)
+    }
+    
     func dimiss(){
         self.navigationController.dismiss(animated: true)
  

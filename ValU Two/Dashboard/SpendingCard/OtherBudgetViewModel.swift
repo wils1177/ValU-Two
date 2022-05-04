@@ -19,22 +19,40 @@ class OtherBudgetViewModel {
             hasher.combine(id)
         }
     }
-    
-    var categories = [BudgetCategory]()
-    var categoriesData = [OtherBudgetSectionData]()
-    var unassignedTransactions = [Transaction]()
+
     var budgetTransactionsService : BudgetTransactionsService
     
     init(budgetTransactionsService: BudgetTransactionsService){
         self.budgetTransactionsService = budgetTransactionsService
-        getTransactionsInOtherCategory()
     }
     
     
-    func getTransactionsInOtherCategory(){
-        self.unassignedTransactions = [Transaction]()
-        self.unassignedTransactions = self.budgetTransactionsService.getOtherTransactionsInBudget()
+    
+    func getOtherSpentTotal() -> Double{
+        return self.budgetTransactionsService.getOtherSpentTotal()
     }
+    
+    func getleft() -> Double{
+        let limitTotal  = self.budgetTransactionsService.budget.getSectionLimitTotal()
+        
+        let budgetToatl = self.budgetTransactionsService.budget.getAmountAvailable()
+        
+        let otherAvailable = Double(budgetToatl) - limitTotal
+        
+        return otherAvailable - getOtherSpentTotal()
+    }
+    
+    func getPercentageSpent() -> Double{
+        let limitTotal  = self.budgetTransactionsService.budget.getSectionLimitTotal()
+        
+        let budgetToatl = self.budgetTransactionsService.budget.getAmountAvailable()
+        
+        let otherAvailable = Double(budgetToatl) - limitTotal
+        
+        return getOtherSpentTotal() / otherAvailable
+    }
+    
+    
     
     
     

@@ -49,7 +49,7 @@ struct BudgetStatusBarView: View {
         self.showLegend = showLegend
     }
     
-    var maxHeight = CGFloat(13)
+    var maxHeight = CGFloat(25)
     
     
    
@@ -99,17 +99,17 @@ struct BudgetStatusBarView: View {
     var foreGroundBars : some View{
         
             GeometryReader{ g in
-                HStack(spacing: 0) {
+                HStack(spacing: 2) {
                     ForEach(self.viewData, id: \.self) {data in
                         if g.size.height < g.size.width{
-                            RoundedRectangle(cornerRadius: 0).frame(width: self.getWidthOfBar(totalSize: g.size.width, barCount: self.viewData.count, percentage: data.percentage)).foregroundColor(data.color.opacity(0.7)).opacity(g.size.height < g.size.width ? 1 : 0)
+                            RoundedRectangle(cornerRadius: 0).frame(width: self.getWidthOfBar(totalSize: g.size.width, barCount: self.viewData.count, percentage: data.percentage)).foregroundColor(data.color).opacity(g.size.height < g.size.width ? 1 : 0)
                         }
                         
                   }
                     Spacer()
                 }
                 
-            }.frame(height: self.maxHeight).clipShape(RoundedRectangle(cornerRadius: 7))
+            }.frame(height: self.maxHeight).clipShape(RoundedRectangle(cornerRadius: 10))
         
     }
     

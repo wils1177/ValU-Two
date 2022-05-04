@@ -112,6 +112,15 @@ public class Budget: NSManagedObject, NSCopying, Identifiable {
         return (self.budgetSection?.allObjects as! [BudgetSection]).sorted(by: { $0.order < $1.order })
     }
     
+    func getSectionLimitTotal() -> Double{
+        let sections = self.getBudgetSections()
+        var total = 0.0
+        for section in sections{
+            total = total + section.getLimit()
+        }
+        return total
+    }
+    
     func getBudgetCategories() -> [BudgetCategory]{
         var budgetCategories = [BudgetCategory]()
         let sections = self.getBudgetSections()

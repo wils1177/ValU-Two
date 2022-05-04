@@ -53,6 +53,10 @@ class BudgetIncomeService : ObservableObject{
         return self.incomePredictionService.getSortedIncomeTransactions()
     }
     
+    func predictionString() -> String{
+        return CommonUtils.makeMoneyString(number: Int(self.incomePredictionService.getTotalIncome()))
+    }
+    
     func tryToSetBudgetIncome(){
         let incomeString = self.currentIncomeEntry.replacingOccurrences(of: "$", with: "", options: NSString.CompareOptions.literal, range:nil)
 

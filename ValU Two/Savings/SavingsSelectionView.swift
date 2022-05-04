@@ -19,45 +19,7 @@ struct SavingsSelectionView: View {
     @ObservedObject var viewModel : SetSavingsPresentor
     
     var body: some View {
-        VStack(spacing: 10){
-            
-            HStack{
-                StepTitleText(header: "Step 3 of 4", title: "Savings Goal", description: "Choose a savings goal for your budget.").padding(.bottom, 20)
-                Spacer()
-                
-            }.padding(.horizontal, 25)
-            
-            Button(action: {
-                self.viewModel.selectedPresetButton(goal: SavingsGoals.Aggressive)
-            }) {
-                SetSavingsRow(title: "Aggressive", description: "Save at a high rate.", displayPercent: "25%", savingsGoal: SavingsGoals.Aggressive, savingsAmount: self.viewModel.getSavingsAmountForGoal(goal: SavingsGoals.Aggressive), spendingAmount: self.viewModel.getSpendingAmountForGoal(goal: SavingsGoals.Aggressive), viewModel: self.viewModel).padding(.horizontal, 20).padding(.bottom, 5)
-            }.buttonStyle(PlainButtonStyle())
-            
-            Button(action: {
-                self.viewModel.selectedPresetButton(goal: SavingsGoals.Moderate)
-            }) {
-                SetSavingsRow(title: "Moderate", description: "Save at the reccomended rate.", displayPercent: "15%", savingsGoal: SavingsGoals.Moderate, savingsAmount: self.viewModel.getSavingsAmountForGoal(goal: SavingsGoals.Moderate), spendingAmount: self.viewModel.getSpendingAmountForGoal(goal: SavingsGoals.Moderate), viewModel: self.viewModel).padding(.horizontal, 20).padding(.bottom, 5)
-            }.buttonStyle(PlainButtonStyle())
-            
-            Button(action: {
-                self.viewModel.coordinator!.userTappedCustomSavings(presentor: self.viewModel)
-            }) {
-                SetSavingsRow(title: "Custom", description: "Choose a custom savings rate.", displayPercent: self.viewModel.getCustomDisplayPercentage(), savingsGoal: SavingsGoals.Custom, savingsAmount: self.viewModel.getSavingsAmountForGoal(goal: SavingsGoals.Custom), spendingAmount: self.viewModel.getSpendingAmountForGoal(goal: SavingsGoals.Custom), viewModel: self.viewModel).padding(.horizontal, 20).padding(.bottom, 5)
-            }.buttonStyle(PlainButtonStyle())
-            
-         
-            
-            Spacer()
-            
-            Button(action: {
-                          //Button Action
-                self.viewModel.coordinator?.savingsSubmitted(budget: self.viewModel.budget, sender: self.viewModel)
-                          }){
-                ActionButtonLarge(text: "Done")
-            
-                }
-            
-        }
+        SetSavingsView(presentor: viewModel)
         .background(Color(.systemGroupedBackground))
         .navigationBarTitle(Text(""))
     }
@@ -107,9 +69,7 @@ struct SetSavingsRow: View {
     }
     
     
-    
-    var body: some View {
-        
+    var oldBody: some View{
         HStack{
             VStack(alignment: .leading, spacing: 2){
                 Text(self.title).font(.system(size: 24, design: .rounded)).foregroundColor(getTextColor(selected: self.viewModel.isGoalSelected(goal: self.savingsGoal))).bold()
@@ -131,6 +91,12 @@ struct SetSavingsRow: View {
             Text(self.displayPercent).font(.system(size: 26, design: .rounded)).bold().foregroundColor(getSelectionColor(selected: self.viewModel.isGoalSelected(goal: self.savingsGoal))).padding(.trailing)
 
         }.padding(.vertical, 10).background(self.getBackgroundColor(selected: self.viewModel.isGoalSelected(goal: self.savingsGoal))).cornerRadius(23)
+    }
+    
+    
+    var body: some View {
+        
+        Text("lame")
         
     }
     

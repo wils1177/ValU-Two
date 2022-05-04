@@ -9,7 +9,10 @@
 import SwiftUI
 import MapKit
 
-
+struct MyAnnotationItem: Identifiable {
+    var coordinate: CLLocationCoordinate2D
+    let id = UUID()
+}
 
 struct TransactionDetailView: View {
     
@@ -23,6 +26,8 @@ struct TransactionDetailView: View {
     
     var showMap = false
     
+    var annotationItems: [MyAnnotationItem]?
+    
     init(viewModel: TransactionDetailViewModel, transaction: Transaction, account: AccountData?){
         self.viewModel = viewModel
         self.transaction = transaction
@@ -32,8 +37,10 @@ struct TransactionDetailView: View {
         
         print(transaction.location!.lat)
         if transaction.location != nil && transaction.location!.lat != 0.0 && transaction.location!.lon != 0.0{
-            self.region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: transaction.location!.lat, longitude: transaction.location!.lon), span: MKCoordinateSpan(latitudeDelta: 0.02, longitudeDelta: 0.02))
+            var coord = CLLocationCoordinate2D(latitude: transaction.location!.lat, longitude: transaction.location!.lon)
+            self.region = MKCoordinateRegion(center: coord, span: MKCoordinateSpan(latitudeDelta: 0.02, longitudeDelta: 0.02))
             self.showMap = true
+            self.annotationItems = [MyAnnotationItem(coordinate: coord)]
         }
         else{
             self.region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
@@ -151,6 +158,27 @@ struct TransactionDetailView: View {
         }
     }
     
+    func restore(){
+        self.viewModel.restoreOriginal()
+    }
+    
+    func split2(){
+        self.viewModel.split(num: 2)
+    }
+    
+    func split3(){
+        self.viewModel.split(num: 3)
+    }
+    
+    func split4(){
+        self.viewModel.split(num: 4)
+    }
+    
+    func split5(){
+        self.viewModel.split(num: 5)
+    }
+    
+    
     var actionSection : some View{
         HStack(spacing: 0){
             
@@ -165,27 +193,30 @@ struct TransactionDetailView: View {
                     Text("Edit Category").foregroundColor(AppTheme().themeColorPrimary).font(.caption).padding(.bottom, 5)
                     }
                     Spacer()
-                }.padding(.horizontal).padding(.vertical, 5).background(Color(.systemBackground).opacity(0.65)).cornerRadius(15)
+                }.padding(.horizontal).padding(.vertical, 5).background(Color(.tertiarySystemBackground).opacity(0.65)).cornerRadius(15)
 
             }
             
             Spacer()
             
-            Button(action: {
-                //Button Action
-                self.viewModel.coordinator?.showSplitTransaction(transaction: self.viewModel.transaction)
-                
-                }){
-                HStack{
-                    Spacer()
-                    VStack(alignment: .center, spacing: 7){
-                            Image(systemName: "divide.circle.fill").imageScale(.large).foregroundColor(AppTheme().themeColorPrimary).padding(.top, 10)
-                        Text("Split").foregroundColor(AppTheme().themeColorPrimary).font(.caption).padding(.bottom, 5)
-                        }
-                    Spacer()
-                }.padding(.horizontal).padding(.vertical, 5).background(Color(.systemBackground).opacity(0.65)).cornerRadius(15)
-
-            }
+            Menu {
+                        Button("2 People", action: split2)
+                Button("3 People", action: split3)
+                        Button("4 People", action: split4)
+                        Button("5 People", action: split5)
+                        Button("Restore Original", action: restore)
+                    } label: {
+                        HStack{
+                            Spacer()
+                            VStack(alignment: .center, spacing: 7){
+                                    Image(systemName: "person.fill").imageScale(.large).foregroundColor(AppTheme().themeColorPrimary).padding(.top, 10)
+                                Text("Split").foregroundColor(AppTheme().themeColorPrimary).font(.caption).padding(.bottom, 5)
+                                }
+                            Spacer()
+                        }.padding(.horizontal).padding(.vertical, 5).background(Color(.tertiarySystemBackground).opacity(0.65)).cornerRadius(15)
+                    }
+            
+            
             
             
             
@@ -261,8 +292,14 @@ struct TransactionDetailView: View {
             
             if self.showMap{
                 Section(header: Text("Location")){
-                    Map(coordinateRegion: $region, interactionModes: [])
-                        .frame(height: 300, alignment: .center).listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)).cornerRadius(15).listRowBackground(Color.clear).listRowSeparator(.hidden)
+                    //Map(coordinateRegion: $region, interactionModes: [])
+                        //.frame(height: 300, alignment: .center).listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)).cornerRadius(15).listRowBackground(Color.clear).listRowSeparator(.hidden)
+                    
+                    Map(coordinateRegion: $region,
+                                    annotationItems: annotationItems!) {item in
+                                    MapPin(coordinate: item.coordinate)
+                                }.frame(height: 300, alignment: .center).listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)).cornerRadius(15).listRowBackground(Color.clear).listRowSeparator(.hidden)
+                    
                 }
             }
             
@@ -288,6 +325,8 @@ struct TransactionDetailView: View {
         
     }
 }
+
+
 
 
 

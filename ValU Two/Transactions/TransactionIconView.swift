@@ -112,7 +112,7 @@ struct TransactionIconViewLarge: View {
     
     var body: some View {
         ZStack(alignment: .center){
-            RoundedRectangle(cornerRadius: 35).frame(width: 125, height: 125, alignment: .center).foregroundColor(Color(.systemBackground).opacity(0.6))
+            RoundedRectangle(cornerRadius: 35).frame(width: 125, height: 125, alignment: .center).foregroundColor(Color(.tertiarySystemBackground).opacity(0.6))
             self.mainPart
         }
         

@@ -33,7 +33,7 @@ struct BalancerBodyView: View {
         }) {
             HStack{
                 Image(systemName: "plus.circle.fill").font(.system(size: 22, weight: .regular)).foregroundColor(AppTheme().themeColorPrimary)
-                Text("New Budget").foregroundColor(AppTheme().themeColorPrimary).bold()
+                Text("New Budget").font(.system(size: 18, weight: .regular, design: .rounded)).foregroundColor(AppTheme().themeColorPrimary).bold()
                 
             }
             
@@ -42,43 +42,49 @@ struct BalancerBodyView: View {
     
     
     
-    
+    var headerText: some View{
+        Text("Budgets").font(.system(size: 18, weight: .bold, design: .rounded))
+    }
       
       var body: some View {
         
             
-            ScrollView{
+            List{
                 
-                VStack{
+                
                     
                     
-                                 
-                    SpendingLimitSummaryView(viewModel: self.viewModel).padding(.top, 5).padding(.horizontal, 10)
+                
+                SpendingLimitSummaryView(viewModel: self.viewModel).listRowSeparator(.hidden).listRowBackground(Color.clear).listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)).padding(.horizontal, 10).padding(.top)
+                
+                
                     
                     
-                            
-                    BalanceBudgetCardList(viewModel: self.viewModel, sections: self.budget.getBudgetSections()).padding(.horizontal, 10).padding(.top, 15)
-                }.padding(.horizontal, 25)
+                Section(header: headerText){
+                    BalanceBudgetCardList(viewModel: self.viewModel, sections: self.budget.getBudgetSections())//.listRowSeparator(.hidden)
+                }//.padding(.top, 20).padding(.horizontal, 26)
+                
+                
             
                 
                             
                         
-                Spacer().padding(.top)
+                
                                                 
                 
                       
                             
                         
-                    }.listStyle(SidebarListStyle()).padding(.horizontal, -20)
+                    }
             
             
         
         
         
         
-        .background(Color(.systemGroupedBackground))
-       
-        .navigationBarTitle("Set Budgets", displayMode: .large).navigationBarItems(trailing:
+        
+            .background(Color(.systemGroupedBackground))
+        .navigationBarTitle("Set Budget", displayMode: .large).navigationBarItems(trailing:
             
             HStack{
                 
@@ -127,6 +133,7 @@ struct BalancerBodyView: View {
                 HStack{
                     newSectionButton
                     Spacer()
+                    EditButton()
                 }
                 
                 
@@ -151,7 +158,7 @@ struct BalanceBudgetCardList : View {
     @ObservedObject var budget: Budget
     var sections : [BudgetSection]
     
-    @State var showDeleteAlert = false
+    @State var showingDeleteAlert = false
     
     private var columns: [GridItem] = [
         GridItem(.flexible(), spacing: 13),
@@ -164,6 +171,12 @@ struct BalanceBudgetCardList : View {
         self.budget = viewModel.budget
     }
     
+    @State var toDelete : IndexSet?
+    
+    func deleteAttempt(at offsets: IndexSet){
+        self.toDelete = offsets
+        self.showingDeleteAlert.toggle()
+    }
     
     
     func delete(at offsets: IndexSet) {
@@ -215,42 +228,38 @@ struct BalanceBudgetCardList : View {
     var body: some View{
         
         //VStack{
+        /*
             HStack{
-                Text("Budgets").font(.system(size: 22, design: .rounded)).bold()
+                Text("Budget Groups").font(.system(size: 22, design: .rounded)).bold()
                 Spacer()
             }.padding(.leading, 5)
+         */
             
-            /*
             ForEach(self.sections, id: \.self) { section in
-                            VStack(spacing: 0){
                                 
-                                BudgetBalanceCard(budgetSection: section, coordinator: self.viewModel.coordinator!, viewModel: self.viewModel)
-                                
-        
-                            }
+                BudgetBalanceCard(budgetSection: section, coordinator: self.viewModel.coordinator!, viewModel: self.viewModel).padding(.vertical, 8)
+              
+                    .swipeActions(allowsFullSwipe: true) {
+                                                Button {
+                                                    print("Muting conversation")
+                                                } label: {
+                                                    Label("Mute", systemImage: "bell.slash.fill")
+                                                }
+                                                .tint(.indigo)
 
-            }.onDelete(perform: delete).onMove(perform: move)
-             */
-        //}
+                                                
+                                            }
         
-        
-        LazyVGrid(      columns: columns,
-                        alignment: .center,
-                        spacing: 15,
-                        pinnedViews: [.sectionHeaders, .sectionFooters]
-        ){
-            ForEach(self.sections, id: \.self) { section in
-                            VStack(spacing: 0){
-                                
-                                BudgetBalanceCard(budgetSection: section, coordinator: self.viewModel.coordinator!, viewModel: self.viewModel)
-                                
-        
-                            }
+                            
 
-            }.onDelete(perform: delete).onMove(perform: move)
-        }.padding(.top, -13)
-        
-        
+            }.onDelete(perform: deleteAttempt).onMove(perform: move)
+             
+     
+            .alert(isPresented:self.$showingDeleteAlert) {
+                Alert(title: Text("Are you sure you want to delete this budget?"), message: Text("All associated data will be deleted"), primaryButton: .destructive(Text("Delete")) {
+                    self.delete(at: self.toDelete!)
+                }, secondaryButton: .cancel())
+            }
     }
 }
 

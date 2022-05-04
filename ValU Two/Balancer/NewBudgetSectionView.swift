@@ -14,14 +14,15 @@ struct NewBudgetSectionView: View {
     
     @State var nameText = ""
     
-    @State var icons = [["flame", "paintbrush", "leaf", "bed.double", "heart"],
-                         ["cross", "bus", "network", "bolt.horizontal.circle", "tv"],
-                         ["macpro.gen3", "gamecontroller.fill", "ticket", "paperclip", "pianokeys"],
-                         ["speedometer", "ruler", "hammer", "briefcase", "puzzlepiece"],
-                         ["lock", "pin", "map", "film", "crown"],
-                         ["eyes", "pencil", "eyeglasses", "die.face.3", "cloud.sun"],
-                         ["moon", "sun.max", "phone", "envelope", "message"],
-                         ["scribble", "newspaper", "book.closed", "sleep", "drop"]
+    @State var icons = ["flame.fill", "paintbrush.fill", "leaf.fill", "house.fill", "heart.fill",
+                         "graduationcap.fill", "bus.fill", "globe.americas.fill", "ticket.fill", "fork.knife",
+                         "macpro.gen3.fill", "gamecontroller.fill", "tag.fill", "paperclip", "pianokeys",
+                         "cloud.sun.fill", "car.fill", "hammer.fill", "briefcase.fill", "brain",
+                         "pawprint.fill", "ferry.fill", "map.fill", "film.fill", "crown",
+                         "eyes", "scissors", "shippingbox.fill", "gift.fill", "cloud.sun",
+                         "moon.fill", "pc", "phone.fill", "envelope.fill", "message",
+                         "lightbulb.fill", "newspaper", "book.closed", "bandage.fill", "guitars.fill",
+                        "mustache.fill", "building.2.fill"
     ]
         
     
@@ -29,7 +30,6 @@ struct NewBudgetSectionView: View {
     @State var colors = [0, 1, 2 ,3 , 4 ,5 ,
                          6, 7, 8, 9, 10, 11]
     
-    @State var selectedIconRow = 0
     @State var selectedIconColumn = 0
     
     
@@ -49,8 +49,8 @@ struct NewBudgetSectionView: View {
     
     var createdIconView : some View {
         ZStack(alignment: .center){
-            RoundedRectangle(cornerRadius: 25).frame(width: 120, height: 120).foregroundColor(colorMap[self.colors[selectedColorColumn]] as! Color)
-            Image(systemName: self.icons[self.selectedIconRow][self.selectedIconColumn]).font(.system(size: 55)).foregroundColor(Color(.white))
+            RoundedRectangle(cornerRadius: 40).frame(width: 120, height: 120).foregroundColor(colorMap[self.colors[selectedColorColumn]] as! Color)
+            Image(systemName: self.icons[self.selectedIconColumn]).font(.system(size: 55)).foregroundColor(Color(.white))
             
         }
     }
@@ -69,25 +69,25 @@ struct NewBudgetSectionView: View {
                 VStack{
                     
                     
-                    TextField("Name", text: self.$nameText).font(Font.system(size: 24, weight: .semibold)).frame(height: 55, alignment: .center).multilineTextAlignment(.center).padding(.horizontal).background(Color(.tertiarySystemGroupedBackground)).cornerRadius(20).padding(.horizontal).padding(.bottom)
+                    TextField("Name", text: self.$nameText).font(Font.system(size: 24, weight: .semibold)).frame(height: 65, alignment: .center).multilineTextAlignment(.center).padding(.horizontal).background(Color(.tertiarySystemGroupedBackground)).cornerRadius(20).padding(.horizontal).padding(.bottom)
                     
  
                 }
                 
                 VStack{
                     HStack{
-                        Text("Color").font(.title3).bold()
+                        Text("Color").font(.system(size: 22, design: .rounded)).bold()
                         Spacer()
                     }.padding(.horizontal)
                     ColorSelectionGridView(colors: self.$colors, selectedColumn: self.$selectedColorColumn).padding(10).background(Color(.tertiarySystemGroupedBackground)).cornerRadius(20).padding(.horizontal).padding(.bottom)
-                }.padding(.top, 15)
+                }
                 
                 VStack{
                     HStack{
-                        Text("Icon").font(.title3).bold()
+                        Text("Icon").font(.system(size: 22, design: .rounded)).bold()
                         Spacer()
                     }.padding(.horizontal)
-                    IconSelectionGridView(icons: self.$icons, selectedRow: self.$selectedIconRow, selectedColumn: self.$selectedIconColumn).padding().background(Color(.tertiarySystemGroupedBackground)).cornerRadius(20).padding(.horizontal).padding(.bottom)
+                    IconSelectionGridView(icons: self.$icons, selectedColumn: self.$selectedIconColumn).padding().background(Color(.tertiarySystemGroupedBackground)).cornerRadius(20).padding(.horizontal).padding(.bottom)
                 }
                 
                     
@@ -109,7 +109,7 @@ struct NewBudgetSectionView: View {
                 ,trailing: Button(action: {
                         
                     if self.nameText != ""{
-                        self.budgetSectionCreator.addSectionToBudget(name: self.nameText, icon: self.icons[self.selectedIconRow][self.selectedIconColumn], colorCode: self.colors[self.selectedColorColumn])
+                        self.budgetSectionCreator.addSectionToBudget(name: self.nameText, icon: self.icons[self.selectedIconColumn], colorCode: self.colors[self.selectedColorColumn])
                         self.coordinator?.dismissPresented()
                     }else{
                         self.showAlertForNoName = true

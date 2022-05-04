@@ -19,11 +19,16 @@ struct ParentCategoryCard: View {
     var limit : Float
     var name: String
     var percentageSpent: Double
-    var section: BudgetSection?
+    @ObservedObject var section: BudgetSection
     
+    var coordinator: BudgetsTabCoordinator?
     
-    init(budgetSection: BudgetSection){
+    @Binding var selectedSpendingState : Int
+    
+    init(budgetSection: BudgetSection, coordiantor: BudgetsTabCoordinator? = nil, selectedState: Binding<Int>){
+        self.coordinator = coordiantor
         self.section = budgetSection
+        self._selectedSpendingState = selectedState
         self.color = colorMap[Int(budgetSection.colorCode)]
         self.colorSeconday = Color(colorMapUIKit[Int(budgetSection.colorCode)].lighter()!)
         self.colorTertiary = Color(colorMapUIKit[Int(budgetSection.colorCode)].darker()!)
@@ -31,19 +36,11 @@ struct ParentCategoryCard: View {
         self.spent = Float(budgetSection.getSpent())
         self.limit = Float(budgetSection.getLimit())
         self.name = budgetSection.name!
+        
         self.percentageSpent = budgetSection.getPercentageSpent()
+        
     }
     
-    init(color: Color, colorSecondary: Color, colorTertiary: Color, icon: String, spent: Float, limit: Float, name: String, percentageSpent: Double){
-        self.color = color
-        self.colorSeconday = colorSecondary
-        self.colorTertiary = colorTertiary
-        self.icon = icon
-        self.spent = spent
-        self.limit = limit
-        self.name = name
-        self.percentageSpent = percentageSpent
-    }
     
     func getDisplayPercent() -> Double{
         if self.percentageSpent < 0.1{
@@ -54,114 +51,121 @@ struct ParentCategoryCard: View {
         }
     }
     
-    var colorDesign : some View{
-        VStack(alignment: .leading){
-            
-            HStack(alignment: .top){
-                BudgetSectionIconLarge(color: self.color, icon: self.icon, size: 40)
-                Spacer()
-                Text(CommonUtils.makeMoneyString(number: Int(self.spent))).foregroundColor(Color(.white)).font(.system(size: 18, design: .rounded)).fontWeight(.bold)
-            }.padding(.bottom, 15)
-            
-            HStack{
-                Text(self.name).font(.system(size: 15, design: .rounded)).bold().foregroundColor(.white).lineLimit(1)
-                Spacer()
-                if percentageSpent >= 1.0 {
-                    Image(systemName: "exclamationmark.triangle.fill" ).foregroundColor(Color(.white)).font(Font.system(size: 14, weight: .semibold)).padding(.trailing, 10)
-                }
-            }
-            
-            ProgressBarView(percentage: CGFloat(getDisplayPercent()), color: Color(.white), backgroundColor: self.colorTertiary).padding(.trailing, 5).padding(.bottom, 5)
-            
-        }.padding(12)
+    
+    func getLeft() -> String{
+        var left = 0.0
+        if self.selectedSpendingState == 0{
+            left = self.section.getFreeLimit() - self.section.getFreeSpent()
+        }
+        else{
+            left = self.section.getRecurringLimit() - self.section.getRecurringSpent()
+        }
         
-            .background(LinearGradient(gradient: Gradient(colors: [self.colorSeconday, self.color]), startPoint: .topLeading, endPoint: .bottomTrailing)).cornerRadius(23)
+        
+        var leftOver = " Left"
+        if left < 0 {
+            leftOver = " Over"
+        }
+        
+        return CommonUtils.makeMoneyString(number: Int(left)) + leftOver
     }
     
+
+
     
-    var whiteDesign : some View{
-        VStack(alignment: .leading){
-            
-            HStack(alignment: .top){
-                BudgetSectionIconLarge(color: self.color, icon: self.icon, size: 40)
-                Spacer()
-                Text(CommonUtils.makeMoneyString(number: Int(self.spent))).foregroundColor(Color(.black)).font(.system(size: 18, design: .rounded)).fontWeight(.bold)
-            }.padding(.bottom, 15)
-            
-            HStack{
-                Text(self.name).font(.system(size: 15, design: .rounded)).bold().foregroundColor(.black).lineLimit(1)
-                Spacer()
-                if percentageSpent >= 1.0 {
-                    Image(systemName: "exclamationmark.triangle.fill" ).foregroundColor(Color(.black)).font(Font.system(size: 14, weight: .semibold)).padding(.trailing, 10)
-                }
-            }
-            
-            ProgressBarView(percentage: CGFloat(getDisplayPercent()), color: self.color, backgroundColor: self.color.opacity(0.3)).padding(.trailing, 5).padding(.bottom, 5)
-            
-        }.padding(12)
-        
-            .background(color.opacity(0.2)).cornerRadius(23)
-    }
+    private var columns: [GridItem] = [
+        GridItem(.flexible(), spacing: 17),
+        //GridItem(.flexible(), spacing: 17)
+        //GridItem(.flexible(), spacing: 17)
+        ]
     
-    var rowDesign: some View{
-        Section(){
-            
-            VStack{
+    
+    @State var isLarge = true
+    
+    var circleNuts: some View{
+        Section{
+            VStack(spacing: 5){
+                
                 HStack{
-                    BudgetSectionIconLarge(color: self.color, icon: self.icon, size: 38).padding(.leading)
-                    VStack(alignment: .leading, spacing: 7){
-                        
-                            Text(self.name).font(.system(size: 17, design: .rounded)).fontWeight(.bold)
-                                 
-                        
-                        
-                        
-                        ProgressBarView(percentage: self.getDisplayPercent(), color: self.color.opacity(0.7), backgroundColor: self.color.opacity(0.3))
-                    }.padding(.horizontal, 5).padding(.trailing)
-                    Spacer()
-                    VStack(alignment: .trailing){
-                        
-                        Text(CommonUtils.makeMoneyString(number: Int(self.spent))).font(.system(size: 18, design: .rounded)).fontWeight(.bold)
-                        
-                        
-                    }.padding(.trailing, 25)
                     
-                }
-                .padding(.vertical, 12).background(self.color.opacity(0.2))
-                
-                
-                VStack{
-                    
-                    if self.section != nil{
-                        ForEach(self.section!.getBudgetCategories(), id: \.self) { category in
-                                
-                            HStack{
-                                Text(category.spendingCategory!.icon!).font(.system(size: 19, design: .rounded)).fontWeight(.bold)
-                                Text(category.spendingCategory!.name!).font(.system(size: 17, design: .rounded)).fontWeight(.semibold)
-                                Spacer()
-                                Text("\(CommonUtils.makeMoneyString(number: Int(category.getAmountSpent())))").font(.system(size: 17, design: .rounded)).fontWeight(.semibold)
-                                Text("/ \(CommonUtils.makeMoneyString(number: Int(category.limit)))").font(.system(size: 17, design: .rounded)).foregroundColor(Color(.lightGray)).fontWeight(.semibold)
-                            }.padding(.vertical, 10)
-                            
-                            if category.id != self.section?.getBudgetCategories().last!.id{
-                                Divider().padding(.leading, 25).foregroundColor(Color.clear)
-                            }
-                            
-                            
+                  
+                    Button(action: {
+                        // What to perform
+                        withAnimation{
+                            self.isLarge.toggle()
                         }
-                    }
+                        
+                    }) {
+                        // How the button looks like
+                        //Image(systemName: "chevron.right").font(.system(size: 19)).foregroundColor(globalAppTheme.themeColorPrimary).padding(.trailing, 3).rotationEffect(.degrees(isLarge ? 90 : 0)).padding(.trailing, 3)
+                        BudgetSectionIconLarge(color: self.color, icon: self.section.icon ?? "book", size: 30).padding(.trailing, 2)
+                        Text(self.name).font(.system(size: 20, design: .rounded)).fontWeight(.bold).lineLimit(1).listRowSeparator(.hidden)
+                    }.buttonStyle(PlainButtonStyle())
                     
                     
                     
                     
-                }.padding(.horizontal)
+                    
+                    Spacer()
+                    Button(action: {
+                        // What to perform
+                        coordinator?.showIndvidualBudget(budgetSection: self.section)
+                    }) {
+                        // How the button looks like
+                        NavigationBarTextButton(text: getLeft(), color: color)
+                    }.buttonStyle(PlainButtonStyle())
+                    
+                }.padding(.horizontal, 15).padding(.vertical, 5)
                 
-            }.background(self.color.opacity(0.06)).cornerRadius(25).listRowSeparator(.hidden)
+                
+                
+                if isLarge{
+                    
+                    Rectangle().frame(height: 3).foregroundColor(Color(.lightGray).opacity(0.2))
+                    
+                    VStack(spacing: 0){
+                        
+                        
+                        
+                            ForEach(self.section.getBudgetCategories(), id: \.self) { category in
+                                
+                                VStack(spacing: 0.0){
+                                    if self.selectedSpendingState == 0 && !category.recurring{
+                                        Button(action: {
+                                            // What to perform
+                                            self.coordinator?.showCategoryDetail(category: category)
+                                        }) {
+                                            // How the button looks like
+                                            CategorySlideView(category: category, color: self.color).padding(.vertical, 2.5)
+                                        }.buttonStyle(PlainButtonStyle())
+                                    }
+                                    else if self.selectedSpendingState == 1 && category.recurring{
+                                        Button(action: {
+                                            // What to perform
+                                            self.coordinator?.showCategoryDetail(category: category)
+                                        }) {
+                                            // How the button looks like
+                                            CategorySlideView(category: category, color: self.color).padding(.vertical, 2.5)
+                                        }.buttonStyle(PlainButtonStyle())
+                                    }
+                                }
+                                
+                                
+                                
+                                
+                                
+                                //Divider().padding(.leading, 30)
+                            }
+                        
+                    }.padding(.horizontal, 12).padding(.bottom, 12).padding(.top, 8)
+                }
+                
+                
+            }.padding(.top, 8).background(Color(.tertiarySystemBackground)).cornerRadius(25)
             
-        }.listRowBackground(Color.clear)
-        
-        
-        
+            
+            
+        }
     }
 
     
@@ -169,9 +173,277 @@ struct ParentCategoryCard: View {
         
         
         
-        self.rowDesign
-
+        self.circleNuts
     }
+}
+
+struct OtherSectionView: View{
+    
+    var model : OtherBudgetViewModel
+    
+    var percent: Double
+    
+    var left: Double
+    
+    var color = globalAppTheme.otherColor
+    
+    init(service: BudgetTransactionsService){
+        let viewModel = OtherBudgetViewModel(budgetTransactionsService: service)
+        self.model = viewModel
+        self.percent = model.getPercentageSpent()
+        self.left = model.getleft()
+        
+    }
+    
+    func getPercentage() -> Double{
+        
+        
+        if percent > 1.0{
+            return 1.0
+        }
+        if percent < 0.1 && percent != 0{
+            return 0.1
+        }
+        
+        else{
+            return percent
+        }
+    }
+    
+    func getDisplayPercent() -> String{
+        let intPercent = Int(percent * 100)
+        return String(intPercent) + "%"
+    }
+    
+    func getLeft() -> String{
+        return CommonUtils.makeMoneyString(number: Int(left))
+    }
+    
+    func getText() -> String{
+        if left >= 0{
+            return "Left"
+        }
+        else{
+            return "Over"
+        }
+    }
+    
+    var body: some View{
+        
+        Section{
+            VStack{
+                
+                HStack{
+                    
+  
+                    Text("Other").font(.system(size: 23, design: .rounded)).fontWeight(.bold).listRowSeparator(.hidden)
+
+                    Spacer()
+                    
+                    
+                }
+                
+                
+                    VStack{
+                        
+                        HStack{
+                            
+                            ZStack(alignment: .center){
+                                //RoundedRectangle(cornerRadius: 8).frame(width: 40, height: 40, alignment: .center).foregroundColor(color.opacity(0.7))
+                                Text("👄").font(.system(size: 27, design: .rounded))
+                            }
+                            
+                            GeometryReader{ g in
+                                
+                                    ZStack(alignment: .leading){
+                                        
+                                        
+                                        
+                                        RoundedRectangle(cornerRadius: 10).frame(width: g.size.width, height: 40).foregroundColor(self.color.opacity(0.08))
+                                        
+                                        
+                                        RoundedRectangle(cornerRadius: 10).frame(width: g.size.width * getPercentage(), height: 40).foregroundColor(self.color.opacity(0.4))
+                                        
+                                        
+                                        HStack{
+                                            
+                                            
+                                            VStack(alignment: .leading){
+                                                Text("Other").font(.system(size:15, design: .rounded)).bold().foregroundColor(Color(.black)).lineLimit(1)
+                                                Text(getDisplayPercent()).font(.system(size:12, design: .rounded)).bold().foregroundColor(color).lineLimit(1)
+                                            }
+                                            
+                                            Spacer()
+                                            
+                                            
+                                            
+                                        }.padding(.horizontal, 10)
+                                        
+                                    }
+                                
+                                
+                                
+                                
+                            }
+                            
+                            
+                            
+                            Spacer()
+                            
+                            
+                            VStack(alignment: .trailing){
+                                    //Text(category.spendingCategory!.name!).font(.system(size:15, design: .rounded)).bold().lineLimit(1)
+                                    Text(getLeft()).font(.system(size:15, design: .rounded)).bold().lineLimit(1)
+                                    Text(getText()).font(.system(size:13, design: .rounded)).foregroundColor(Color(.lightGray)).bold().lineLimit(1)
+                                    Spacer()
+                                }.frame(width: 50)
+                            
+                            
+                            
+                        }.frame(height: 50)
+                        
+                        
+                        }.padding(12).padding(.top, 8).background(Color(.tertiarySystemBackground)).cornerRadius(25)
+                    
+                }
+                
+                
+            }
+
+        
+    }
+}
+
+
+struct CategorySlideView: View{
+    
+    var category : BudgetCategory
+    var color : Color
+    var percent : Double = 0.0
+    
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
+    
+    init(category: BudgetCategory, color: Color){
+        self.category = category
+        self.color = color
+        self.percent = createPercent(cat: category)
+        
+    }
+    
+    func createPercent(cat: BudgetCategory) -> Double {
+        
+        if cat.limit == left{
+            return 0.0
+        }
+        
+        if cat.limit != 0{
+            return cat.getAmountSpent() / cat.limit
+        }
+        else{
+            return 1.0
+        }
+    }
+    
+    var left : Double{
+        return category.limit - category.getAmountSpent()
+    }
+    
+    func getPercentage() -> Double{
+        
+        
+        
+        if percent > 1.0{
+            return 1.0
+        }
+        if percent < 0.1 && percent != 0{
+            return 0.1
+        }
+        
+        else{
+            return percent
+        }
+    }
+    
+    func getDisplayPercent() -> String{
+        let intPercent = Int(percent * 100)
+        return String(intPercent) + "%"
+    }
+    
+    func getLeft() -> String{
+        return CommonUtils.makeMoneyString(number: Int(left))
+    }
+    
+    func getText() -> String{
+        if left >= 0{
+            return "Left"
+        }
+        else{
+            return "Over"
+        }
+    }
+    
+    
+    var body : some View{
+        
+        HStack{
+            
+            ZStack(alignment: .center){
+                //RoundedRectangle(cornerRadius: 8).frame(width: 40, height: 40, alignment: .center).foregroundColor(color.opacity(0.7))
+                Text(category.spendingCategory?.icon ?? "").font(.system(size: 27, design: .rounded))
+            }
+            
+            GeometryReader{ g in
+                
+                    ZStack(alignment: .leading){
+                        
+                        
+                        
+                        RoundedRectangle(cornerRadius: 10).frame(width: g.size.width, height: 40).foregroundColor(self.color.opacity(0.08))
+                        
+                        
+                        RoundedRectangle(cornerRadius: 10).frame(width: g.size.width * getPercentage(), height: 40).foregroundColor(self.color.opacity(0.4))
+                        
+                        
+                        HStack{
+                            
+                            
+                            VStack(alignment: .leading){
+                                Text(category.spendingCategory!.name!).font(.system(size:15, design: .rounded)).bold().foregroundColor((colorScheme == .dark) ? Color.white : Color.black).lineLimit(1)
+                                Text(getDisplayPercent()).font(.system(size:12, design: .rounded)).bold().foregroundColor(color).lineLimit(1)
+                            }
+                            
+                            Spacer()
+                            
+                            
+                            
+                        }.padding(.horizontal, 10)
+                        
+                    }
+                
+                
+                
+                
+            }
+            
+            
+            
+            Spacer()
+            
+            
+            VStack(alignment: .trailing){
+                    //Text(category.spendingCategory!.name!).font(.system(size:15, design: .rounded)).bold().lineLimit(1)
+                    Text(getLeft()).font(.system(size:15, design: .rounded)).bold().lineLimit(1)
+                    Text(getText()).font(.system(size:13, design: .rounded)).foregroundColor(Color(.lightGray)).bold().lineLimit(1)
+                    Spacer()
+                }.frame(width: 50)
+            
+            
+            
+        }.frame(height: 50)
+        
+        
+    }
+    
 }
 
 

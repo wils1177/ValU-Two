@@ -10,25 +10,28 @@ import SwiftUI
 
 struct MyMoneyTabView: View {
     
-    var viewModel : MyMoneyViewModel
+    @ObservedObject var viewModel : MyMoneyViewModel
     var coordinator : MoneyTabCoordinator?
     
     var body: some View {
          
-            ScrollView{
+            List{
                 
                 
                 
-                BalanceSummaryView().padding(.horizontal, 5).padding(.top, 25).padding(.bottom)
+                BalanceSummaryView().padding(.horizontal, 5).padding(.top, 25).listRowBackground(Color.clear).listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)).listRowSeparator(.hidden).padding(.bottom)
                 
                 //CashFlowHighlightView().padding(.horizontal, 5).padding(.top, 5)
                 
-                SwiftUIAccountsView(coordinator: self.coordinator).padding(.horizontal, 10)
+                SwiftUIAccountsView(coordinator: self.coordinator).listRowBackground(Color.clear).listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)).listRowSeparator(.hidden).padding(.horizontal, 10).padding(.top, 20)
                 
-            }.background(Color(.systemGroupedBackground))
- 
+            }.listStyle(PlainListStyle())
+            .refreshable {
+                let refreshModel = OnDemandRefreshViewModel()
+                await refreshModel.refreshAllItems()
+            }
         
-        
+            .background(Color(.systemGroupedBackground))
         .navigationBarTitle("Accounts")
     }
 }

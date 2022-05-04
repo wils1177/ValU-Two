@@ -14,6 +14,8 @@ class BudgetTransactionsService : ObservableObject {
     @Published var budgetTransactions : [Transaction]
     var lastMonthTransactions : [Transaction]
     
+    var recurringBudgetCategories: [BudgetCategory]
+    
     init(budget: Budget){
         self.budget = budget
         
@@ -36,7 +38,8 @@ class BudgetTransactionsService : ObservableObject {
         catch{
             self.lastMonthTransactions = [Transaction]()
         }
-            
+        
+        self.recurringBudgetCategories = BudgetTransactionsService.getRecurringBudgetCategories(budget: budget)
         
     }
     
@@ -59,7 +62,7 @@ class BudgetTransactionsService : ObservableObject {
         return income
     }
     
-    func getBudgetExpenses() -> Double {
+    func getBudgetExpenses(includeRecurring: Bool = true) -> Double {
         
         
         var expenses = 0.0
@@ -72,7 +75,21 @@ class BudgetTransactionsService : ObservableObject {
                 }
                 else{
                     for categoryMatch in transaction.categoryMatches?.allObjects as! [CategoryMatch]{
-                        expenses = expenses + Double(categoryMatch.amount)
+                        if includeRecurring{
+                            expenses = expenses + Double(categoryMatch.amount)
+                        }
+                        else{
+                            var isRecurring = false
+                            for category in recurringBudgetCategories {
+                                if categoryMatch.spendingCategory!.id! == category.spendingCategory!.id!{
+                                    isRecurring = true
+                                }
+                            }
+                            if !isRecurring{
+                                expenses = expenses + Double(categoryMatch.amount)
+                            }
+                        }
+                        
                     }
                 }
             }
@@ -80,21 +97,93 @@ class BudgetTransactionsService : ObservableObject {
         return expenses
     }
     
-    func getExpenseTransactions() -> [Transaction]{
+    static func getRecurringBudgetCategories(budget: Budget) -> [BudgetCategory]{
+        var recurringCategories = [BudgetCategory]()
+        
+        for section in budget.getBudgetSections(){
+            for cat in section.getBudgetCategories(){
+                if cat.recurring{
+                    recurringCategories.append(cat)
+                }
+            }
+        }
+        return recurringCategories
+    }
+    
+    //Get amount to spend
+    //Get assumed spending
+    //Get actual spending excluding any assumed spending
+    //Minus above from value from amount to Spend
+    func getLeftInBudget() -> Double{
+        let availableToSpend = self.budget.getAmountAvailable()
+        let assumedSpending = getAssumedSpending()
+        let actualSpendingWithOutAssumed = self.getBudgetExpenses(includeRecurring: false)
+        return (Double(availableToSpend)-assumedSpending) - actualSpendingWithOutAssumed
+    }
+    
+    func getFreeLimit() -> Double{
+        let availableToSpend = self.budget.getAmountAvailable()
+        let assumedSpending = getAssumedSpending()
+        return Double(availableToSpend) - assumedSpending
+    }
+    
+    func getAssumedSpending() -> Double{
+        var total = 0.0
+        for section in self.budget.getBudgetSections(){
+            let assumed = section.getRecurringLimit()
+            total = total + assumed
+        }
+        return total
+    }
+    
+    func getExpenseTransactions(includeRecurring : Bool = false) -> [Transaction]{
         var transactionsToReturn = [Transaction]()
         for transaction in self.budgetTransactions{
             if (transaction.amount > 0 && !transaction.isHidden){
-                transactionsToReturn.append(transaction)
+                
+                if !includeRecurring{
+                    let isRecurring = checkIfTransactionIsRecurring(transaction: transaction)
+                    if !isRecurring{
+                        transactionsToReturn.append(transaction)
+                    }
+                }
+                else{
+                    transactionsToReturn.append(transaction)
+                }
+                
+                
             }
         }
         return transactionsToReturn
     }
     
-    func getLastMonthExpenseTransactions() -> [Transaction]{
+    func checkIfTransactionIsRecurring(transaction: Transaction) -> Bool{
+        let matches = transaction.categoryMatches?.allObjects as! [CategoryMatch]
+        var anyRecurring = false
+        for match in matches{
+            for cat in self.recurringBudgetCategories{
+                if match.spendingCategory!.id == cat.spendingCategory!.id{
+                    anyRecurring = true
+                }
+            }
+        }
+        return anyRecurring
+    }
+    
+    func getLastMonthExpenseTransactions(includeRecurring: Bool = true) -> [Transaction]{
         var transactionsToReturn = [Transaction]()
         for transaction in self.lastMonthTransactions{
             if (transaction.amount > 0 && !transaction.isHidden){
-                transactionsToReturn.append(transaction)
+                
+                if includeRecurring{
+                    transactionsToReturn.append(transaction)
+                }
+                else{
+                    if !checkIfTransactionIsRecurring(transaction: transaction){
+                        transactionsToReturn.append(transaction)
+                    }
+                }
+                
             }
         }
         return transactionsToReturn
@@ -192,7 +281,15 @@ class BudgetTransactionsService : ObservableObject {
     func getThisMonthSpending() -> [Double]{
         
         let start = self.budget.startDate!
-        let end = Date()
+        
+        let today = Date()
+        
+        var end = today
+        if today > self.budget.endDate!{
+            end = Calendar.current.date(byAdding: .day, value: -1, to: self.budget.endDate!)!
+            
+        }
+        
         
         return ThisMonthLastMonthService.createDataPoints(start: start, end: end, transactions: self.getExpenseTransactions())
         
@@ -202,13 +299,20 @@ class BudgetTransactionsService : ObservableObject {
         let start = Calendar.current.date(byAdding: .month, value: -1, to: self.budget.startDate!)!
         let end = self.budget.startDate!
         
-        return ThisMonthLastMonthService.createDataPoints(start: start, end: end, transactions: self.getLastMonthExpenseTransactions())
+        return ThisMonthLastMonthService.createDataPoints(start: start, end: end, transactions: self.getLastMonthExpenseTransactions(includeRecurring: false))
     }
     
     func getThisMonthIncome() -> [Double]{
         
         let start = self.budget.startDate!
-        let end = Date()
+        
+        let today = Date()
+        
+        var end = today
+        if today > self.budget.endDate!{
+            end = Calendar.current.date(byAdding: .day, value: -1, to: self.budget.endDate!)!
+            
+        }
         
         return ThisMonthLastMonthService.createDataPoints(start: start, end: end, transactions: self.getIncomeTransactions()).map { $0 * -1 }
         
@@ -223,12 +327,21 @@ class BudgetTransactionsService : ObservableObject {
         
     }
     
+    
+    func getTransactionsForBudgetSection(section: BudgetSection){
+        
+    }
+    
+    
     func getGraphLabels() -> [Date]{
         let start =  self.budget.startDate!
         let end = self.budget.endDate!
         
         return ThisMonthLastMonthService.createLegendValues(start: start, end: end)
     }
+    
+    
+    
     
     
     

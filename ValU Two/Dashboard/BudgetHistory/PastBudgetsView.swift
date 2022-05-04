@@ -11,6 +11,7 @@ import SwiftUI
 struct PastBudgetsView: View {
     
     @ObservedObject var viewModel : HistoryViewModel
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     
     init(viewModel: HistoryViewModel){
         self.viewModel = viewModel
@@ -28,22 +29,53 @@ struct PastBudgetsView: View {
     
     var historyZeroState : some View{
         VStack{
-            Image(systemName: "xmark.shield.fill").font(.system(size: 50)).padding(.trailing, 10).foregroundColor(AppTheme().themeColorPrimary).padding(.top).padding(.top)
-            Text("No Compelted Budgets Yet").font(.headline).multilineTextAlignment(.center).padding(.top)
-            Text("Past budgets will show up here when completed").font(.caption).foregroundColor(Color.gray).multilineTextAlignment(.center)
+            Image(systemName: "books.vertical.circle").font(.system(size: 65)).font(.largeTitle.weight(.heavy)).symbolRenderingMode(.hierarchical).padding(.trailing, 10).foregroundColor(AppTheme().themeColorPrimary).padding(.top)
+            Text("No Compelted Budgets Yet").font(.system(size: 20, weight: .bold, design: .rounded)).multilineTextAlignment(.center).padding(.top)
+            Text("Past budgets will show up here when completed").font(.system(size: 16, weight: .semibold, design: .rounded)).foregroundColor(Color.gray).multilineTextAlignment(.center).padding(.top, 3)
         }.padding(.bottom).padding(.bottom)
     }
     
-
+    var header : some View{
+        HStack{
+            Text("Past Budgets").font(.system(size: 15, design: .rounded)).fontWeight(.bold).listRowSeparator(.hidden)
+            Spacer()
+        }
+    }
+    
+    func getBudgetName(budget: Budget) -> String{
+        let monthInt = Calendar.current.component(.month, from: budget.startDate!) // 4
+        let monthStr = Calendar.current.monthSymbols[monthInt-1]  // April
+        
+        let dayInt = Calendar.current.component(.day, from: budget.startDate!) // 4
+        let dayStr = String(dayInt)  // April
+        
+        return monthStr
+        
+    }
     
     var body: some View {
-        VStack(alignment: .center, spacing: 0){
+        Section(header: header){
                 
                 if self.viewModel.historicalBudgets.count > 0 {
                     ForEach(viewModel.historicalBudgets, id: \.self) { budget in
-                        VStack(spacing: 0){
-                            HistoryEntryView(budget: budget, service: self.viewModel.service, coordinator: self.viewModel.coordinator).padding(.horizontal).padding(.bottom)
+                            
+
+                        Button(action: {
+                            self.viewModel.coordinator?.showBudgetDetail(budget: budget, service: self.viewModel.service, title: self.getBudgetName(budget: budget))
+                            
+                        }) {
+                            HStack{
+                                Text(self.getBudgetName(budget: budget)).font(.system(size: 18, design: .rounded)).fontWeight(.semibold).foregroundColor((colorScheme == .dark) ? Color.white : Color.black)
+                                Spacer()
+                                
+                                Text(CommonUtils.makeMoneyString(number: Int(self.viewModel.service.getAmountSavedForBudget(budget: budget)) ) + " Saved").font(.system(size: 18, design: .rounded)).fontWeight(.semibold).foregroundColor(Color(.systemGreen))
+                            }
                         }
+                        
+                        
+                        
+                        
+                        
                     }
                 }
                 else{

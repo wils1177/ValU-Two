@@ -13,12 +13,16 @@ import SwiftUI
 
 class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, ObservableObject, Presentor {
     
+    
+    
     var coordinator: TransactionRowDelegate?
     
     @Published var selectedCategoryNames = [String]()
     var spendingCategories = [SpendingCategory]()
     var subSpendingCategories = [SpendingCategory]()
-    var saveRule : Bool = false
+    
+    @Published var saveRule : Bool = false
+    @Published var transactionRuleName: String
     
     var budgetSections = [BudgetSection]()
     var unassignedBudgetCategories = [SpendingCategory]()
@@ -29,6 +33,9 @@ class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, Observa
 
     init(transaction: Transaction, budget : Budget? = nil){
         self.transaction = transaction
+        
+        self.transactionRuleName = self.transaction.merchantName ?? (self.transaction.name ?? "no name")
+        
         self.budget = budget
         self.spendingCategories = SpendingCategoryService().getParentSpendingCategories()
         self.subSpendingCategories = SpendingCategoryService().getSubSpendingCategories()
@@ -38,6 +45,9 @@ class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, Observa
         
     }
     
+    func resetRuleName(){
+        self.transactionRuleName = self.transaction.merchantName ?? (self.transaction.name ?? "no name")
+    }
     
     func configure() -> UIViewController {
         
@@ -103,19 +113,18 @@ class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, Observa
             categories.append(match.spendingCategory!.name!)
             spendingCategories = spendingCategories.adding(match.spendingCategory!) as NSSet
         }
-        let name = self.transaction.name
         
         do{
             //Check for existing rule
-            let rule = try DataManager().getTransactionRules(name: name!)
+            let rule = try DataManager().getTransactionRules(name: self.transactionRuleName)
             if rule != nil{
-                rule!.name = name
+                rule!.name = self.transactionRuleName
                 rule!.categories = categories
                 rule!.addToSpendingCategories(spendingCategories)
             }
             //If there is no existing rule, just make a new one
             else{
-                let newRule = DataManager().saveTransactionRule(name: name!, amountOverride: Float(0.0), categoryOverride: categories)
+                let newRule = DataManager().saveTransactionRule(name: self.transactionRuleName, amountOverride: Float(0.0), categoryOverride: categories)
                 newRule.addToSpendingCategories(spendingCategories)
             }
             
@@ -255,6 +264,11 @@ class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, Observa
         
     }
     
-
+    func hide(category: SpendingCategory) {
+        print(category.hidden)
+        print("hiding the spending category")
+        category.hidden = true
+        DataManager().saveDatabase()
+    }
 
 }

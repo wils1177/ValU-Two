@@ -20,8 +20,9 @@ public class Transaction: NSManagedObject {
         
         self.accountId = (transaction.accountId)
         self.amount = (transaction.amount)
-        if transaction.dateTime != nil{
-            self.date = getDate(dateString: transaction.dateTime!)
+        
+        if transaction.authDate != nil{
+            self.date = getDate(dateString: transaction.authDate!)
         }
         else{
             self.date = getDate(dateString: transaction.date)

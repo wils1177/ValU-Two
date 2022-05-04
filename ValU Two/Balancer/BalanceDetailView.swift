@@ -87,7 +87,7 @@ struct BalanceDetailView: View {
         HStack{
             Spacer()
             HStack{
-                Text(self.viewModel.getDisplayAmountRemaining()).font(.system(size: 16, design: .rounded)).fontWeight(.semibold)
+                Text(self.viewModel.getDisplayAmountRemaining() + " left").font(.system(size: 16, design: .rounded)).fontWeight(.semibold)
             }.padding(7).padding(.horizontal, 15).frame(minWidth: 165).background(Color(.tertiarySystemBackground)).cornerRadius(10).shadow(radius: 2)
             Spacer()
             HStack(spacing: 0){
@@ -212,7 +212,7 @@ struct BalanceDetailView: View {
                 
                 
         }.padding(.horizontal, -20)
-            .background(Color(.systemGroupedBackground))
+            //.background(Color(.systemGroupedBackground))
         
         .listStyle(SidebarListStyle())
     

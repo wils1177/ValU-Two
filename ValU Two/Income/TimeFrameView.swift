@@ -76,13 +76,13 @@ struct TimeFrameView: View {
                                   //Button Action
                         self.viewModel.submitResult()
                                   }){
-                        ActionButtonLarge(text: "Done")
+                                      ActionButtonLarge(text: "Done").padding().padding(.horizontal)
                     
                               }
                 }
                 else{
                     
-                    ActionButtonLarge(text: "Done", enabled: false)
+                    ActionButtonLarge(text: "Done", enabled: false).padding().padding(.horizontal)
                     
                 }
                 

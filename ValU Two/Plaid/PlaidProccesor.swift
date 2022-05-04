@@ -47,8 +47,10 @@ class PlaidProccessor{
             print("PRINTING ACCESS TOKEN FOR TESTING PURPOSES")
             print(accessTokenString)
             let itemId = tokenResponse.itemId
-            let saveSuccessful: Bool = KeychainWrapper.standard.set(accessTokenString, forKey: PlaidUserDefaultKeys.accessTokenKey.rawValue + itemId)
+            let saveSuccessful: Bool = KeychainWrapper.standard.set(accessTokenString, forKey: PlaidUserDefaultKeys.accessTokenKey.rawValue + itemId, withAccessibility: KeychainItemAccessibility.afterFirstUnlock)
             print(saveSuccessful)
+            
+            
             
             submitItemToServer(itemID: itemId)
             
@@ -186,15 +188,30 @@ class PlaidProccessor{
             for account in dataManager.getAccounts(){
                 if account.accountId == transaction.accountId{
                     
-                    let newTransaction = dataManager.saveTransaction(transaction: transaction, itemId: itemId)
                     let transactionProcessor = TransactionProccessor(spendingCategories: self.spendingCategories, transactionRules: self.transactionRules)
-
-                    transactionProcessor.proccessTransactionToCategory(transaction: newTransaction, spendingCategories: self.spendingCategories)
                     
-                    //If this is replacing a pending transaction, delete the pending one.
+                    //If this is replacing a pending transaction, replace the pending one.
                     if transaction.pendingTransactionId != nil{
-                        transactionProcessor.removePendingTransaction(pendingTransactionId: transaction.pendingTransactionId!)
+                        print("Transaction is supposed to replace a pending transaction")
+                        
+                        let didReplaceTransaction = transactionProcessor.attemptToReplcePendingTransaction(pendingTransactionId: transaction.pendingTransactionId!, transactionData: transaction)
+                        
+                        if !didReplaceTransaction{
+                            let newTransaction = dataManager.saveTransaction(transaction: transaction, itemId: itemId)
+                            transactionProcessor.proccessTransactionToCategory(transaction: newTransaction, spendingCategories: self.spendingCategories)
+                        }
+                        
                     }
+                    // If its not replace a pending transaction, simply process it as a new transaction
+                    else{
+                        let newTransaction = dataManager.saveTransaction(transaction: transaction, itemId: itemId)
+                        transactionProcessor.proccessTransactionToCategory(transaction: newTransaction, spendingCategories: self.spendingCategories)
+                    }
+                    
+                    
+                    
+                    
+                   
                     
                 }
             }

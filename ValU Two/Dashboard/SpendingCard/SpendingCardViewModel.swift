@@ -64,7 +64,6 @@ class SpendingCardViewModel: ObservableObject {
         self.budgetTransactionsService = budgetTransactionsService
         self.budgetSections = getBudgetedSections(sections: budget.getBudgetSections())
         self.budgetCategories = budget.getBudgetCategories()
-        makeOtherCategory()
     }
     
     func getBudgetedSections(sections: [BudgetSection]) -> [BudgetSection]{
@@ -78,38 +77,7 @@ class SpendingCardViewModel: ObservableObject {
     }
     
     
-    func makeOtherCategory(){
-        
-        var spendingCategoryLimitTotal = 0.0
-        var selectedSpentTotal = 0.0
-        
-        for budgetCategory in self.budgetCategories{
-            
-            if budgetCategory.limit > 0{
-                let spent = budgetCategory.getAmountSpent()
-                selectedSpentTotal = selectedSpentTotal + Double(spent)
-                let limit = budgetCategory.limit
-                spendingCategoryLimitTotal = spendingCategoryLimitTotal + Double(limit)
-            }
-                
-            
-        }
-        
-        let otherName = "Not Budgeted"
-        let otherLimit = self.budget.getAmountAvailable() - Float(spendingCategoryLimitTotal)
-        let otherIcon = "🔸"
-        var otherPercentage = Float(0.0)
-        let otherSpentTotal = getOtherSpent()
-        if otherLimit > 0.0 && otherSpentTotal > 0.0{
-            otherPercentage = Float(otherSpentTotal) / otherLimit
-        }
-        
-        let categoryViewData = SpendingCategoryViewData(percentage: CGFloat(otherPercentage), spent: otherSpentTotal, limit: otherLimit, name: otherName, icon: otherIcon)
-        self.otherCategory = categoryViewData
-        
-        
-        
-    }
+    
     
     func editBudget(){
         self.coordinator?.editClicked(budgetToEdit: self.budget)

@@ -14,7 +14,7 @@ struct NavigationBarTextButton: View {
     
     var body : some View {
         ZStack(alignment:.center){
-            Text(self.text).font(Font.system(size: 16, weight: .semibold)).foregroundColor(color)
+            Text(self.text).font(Font.system(size: 16, weight: .semibold, design: .rounded)).foregroundColor(color)
                 .padding(.horizontal, 13).padding(.vertical, 5).background(color.opacity(0.15)).cornerRadius(20)
             
     }
@@ -25,14 +25,15 @@ struct NavigationBarTextButton: View {
 struct NavigationBarTextIconButton: View {
     var text : String
     var icon : String
+    var color : Color = AppTheme().themeColorPrimary
     
     var body : some View {
         HStack(alignment:.center, spacing: 2){
             Image(systemName: self.icon).font(.system(size: 16, weight: .semibold))
             Text(self.text).font(Font.system(size: 16, weight: .semibold))
             
-    }.foregroundColor(AppTheme().themeColorPrimary)
-        .padding(.horizontal, 13).padding(.vertical, 5).background(AppTheme().themeColorPrimary.opacity(0.15)).cornerRadius(20)
+    }.foregroundColor(color)
+            .padding(.horizontal, 13).padding(.vertical, 5).background(color.opacity(0.15)).cornerRadius(20)
     }
     
 }
@@ -57,18 +58,40 @@ struct CircleButtonIcon : View {
 struct ActionButtonLarge: View {
     var text : String
     var enabled = true
+    var color: Color = globalAppTheme.themeColorPrimary
+    
+    var textColor : Color?
+    
+    var isLoading: Bool = false
+    
+    func getTextColor() -> Color{
+        if textColor == nil{
+            return colorScheme == .dark ? Color.black : Color.white
+        }
+        else{
+            return textColor!
+        }
+    }
     
     @Environment(\.colorScheme) var colorScheme
     
     var body : some View {
-        if enabled {
+        
+        if isLoading {
+            HStack{
+                Spacer()
+                ProgressView()
+                Spacer()
+            }.padding(.vertical).background(color).cornerRadius(20)
+        }
+        else if enabled {
             HStack{
                 Spacer()
                 ZStack{
-                    Text(self.text).font(.headline).foregroundColor(colorScheme == .dark ? Color.black : Color.white).bold().padding()
+                    Text(self.text).font(.system(size: 19, weight: .semibold, design: .rounded)).foregroundColor(getTextColor()).bold().padding()
                 }
                 Spacer()
-            }.background(AppTheme().themeColorPrimary).cornerRadius(20).shadow(radius: 10).padding().padding(.horizontal).padding(.bottom)
+            }.background(color).cornerRadius(20)
         }
         else {
             HStack{
@@ -77,7 +100,7 @@ struct ActionButtonLarge: View {
                     Text(self.text).font(.headline).foregroundColor(colorScheme == .dark ? Color.white : Color.black).bold().padding()
                 }
                 Spacer()
-            }.background(Color(.lightGray)).cornerRadius(20).shadow(radius: 0).padding().padding(.horizontal).padding(.bottom)
+            }.background(Color(.lightGray)).cornerRadius(20).padding(.horizontal)
         }
         
     }

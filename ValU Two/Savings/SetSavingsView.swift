@@ -10,96 +10,59 @@ import SwiftUI
 
 struct SetSavingsView: View {
     
-    @ObservedObject var viewData : SetSavingsViewData
-    var presentor : SetSavingsPresentor?
+    var presentor : SetSavingsPresentor
     
     
-    var goodMessageIcon = "👌"
-    var goodMessage = "That's a great goal!"
+    @State var savingsPercentage : Double
     
-    var badMessageIcon = "❗"
-    var badMessage = "Your goal is a bit low!"
-    
-    var tooMuchIcon = "🥵"
-    var tooMuchMessage = "Keepj enough money for expenses!"
-    
+    var scalingFactor = 0.5
    
-    init(presentor: SetSavingsPresentor?, viewData: SetSavingsViewData){
-        self.viewData = viewData
+    init(presentor: SetSavingsPresentor){
         self.presentor = presentor
+        _savingsPercentage = State(initialValue: Double(presentor.budget.savingsPercent / Float(scalingFactor)))
                 
     }
     
-    func getRecMessage() -> String {
+    
+    func getSavings() -> String{
         
-        if self.viewData.savingsPercentage < 0.20{
-            return badMessage
-        }
-        else if self.viewData.savingsPercentage > 0.6{
-            return tooMuchMessage
-        }
-        else{
-            return goodMessage
-        }
+        let ratio = (Double(self.presentor.budget.amount) * (self.savingsPercentage * scalingFactor))
+        let integer = Int(ratio)
+        return CommonUtils.makeMoneyString(number: integer)
         
     }
     
-    func getRecIcon() -> String {
+    func getSpending() -> String{
         
-        if self.viewData.savingsPercentage < 0.20{
-            return badMessageIcon
-        }
-        else if self.viewData.savingsPercentage > 0.6{
-            return tooMuchIcon
-        }
-        else{
-            return goodMessageIcon
-        }
+        let ratio = (Double(self.presentor.budget.amount) * (1.0 - (self.savingsPercentage  * scalingFactor)))
+        let integer = Int(ratio)
+        return CommonUtils.makeMoneyString(number: integer)
         
     }
-    
-    
-    var reccomendation: some View{
-        VStack{
-            /*
-            HStack{
-                Spacer()
-                Text(getRecIcon()).font(.largeTitle)
-                Text(getRecMessage()).font(.headline)
-                Spacer()
-            }.transition(.scale)
-            */
-            HStack{
-                Text("Experts reccomend saving at least 20% of your income.").font(.subheadline).foregroundColor(Color(.gray)).multilineTextAlignment(.center)
-            }.padding(.horizontal).padding(.horizontal)
-            
-            
-        }
-        
-    }
+ 
     
     var topSummary : some View {
         HStack{
             Spacer()
-            VStack(spacing: 3){
+            VStack(alignment: .leading, spacing: 3){
                 HStack{
-                    Image(systemName: "plus.circle").foregroundColor(Color(.systemGreen))
-                    Text("SAVINGS").font(.subheadline).foregroundColor(Color(.systemGreen)).bold()
+                    
+                    Text("Savings").font(.system(size: 16, design: .rounded)).foregroundColor(Color(.lightGray)).bold()
                 }
                 
-                Text("$\(self.viewData.savingsAmount)").font(.title).bold()
+                Text(getSavings()).font(.system(size: 30, design: .rounded)).foregroundColor(Color(.systemGreen)).fontWeight(.heavy)
                 
                 
             }
             
             Spacer()
             
-            VStack(spacing: 3){
+            VStack(alignment: .leading, spacing: 3){
                 HStack{
-                    Image(systemName: "minus.circle").foregroundColor(Color(.systemRed))
-                    Text("SPENDING").font(.subheadline).foregroundColor(Color(.systemRed)).bold()
+                    
+                    Text("Spending").font(.system(size: 16, design: .rounded)).foregroundColor(Color(.lightGray)).bold()
                 }
-                Text("$\(self.viewData.spendingAmount)").font(.title).bold()
+                Text(getSpending()).font(.system(size: 30, design: .rounded)).foregroundColor(Color(.systemRed)).fontWeight(.heavy)
                 
             }
             Spacer()
@@ -113,9 +76,8 @@ struct SetSavingsView: View {
         VStack{
                 
             topSummary.padding(.top)
-            SetSavingsSlider(viewData: self.viewData, presentor: self.presentor).padding(.horizontal)
+            SetSavingsSlider(presentor: self.presentor, savingPercentage: self.$savingsPercentage, scalingFactor: self.scalingFactor).padding(.horizontal)
             
-                //self.indicator.offset(y: -((CGFloat(0.20) * geometry.size.height) - (geometry.size.height/2)))
                 
                 
             
@@ -142,22 +104,20 @@ struct SetSavingsView: View {
             
             }
         
-        .navigationBarTitle(Text("Custom Goal")).navigationBarItems(
+        .navigationBarTitle(Text("Savings Goal")).navigationBarItems(
                                                                        
                                                                        
                     trailing: Button(action: {
                         //action
-                        self.presentor?.userPressedContinue()
+                        self.presentor.budget.savingsPercent = Float(self.savingsPercentage * scalingFactor)
+                        self.presentor.userPressedContinue()
+                        
                     }){
                     NavigationBarTextButton(text: "Done")
             })
         
 }
 
-struct SetSavingsView_Previews: PreviewProvider {
-    static var previews: some View {
-        SetSavingsView(presentor: nil, viewData: SetSavingsViewData(savingsAmount: "500", spendingAmount: "500", savingsPercentage: 0.5))
-    }
-}
+
 
 }

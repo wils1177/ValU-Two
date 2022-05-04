@@ -107,9 +107,35 @@ class TransactionDetailViewModel: ObservableObject, Presentor, KeyboardDelegate 
                 //categoryMatch.spendingCategory!.reCalculateAmountSpent()
                 categoryMatch.spendingCategory!.objectWillChange.send()
                 self.transaction.objectWillChange.send()
+                self.budget?.objectWillChange.send()
             }
         }
         
+    }
+    
+    func split(num: Int){
+        if (transaction.categoryMatches?.allObjects as [CategoryMatch]).count != 0{
+            for match in transaction.categoryMatches?.allObjects as [CategoryMatch]{
+                match.amount = match.amount / Float(num)
+                
+            }
+        }
+        self.transaction.objectWillChange.send()
+        self.objectWillChange.send()
+        DataManager().saveDatabase()
+    }
+    
+    func restoreOriginal(){
+        let matchCount = (transaction.categoryMatches?.allObjects as! [CategoryMatch]).count
+        if matchCount != 0{
+            for match in transaction.categoryMatches?.allObjects as! [CategoryMatch]{
+                match.amount = Float(transaction.amount / Double(matchCount))
+                
+            }
+        }
+        self.transaction.objectWillChange.send()
+        self.objectWillChange.send()
+        DataManager().saveDatabase()
     }
     
     func toggleHidden(){

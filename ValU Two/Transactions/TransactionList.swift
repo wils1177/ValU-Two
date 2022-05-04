@@ -33,27 +33,26 @@ struct TransactionList: View {
     
     var body: some View {
         
-        ScrollView{
-            VStack{
+        List{
+            Section{
                 
                 if self.viewModel.transactions.count > 0{
 
                     
                     ForEach(self.viewModel.transactions, id: \.self) { transaction in
                         
-                        VStack{
                             
                                 
-                            VStack{
-                                TransactionRow(coordinator: self.viewModel.coordinator!, transaction: transaction, transactionService: TransactionService()).padding(.horizontal).padding(.bottom, 5)
-                            }
+                            
+                                TransactionRow(coordinator: self.viewModel.coordinator!, transaction: transaction, transactionService: TransactionService())
+                            
                              
-                        }
                         
                         
                         
                         
-                    }.listRowInsets(.init(top: 5, leading: 0, bottom: 5, trailing: 0))
+                        
+                    }
                 }
                 else{
                     EmptyState(errorMessage: "There are no transactions here yet")
@@ -62,8 +61,8 @@ struct TransactionList: View {
                 
                 
                 
-            }.padding(.top)
-        }
+            }
+        }.navigationTitle(self.viewModel.title)
             
         
         

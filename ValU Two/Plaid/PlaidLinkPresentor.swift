@@ -12,19 +12,12 @@ import LinkKit
 
 class PlaidLinkViewPresentor  {
     
-    enum PlaidLinkState {
-        case start
-        case fetchingLink
-        case linkTokenFetched
-        case loaded
-        case error
-    }
+    
 
     var coordinator : PlaidLinkDelegate?
     var linkToken: String?
     var publicToken : String?
     var handler : Handler?
-    var state = PlaidLinkState.start
     
     var viewController : UIViewController
     
@@ -35,7 +28,6 @@ class PlaidLinkViewPresentor  {
     
     //Takes the viewcontroller you want to present link over.
     init(viewControllerToPresentOver: UIViewController){
-        self.state = PlaidLinkState.start
         self.viewController = viewControllerToPresentOver
     }
     
@@ -60,7 +52,9 @@ class PlaidLinkViewPresentor  {
     
     func openLink(){
         
-        let linkConfiguration = LinkTokenConfiguration(token: self.linkToken!, onSuccess: linkSuccess(linkSuccess:))
+        var linkConfiguration = LinkTokenConfiguration(token: self.linkToken!, onSuccess: linkSuccess(linkSuccess:))
+        linkConfiguration.onExit = self.linkExit(exit:)
+        
         
         let result = Plaid.create(linkConfiguration)
         switch result{
@@ -72,6 +66,7 @@ class PlaidLinkViewPresentor  {
         
         let method: PresentationMethod = PresentationMethod.viewController(self.viewController)
         handler!.open(presentUsing: method)
+        
         
     }
     
@@ -94,6 +89,12 @@ class PlaidLinkViewPresentor  {
         
         
     }
+    
+    func linkExit(exit: LinkExit){
+        self.coordinator?.dismissPlaidLink(sender: self)
+        print("User exited the link modal!")
+    }
+    
     
     
     

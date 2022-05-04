@@ -11,6 +11,7 @@ import SwiftUI
 struct CategoryDetailTransactionsSection: View {
     
     @State var transactionsHidden : Bool = false
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     
     var category : BudgetCategory
     var coordinator : BudgetsTabCoordinator
@@ -18,6 +19,8 @@ struct CategoryDetailTransactionsSection: View {
     var transactionService = TransactionService()
     
     var transactions : [Transaction]
+    
+    var model = BudgetDetailViewModel()
     
     init(category: BudgetCategory, coordinator: BudgetsTabCoordinator){
         self.category = category
@@ -56,15 +59,39 @@ struct CategoryDetailTransactionsSection: View {
                 if !self.transactionsHidden{
                     if self.transactions.count > 0{
                         
+                        /*
                         ForEach(self.transactions.sorted(by: { $0.date! > $1.date! }), id: \.self) { transaction in
                             TransactionRow(coordinator: self.coordinator, transaction: transaction, transactionService: self.transactionService).padding(.vertical, 3)
                         }.transition(.scale)
+                         */
+                        
+                        ForEach(self.model.getMerchangeTotalsForCategory(category: self.category), id: \.self) { totals in
+                            
+                        
+                            Button(action: {
+                                // What to perform
+                                self.coordinator.showListOfTransactions(title: totals.name, list: totals.transactions)
+                            }) {
+                                // How the button looks like
+                                HStack(alignment: .top){
+                                    
+                                    
+                                    Text( totals.name).lineLimit(2).font(.system(size: 17, weight: .regular, design: .rounded)).foregroundColor((colorScheme == .dark) ? Color.white : Color.black)
+                                    Spacer()
+                                    Text(CommonUtils.makeMoneyString(number: totals.amount)).font(.system(size: 17, weight: .regular, design: .rounded)).foregroundColor((colorScheme == .dark) ? Color.white : Color.black)
+                                }
+                            }
+                            
+                            
+                            
+                        }
+                        
                     }
                     else{
                         
                         HStack{
                             Spacer()
-                            self.transactionsZeroState.padding(.vertical)
+                            self.transactionsZeroState.padding(.vertical, 10)
                             Spacer()
                         }.transition(.scale)
                         

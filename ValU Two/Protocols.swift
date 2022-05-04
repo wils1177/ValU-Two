@@ -36,6 +36,7 @@ protocol CategoryListViewModel: UserSubmitViewModel, ObservableObject{
     func selectedCategoryName(name:String)
     func deSelectedCategoryName(name:String)
     func isSelected(name: String) -> Bool
+    func hide(category: SpendingCategory)
     
 }
 
@@ -111,7 +112,7 @@ protocol IncomeCoordinator: Coordinator {
     func incomeSubmitted(budget: Budget)
     func continueToTimeFrame()
     func timeFrameSubmitted()
-    func showIncomeTransactions(transactions: [Transaction])
+    func showIncomeTransactions(service: BudgetIncomeService)
 }
 
 protocol BudgetEditor {

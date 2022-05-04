@@ -21,6 +21,10 @@ class BudgetStatsService{
         return budgets.count
     }
     
+    func getSavingsGoalAmount(budget: Budget) -> Int{
+        return Int(budget.amount - budget.getAmountAvailable())
+    }
+    
     
     func getTotalAmountSaved() -> Int{
         var total = 0
@@ -89,7 +93,7 @@ class BudgetStatsService{
     
     func getSpentAmount(budget: Budget) -> Int {
         
-        return Int(budget.amount)
+        return Int(budget.spent)
         
     }
     
@@ -100,105 +104,13 @@ class BudgetStatsService{
     }
     
     func getAvailableString(budget: Budget) -> String {
-        return CommonUtils.makeMoneyString(number: Int(budget.amount))
+        return CommonUtils.makeMoneyString(number: Int(budget.getAmountAvailable()))
     }
     
     func getAmountBeat(budget: Budget) -> Int{
         return Int(budget.getAmountAvailable() - budget.spent)
     }
     
-    
-    
-    
-    func getBudgetStatusBarViewData(budget: Budget) -> [BudgetStatusBarViewData]{
-        
-        var viewDataToReturn = [BudgetStatusBarViewData]()
-        let available = budget.getAmountAvailable()
-        let total = budget.spent
-        
-        var allSectionsTotal = 0.0
-        for section in budget.getBudgetSections(){
-            let sectionTotal = section.spent
-            allSectionsTotal = allSectionsTotal + sectionTotal
-            let data = BudgetStatusBarViewData(percentage: sectionTotal / Double(total), color: colorMap[Int(section.colorCode)], name: section.name!, icon: section.icon!, action: nil, section: section)
-            
-            if sectionTotal > 0.0{
-                viewDataToReturn.append(data)
-            }
-        }
-        
-        
-        let otherTotal = Double(total) - allSectionsTotal
-        if otherTotal > 0.0{
-            let otherPercentage = Float(otherTotal) / total
-            let otherData = BudgetStatusBarViewData(percentage: Double(otherPercentage), color: AppTheme().otherColor, name: "Other", icon: "book")
-            viewDataToReturn.append(otherData)
-        }
-        
-        viewDataToReturn.sort(by: { $0.percentage > $1.percentage })
-        
-        if available > total{
-            let remainingPercentage = Float((total - Float(available)) / available)
-            let remainingData = BudgetStatusBarViewData(percentage: Double(remainingPercentage), color: Color(#colorLiteral(red: 0.9543517232, green: 0.9543194175, blue: 0.9847152829, alpha: 1)), name: "Remaining", icon: "folder")
-            viewDataToReturn.append(remainingData)
-        }
-        
-        
-        
-        
-        /*
-        var viewDataToReturn = [BudgetStatusBarViewData]()
-        let budgetTransactionsService = BudgetTransactionsService(budget: budget)
-        let amountAvailable = budget.getAmountAvailable()
-        let spentTotal = budgetTransactionsService.getBudgetExpenses()
-        let otherTotal = budgetTransactionsService.getOtherSpentTotal()
-        var total = amountAvailable
-        
-        if spentTotal > Double(amountAvailable){
-            total = Float(spentTotal)
-        }
-        
 
-        
-        var sectionSpentTotal = 0.0
-        for section in budget.getBudgetSections(){
-            let spentInSection = section.getSpent()
-            sectionSpentTotal = spentInSection + sectionSpentTotal
-            let data = BudgetStatusBarViewData(percentage: spentInSection / Double(total), color: colorMap[Int(section.colorCode)], name: section.name!, icon: section.icon!, action: nil, section: section)
-            
-            
-            if spentInSection > 0.0{
-                viewDataToReturn.append(data)
-            }
-            
-        }
-        
-        
-        
-        
-        let otherPercentage = Float(otherTotal) / total
-        let otherData = BudgetStatusBarViewData(percentage: Double(otherPercentage), color: AppTheme().otherColor, name: "Other", icon: "book")
-        viewDataToReturn.append(otherData)
-        
-        viewDataToReturn.sort(by: { $0.percentage > $1.percentage })
-        
-        
-        if !(spentTotal > Double(amountAvailable)){
-            viewDataToReturn.sort(by: { $0.percentage > $1.percentage })
-            let remainingPercentage = Float((total - Float(spentTotal)) / total)
-            let remainingData = BudgetStatusBarViewData(percentage: Double(remainingPercentage), color: Color(#colorLiteral(red: 0.9543517232, green: 0.9543194175, blue: 0.9847152829, alpha: 1)), name: "Remaining", icon: "folder")
-            viewDataToReturn.append(remainingData)
-        }
-        
-        
-        
-        */
-        
-        return viewDataToReturn
-        
-        
-        
-        
-    }
     
 }

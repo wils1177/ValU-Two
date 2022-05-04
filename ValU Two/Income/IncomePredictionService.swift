@@ -8,17 +8,15 @@
 
 import Foundation
 
-struct SelectableTransaction {
-    var transaction : Transaction
-    var selected = true
-}
 
 
-class IncomePredictionService{
+
+class IncomePredictionService: ObservableObject{
     
     var transactions = [Transaction]()
-    var selectableTransactions = [SelectableTransaction]()
     var timeFrame: TimeFrame
+    
+    @Published var excludedTransactions = [String]()
     
     init(timeFrame: TimeFrame){
         self.timeFrame = timeFrame
@@ -46,7 +44,10 @@ class IncomePredictionService{
     func getTotalIncome() -> Double{
         var total = 0.0
         for transaction in self.transactions{
-            total = total + transaction.amount
+            if !self.excludedTransactions.contains(transaction.transactionId ?? ""){
+                total = total + transaction.amount
+            }
+            
         }
         
         if timeFrame == TimeFrame.monthly{
@@ -66,7 +67,18 @@ class IncomePredictionService{
         return self.transactions.sorted(by: { $0.amount > $1.amount })
     }
     
+    func exclude(transactionId: String){
+        self.excludedTransactions.append(transactionId)
+        
+    }
     
+    func unExclude(transactionId: String){
+        self.excludedTransactions = self.excludedTransactions.filter(){$0 != transactionId}
+    }
+    
+    func isExcluded(transactionId: String) -> Bool{
+        return self.excludedTransactions.contains(transactionId)
+    }
     
     
     

@@ -16,6 +16,7 @@ enum LoadingAccountsViewState{
     case Success
     case Failure
     case Initial
+    case SettingUpLink
 }
 
 class LoadingAccountsViewData : ObservableObject{
@@ -50,6 +51,7 @@ class LoadingAccountsPresentor : Presentor, PlaidLinkDelegate {
     }
     
     func launchPlaidLink() {
+        self.viewData.viewState = LoadingAccountsViewState.SettingUpLink
         self.plaidLinkPresentor!.setupLink()
     }
     
@@ -102,7 +104,7 @@ class LoadingAccountsPresentor : Presentor, PlaidLinkDelegate {
     
     
     func dismissPlaidLink(sender: PlaidLinkViewPresentor) {
-        
+        self.viewData.viewState = LoadingAccountsViewState.Initial
     }
     
     func plaidLinkSuccess(sender: PlaidLinkViewPresentor) {

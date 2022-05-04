@@ -49,6 +49,30 @@ public class BudgetSection: NSManagedObject, NSCopying {
         return total
     }
     
+    func getFreeLimit() -> Double{
+        
+        var total = 0.0
+        for child in self.budgetCategories?.allObjects as? [BudgetCategory] ?? [BudgetCategory](){
+            if !child.recurring{
+                total = child.limit + total
+            }
+            
+        }
+        return total
+    }
+    
+    func getRecurringLimit() -> Double{
+        
+        var total = 0.0
+        for child in self.budgetCategories?.allObjects as? [BudgetCategory] ?? [BudgetCategory](){
+            if child.recurring{
+                total = child.limit + total
+            }
+            
+        }
+        return total
+    }
+    
     func getSpent() -> Double{
         
         var total = 0.0
@@ -57,6 +81,32 @@ public class BudgetSection: NSManagedObject, NSCopying {
             //if child.limit > 0.0{
                 total = child.getAmountSpent() + total
             //}
+            
+        }
+        
+        return total
+    }
+    
+    func getFreeSpent() -> Double{
+        var total = 0.0
+        for child in self.budgetCategories?.allObjects as! [BudgetCategory]{
+            
+            if !child.recurring{
+                total = child.getAmountSpent() + total
+            }
+            
+        }
+        
+        return total
+    }
+    
+    func getRecurringSpent() -> Double{
+        var total = 0.0
+        for child in self.budgetCategories?.allObjects as! [BudgetCategory]{
+            
+            if child.recurring{
+                total = child.getAmountSpent() + total
+            }
             
         }
         
@@ -94,6 +144,26 @@ public class BudgetSection: NSManagedObject, NSCopying {
     
     func getBudgetCategories() -> [BudgetCategory]{
         return (self.budgetCategories?.allObjects as! [BudgetCategory]).sorted(by: { $0.order < $1.order })
+    }
+    
+    func hasAnyRecurringCategories() -> Bool{
+        let categories = getBudgetCategories()
+        for cat in categories{
+            if cat.recurring{
+                return true
+            }
+        }
+        return false
+    }
+    
+    func hasAnyFreeCategories() -> Bool{
+        let categories = getBudgetCategories()
+        for cat in categories{
+            if !cat.recurring{
+                return true
+            }
+        }
+        return false
     }
 
 }

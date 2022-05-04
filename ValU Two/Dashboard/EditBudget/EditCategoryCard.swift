@@ -14,13 +14,12 @@ struct EditCategoryCard<ViewModel>: View where ViewModel: CategoryListViewModel 
     var category : SpendingCategory
     var subCategories : [SpendingCategory]
     
-    var viewModel : ViewModel
+    @ObservedObject var viewModel : ViewModel
     
-
     
     init(category: SpendingCategory, viewModel : ViewModel){
         self.category = category
-        self.subCategories = category.subSpendingCategories?.allObjects as! [SpendingCategory]
+        self.subCategories = (category.subSpendingCategories?.allObjects as! [SpendingCategory]).filter {$0.hidden != true}
         self.viewModel = viewModel
     }
     
@@ -39,7 +38,7 @@ struct EditCategoryCard<ViewModel>: View where ViewModel: CategoryListViewModel 
                  
             HStack(spacing: 0.0){
                    
-                Text(self.category.name!).font(.system(size: 20)).bold()
+                Text(self.category.name!).font(.system(size: 20, design: .rounded)).bold()
                    Spacer()
                   
             }.padding(.bottom)

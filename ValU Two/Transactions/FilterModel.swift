@@ -14,6 +14,17 @@ enum TimeFilters {
     case last30Days
     case last60Days
     case lastWeek
+    case previousWeek
+    case previous30Days
+    case custom
+}
+
+struct TimeFilter{
+    
+    let type : TimeFilters
+    let startDate : Date?
+    let endDate: Date?
+    
 }
 
 enum DirectionFilter {
@@ -22,17 +33,25 @@ enum DirectionFilter {
 }
 
 
-class TransactionFilterModel: ObservableObject {
+class TransactionFilterModel: CategoryListViewModel, ObservableObject {
     
-    @Published var timeFilter : TimeFilters? = nil
+    
+    
+    @Published var timeFilter : TimeFilter? = nil
     @Published var directionFilter : DirectionFilter?
     var unassignedFilter = false
     var unbudgetedFilter = false
     
     var predicateBuilder = PredicateBuilder()
     
+    var spendingCategories = SpendingCategoryService().getSubSpendingCategories()
+    
+    @Published var selectedCategoryNames = [String]()
+    
+    @Published var categoryFilters = [SpendingCategory]()
+    
     func areThereAnyFilterEnabled() -> Bool{
-        if timeFilter == nil && directionFilter == nil{
+        if timeFilter == nil && directionFilter == nil && categoryFilters.count == 0{
             return false
         }
         else{
@@ -47,8 +66,18 @@ class TransactionFilterModel: ObservableObject {
         
         let directionPredicate = getDirectionPredicate()
         
-        if directionPredicate != nil{
+        let categoryPredicate = getCategoryPredicate()
+        
+        if directionPredicate != nil && categoryPredicate == nil{
             let compound = NSCompoundPredicate(andPredicateWithSubpredicates: [timePredicate, directionPredicate!])
+            return compound
+        }
+        else if categoryPredicate != nil && directionPredicate == nil{
+            let compound = NSCompoundPredicate(andPredicateWithSubpredicates: [timePredicate, categoryPredicate!])
+            return compound
+        }
+        else if categoryPredicate != nil && directionPredicate != nil{
+            let compound = NSCompoundPredicate(andPredicateWithSubpredicates: [timePredicate, categoryPredicate!, directionPredicate!])
             return compound
         }
         else{
@@ -60,11 +89,20 @@ class TransactionFilterModel: ObservableObject {
     
     func getTimePredicate() -> NSPredicate {
         
-        if self.timeFilter == TimeFilters.last30Days{
+        if self.timeFilter?.type == TimeFilters.last30Days{
             return predicateBuilder.generateLastMonthPredicate()
         }
-        else if self.timeFilter == TimeFilters.lastWeek{
+        else if self.timeFilter?.type == TimeFilters.lastWeek{
             return predicateBuilder.generateLastWeekPredicate()
+        }
+        else if self.timeFilter?.type == TimeFilters.custom{
+            return predicateBuilder.generateInDatesPredicate(startDate: self.timeFilter!.startDate!, endDate: self.timeFilter!.endDate!)
+        }
+        else if self.timeFilter?.type == TimeFilters.previousWeek{
+            return predicateBuilder.generatePreviousWeekPredicate()
+        }
+        else if self.timeFilter?.type == TimeFilters.previous30Days{
+            return predicateBuilder.generatePreviousMonthPredicate()
         }
         else {
             return predicateBuilder.generateLast60daysPredicate()
@@ -84,13 +122,83 @@ class TransactionFilterModel: ObservableObject {
         }
     }
     
-    func changeTimeFilterTo(time: TimeFilters?){
-        self.timeFilter = time
+    func getCategoryPredicate() -> NSPredicate? {
+        
+        if categoryFilters.count == 0 {
+            return nil
+        }
+        
+        var ids = [UUID]()
+        for category in categoryFilters{
+            ids.append(category.id!)
+        }
+        return predicateBuilder.generateTransactionsForCategoryIdPredicate(ids: ids)
+    }
+    
+    func changeTimeFilterTo(time: TimeFilters?, start: Date?, end: Date?){
+        if time != nil{
+            let filter = TimeFilter(type: time!, startDate: start, endDate: end)
+            self.timeFilter = filter
+        }
+        else{
+            self.timeFilter = nil
+        }
+        
     }
     
     func changeDirectionFilterTo(filter: DirectionFilter?){
         self.directionFilter = filter
     }
     
+    func changeCategoryFilter(){
+        self.categoryFilters = [SpendingCategory]()
+        for category in self.spendingCategories{
+            for name in selectedCategoryNames{
+                if category.name == name{
+                    self.categoryFilters.append(category)
+                }
+            }
+        }
+        self.selectedCategoryNames = [String]()
+    }
+    
+    func clearCategoryFilter(){
+        self.categoryFilters = [SpendingCategory]()
+        self.selectedCategoryNames = [String]()
+    }
+    
+    func filtersSubmitted(time: TimeFilters?, start: Date?, end: Date?, direction: DirectionFilter?){
+        
+        changeTimeFilterTo(time: time, start: start, end: end)
+        
+        changeDirectionFilterTo(filter: direction)
+        
+        changeCategoryFilter()
+    }
+    
+    func selectedCategoryName(name: String) {
+        self.selectedCategoryNames.append(name)
+    }
+    
+    func deSelectedCategoryName(name: String) {
+        self.selectedCategoryNames.removeAll { $0 == name}
+    }
+    
+    func isSelected(name: String) -> Bool {
+        for category in self.selectedCategoryNames{
+            if name == category{
+                return true
+            }
+        }
+        return false
+    }
+    
+    func submit() {
+        
+    }
+    
+    func hide(category: SpendingCategory) {
+        
+    }
     
 }

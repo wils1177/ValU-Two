@@ -11,12 +11,14 @@ import SwiftUI
 struct EmojiSelectionGridView: View {
     
     
-    @Binding var icons : [[String]]
-    @Binding var selectedRow : Int
-    @Binding var selectedColumn : Int
+    @Binding var icons : [String]
     
-    func isSelectedI(row: Int, col: Int) -> Bool{
-        if row == self.selectedRow && col == self.selectedColumn{
+    @Binding var selectedIcon : String
+
+    @State var selectedColumn : Int = 0
+    
+    func isSelectedI(col: Int) -> Bool{
+        if col == self.selectedColumn{
             return true
         }
         else{
@@ -24,40 +26,48 @@ struct EmojiSelectionGridView: View {
         }
     }
     
-    func changeSelection(row: Int, col: Int){
-        self.selectedRow = row
+    func changeSelection(col: Int){
         self.selectedColumn = col
-        
+        self.selectedIcon = icons[col]
     }
     
-
+    
+    var columns: [GridItem] = [
+        GridItem(.flexible(), spacing: 15),
+            GridItem(.flexible(), spacing: 15),
+        GridItem(.flexible(), spacing: 15),
+        GridItem(.flexible(), spacing: 15),
+        GridItem(.flexible(), spacing: 15)
+        
+        
+        
+        
+        ]
     
     var body: some View {
-        VStack{
-            ForEach(0..<self.icons.count, id: \.self){ row in
-                HStack{
-                    ForEach(0..<self.icons[row].count, id: \.self){ col in
+        LazyVGrid(columns: columns, spacing: 10) {
+            ForEach(0..<self.icons.count, id: \.self){ col in
+                    
                         
                         Button(action: {
-                            print(row)
                             print(col)
-                            self.changeSelection(row: row, col: col)
+                            self.changeSelection(col: col)
                             
                                 }){
                                     Spacer()
-                                    if self.isSelectedI(row: row, col: col){
-                                        EmojiIcon(emoji: self.icons[row][col], color: Color(.systemFill))
+                                    if self.isSelectedI(col: col){
+                                        EmojiIcon(emoji: self.icons[col], color: Color(.systemFill))
                                         
                                         
                                     }else{
-                                        EmojiIcon(emoji: self.icons[row][col], color: Color(.clear))
+                                        EmojiIcon(emoji: self.icons[col], color: Color(.clear))
                                     }
                                     Spacer()
                             }
                         
                         
-                    }
-                }
+                    
+                
             }
         }
     }
@@ -71,7 +81,7 @@ struct EmojiIcon: View {
     var body : some View{
         ZStack{
             RoundedRectangle(cornerRadius: 20).frame(width: 50, height: 50).foregroundColor(self.color)
-            Text(self.emoji).font(.system(size: 26)).foregroundColor(Color(.black))
+            Text(self.emoji).font(.system(size: 32)).foregroundColor(Color(.black))
         }.padding(.vertical, 5)
     }
     

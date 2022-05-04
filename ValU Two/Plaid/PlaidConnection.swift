@@ -34,13 +34,13 @@ struct Keys : Codable{
     
     enum CodingKeys : String, CodingKey {
         case clientID =  "CLIENT_ID"
-        case clientSecret =  "DEVELOPMENT_CLIENT_SECRET"
+        case clientSecret =  "SANDBOX_CLIENT_SECRET"
     }
 }
 
 class PlaidConnection{
     
-    var rootURL = "https://development.plaid.com"
+    var rootURL = "https://sandbox.plaid.com"
     let webhookURL = "https://us-central1-valu-2.cloudfunctions.net/plaidWebhook"
     var URLdict : [PlaidURLs : URL]
     var clientName = "ValU-Two"
@@ -99,17 +99,17 @@ class PlaidConnection{
     }
     
 
-
-    
-    func getTransactions(itemId: String, startDate: Date, endDate: Date, completion : @escaping (Result<Data, Error>) -> ()) throws{
+    func createTransactionsJSON(itemId: String, startDate: Date, endDate: Date) throws -> [String: Any] {
         
-        let URL = PlaidURLs.GetTransactions
+        
         let keys = getAPIKeys()
         
         guard let accessToken: String = KeychainWrapper.standard.string(forKey: PlaidUserDefaultKeys.accessTokenKey.rawValue + itemId) else{
             print("Error: missing access Token")
             throw PlaidConnectionError.AccessTokenNotFound
         }
+        
+ 
         
         let format = DateFormatter()
         format.dateFormat = "yyyy-MM-dd"
@@ -120,6 +120,15 @@ class PlaidConnection{
         print(endDate)
         
         let json: [String: Any] = ["client_id" : keys.clientID, "secret" : keys.clientSecret, "access_token" : accessToken, "start_date" : formattedStartDate, "end_date" : formattedEndDate]
+        
+        return json
+        
+    }
+    
+    func getTransactions(itemId: String, startDate: Date, endDate: Date, completion : @escaping (Result<Data, Error>) -> ()) throws{
+        
+        let URL = PlaidURLs.GetTransactions
+        let json = try createTransactionsJSON(itemId: itemId, startDate: startDate, endDate: endDate)
         
             
         try postRequest(url: URL, jsonBody: json, completion: completion, dispatch: nil)
@@ -207,6 +216,7 @@ class PlaidConnection{
                         
                         
                     }else{
+                        print("Post Request Complete")
                         completion(.success(dataResponse!))
 
                     
@@ -237,6 +247,41 @@ class PlaidConnection{
         
         task.resume()
         
+        
+    }
+    
+    //MARK: Here are the async await version of these requests
+    
+    func getTransactionsWithAwait(itemId: String, startDate: Date, endDate: Date) async throws -> (Result<Data, Error>){
+        
+        let URL = PlaidURLs.GetTransactions
+        let json = try createTransactionsJSON(itemId: itemId, startDate: startDate, endDate: endDate)
+        
+        return await postRequestWithAwait(url: URL, jsonBody: json)
+        
+    }
+    
+    func postRequestWithAwait(url: PlaidURLs, jsonBody : [String: Any]) async -> (Result<Data, Error>) {
+        
+        let requestURL = URLdict[url]
+        var request = URLRequest(url: requestURL!)
+        let body = try? JSONSerialization.data(withJSONObject: jsonBody)
+        request.httpMethod = "POST"
+        request.httpBody = body
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        do{
+            let (data, _) = try await URLSession.shared.data(for: request)
+            
+            
+           return .success(data)
+            
+        }
+        catch{
+            print(error)
+            return .failure(PlaidConnectionError.BadRequest)
+            
+        }
         
     }
     

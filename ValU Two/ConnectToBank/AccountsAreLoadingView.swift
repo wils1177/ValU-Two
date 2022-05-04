@@ -30,7 +30,7 @@ struct AccountsAreLoadingView: View {
                     self.animate.toggle()
             }.foregroundColor(AppTheme().themeColorPrimary)
                 .padding()
-            Text("Loading Accounts...").bold()
+            Text("Loading Accounts...").font(.system(size: 25, design: .rounded)).fontWeight(.heavy)
             
             
             Button(action: {

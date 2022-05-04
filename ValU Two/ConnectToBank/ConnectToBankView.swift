@@ -12,10 +12,12 @@ struct ConnectToBankView: View {
     
     var presentor : LoadingAccountsPresentor?
     var itemService : ItemManagerService
+    @ObservedObject var viewData : LoadingAccountsViewData
     
-    init(presentor: LoadingAccountsPresentor, itemManager: ItemManagerService){
+    init(presentor: LoadingAccountsPresentor, itemManager: ItemManagerService, viewData: LoadingAccountsViewData){
         self.presentor = presentor
         self.itemService = itemManager
+        self.viewData = viewData
     }
     
     var myConnectionsView : some View{
@@ -27,26 +29,39 @@ struct ConnectToBankView: View {
             
            Spacer()
             
-            Text("To use budgetpoop12$13, connect to your bank!").font(.title).bold().lineLimit(nil).padding().multilineTextAlignment(.center).padding(.bottom, 70)
+            Image(systemName: "atom")
+                .font(.system(size: 70))
+                .font(.largeTitle.weight(.heavy))
+                .symbolRenderingMode(.hierarchical)
+                .foregroundColor(globalAppTheme.themeColorPrimary).padding(.bottom, 10)
+            
+            Text("Connect to your bank").font(.system(size: 32, design: .rounded)).fontWeight(.heavy).multilineTextAlignment(.center)
+            
+            Text("Budget app uses a connection to your bank to automatically import and categorize your spending.").font(.system(size: 18, design: .rounded)).fontWeight(.semibold).foregroundColor(Color(.lightGray)).multilineTextAlignment(.center).padding(.top)
             
             Spacer()
-            Button(action: {
-                //Button Action
-                self.presentor?.launchPlaidLink()
-                }){
-                HStack{
-                    Spacer()
-                    ZStack{
-                        Text("Sure, dude!").font(.subheadline).foregroundColor(.white).bold().padding()
-                    }
-                    Spacer()
-                }.background(AppTheme().themeColorPrimary).cornerRadius(15).shadow(radius: 10).padding().padding(.horizontal).padding(.bottom)
+            
+            if self.viewData.viewState == LoadingAccountsViewState.SettingUpLink{
                 
+                ActionButtonLarge(text: "Start Connecting", color: globalAppTheme.themeColorPrimary.opacity(0.3), textColor: globalAppTheme.themeColorPrimary, isLoading: true).padding()
                 
+            }
+            else{
+                Button(action: {
+                    //Button Action
+                    self.presentor?.launchPlaidLink()
+                    }){
+                    
+                        
+                        ActionButtonLarge(text: "Start Connecting", color: globalAppTheme.themeColorPrimary.opacity(0.3), textColor: globalAppTheme.themeColorPrimary).padding()
+                    
+                    
+                }
             }
             
             
-        }.navigationBarHidden(true)
+            
+        }.padding(.horizontal).navigationBarHidden(true)
     }
     
     

@@ -36,6 +36,7 @@ struct TransactionDateSection: Hashable{
     
     var date: Date
     var transactions: [Transaction]
+    var amount: Double?
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(date)
@@ -76,13 +77,31 @@ class TransactionsTabViewModel: ObservableObject, Presentor{
         var transactionsByDate = [TransactionDateSection]()
         let transactions = getTransactionsList()
         
-        let datesArray = transactions.compactMap { $0.date }
+        let datesArray = transactions.compactMap { $0.date?.stripTime() }
         let datesSet = Set(datesArray)
         
         datesSet.forEach {
             let dateKey = $0
-            let filterArray = transactions.filter { $0.date == dateKey }
-            let section = TransactionDateSection(date: dateKey, transactions: filterArray)
+            let filterArray = transactions.filter { $0.date?.stripTime() == dateKey }
+            
+            
+            var amount = 0.0
+            for transaction in filterArray{
+                
+                if !transaction.isHidden{
+                    let categoryMatches = transaction.categoryMatches?.allObjects as! [CategoryMatch]
+                    
+                    for match in categoryMatches{
+                        amount = amount + Double(match.amount)
+                    }
+                }
+                
+                
+            }
+            
+            var section = TransactionDateSection(date: dateKey, transactions: filterArray, amount: amount)
+            
+            section.transactions = section.transactions.sorted(by: { $0.createdDate! > $1.createdDate!})
             transactionsByDate.append(section)
         }
         
@@ -90,7 +109,7 @@ class TransactionsTabViewModel: ObservableObject, Presentor{
     }
     
     func refreshCompleted(){
-        self.objectWillChange.send()
+        //self.objectWillChange.send()
     }
     
     
@@ -105,4 +124,14 @@ class TransactionsTabViewModel: ObservableObject, Presentor{
         
     }
     
+}
+
+extension Date {
+
+    func stripTime() -> Date {
+        let components = Calendar.current.dateComponents([.year, .month, .day], from: self)
+        let date = Calendar.current.date(from: components)
+        return date!
+    }
+
 }

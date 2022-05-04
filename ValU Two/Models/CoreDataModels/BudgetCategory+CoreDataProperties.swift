@@ -2,7 +2,7 @@
 //  BudgetCategory+CoreDataProperties.swift
 //  ValU Two
 //
-//  Created by Clayton Wilson on 2/11/22.
+//  Created by Clayton Wilson on 4/21/22.
 //  Copyright © 2022 Clayton Wilson. All rights reserved.
 //
 //
@@ -21,6 +21,7 @@ extension BudgetCategory {
     @NSManaged public var limit: Double
     @NSManaged public var order: Int64
     @NSManaged public var spent: Double
+    @NSManaged public var recurring: Bool
     @NSManaged public var budgetSection: BudgetSection?
     @NSManaged public var spendingCategory: SpendingCategory?
 

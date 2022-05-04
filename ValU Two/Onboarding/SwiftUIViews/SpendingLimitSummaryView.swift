@@ -28,24 +28,24 @@ struct SpendingLimitSummaryView: View {
                 
                 HStack{
                    
-                    Text("Summary").font(.system(size: 17, design: .rounded)).fontWeight(.semibold).foregroundColor(AppTheme().themeColorPrimary)
+                    Text("Left to Budget").font(.system(size: 17, design: .rounded)).fontWeight(.bold).foregroundColor(Color(.gray))
                     Spacer()
             
-                }.padding(.bottom, 7)
+                }.padding(.bottom, 5)
                 
                 HStack{
-                    Text("\(self.viewModel.getDisplaySpent())\(Text(" / \(self.viewModel.getAvailable())").foregroundColor(Color(.lightGray)).font(.system(size: 22, design: .rounded)))").font(.system(size: 30, design: .rounded)).fontWeight(.bold)
+                    Text("\(self.viewModel.getDisplayAmountRemaining())\(Text(" / \(self.viewModel.getAvailable())").foregroundColor(Color(.lightGray)).font(.system(size: 24, design: .rounded)))").font(.system(size: 38, design: .rounded)).fontWeight(.bold)
                     Spacer()
-                }.padding(.bottom)
+                }.padding(.bottom, 10)
                 
                 
-                BudgetStatusBarView(viewData: self.viewModel.getBudgetStatusBarViewData(), showLegend: true)
+                BudgetStatusBarView(viewData: self.viewModel.getBudgetStatusBarViewData(), showLegend: false)
                 
 
                 
             }
  
-        }.padding(.horizontal).padding(.top, 10).background(Color(.systemBackground)).cornerRadius(20)
+        }
     }
 }
 

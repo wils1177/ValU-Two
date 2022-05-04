@@ -15,14 +15,39 @@ struct SelectedFilterPillsView: View {
     
     var timePill : some View{
         VStack{
-            if filterModel.timeFilter == TimeFilters.lastWeek{
-                TimeFilterPill(filterModel: self.filterModel, name: "LAST WEEK", action: self.filterModel.changeTimeFilterTo)
+            
+            if filterModel.timeFilter?.type == TimeFilters.lastWeek{
+                TimeFilterPill(filterModel: self.filterModel, name: "THIS WEEK", action: self.filterModel.changeTimeFilterTo)
                 
             }
-            else if filterModel.timeFilter == TimeFilters.last30Days{
+            else if filterModel.timeFilter?.type == TimeFilters.last30Days{
+                
+                
+                
+                TimeFilterPill(filterModel: self.filterModel, name: "THIS MONTH", action: self.filterModel.changeTimeFilterTo)
+                
+                
+            }
+            else if filterModel.timeFilter?.type == TimeFilters.previous30Days{
+                
+                
                 
                 TimeFilterPill(filterModel: self.filterModel, name: "LAST MONTH", action: self.filterModel.changeTimeFilterTo)
+                
+                
             }
+            else if filterModel.timeFilter?.type == TimeFilters.previousWeek{
+                
+                
+                
+                TimeFilterPill(filterModel: self.filterModel, name: "LAST WEEK", action: self.filterModel.changeTimeFilterTo)
+                
+                
+            }
+            else if filterModel.timeFilter?.type == TimeFilters.custom{
+                TimeFilterPill(filterModel: self.filterModel, name: CommonUtils.getMonthDayString(date: filterModel.timeFilter!.startDate!) + " - " + CommonUtils.getMonthDayString(date: filterModel.timeFilter!.endDate!), action: self.filterModel.changeTimeFilterTo)
+            }
+            
         }
     }
     
@@ -39,10 +64,40 @@ struct SelectedFilterPillsView: View {
         }
     }
     
+    var categoryPill : some View{
+        
+        HStack{
+            
+            if filterModel.categoryFilters.count > 0 {
+                
+                Button(action: {
+                    //self.action(nil, nil, nil)
+                    self.filterModel.clearCategoryFilter()
+                }) {
+                    HStack{
+                        Image(systemName: "xmark.circle.fill").foregroundColor(globalAppTheme.themeColorPrimary)
+                        
+                        ForEach(filterModel.categoryFilters, id: \.self) { category in
+                            Text(category.icon!).foregroundColor(globalAppTheme.themeColorPrimary).font(.subheadline)
+                            
+                            
+                    }
+                    }
+                    
+                
+                
+                }.buttonStyle(PlainButtonStyle()).padding(.horizontal, 4).padding(.trailing, 5).padding(.vertical, 5).background(globalAppTheme.themeColorPrimary.opacity(0.1)).cornerRadius(15)
+            }
+            
+        }
+        
+    }
+    
     var body: some View {
         HStack{
-            timePill
-            directionPill
+            timePill.padding(.horizontal, 3)
+            directionPill.padding(.horizontal, 3)
+            categoryPill.padding(.horizontal, 3)
             Spacer()
         }
     }
@@ -50,25 +105,27 @@ struct SelectedFilterPillsView: View {
 }
 
 
+
+
 struct TimeFilterPill: View {
     
     @ObservedObject var filterModel : TransactionFilterModel
     var name : String
     
-    var action : (TimeFilters?) -> ()
+    var action : (TimeFilters?, Date?, Date?) -> ()
     
     var body: some View {
         HStack{
 
             Button(action: {
-                self.action(nil)
+                self.action(nil, nil, nil)
             }) {
-                Image(systemName: "xmark.circle.fill").foregroundColor(Color(.black))
+                Image(systemName: "xmark.circle.fill").foregroundColor(globalAppTheme.themeColorPrimary)
             }.buttonStyle(PlainButtonStyle())
             
             
-            Text(self.name).font(.caption)
-        }.padding(.horizontal, 4).padding(.trailing, 5).padding(.vertical, 5).background(Color(.systemGray2)).cornerRadius(15)
+            Text(self.name).foregroundColor(globalAppTheme.themeColorPrimary).font(.subheadline).bold()
+        }.padding(.horizontal, 4).padding(.trailing, 5).padding(.vertical, 5).background(globalAppTheme.themeColorPrimary.opacity(0.1)).cornerRadius(15)
     }
 }
 
@@ -86,12 +143,12 @@ struct DirectionFilterPill: View {
             Button(action: {
                 self.action(nil)
             }) {
-                Image(systemName: "xmark.circle.fill").foregroundColor(Color(.black))
+                Image(systemName: "xmark.circle.fill").foregroundColor(globalAppTheme.themeColorPrimary)
             }.buttonStyle(PlainButtonStyle())
             
             
-            Text(self.name).font(.caption)
-        }.padding(.horizontal, 4).padding(.trailing, 5).padding(.vertical, 5).background(Color(.systemGray2)).cornerRadius(15)
+            Text(self.name).foregroundColor(globalAppTheme.themeColorPrimary).font(.subheadline).bold()
+        }.padding(.horizontal, 4).padding(.trailing, 5).padding(.vertical, 5).background(globalAppTheme.themeColorPrimary.opacity(0.1)).cornerRadius(15)
     }
 }
 
