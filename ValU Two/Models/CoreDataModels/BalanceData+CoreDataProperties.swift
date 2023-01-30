@@ -1,8 +1,9 @@
 //
 //  BalanceData+CoreDataProperties.swift
-//  
+//  ValU Two
 //
-//  Created by Clayton Wilson on 8/28/19.
+//  Created by Clayton Wilson on 9/5/22.
+//  Copyright © 2022 Clayton Wilson. All rights reserved.
 //
 //
 
@@ -19,5 +20,10 @@ extension BalanceData {
     @NSManaged public var available: Double
     @NSManaged public var current: Double
     @NSManaged public var limit: Double
+    @NSManaged public var account: AccountData?
+
+}
+
+extension BalanceData : Identifiable {
 
 }

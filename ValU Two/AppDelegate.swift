@@ -14,6 +14,7 @@ import SwiftUI
 import BackgroundTasks
 //import FirebaseFirestoreSwift
 
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -122,7 +123,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
          application to it. This property is optional since there are legitimate
          error conditions that could cause the creation of the store to fail.
          */
-        let container = NSPersistentContainer(name: "ValU Two")
+        //let container = NSPersistentContainer(name: "ValU Two")
+        let container = NSPersistentCloudKitContainer(name: "ValU Two")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             
             container.viewContext.mergePolicy = NSRollbackMergePolicy

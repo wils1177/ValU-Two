@@ -30,18 +30,23 @@ struct FixNowCard: View {
             
             Image(systemName: "exclamationmark.triangle.fill").foregroundColor(Color(.systemYellow)).imageScale(.large).padding(.leading, 5)
             Spacer()
-            Text("Your bank needs to re-verify your identity").foregroundColor(Color(.gray)).font(.footnote).padding(.leading, 5)
+            Text("Your bank needs to re-verify your identity").foregroundColor(Color(.gray)).font(.system(size: 13, weight: .bold, design: .rounded)).padding(.leading, 1)
             Spacer()
-            Text("Fix Now").foregroundColor(AppTheme().themeColorPrimary).font(.callout)
+            Text("Fix Now").foregroundColor(AppTheme().themeColorPrimary).font(.system(size: 15, weight: .bold, design: .rounded))
             
         }.padding(.trailing)
     }
     
     var loadingState : some View{
         HStack{
-            Text("Loading...").foregroundColor(Color(.gray)).font(.footnote).padding(.leading, 5)
+            
+            Image(systemName: "exclamationmark.triangle.fill").foregroundColor(Color(.systemYellow)).imageScale(.large).padding(.leading, 5)
             Spacer()
-        }
+            Text("Your bank needs to re-verify your identity").foregroundColor(Color(.gray)).font(.system(size: 13, weight: .bold, design: .rounded)).padding(.leading, 1)
+            Spacer()
+            ProgressView()
+            
+        }.padding(.trailing)
     }
     
     var failState : some View{

@@ -61,6 +61,7 @@ class ItemDeleteModel: ObservableObject {
                 self.removeLocalData()
                 self.removing = false
                 self.parentModel.updateView()
+                NotificationCenter.default.post(name: .modelUpdate, object: nil)
             }
         }
         

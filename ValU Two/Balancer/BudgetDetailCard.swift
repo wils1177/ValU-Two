@@ -94,6 +94,17 @@ struct BudgetDetailCard: View {
         self.viewModel.deleteCategory(id: self.budgetCategory.id!, budgetSection: self.budgetCategory.budgetSection!)
     }
     
+    func useEstimate(){
+        let toChange = Float(self.historicalTransactions.getPreviouslySpentInCategory(budgetCategory: self.budgetCategory))
+        self.service.updateSpendingLimit(value: toChange)
+        
+        self.service.editText = String(Int(toChange))
+        
+        //self.budgetCategory.objectWillChange.send()
+        
+        
+    }
+    
     var moreMenu : some View{
         
         Menu {
@@ -111,6 +122,11 @@ struct BudgetDetailCard: View {
                                                 Label("Make Recurring", systemImage: "clock.arrow.circlepath")
                                             }
             }
+            
+            
+            Button(action: useEstimate) {
+                                            Label("Use Estimate", systemImage: "brain")
+                                        }
             
             
             Button(action: editCategory) {
@@ -190,7 +206,7 @@ struct BudgetDetailCard: View {
             
                    
                    
-        }.background(Color(.tertiarySystemBackground)).cornerRadius(23).shadow(radius: 8)
+        }.background(Color(.tertiarySystemBackground)).cornerRadius(23)
     }
     
     

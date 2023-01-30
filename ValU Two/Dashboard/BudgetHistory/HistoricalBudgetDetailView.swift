@@ -18,6 +18,8 @@ struct HistoricalBudgetDetailView: View {
     
     var spendingCardViewModel : SpendingCardViewModel
     
+    @State var budgetFilter: BudgetFilter = .Spending
+    
     init(budget: Budget, service: BudgetStatsService, title: String){
         self.title = title
         self.budget = budget
@@ -40,18 +42,28 @@ struct HistoricalBudgetDetailView: View {
     }
     
     var body: some View {
-        List{
+        ScrollView{
                 
-            HistoryEntryView(budget: self.budget, service: self.service, coordinator: nil).listRowBackground(Color.clear).listRowSeparator(.hidden).padding(.vertical).background(Color(.systemGroupedBackground)).cornerRadius(13)
+            HistoryEntryView(budget: self.budget, service: self.service, coordinator: nil).listRowBackground(Color.clear).listRowSeparator(.hidden).padding().background(Color(.systemGroupedBackground)).cornerRadius(13)
+            
+            
+            VStack(alignment: .leading, spacing: 6){
+                
+                Text("This Month vs Last Month").font(.system(size: 21, weight: .bold, design: .rounded)).padding(.leading, 5).padding(.bottom, 5)
                 
                 ThisMonthLastMonthGraph(budget: self.budget
-                                        , budgetTransactionsService: self.transactionsService).listRowBackground(Color.clear).listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)).listRowSeparator(.hidden)
+                                        , budgetTransactionsService: self.transactionsService, budgetFilter: $budgetFilter).listRowBackground(Color.clear).listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)).listRowSeparator(.hidden)
+            }.padding(10).background(Color(.tertiarySystemBackground)).cornerRadius(12).padding([.horizontal, .bottom], 16)
                 
                 
-                SpendingCardView(budget: self.budget, budgetTransactionsService: self.transactionsService).listRowSeparator(.hidden).listRowBackground(Color.clear).padding(.top, 30)
+                
+                
+            SpendingCardView(budget: self.budget, budgetTransactionsService: self.transactionsService, budgetFilter: self.$budgetFilter).listRowSeparator(.hidden).listRowBackground(Color.clear)
             
-        }.listStyle(PlainListStyle())
-            .background(Color(.systemGroupedBackground))
+            
+            
+            
+        }.background(Color(uiColor: .systemGroupedBackground))
         
     }
 }

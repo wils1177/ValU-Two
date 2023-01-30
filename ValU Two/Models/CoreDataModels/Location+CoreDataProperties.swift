@@ -2,8 +2,8 @@
 //  Location+CoreDataProperties.swift
 //  ValU Two
 //
-//  Created by Clayton Wilson on 5/27/20.
-//  Copyright © 2020 Clayton Wilson. All rights reserved.
+//  Created by Clayton Wilson on 9/5/22.
+//  Copyright © 2022 Clayton Wilson. All rights reserved.
 //
 //
 
@@ -25,5 +25,10 @@ extension Location {
     @NSManaged public var postalCode: String?
     @NSManaged public var region: String?
     @NSManaged public var storeNumber: String?
+    @NSManaged public var transaction: Transaction?
+
+}
+
+extension Location : Identifiable {
 
 }

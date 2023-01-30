@@ -53,6 +53,38 @@ class TransactionProccessor{
         
     }
     
+    func processTransaction(transaction: TransactionJSON, itemId: String){
+        
+        //If this is replacing a pending transaction, replace the pending one.
+        if transaction.pendingTransactionId != nil{
+            print("Transaction is supposed to replace a pending transaction")
+            
+            let didReplaceTransaction = self.attemptToReplcePendingTransaction(pendingTransactionId: transaction.pendingTransactionId!, transactionData: transaction)
+            
+            if !didReplaceTransaction{
+                
+                
+                
+                let newTransaction = self.insertTransaction(transactionJSON: transaction, itemId: itemId)
+                
+                if newTransaction != nil{
+                    self.proccessTransactionToCategory(transaction: newTransaction!, spendingCategories: self.spendingCategories)
+                }
+                
+            }
+            
+        }
+        // If its not replace a pending transaction, simply process it as a new transaction
+        else{
+            let newTransaction = self.insertTransaction(transactionJSON: transaction, itemId: itemId)
+            
+            if newTransaction != nil{
+                self.proccessTransactionToCategory(transaction: newTransaction!, spendingCategories: self.spendingCategories)
+            }
+        }
+        
+    }
+    
     
     func attemptToReplcePendingTransaction(pendingTransactionId: String, transactionData: TransactionJSON) -> Bool{
         do{
@@ -63,12 +95,7 @@ class TransactionProccessor{
                 transaction.transactionId = transactionData.transactionId
                 transaction.amount = transactionData.amount
                 
-                /*
-                if transactionData.authDate != nil{
-                    transaction.date = CommonUtils().getDate(dateString: transactionData.authDate!)
-                }
-                */ 
-                
+               
                 transaction.name = transactionData.name
                 transaction.merchantName = transactionData.merchantName
                 transaction.pending = transactionData.pending
@@ -86,6 +113,41 @@ class TransactionProccessor{
             print("Could not replace a pending transaction")
             return false
         }
+    }
+    
+    func doesTransactionAlreadyExists(transactionId: String) -> Bool{
+        
+        do{
+            let result = try dataManager.getEntity(predicate: PredicateBuilder().generateTransactionIdPredicate(transactionId: transactionId), entityName: "Transaction") as! [Transaction]
+            
+            if result.count != 0{
+                return true
+            }
+            else{
+                return false
+            }
+        }
+        catch{
+            return false
+        }
+  
+    }
+    
+    func insertTransaction(transactionJSON: TransactionJSON, itemId: String) -> Transaction?{
+        
+        let transactionId = transactionJSON.transactionId
+        let doesExistAlready = doesTransactionAlreadyExists(transactionId: transactionId)
+        
+        if !doesExistAlready{
+            print("Transaction is New")
+            let newTransaction = dataManager.saveTransaction(transaction: transactionJSON, itemId: itemId)
+            return newTransaction
+        }
+        else{
+            print("Already exists, skip transaction")
+            return nil
+        }
+        
     }
     
     
@@ -112,7 +174,7 @@ class TransactionProccessor{
             for match in matches{
                 
                 transaction.addToCategoryMatches(match)
-                match.spendingCategory!.addToTransactions(transaction)
+                //match.spendingCategory!.addToTransactions(transaction)
             }
 
             dataManager.saveDatabase()

@@ -77,7 +77,15 @@ struct TransactionsTabView: View {
                     Section(header: TransactionDateSectionHeader(transactionSection: dateSection, isAnySearch: self.isAnySearch)){
                         
                         ForEach(dateSection.transactions, id: \.self) { transaction in
-                            TransactionRow(coordinator: self.viewModel.coordinator!, transaction : transaction, transactionService: self.transactionService).padding(.vertical, 3)
+                            TransactionRow(coordinator: self.viewModel.coordinator!, transaction : transaction, transactionService: self.transactionService)
+                            
+                                .swipeActions {
+                                            Button("Change Category") {
+                                                self.viewModel.coordinator?.showEditCategory(transaction: transaction)
+                                            }
+                                            .tint(.blue)
+                                        }
+                            
                         }
                         
                     }.textCase(nil)

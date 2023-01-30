@@ -9,11 +9,20 @@
 import SwiftUI
 import SwiftKeychainWrapper
 
+enum BudgetFilter{
+    case Spending
+    case Recurring
+    case Income
+    case All
+}
+
 struct BudgetsView: View {
     
     @ObservedObject var viewModel: BudgetsViewModel
     @ObservedObject var budget: Budget
     @ObservedObject var fixNowService : FixNowService
+    
+    @State var budgetFilter: BudgetFilter = .Spending
 
     
     init(viewModel: BudgetsViewModel, budget: Budget){
@@ -68,13 +77,105 @@ struct BudgetsView: View {
     var fixNowCards: some View{
         
         ForEach(self.fixNowService.exiredItemIds, id: \.self){ expiredId in
-            FixNowCard(service: self.fixNowService, itemId: expiredId).padding(.horizontal)
+            FixNowCard(service: self.fixNowService, itemId: expiredId).listRowBackground(Color(.clear)).listRowSeparator(.hidden)
         }
     }
     
 
     
-    
+    var summary: some View{
+        HStack(alignment: .top){
+            
+            VStack(alignment: .leading){
+                
+                
+                if self.budgetFilter == .Spending{
+                    
+                    
+                        
+                        
+                        HStack{
+                            //Image(systemName: "creditcard.fill").font(.system(size: 18, design: .rounded)).foregroundColor(Color(.lightGray))
+                            Text("Left in Budget").font(.system(size: 16, design: .rounded)).bold().foregroundColor(Color(.lightGray))
+                        }
+                    Text("\(CommonUtils.makeMoneyString(number:(Int(self.viewModel.budgetTransactionsService.getLeftInBudget()))))").font(.system(size: 31, design: .rounded)).fontWeight(.heavy).foregroundColor(globalAppTheme.themeColorPrimary)
+                        
+                        
+                    
+                    
+                    
+                    //Text("Left in budget").foregroundColor(Color(.lightGray)).font(.system(size: 20, weight: .bold, design: .rounded))
+                    //Text("\(CommonUtils.makeMoneyString(number:(Int(self.viewModel.budgetTransactionsService.getLeftInBudget()))))").font(.system(size: 37, weight: .heavy, design: .rounded)).foregroundColor(globalAppTheme.themeColorPrimary)
+                    
+                }
+                else if self.budgetFilter == .Income{
+                    HStack{
+                        //Image(systemName: "creditcard.fill").font(.system(size: 18, design: .rounded)).foregroundColor(Color(.lightGray))
+                        Text("Income").font(.system(size: 16, design: .rounded)).bold().foregroundColor(Color(.lightGray))
+                    }
+                    Text("\(CommonUtils.makeMoneyString(number:(Int(self.viewModel.budgetTransactionsService.getBudgetIncome() * -1))))").font(.system(size: 30, weight: .heavy, design: .rounded)).foregroundColor(globalAppTheme.themeColorPrimary)
+                    
+                }
+                else if self.budgetFilter == .Recurring{
+                    HStack{
+                        //Image(systemName: "creditcard.fill").font(.system(size: 18, design: .rounded)).foregroundColor(Color(.lightGray))
+                        Text("Recurring Reimaining").font(.system(size: 16, design: .rounded)).bold().foregroundColor(Color(.lightGray))
+                    }
+                    Text("\(CommonUtils.makeMoneyString(number:(Int(self.viewModel.budgetTransactionsService.getLeftRecurring()))))").font(.system(size: 30, weight: .heavy, design: .rounded)).foregroundColor(globalAppTheme.themeColorPrimary)
+                    
+                }
+                
+                
+                
+  
+                
+            }
+            Spacer()
+            
+            
+            Menu() {
+                
+                
+                Picker(selection: $budgetFilter, label: Text("Budget Section")) {
+                    
+                    Label("Spending", systemImage: "chart.bar.doc.horizontal").tag(BudgetFilter.Spending)
+                    Label("Recurring", systemImage: "chart.line.uptrend.xyaxis.circle").tag(BudgetFilter.Recurring)
+                    //  Label("All Spending", systemImage: "chart.line.uptrend.xyaxis.circle").tag(2)
+                    Label("Income", systemImage: "chart.line.uptrend.xyaxis").tag(BudgetFilter.Income)
+                    
+                    
+                    
+                }
+                
+            }
+            label: {
+                
+                HStack(spacing: 3){
+                    
+                    if self.budgetFilter == .Spending{
+                        Image(systemName: "chart.bar.doc.horizontal").font(.system(size: 15, weight: .bold, design: .rounded)).foregroundColor(globalAppTheme.themeColorPrimary)
+                        Text("Spending").font(.system(size: 15, weight: .bold, design: .rounded)).foregroundColor(globalAppTheme.themeColorPrimary)
+                    }
+                    else if self.budgetFilter == .Income{
+                        Image(systemName: "chart.line.uptrend.xyaxis").font(.system(size: 15, weight: .bold, design: .rounded)).foregroundColor(globalAppTheme.themeColorPrimary)
+                        Text("Income").font(.system(size: 15, weight: .bold, design: .rounded)).foregroundColor(globalAppTheme.themeColorPrimary)
+                    }
+                    else if self.budgetFilter == .Recurring{
+                        Image(systemName: "chart.line.uptrend.xyaxis.circle").font(.system(size: 15, weight: .bold, design: .rounded)).foregroundColor(globalAppTheme.themeColorPrimary)
+                        Text("Recurring").font(.system(size: 15, weight: .bold, design: .rounded)).foregroundColor(globalAppTheme.themeColorPrimary)
+                    }
+                    
+                        
+                        Image(systemName: "chevron.down").font(.system(size: 15, weight: .bold, design: .rounded)).foregroundColor(globalAppTheme.themeColorPrimary)
+                    
+                    
+                }.padding(.horizontal, 12).padding(.vertical, 6).background(Color(.tertiarySystemBackground)).clipShape(Capsule())
+                
+            }
+            
+           
+        }
+    }
     
 
     
@@ -82,57 +183,42 @@ struct BudgetsView: View {
     
     var body: some View {
         
-            List{
+            ScrollView{
                 
                     if self.fixNowService.exiredItemIds.count > 0{
                         fixNowCards
                     }
                         
+     
                 
-                        
-                //TimeSectionView(budget: self.viewModel.currentBudget, service: self.viewModel.budgetTransactionsService, coordinator: self.viewModel.coordinator).padding(.horizontal, 25).listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)).listRowSeparator(.hidden).padding(.top, 10)
-                        
-                            
-                            
-                            //self.topButtons//.padding(.top, 7)
-                            
-                        //Divider()
-                        
-                                    
-                                    //self.budgetHeader.padding(.bottom,5)
-                BudgetCardView(budget: self.budget, viewModel: self.viewModel).listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                     
+                self.summary.padding(.horizontal, 16).padding(.top, 16)
+                
+                        
+                                    
+                VStack(alignment: .leading, spacing: 6){
                     
-                                    
-                                    
-                                   
-                                    
-                                
-                        
-                        //Divider()
-                        
-                        
-                        
-
-                        
-                    //IncomeSectionView(coordinator: self.viewModel.coordinator, service: self.viewModel.budgetTransactionsService, budget: self.budget).listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)).listRowBackground(Color.clear).listRowSeparator(.hidden).padding(.horizontal)
-                
-                        
-                        
-                       // Divider()
-
+                    Text("This Month vs Last Month").font(.system(size: 21, weight: .bold, design: .rounded)).padding(.leading, 5).padding(.bottom, 5)
+                    //summary.padding(.horizontal, 8).padding(.bottom, 8)
+                    ThisMonthLastMonthGraph(budget: self.budget
+                                            , budgetTransactionsService: self.viewModel.budgetTransactionsService, budgetFilter: self.$budgetFilter).listRowSeparator(.hidden)
+                }.padding(10).background(Color(.tertiarySystemBackground)).cornerRadius(12).padding([.horizontal, .bottom], 16)
                 
                 
-                //Section(){
-                    //Text("Spending Breakdown").font(.system(size: 23, design: .rounded)).fontWeight(.bold).listRowSeparator(.hidden)
-                    //BudgetStatusBarView(viewData: self.viewModel.getBudgetStatusBarViewData(), showLegend: false).listRowSeparator(.hidden).listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)).padding(.horizontal, 30)
-                SpendingCardView(budget: self.viewModel.currentBudget, budgetTransactionsService: self.viewModel.budgetTransactionsService, coordinator: self.viewModel.coordinator).listRowSeparator(.hidden).listRowBackground(Color.clear).padding(.top)
-               //}.listRowBackground(Color.clear).padding(.top)
+                
+                
+                
+                    
+                
+                
+                SpendingCardView(budget: self.viewModel.currentBudget, budgetTransactionsService: self.viewModel.budgetTransactionsService, coordinator: self.viewModel.coordinator, budgetFilter: self.$budgetFilter).listRowSeparator(.hidden)
+               
                 
                 
             }
-            .listStyle(PlainListStyle())
-            .background(Color(.systemGroupedBackground))
+            .background(Color(uiColor: .systemGroupedBackground))
+           
+            
             .refreshable {
                 let refreshModel = OnDemandRefreshViewModel()
                 await refreshModel.refreshAllItems()

@@ -19,16 +19,16 @@ struct ParentCategoryCard: View {
     var limit : Float
     var name: String
     var percentageSpent: Double
-    @ObservedObject var section: BudgetSection
+    var section: BudgetSection
     
     var coordinator: BudgetsTabCoordinator?
     
-    @Binding var selectedSpendingState : Int
+    @Binding var budgetFilter: BudgetFilter
     
-    init(budgetSection: BudgetSection, coordiantor: BudgetsTabCoordinator? = nil, selectedState: Binding<Int>){
+    init(budgetSection: BudgetSection, coordiantor: BudgetsTabCoordinator? = nil, budgetFilter: Binding<BudgetFilter>){
         self.coordinator = coordiantor
         self.section = budgetSection
-        self._selectedSpendingState = selectedState
+        self._budgetFilter = budgetFilter
         self.color = colorMap[Int(budgetSection.colorCode)]
         self.colorSeconday = Color(colorMapUIKit[Int(budgetSection.colorCode)].lighter()!)
         self.colorTertiary = Color(colorMapUIKit[Int(budgetSection.colorCode)].darker()!)
@@ -54,7 +54,7 @@ struct ParentCategoryCard: View {
     
     func getLeft() -> String{
         var left = 0.0
-        if self.selectedSpendingState == 0{
+        if self.budgetFilter == .Spending{
             left = self.section.getFreeLimit() - self.section.getFreeSpent()
         }
         else{
@@ -82,90 +82,72 @@ struct ParentCategoryCard: View {
     
     @State var isLarge = true
     
+    var header: some View{
+        HStack{
+            
+          
+            Button(action: {
+                // What to perform
+                coordinator?.showIndvidualBudget(budgetSection: self.section)
+                
+            }) {
+                // How the button looks like
+                //Image(systemName: "chevron.right").font(.system(size: 19)).foregroundColor(globalAppTheme.themeColorPrimary).padding(.trailing, 3).rotationEffect(.degrees(isLarge ? 90 : 0)).padding(.trailing, 3)
+                //BudgetSectionIconLarge(color: self.color, icon: self.section.icon ?? "book", size: 30).padding(.trailing, 2)
+                Image(systemName: self.section.icon!).font(.system(size: 21, design: .rounded)).fontWeight(.bold).foregroundColor(color.opacity(0.4))
+                Text(self.name).font(.system(size: 21, design: .rounded)).foregroundColor(color).fontWeight(.bold).lineLimit(1).listRowSeparator(.hidden)
+                
+                
+                Spacer()
+               
+                NavigationBarTextButton(text: getLeft(), color: color)
+                //Image(systemName: "chevron.right").font(.system(size: 14, design: .rounded)).fontWeight(.bold).foregroundColor(Color(.lightGray))
+                
+            }.buttonStyle(PlainButtonStyle())
+ 
+        }.padding(.bottom, 5)
+    }
+    
     var circleNuts: some View{
-        Section{
-            VStack(spacing: 5){
+        
+        
+        
+        
+        
+        VStack(spacing: 0){
+            
+            header.padding(.bottom, 15)
+            
+            ForEach(self.section.getBudgetCategories(), id: \.self) { category in
                 
-                HStack{
-                    
-                  
-                    Button(action: {
-                        // What to perform
-                        withAnimation{
-                            self.isLarge.toggle()
-                        }
-                        
-                    }) {
-                        // How the button looks like
-                        //Image(systemName: "chevron.right").font(.system(size: 19)).foregroundColor(globalAppTheme.themeColorPrimary).padding(.trailing, 3).rotationEffect(.degrees(isLarge ? 90 : 0)).padding(.trailing, 3)
-                        BudgetSectionIconLarge(color: self.color, icon: self.section.icon ?? "book", size: 30).padding(.trailing, 2)
-                        Text(self.name).font(.system(size: 20, design: .rounded)).fontWeight(.bold).lineLimit(1).listRowSeparator(.hidden)
-                    }.buttonStyle(PlainButtonStyle())
-                    
-                    
-                    
-                    
-                    
-                    Spacer()
-                    Button(action: {
-                        // What to perform
-                        coordinator?.showIndvidualBudget(budgetSection: self.section)
-                    }) {
-                        // How the button looks like
-                        NavigationBarTextButton(text: getLeft(), color: color)
-                    }.buttonStyle(PlainButtonStyle())
-                    
-                }.padding(.horizontal, 15).padding(.vertical, 5)
-                
-                
-                
-                if isLarge{
-                    
-                    Rectangle().frame(height: 3).foregroundColor(Color(.lightGray).opacity(0.2))
-                    
-                    VStack(spacing: 0){
-                        
-                        
-                        
-                            ForEach(self.section.getBudgetCategories(), id: \.self) { category in
-                                
-                                VStack(spacing: 0.0){
-                                    if self.selectedSpendingState == 0 && !category.recurring{
-                                        Button(action: {
-                                            // What to perform
-                                            self.coordinator?.showCategoryDetail(category: category)
-                                        }) {
-                                            // How the button looks like
-                                            CategorySlideView(category: category, color: self.color).padding(.vertical, 2.5)
-                                        }.buttonStyle(PlainButtonStyle())
-                                    }
-                                    else if self.selectedSpendingState == 1 && category.recurring{
-                                        Button(action: {
-                                            // What to perform
-                                            self.coordinator?.showCategoryDetail(category: category)
-                                        }) {
-                                            // How the button looks like
-                                            CategorySlideView(category: category, color: self.color).padding(.vertical, 2.5)
-                                        }.buttonStyle(PlainButtonStyle())
-                                    }
-                                }
-                                
-                                
-                                
-                                
-                                
-                                //Divider().padding(.leading, 30)
-                            }
-                        
-                    }.padding(.horizontal, 12).padding(.bottom, 12).padding(.top, 8)
+                VStack(spacing: 0.0){
+                    if self.budgetFilter == .Spending && !category.recurring{
+                        Button(action: {
+                            // What to perform
+                            self.coordinator?.showCategoryDetail(category: category)
+                        }) {
+                            // How the button looks like
+                            CategorySlideView(category: category, color: self.color).padding(.vertical, 4)
+                        }.buttonStyle(PlainButtonStyle())
+                    }
+                    else if self.budgetFilter == .Recurring && category.recurring{
+                        Button(action: {
+                            // What to perform
+                            self.coordinator?.showCategoryDetail(category: category)
+                        }) {
+                            // How the button looks like
+                            CategorySlideView(category: category, color: self.color).padding(.vertical, 4)
+                        }.buttonStyle(PlainButtonStyle())
+                    }
                 }
                 
-                
-            }.padding(.top, 8).background(Color(.tertiarySystemBackground)).cornerRadius(25)
+            }
+            
             
             
             
         }
+        
     }
 
     
@@ -228,23 +210,28 @@ struct OtherSectionView: View{
         }
     }
     
+    
+    
     var body: some View{
         
         Section{
             VStack{
                 
-                HStack{
-                    
-  
-                    Text("Other").font(.system(size: 23, design: .rounded)).fontWeight(.bold).listRowSeparator(.hidden)
-
-                    Spacer()
-                    
-                    
-                }
                 
                 
                     VStack{
+                        
+                        HStack{
+                            
+          
+                            Text("Other").font(.system(size: 23, design: .rounded)).fontWeight(.bold).listRowSeparator(.hidden)
+
+                            Spacer()
+                            
+                            
+                        }.padding(.horizontal, 12).padding(.top, 8)
+                        
+                        Rectangle().frame(height: 3).foregroundColor(Color(.lightGray).opacity(0.2))
                         
                         HStack{
                             
@@ -300,10 +287,10 @@ struct OtherSectionView: View{
                             
                             
                             
-                        }.frame(height: 50)
+                        }.frame(height: 50).padding(12)
                         
                         
-                        }.padding(12).padding(.top, 8).background(Color(.tertiarySystemBackground)).cornerRadius(25)
+                        }.padding(.top, 8).background(Color(.tertiarySystemBackground)).cornerRadius(25)
                     
                 }
                 
@@ -398,7 +385,7 @@ struct CategorySlideView: View{
                         
                         
                         
-                        RoundedRectangle(cornerRadius: 10).frame(width: g.size.width, height: 40).foregroundColor(self.color.opacity(0.08))
+                        RoundedRectangle(cornerRadius: 10).frame(width: g.size.width, height: 40).foregroundColor(Color(.lightGray).opacity(0.11))
                         
                         
                         RoundedRectangle(cornerRadius: 10).frame(width: g.size.width * getPercentage(), height: 40).foregroundColor(self.color.opacity(0.4))

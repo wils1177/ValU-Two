@@ -128,15 +128,22 @@ class HistoryViewModel : ObservableObject {
             }
             
             var graphSegements = [HistoryGraphBarSegment]()
-            let income = HistoryGraphBarSegment(color: Color(.systemGreen), name: "Income", value: earnedTotal, icon: "arrow.up")
             
-            graphSegements.append(income)
             
-            let outcome = HistoryGraphBarSegment(color: Color(.systemRed), name: "Spending", value: spentTotal, icon: "arrow.down")
             
-            graphSegements.append(outcome)
             
             let total = earnedTotal - spentTotal
+            
+            
+            let income = HistoryGraphBarSegment(color: Color(.systemGreen), name: "Income", startDate: startDate, value: earnedTotal, icon: "arrow.up")
+                
+                graphSegements.append(income)
+            
+            
+            let outcome = HistoryGraphBarSegment(color: Color(.systemRed), name: "Spending", startDate: startDate, value: spentTotal, icon: "arrow.down")
+                 
+                 graphSegements.append(outcome)
+            
                 
             data.append(HistoryGraphBar(label: name, totalValue: total, segments: graphSegements))
             
@@ -151,140 +158,108 @@ class HistoryViewModel : ObservableObject {
     
     
     
-    func createSpendingGraphData(state: HistoryGraphViewState, budgetSection: BudgetSection?) -> [HistoryGraphBar]{
+    
+    
+    
+    func createSpendingGraphData(state: HistoryGraphViewState, budgetSection: BudgetSection?) -> [HistoryGraphBarSegment]{
         
-        var sectionsToUse = [BudgetSection]()
         
-        let budget = self.activeBudget
         
-        if budget != nil{
-            
-            if state == .All{
-                sectionsToUse = budget!.getBudgetSections()
-                
-            }
-            else if state == .Other{
-                sectionsToUse = [BudgetSection]()
-            }
-            else if state == .Section {
-                sectionsToUse.append(budgetSection!)
-            }
-            
-        }
+       
+        return createGraphDataforSection(section: budgetSection)
         
-        return createGraphDataForSection(sectionsToUse: sectionsToUse, state: state)
     }
     
-    func createGraphDataForSection(sectionsToUse: [BudgetSection], state: HistoryGraphViewState) -> [HistoryGraphBar]{
-        
+    
+    func createGraphDataforSection(section: BudgetSection?) -> [HistoryGraphBarSegment]{
         let periods = 5
-        
         
         var endDate = Date().endOfMonth!
         
         var startDate = Date().startOfMonth!
         
-        var bars = [HistoryGraphBar]()
-        
-        
-        
+        var segments = [HistoryGraphBarSegment]()
         
         for _ in 1...periods{
             
-            var sectionTotals = [BudgetSectionTotals]()
-            for section in sectionsToUse{
-                let sectionTotal = BudgetSectionTotals(section: section, total: 0.0)
-                sectionTotals.append(sectionTotal)
-            }
-            
-            var otherTotal = 0.0
+            let total = getSpendingTotalForSectionAndDate(section: section, startDate: startDate, endDate: endDate)
             let name = CommonUtils.getDateTitleShort(date: startDate)
             
+            if section == nil{
+                let segment = HistoryGraphBarSegment(color: globalAppTheme.themeColorPrimary, name: name, startDate: startDate, value: total)
+                segments.append(segment)
+            }
+            else{
+                let segment = HistoryGraphBarSegment(color: colorMap[Int(section!.colorCode)], name: name, startDate: startDate, value: total)
+                segments.append(segment)
+            }
+
             
-            let transactions = TransactionsCategoryFetcher.getTransactionsForDateRange(startDate: startDate, endDate: endDate)
             
-            for transaction in transactions{
+            endDate = Calendar.current.date(byAdding: .month, value: -1, to: endDate)!
+            startDate = Calendar.current.date(byAdding: .month, value: -1, to: startDate)!
+            
+        }
+        
+        return segments
+    }
+    
+    func getSpendingTotalForSectionAndDate(section: BudgetSection?, startDate: Date, endDate: Date) -> Double{
+        
+        let transactions = TransactionsCategoryFetcher.getTransactionsForDateRange(startDate: startDate, endDate: endDate)
+        
+        var total = 0.0
+        
+        for transaction in transactions{
+            
+            let categoryMatches = transaction.categoryMatches?.allObjects as! [CategoryMatch]
+            
+            if transaction.amount < 0{
+                continue
+            }
+            
+            for match in categoryMatches{
                 
-                let categoryMatches = transaction.categoryMatches?.allObjects as! [CategoryMatch]
-                
-                
-                
-                if transaction.amount < 0{
-                    continue
-                }
-                else if categoryMatches.count == 0 && !transaction.isHidden{
-                    otherTotal = otherTotal + transaction.amount
-                }
-                else{
-                    //Horribly complex code to see what section total I should increment
-                    for match in categoryMatches{
+                if section != nil{
+                    for budgetCategory in section!.getBudgetCategories(){
                         
-                        var anyMatch = false
-                        for section in sectionsToUse{
+                        if budgetCategory.spendingCategory!.id! == match.spendingCategory!.id!{
                             
-                            for budgetCategory in section.getBudgetCategories(){
-                                
-                                if budgetCategory.spendingCategory!.id! == match.spendingCategory!.id!{
-                                    
-                                    
-                                    for (index, sectionTotal) in sectionTotals.enumerated(){
-                                        
-                                        
-                                        if sectionTotal.section.id! == section.id{
-                                            anyMatch = true
-                                            if !transaction.isHidden{
-                                                sectionTotals[index].total = sectionTotals[index].total + Double(match.amount)
-                                            }
-                                            
-                                        }
-                                        
-                                    }
-                                    
-                                    //if !anyMatch && !transaction.isHidden{
-                                    //    otherTotal = otherTotal + Double(match.amount)
-                                    //}
-                                    
-                                   
-                                }
-                                
+                            if transaction.isHidden != true{
+                                total = total + Double(match.amount)
                             }
+                            
                             
                         }
                         
                     }
                 }
+                else{
+                    for match in categoryMatches{
+                        
+                        if transaction.isHidden != true{
+                            total = total + Double(match.amount)
+                        }
+                        
+                        
+                    }
+                }
                 
                 
-  
+                
             }
             
-            //We've gone through every transaction in the period. Now, let's create each bar segement
-            var graphSegements = [HistoryGraphBarSegment]()
-            var total = 0.0
-            for sectionTotal in sectionTotals {
-                let segement = HistoryGraphBarSegment(color: colorMap[Int(sectionTotal.section.colorCode)], name: sectionTotal.section.name!, value: sectionTotal.total, icon: sectionTotal.section.icon!)
-                graphSegements.append(segement)
-                total = total + sectionTotal.total
-            }
             
-            if state != .Section{
-                let segement = HistoryGraphBarSegment(color: globalAppTheme.otherColor, name: "Other", value: otherTotal, icon: "book")
-                graphSegements.append(segement)
-                total = total + otherTotal
-            }
-            
-            graphSegements = graphSegements.sorted(by: { $0.value < $1.value })
-            
-            bars.append(HistoryGraphBar(label: name, totalValue: total, segments: graphSegements))
-            
-           endDate = Calendar.current.date(byAdding: .month, value: -1, to: endDate)!
-           startDate = Calendar.current.date(byAdding: .month, value: -1, to: startDate)!
             
         }
         
-        return bars
+        return total
+        
+        
         
     }
+    
+    
     
     
     

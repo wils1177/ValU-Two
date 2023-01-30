@@ -36,8 +36,10 @@ class CategoryEditService : ObservableObject, KeyboardDelegate{
     func updateSpendingLimit(value: Float){
         
         budgetCategory.limit = Double(value)
+        self.editText = String(Int(value))
         DataManager().saveDatabase()
         self.budgetCategory.budgetSection?.objectWillChange.send()
+        
         self.viewModel.budget.objectWillChange.send()
     }
     

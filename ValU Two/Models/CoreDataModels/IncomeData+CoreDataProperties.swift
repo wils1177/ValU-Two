@@ -1,8 +1,9 @@
 //
 //  IncomeData+CoreDataProperties.swift
-//  
+//  ValU Two
 //
-//  Created by Clayton Wilson on 12/18/19.
+//  Created by Clayton Wilson on 9/5/22.
+//  Copyright © 2022 Clayton Wilson. All rights reserved.
 //
 //
 
@@ -38,5 +39,9 @@ extension IncomeData {
 
     @objc(removeIncomeStreams:)
     @NSManaged public func removeFromIncomeStreams(_ values: NSSet)
+
+}
+
+extension IncomeData : Identifiable {
 
 }

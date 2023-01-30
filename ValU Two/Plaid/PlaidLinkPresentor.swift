@@ -31,9 +31,9 @@ class PlaidLinkViewPresentor  {
         self.viewController = viewControllerToPresentOver
     }
     
-    func getLinkToken(){
+    func getLinkToken(itemId: String? = nil){
         let tokenService = PlaidLinkTokenService(completion: handleLinkTokenResult(result:))
-        tokenService.getLinkToken()
+        tokenService.getLinkToken(itemId: itemId)
     }
     
     func handleLinkTokenResult(result: Result<PlaidLinkTokenResult, Error>){
@@ -70,9 +70,9 @@ class PlaidLinkViewPresentor  {
         
     }
     
-    func setupLink(){
+    func setupLink(itemId: String? = nil){
         
-        getLinkToken()
+        getLinkToken(itemId: itemId)
         
     }
     
@@ -100,48 +100,3 @@ class PlaidLinkViewPresentor  {
     
 
 }
-
-/*
-extension PlaidLinkViewPresentor : PLKPlaidLinkViewDelegate
-{
-    func linkViewController(_ linkViewController:
-        PLKPlaidLinkViewController, didSucceedWithPublicToken publicToken:
-        String, metadata: [String : Any]?) {
-        
-        print("success In Link Modal")
-        
-        let institution = metadata!["institution"] as! [String : String]
-        let name = institution["name"]
-        let institutionId = institution["institution_id"]
-        PlaidProccessor.savePublicToken(publicToken: publicToken, institutionName: name!, institutionId : institutionId!)
-        self.coordinator?.plaidLinkSuccess(sender : self)
-        //linkViewController.dismiss(animated: true, completion: nil)
- 
-    }
-    
-    func linkViewController(_ linkViewController:
-        PLKPlaidLinkViewController, didExitWithError error: Error?,
-                                    metadata: [String : Any]?) {
-        dismiss(animated: true) {
-            if let error = error {
-                print("Exited with error")
-            }
-            else {
-                print("Exited without any error")
-            }
-        }
-        self.coordinator?.dismissPlaidLink(sender: self)
-    }
-    
-    func linkViewController(_ linkViewController:
-        PLKPlaidLinkViewController, didHandleEvent event: String, metadata:
-        [String : Any]?) {
-        print("Link Event!")
-        if event == "ERROR"{
-            print(metadata)
-        }
-        
-    }
-    
-}
-*/

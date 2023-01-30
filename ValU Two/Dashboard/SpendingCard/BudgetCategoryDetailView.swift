@@ -64,10 +64,11 @@ struct BudgetCategoryDetailView: View {
                         HStack{
                             Text(graphTitle).font(.system(size: 21, design: .rounded)).fontWeight(.bold)
                             Spacer()
-                        }.padding(.bottom, 15)
+                        }.padding(.bottom)
                         
-                        LineView(dataSet1: self.detailModel.getThisMonthTransactionsForCategory(category: self.category), dataSet2: self.detailModel.getLastMonthTransactionsForCategory(category: self.category), cutOffValue: Double(self.category.limit), color1: colorMap[Int(category.budgetSection!.colorCode)], color2: Color(.lightGray).opacity(0.7), cutOffColor: colorMap[Int(category.budgetSection!.colorCode)], legendSet: self.detailModel.getGraphLabels(category: self.category)).frame(height: 200).padding(.bottom, 15)
+                        //LineView(dataSet1: self.detailModel.getThisMonthTransactionsForCategory(category: self.category), dataSet2: self.detailModel.getLastMonthTransactionsForCategory(category: self.category), cutOffValue: Double(self.category.limit), color1: colorMap[Int(category.budgetSection!.colorCode)], color2: Color(.lightGray).opacity(0.7), cutOffColor: colorMap[Int(category.budgetSection!.colorCode)], legendSet: self.detailModel.getGraphLabels(category: self.category)).frame(height: 200).padding(.bottom, 15)
                         
+                        NewLineGraph(dataSet1: self.detailModel.getThisMonthTransactionsForCategory(category: self.category), color1: colorMap[Int(category.budgetSection!.colorCode)], dataSet2: self.detailModel.getLastMonthTransactionsForCategory(category: self.category), color2: Color(.lightGray).opacity(0.7), cutOffValue:  Double(self.category.limit), cutOffColor: colorMap[Int(category.budgetSection!.colorCode)])
                     
                     HStack(spacing: 3){
                         Spacer()
@@ -85,7 +86,7 @@ struct BudgetCategoryDetailView: View {
                     }
                     
                     
-                }.padding(12).background(Color(.tertiarySystemBackground)).cornerRadius(21)
+                }.padding(12).background(Color(.tertiarySystemBackground)).cornerRadius(12)
                 
             }.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)).listRowBackground(Color.clear)
             

@@ -45,7 +45,7 @@ class NewBudgetCoordinator : Coordinator, BudgetEditableCoordinator {
         
         
         
-        self.navigationController.modalPresentationStyle = .pageSheet
+        self.navigationController.modalPresentationStyle = .overFullScreen
         self.navigationController.isModalInPresentation = true
         self.newBudgetDependencies.onboardingSummaryPresentor = OnboardingSummaryPresentor(budget: self.budget!, itemManagerService: self.newBudgetDependencies.itemManager)
         self.newBudgetDependencies.onboardingSummaryPresentor!.coordinator = self

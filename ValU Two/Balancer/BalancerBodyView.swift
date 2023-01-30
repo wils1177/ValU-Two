@@ -171,21 +171,20 @@ struct BalanceBudgetCardList : View {
         self.budget = viewModel.budget
     }
     
-    @State var toDelete : IndexSet?
+    @State var toDelete : BudgetSection?
     
-    func deleteAttempt(at offsets: IndexSet){
-        self.toDelete = offsets
+    func deleteAttempt(section: BudgetSection){
+        self.toDelete = section
         self.showingDeleteAlert.toggle()
     }
     
     
-    func delete(at offsets: IndexSet) {
+    func delete(section: BudgetSection) {
         
         print("delete triggered")
         
-        let source = offsets.first!
-        let toDelete = self.sections[source]
-        self.viewModel.deleteBudgetSection(section: toDelete)
+        
+        self.viewModel.deleteBudgetSection(section: section)
             
     }
     
@@ -237,27 +236,43 @@ struct BalanceBudgetCardList : View {
             
             ForEach(self.sections, id: \.self) { section in
                                 
-                BudgetBalanceCard(budgetSection: section, coordinator: self.viewModel.coordinator!, viewModel: self.viewModel).padding(.vertical, 8)
+                BudgetBalanceCard(budgetSection: section, coordinator: self.viewModel.coordinator!, viewModel: self.viewModel).padding(.vertical, 2)
               
                     .swipeActions(allowsFullSwipe: true) {
                                                 Button {
-                                                    print("Muting conversation")
+                                                    self.viewModel.editSection(section: section)
                                                 } label: {
-                                                    Label("Mute", systemImage: "bell.slash.fill")
+                                                    Label("Edit", systemImage: "pencil")
                                                 }
-                                                .tint(.indigo)
+                                                .tint(.blue)
 
                                                 
                                             }
+                
+                
+                    .swipeActions(allowsFullSwipe: true) {
+                                                Button {
+                                                    
+                                                    deleteAttempt(section: section)
+                                                    
+                                                } label: {
+                                                    Label("Delete", systemImage: "trash")
+                                                }
+                                                .tint(.red)
+
+                                                
+                                            }
+                
+                    
         
                             
 
-            }.onDelete(perform: deleteAttempt).onMove(perform: move)
+            }.onMove(perform: move)
              
      
             .alert(isPresented:self.$showingDeleteAlert) {
                 Alert(title: Text("Are you sure you want to delete this budget?"), message: Text("All associated data will be deleted"), primaryButton: .destructive(Text("Delete")) {
-                    self.delete(at: self.toDelete!)
+                    self.delete(section: self.toDelete!)
                 }, secondaryButton: .cancel())
             }
     }

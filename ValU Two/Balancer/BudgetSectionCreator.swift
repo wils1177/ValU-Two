@@ -12,11 +12,23 @@ class BudgetSectionCreator{
     
     var budget: Budget
     
-    init(budget: Budget){
+    var editMode: Bool = false
+    var existingSection: BudgetSection?
+    
+    init(budget: Budget, editMode: Bool = false, existingSection: BudgetSection? = nil){
+        self.existingSection = existingSection
+        self.editMode = editMode
         self.budget = budget
     }
     
-    func addSectionToBudget(name: String, icon: String, colorCode: Int){
+    func editBudgetSection(name: String, icon: String, colorCode: Int){
+        self.existingSection!.name = name
+        self.existingSection!.icon = icon
+        self.existingSection!.colorCode = Int32(colorCode)
+        DataManager().saveDatabase()
+    }
+    
+    func createNewSection(name: String, icon: String, colorCode: Int){
         let dm = DataManager()
         
         let sections = self.budget.budgetSection?.allObjects as! [BudgetSection]
@@ -33,6 +45,17 @@ class BudgetSectionCreator{
         budget.addToBudgetSection(newSection)
         budget.objectWillChange.send()
         dm.saveDatabase()
+    }
+    
+    func addSectionToBudget(name: String, icon: String, colorCode: Int){
+        
+        if editMode{
+            self.editBudgetSection(name: name, icon: icon, colorCode: colorCode)
+        }
+        else{
+            self.createNewSection(name: name, icon: icon, colorCode: colorCode)
+        }
+        
     }
     
 }

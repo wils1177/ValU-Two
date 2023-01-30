@@ -1,16 +1,32 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "SwiftUICharts",
-        "repositoryURL": "https://github.com/AppPear/ChartView",
-        "state": {
-          "branch": null,
-          "revision": "c12c773af0b18be3abc30a5e39fc8370a6498502",
-          "version": "1.5.0"
-        }
+  "pins" : [
+    {
+      "identity" : "coregeometry",
+      "kind" : "remoteSourceControl",
+      "location" : "https://gitlab.com/Pyroh/CoreGeometry.git",
+      "state" : {
+        "revision" : "c8604b90dc60084e9d08f289573e537585b84129",
+        "version" : "4.0.0"
       }
-    ]
-  },
-  "version": 1
+    },
+    {
+      "identity" : "slidingruler",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Pyroh/SlidingRuler",
+      "state" : {
+        "revision" : "707b15e0ade64b488e7146a487cc5ee9570af9fa",
+        "version" : "0.2.0"
+      }
+    },
+    {
+      "identity" : "smoothoperators",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Pyroh/SmoothOperators.git",
+      "state" : {
+        "revision" : "b770ea8174ef03f4872e8b21cbabd967079c8182",
+        "version" : "0.17.0"
+      }
+    }
+  ],
+  "version" : 2
 }

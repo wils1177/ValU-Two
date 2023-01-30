@@ -30,7 +30,7 @@ class EditCoordiantor : BudgetEditableCoordinator{
         vc.title = "Edit Budgets"
         
         self.navigationController.pushViewController(vc, animated: true)
-        self.navigationController.modalPresentationStyle = .pageSheet
+        self.navigationController.modalPresentationStyle = .overFullScreen
     }
     
     
@@ -165,6 +165,15 @@ extension BudgetEditableCoordinator{
         self.navigationController.present(vc, animated: true)
     }
     
+    func editBudgetSection(section: BudgetSection){
+        var view  = NewBudgetSectionView(budget: self.budget!, editMode: true, existingSection: section)
+        
+        view.coordinator = self
+        let vc = UIHostingController(rootView: view)
+        
+        self.navigationController.present(vc, animated: true)
+    }
+    
     func showNewCategoryView(budgetSection: BudgetSection){
         let vm = AddCategoriesViewModel(budgetSection: budgetSection)
         vm.coordinator = self
@@ -207,6 +216,15 @@ extension BudgetEditableCoordinator{
         
         
         
+        self.navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func showListOfTransactions(title: String, list: [Transaction]){
+        let model = TransactionsListViewModel(transactions: list.sorted(by: { $0.date! > $1.date! }), title: title)
+        let view = TransactionList(viewModel: model)
+        model.coordinator = self
+        let vc = UIHostingController(rootView: view)
+        vc.title = title
         self.navigationController.pushViewController(vc, animated: true)
     }
     

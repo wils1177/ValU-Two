@@ -82,7 +82,7 @@ struct SwiftUIAccountsView: View {
                     
                 }
                 
-            }.padding(.horizontal, 15).padding(.vertical, 10).background(Color(.tertiarySystemBackground)).cornerRadius(25).padding(.horizontal, 10).padding(.bottom)
+            }//.padding(.horizontal, 15).padding(.vertical, 10).background(Color(.tertiarySystemBackground)).cornerRadius(25).padding(.horizontal, 10).padding(.bottom)
             
             /*
             VStack(alignment: .center, spacing: 5.0) {

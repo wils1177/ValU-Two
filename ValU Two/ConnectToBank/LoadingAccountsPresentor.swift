@@ -57,7 +57,24 @@ class LoadingAccountsPresentor : Presentor, PlaidLinkDelegate {
     
     func startLoadingAccounts(){
         self.viewData.viewState = LoadingAccountsViewState.Loading
+        self.setTimerToPull()
         self.aggregationService!.startAggregation()
+    }
+    
+    func setTimerToPull(){
+        DispatchQueue.main.asyncAfter(deadline: .now() + 45.0) {
+               //call any function
+            self.timerPullResult()
+        }
+    }
+    
+    // This is the backup if the webhook is never recieved for whatever reason
+    func timerPullResult(){
+        print("timer done")
+        if self.viewData.viewState == LoadingAccountsViewState.Loading{
+            print("execute pull")
+            self.aggregationService?.transactionPull()
+        }
     }
     
     

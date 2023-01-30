@@ -265,7 +265,7 @@ struct TransactionDetailView: View {
                 
                     
                     Section(header: Text("Categories")){
-                        self.categorySection.padding(.vertical, 5)
+                        self.categorySection
                     }
                 
                 
@@ -275,11 +275,11 @@ struct TransactionDetailView: View {
             
             
             Section(header: Text("GENERAL")){
-                self.originalNameSection.padding(.vertical, 10)
-                self.dateSection.padding(.vertical, 10)
-                self.amountSection.padding(.vertical, 10)
-                self.accountSection.padding(.vertical, 10)
-                self.settingsSection.padding(.vertical, 10)
+                self.originalNameSection.padding(.vertical, 8)
+                self.dateSection.padding(.vertical, 8)
+                self.amountSection.padding(.vertical, 8)
+                self.accountSection.padding(.vertical, 8)
+                self.settingsSection.padding(.vertical, 8)
                 
             }
              

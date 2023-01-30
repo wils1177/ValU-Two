@@ -7,10 +7,14 @@
 //
 
 import SwiftUI
+import AuthenticationServices
+
 
 struct WelcomeView: View {
     
     var coordinator : OnboardingFlowCoordinator?
+    
+    
     
     private var columns: [GridItem] = [
         GridItem(.flexible(), spacing: 11),
@@ -56,6 +60,49 @@ struct WelcomeView: View {
           
 
             Spacer()
+            
+            Text("test status").onTapGesture {
+                Task {
+                        do {
+                            await UserManager().checkiCloudStatus()
+                        } 
+                     }
+                
+                
+                
+            }
+            
+            SignInWithAppleButton(.continue) { request in
+                request.requestedScopes = nil
+                
+                } onCompletion: { result in
+                  switch result {
+                    case .success(let authResults):
+                      print("Authorisation successful")
+                      
+                      switch authResults.credential{
+                      case let credential as ASAuthorizationAppleIDCredential:
+                          
+                          let userId = credential.user
+                          print(userId)
+                          
+                          
+                          
+                          
+                      default:
+                          break
+                      }
+                      
+                    case .failure(let error):
+                      print("Authorisation failed: \(error.localizedDescription)")
+                  }
+                }
+                // black button
+                .signInWithAppleButtonStyle(.black)
+                .frame(height: 50)
+                .padding()
+            
+            
             Button(action: {
                 //Button Action
                 self.coordinator?.continueFromWelcome()

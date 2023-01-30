@@ -60,9 +60,12 @@ struct CategoryDetailView: View {
                     HStack{
                         Text(graphTitle).font(.system(size: 21, design: .rounded)).fontWeight(.bold)
                         Spacer()
-                    }.padding(.bottom, 15)
+                    }.padding(.bottom)
                     
-                    LineView(dataSet1: self.detailModel.getThisMonthTransactionsForSection(section: self.section), dataSet2: self.detailModel.getLastMonthTransactionsForSection(section: self.section), cutOffValue: Double(self.section.getLimit()), color1: colorMap[Int(section.colorCode)], color2: Color(.lightGray).opacity(0.7), cutOffColor: colorMap[Int(section.colorCode)], legendSet: self.detailModel.getGraphLabels(section: self.section)).frame(height: 200).padding(.bottom, 15)
+                    //LineView(dataSet1: self.detailModel.getThisMonthTransactionsForSection(section: self.section), dataSet2: self.detailModel.getLastMonthTransactionsForSection(section: self.section), cutOffValue: Double(self.section.getLimit()), color1: colorMap[Int(section.colorCode)], color2: Color(.lightGray).opacity(0.7), cutOffColor: colorMap[Int(section.colorCode)], legendSet: self.detailModel.getGraphLabels(section: self.section)).frame(height: 200).padding(.bottom, 15)
+                    
+                    NewLineGraph(dataSet1: self.detailModel.getThisMonthTransactionsForSection(section: self.section), color1: colorMap[Int(section.colorCode)], dataSet2: self.detailModel.getLastMonthTransactionsForSection(section: self.section), color2: Color(.lightGray).opacity(0.7), cutOffValue: Double(self.section.getLimit()), cutOffColor: Color(.systemOrange))
+                    
                     
                 
                 HStack(spacing: 3){
@@ -78,12 +81,12 @@ struct CategoryDetailView: View {
                     Spacer()
                 }
                     
-                }.padding(12).background(Color(.tertiarySystemBackground)).cornerRadius(21)
+                }.padding(12).background(Color(.tertiarySystemBackground)).cornerRadius(12)
                 
                 
             }.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)).listRowBackground(Color.clear)
             
-            Text("Merchants").font(.system(size: 23, weight: .semibold, design: .rounded)).listRowBackground(Color.clear).listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)).padding(.horizontal).padding(.top, 30)
+            //Text("Merchants").font(.system(size: 23, weight: .semibold, design: .rounded)).listRowBackground(Color.clear).listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)).padding(.horizontal).padding(.top, 30)
                 
             ForEach(self.section.getBudgetCategories(), id: \.self) { category in
                     

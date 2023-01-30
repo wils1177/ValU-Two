@@ -23,6 +23,7 @@ class PredicateBuilder{
 
         return NSPredicate(format: "(endDate >= %@) AND (startDate <= %@)", executionDate as NSDate, executionDate as NSDate)
     }
+
     
     //TODO: Finish this function so that it actually returns something. It will fail right now
     func generateOtherCategoryInBudgetPredicate(startDate: Date, endDate: Date) -> NSPredicate{
@@ -221,7 +222,13 @@ class PredicateBuilder{
         return NSPredicate(format: "ANY categoryMatches.spendingCategory.id IN %@", ids)
     }
     
+    func generateRuleByNamePredicate(name: String) -> NSPredicate{
+        return NSPredicate(format: "name == %@", name as String)
+    }
     
+    func generateAccoutnIdAndDatePredicate(accountId: String, date: Date) -> NSPredicate{
+        return NSPredicate(format: "(date == %@) AND (accountId == %@)", date as NSDate, accountId as String)
+    }
     
 
     

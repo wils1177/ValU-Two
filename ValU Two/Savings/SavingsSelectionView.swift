@@ -20,7 +20,7 @@ struct SavingsSelectionView: View {
     
     var body: some View {
         SetSavingsView(presentor: viewModel)
-        .background(Color(.systemGroupedBackground))
+        //.background(Color(.systemGroupedBackground))
         .navigationBarTitle(Text(""))
     }
 }

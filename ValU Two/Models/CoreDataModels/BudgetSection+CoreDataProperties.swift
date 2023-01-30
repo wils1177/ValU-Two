@@ -45,6 +45,4 @@ extension BudgetSection {
 
 }
 
-extension BudgetSection : Identifiable {
 
-}

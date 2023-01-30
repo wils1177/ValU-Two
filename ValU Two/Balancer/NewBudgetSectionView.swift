@@ -30,7 +30,7 @@ struct NewBudgetSectionView: View {
     @State var colors = [0, 1, 2 ,3 , 4 ,5 ,
                          6, 7, 8, 9, 10, 11]
     
-    @State var selectedIconColumn = 0
+    @State var selectedIcon : String = "flame.fill"
     
     
     @State var selectedColorColumn = 0
@@ -41,16 +41,22 @@ struct NewBudgetSectionView: View {
     var budgetSectionCreator : BudgetSectionCreator
     var coordinator : BudgetEditableCoordinator?
     
-    init(budget: Budget){
+    init(budget: Budget, editMode: Bool = false, existingSection: BudgetSection? = nil){
         self.budget = budget
-        self.budgetSectionCreator = BudgetSectionCreator(budget: budget)
+        self.budgetSectionCreator = BudgetSectionCreator(budget: budget, editMode: editMode, existingSection: existingSection)
+        
+        if editMode && existingSection != nil{
+            _selectedIcon = State(initialValue: existingSection!.icon!)
+            _nameText = State(initialValue: existingSection!.name!)
+            _selectedColorColumn = State(initialValue: Int(existingSection!.colorCode))
+        }
     }
     
     
     var createdIconView : some View {
         ZStack(alignment: .center){
             RoundedRectangle(cornerRadius: 40).frame(width: 120, height: 120).foregroundColor(colorMap[self.colors[selectedColorColumn]] as! Color)
-            Image(systemName: self.icons[self.selectedIconColumn]).font(.system(size: 55)).foregroundColor(Color(.white))
+            Image(systemName: self.selectedIcon).font(.system(size: 55)).foregroundColor(Color(.white))
             
         }
     }
@@ -87,7 +93,7 @@ struct NewBudgetSectionView: View {
                         Text("Icon").font(.system(size: 22, design: .rounded)).bold()
                         Spacer()
                     }.padding(.horizontal)
-                    IconSelectionGridView(icons: self.$icons, selectedColumn: self.$selectedIconColumn).padding().background(Color(.tertiarySystemGroupedBackground)).cornerRadius(20).padding(.horizontal).padding(.bottom)
+                    IconSelectionGridView(icons: self.$icons, selectedIcon: self.$selectedIcon ).padding().background(Color(.tertiarySystemGroupedBackground)).cornerRadius(20).padding(.horizontal).padding(.bottom)
                 }
                 
                     
@@ -96,7 +102,7 @@ struct NewBudgetSectionView: View {
                 
                 
             }
-            .navigationBarTitle("New Budget Section", displayMode: .inline).navigationBarItems(
+            .navigationBarTitle("Budget Section", displayMode: .inline).navigationBarItems(
                 
                 leading: Button(action: {
                         self.coordinator?.dismissPresented()
@@ -109,7 +115,7 @@ struct NewBudgetSectionView: View {
                 ,trailing: Button(action: {
                         
                     if self.nameText != ""{
-                        self.budgetSectionCreator.addSectionToBudget(name: self.nameText, icon: self.icons[self.selectedIconColumn], colorCode: self.colors[self.selectedColorColumn])
+                        self.budgetSectionCreator.addSectionToBudget(name: self.nameText, icon: self.selectedIcon, colorCode: self.colors[self.selectedColorColumn])
                         self.coordinator?.dismissPresented()
                     }else{
                         self.showAlertForNoName = true

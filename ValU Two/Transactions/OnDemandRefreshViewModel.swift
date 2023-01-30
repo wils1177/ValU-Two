@@ -40,7 +40,7 @@ class OnDemandRefreshViewModel {
             
             do {
                 let refreshResult = try await plaidConnection.getTransactionsWithAwait(itemId: item.itemId!, startDate: mostRecentTransaction!, endDate: today)
-                processRefreshResults(result: refreshResult)
+                processRefreshResults(result: refreshResult, itemId: item.itemId!)
             }
             catch{
                 print("COULD NOT REFRESH")
@@ -50,7 +50,7 @@ class OnDemandRefreshViewModel {
         }
     }
     
-    func processRefreshResults(result: Result<Data, Error>){
+    func processRefreshResults(result: Result<Data, Error>, itemId: String){
     
         
         DispatchQueue.main.async {
@@ -59,12 +59,29 @@ class OnDemandRefreshViewModel {
             case .failure(let error):
                 print("UPDATE PULL FAILED")
                 print(error)
+                
+                
+                
+                
             case .success(let dataResult):
                 
                 do{
-                    try PlaidProccessor(spendingCategories: SpendingCategoryService().getSubSpendingCategories()).aggregate(response: dataResult, isInitial: false)
-                    print("UPDATE PULL WOKED")
-                    NotificationCenter.default.post(name: .modelUpdate, object: nil)
+                    
+                    //Check if we have an item error First
+                    if self.checkForItemError(data: dataResult){
+                        print("ITEM ERROR ON REFRESH")
+                        
+                        let loginRequiredKey = PlaidUserDefaultKeys.loginRequiredKey.rawValue + itemId
+                        UserDefaults.standard.set(true, forKey: loginRequiredKey)
+                        NotificationCenter.default.post(name: .modelUpdate, object: nil)
+                    }
+                    else{
+                        try PlaidProccessor(spendingCategories: SpendingCategoryService().getSubSpendingCategories()).aggregate(response: dataResult, isInitial: false)
+                        print("UPDATE PULL WOKED")
+                        NotificationCenter.default.post(name: .modelUpdate, object: nil)
+                    }
+                    
+                    
                     
                 }
                 catch{
@@ -77,6 +94,26 @@ class OnDemandRefreshViewModel {
             
         }
         
+    }
+    
+    func checkForItemError(data: Data) -> Bool{
+        let decoder = JSONDecoder()
+        do{
+            
+            let parsedResponse = try decoder.decode(ErrorResponse.self, from: data)
+            
+            if parsedResponse.errorCode == "ITEM_LOGIN_REQUIRED"{
+                return true
+            }
+            else{
+                return false
+            }
+            
+            
+        }
+        catch{
+            return false
+        }
     }
     
      

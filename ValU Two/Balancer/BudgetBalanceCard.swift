@@ -31,19 +31,21 @@ struct BudgetBalanceCard: View {
         self.colorTertiary = Color(colorMapUIKit[Int(budgetSection.colorCode)].darker()!)
     }
     
-    
+    func getColor() -> Color{
+        return colorMap[Int(budgetSection.colorCode)]
+    }
     
   
     
     var row: some View{
         
             HStack{
-                BudgetSectionIconLarge(color: self.color, icon: self.budgetSection.icon ?? "book", size: 35).padding(.trailing, 5)
+                BudgetSectionIconLarge(color: getColor(), icon: self.budgetSection.icon ?? "book", size: 35).padding(.trailing, 5)
                 VStack(alignment: .leading, spacing: 0){
                     
                     Text(self.budgetSection.name ?? "no name").font(.system(size: 18, design: .rounded)).fontWeight(.semibold).lineLimit(1).foregroundColor((colorScheme == .dark) ? Color.white : Color.black)
-                    //Text(String(self.budgetSection.getBudgetCategories().count) + " Categories").font(.system(size: 15, design: .rounded)).fontWeight(.semibold).foregroundColor(Color(.lightGray))
-                    //Text(self.viewModel.getDisplayPercentageForSection(section: self.budgetSection)).font(.system(size: 15, design: .rounded)).fontWeight(.semibold).foregroundColor(color)
+                   
+                    
                     
                     
                     
@@ -54,7 +56,7 @@ struct BudgetBalanceCard: View {
                     //Text(CommonUtils.makeMoneyString(number: Int(self.budgetSection.getLimit()))).font(.system(size: 18, design: .rounded)).fontWeight(.bold)
                     
                     
-                    NavigationBarTextButton(text: CommonUtils.makeMoneyString(number: Int(self.budgetSection.getLimit())), color: color)
+                    NavigationBarTextButton(text: CommonUtils.makeMoneyString(number: Int(self.budgetSection.getLimit())), color: getColor())
                     
                    // Text(self.viewModel.getDisplayPercentageForSection(section: self.budgetSection)).font(.system(size: 15, design: .rounded)).fontWeight(.semibold).foregroundColor(Color(.lightGray))
                     

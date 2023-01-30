@@ -16,60 +16,45 @@ class PlaidUpdateFlowCoordinator: Coordinator, PlaidLinkDelegate{
     var childCoordinators = [Coordinator]()
     var navigationController : UINavigationController
     var itemId : String
-    var publicToken : String
-    var fixNowService : FixNowService
-    var presentorStack = [Presentor]()
     
-    init(navigationController : UINavigationController, itemId: String, publicToken : String, fixNowService : FixNowService){
+    var fixNowService : FixNowService
+    var linkPresentor : PlaidLinkViewPresentor
+    
+    init(navigationController : UINavigationController, itemId: String, fixNowService : FixNowService){
         self.navigationController = navigationController
         self.itemId = itemId
-        self.publicToken = publicToken
         self.fixNowService = fixNowService
+        let link = PlaidLinkViewPresentor(viewControllerToPresentOver: navigationController)
+        
+        self.linkPresentor = link
     }
     
     func start() {
+        self.linkPresentor.coordinator = self
         launchPlaidLink()
     }
     
     func launchPlaidLink() {
-        /*
-        let presentor = PlaidLinkViewPresentor(publicToken: publicToken)
-        presentor.coordinator = self
-        let vc = presentor.configure()
-        
-        vc.modalPresentationStyle = .fullScreen
-        self.navigationController.present(vc, animated: true, completion: {
-            self.fixNowService.state = FixNowLoadingState.start
-        })
-        self.presentorStack.append(presentor)
-         */
+        print("it would appear this may not be happening")
+        self.linkPresentor.setupLink(itemId: self.itemId)
     }
     
     
     func dismissPlaidLink(sender: PlaidLinkViewPresentor) {
-        /*
-        sender.linkViewController?.dismiss(animated: true, completion: {
-            print("link dismissed")
-        })
-        _ = self.presentorStack.popLast()
-         */
+        print("dismiss Plaid Link")
+        self.fixNowService.state = FixNowLoadingState.start
     }
     
     func plaidLinkSuccess(sender: PlaidLinkViewPresentor) {
-        //TODO
-        //set the needs login back to false
-        //rejig the fix now service?
-        //Actually push the defatul update using the service.
-        /*
+        
+        
         print("poopy doopy doo")
         self.fixNowService.markItemAsFixed(itemId: self.itemId)
         self.fixNowService.updateRecentlyFixedItem(itemId: self.itemId)
         
-        sender.linkViewController?.dismiss(animated: true, completion: {
-            print("link dismissed")
-        })
-        _ = self.presentorStack.popLast()
-         */
+        
+        self.linkPresentor.coordinator = nil
+        
     }
     
     func plaidIsConnected(){

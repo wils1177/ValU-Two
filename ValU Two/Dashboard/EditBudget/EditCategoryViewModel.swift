@@ -147,7 +147,7 @@ class EditCategoryViewModel: CategoryListViewModel, UserSubmitViewModel, Observa
                 }
                 print("added!")
                 let categoryMatch = DataManager().createCategoryMatch(transaction: self.transaction, category: spendingCategory, amount: Float(amount))
-                spendingCategory.addToTransactions(self.transaction)
+                //spendingCategory.addToTransactions(self.transaction)
                 //DataManager().saveDatabase()
                 //spendingCategory.objectWillChange.send()
                 //transaction.objectWillChange.send()

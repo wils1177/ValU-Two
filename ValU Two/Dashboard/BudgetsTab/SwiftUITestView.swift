@@ -25,6 +25,8 @@ struct BudgetCardView: View {
     
     @State var isLarge = false
     
+    @State var testPicker = 0
+    
     init(budget : Budget, viewModel: BudgetsViewModel){
         print("BudgetCard view created")
         self.budget = budget
@@ -111,30 +113,59 @@ struct BudgetCardView: View {
     
     var body: some View {
         
-        Section{
+        
             
             VStack(spacing: 0.0){
-                HStack{
+                HStack(alignment: .top){
                     
                     VStack(alignment: .leading){
-                        Text("Left in Budget").foregroundColor(Color(.gray)).font(.system(size: 20, weight: .bold, design: .rounded))
-                        Text("\(self.available)").font(.system(size: 38, weight: .heavy, design: .rounded)).foregroundColor(globalAppTheme.themeColorPrimary)
-                    }.padding()//.padding(.bottom)
+                        
+                        
+                        Text("\(self.available)").font(.system(size: 30, weight: .heavy, design: .rounded)).foregroundColor(globalAppTheme.themeColorPrimary)
+                        Text("Left in budget").foregroundColor(Color(.gray)).font(.system(size: 17, weight: .bold, design: .rounded))
+                        
+                        
+                        
+                        
+                        
+                    }
                     Spacer()
+                    
+                    
+                    Menu() {
+                        
+                        
+                        Picker(selection: $testPicker, label: Text("Budget Section")) {
+                            
+                            Label("Spending", systemImage: "chart.bar.doc.horizontal").tag(0)
+                            Label("Recurring", systemImage: "chart.line.uptrend.xyaxis.circle").tag(1)
+                            //  Label("All Spending", systemImage: "chart.line.uptrend.xyaxis.circle").tag(2)
+                            Label("Income", systemImage: "chart.line.uptrend.xyaxis").tag(3)
+                            
+                            
+                            
+                        }
+                        
+                    }
+                    label: {
+                        
+                        HStack(spacing: 3){
+                            
+                                Text("Spending").font(.system(size: 17, weight: .bold, design: .rounded))
+                                Image(systemName: "chevron.down").font(.system(size: 17, weight: .bold, design: .rounded))
+                            
+                            
+                        }.padding(.horizontal, 12).padding(.vertical, 6).background(Color(.tertiarySystemGroupedBackground)).clipShape(Capsule())
+                        
+                    }
+                    
+                   
                 }
-                //BudgetStatusBarView(viewData: self.viewModel.getBudgetStatusBarViewData(), showLegend: false).padding(.horizontal, 35)
-            }//.padding(.vertical, 15)
+                    
+                    
+                
+            }
             
-            ThisMonthLastMonthGraph(budget: self.budget
-                                    , budgetTransactionsService: self.viewModel.budgetTransactionsService)
-            
-        }.listRowBackground(Color.clear).listRowSeparator(.hidden)
-        
-        Section(){
-            
-            
-        }.listRowBackground(Color.clear).listRowSeparator(.hidden)
-
 
     }
 }

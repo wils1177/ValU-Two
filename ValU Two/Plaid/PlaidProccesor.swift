@@ -113,6 +113,7 @@ class PlaidProccessor{
                 processItem(response: parsedResponse.item)
             }
             
+            BalanceHistoryService().snapShotBalanceHistory()
      
             
         } catch (let err) {
@@ -190,29 +191,9 @@ class PlaidProccessor{
                     
                     let transactionProcessor = TransactionProccessor(spendingCategories: self.spendingCategories, transactionRules: self.transactionRules)
                     
-                    //If this is replacing a pending transaction, replace the pending one.
-                    if transaction.pendingTransactionId != nil{
-                        print("Transaction is supposed to replace a pending transaction")
-                        
-                        let didReplaceTransaction = transactionProcessor.attemptToReplcePendingTransaction(pendingTransactionId: transaction.pendingTransactionId!, transactionData: transaction)
-                        
-                        if !didReplaceTransaction{
-                            let newTransaction = dataManager.saveTransaction(transaction: transaction, itemId: itemId)
-                            transactionProcessor.proccessTransactionToCategory(transaction: newTransaction, spendingCategories: self.spendingCategories)
-                        }
-                        
-                    }
-                    // If its not replace a pending transaction, simply process it as a new transaction
-                    else{
-                        let newTransaction = dataManager.saveTransaction(transaction: transaction, itemId: itemId)
-                        transactionProcessor.proccessTransactionToCategory(transaction: newTransaction, spendingCategories: self.spendingCategories)
-                    }
+                    transactionProcessor.processTransaction(transaction: transaction, itemId: itemId)
                     
-                    
-                    
-                    
-                   
-                    
+    
                 }
             }
 

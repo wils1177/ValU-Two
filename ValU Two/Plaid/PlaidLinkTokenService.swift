@@ -20,11 +20,11 @@ class PlaidLinkTokenService{
         self.completion = completion
     }
     
-    func getLinkToken(){
+    func getLinkToken(itemId : String? = nil){
         let plaid = PlaidConnection()
         
         do{
-            try plaid.getLinkToken(completion: self.linkTokenRequestFinished(result:))
+            try plaid.getLinkToken(completion: self.linkTokenRequestFinished(result:), itemId: itemId)
         }
         catch{
             self.completion(Result.failure(PlaidConnectionError.BadRequest))

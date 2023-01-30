@@ -38,8 +38,8 @@ class FixNowService: ObservableObject {
     
     func showLinkUpdateMode(itemId: String){
         self.state = FixNowLoadingState.loading
-        let tokenService = PublicTokenGenerationService(completion: self.handlePublicTokenResult(result:), itemId: itemId)
-        tokenService.getPublicToken()
+        
+        self.coordinator.showPlaidUpdate(itemId: itemId, sender: self)
     }
     
     func getExpiredItemIds() -> [String]{
@@ -68,19 +68,7 @@ class FixNowService: ObservableObject {
 
     }
     
-    func handlePublicTokenResult(result: Result<PublicTokenGenrationServiceResult, Error>){
-        switch result {
-        case .failure(let error):
-            //TODO handle error
-            self.state = FixNowLoadingState.fail
-            print(error)
-        case .success(let result):
-            print("Gathered Public Token")
-            self.coordinator.showPlaidUpdate(publicToken: result.publicToken, itemId: result.itemId, sender: self)
-            
-            
-        }
-    }
+    
     
     func markItemAsFixed(itemId: String){
         let key = PlaidUserDefaultKeys.loginRequiredKey.rawValue + itemId
@@ -91,6 +79,7 @@ class FixNowService: ObservableObject {
     func updateRecentlyFixedItem(itemId: String) {
         let updateService = PlaidDefaultUpdateService(itemId: itemId)
         updateService.initiateDefaultUpdatePull()
+        
         
     }
     

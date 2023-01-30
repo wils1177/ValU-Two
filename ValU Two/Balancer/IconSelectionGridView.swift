@@ -11,11 +11,11 @@ import SwiftUI
 struct IconSelectionGridView: View {
     
     @Binding var icons : [String]
-    @Binding var selectedColumn : Int
+    @Binding var selectedIcon : String
     
     
-    func isSelectedI(col: Int) -> Bool{
-        if col == self.selectedColumn{
+    func isSelectedI(icon: String) -> Bool{
+        if icon == self.selectedIcon{
             return true
         }
         else{
@@ -23,8 +23,8 @@ struct IconSelectionGridView: View {
         }
     }
     
-    func changeSelection(col: Int){
-        self.selectedColumn = col
+    func changeSelection(icon: String){
+        self.selectedIcon = icon
         
     }
     
@@ -50,11 +50,11 @@ struct IconSelectionGridView: View {
                             
                             Button(action: {
                                 
-                                self.changeSelection(col: col)
+                                self.changeSelection(icon: self.icons[col])
                                 
                                     }){
                                         Spacer()
-                                        if self.isSelectedI(col: col){
+                                        if self.isSelectedI(icon: self.icons[col]){
                                             ZStack{
                                                 Circle().frame(width: 45, height: 45).foregroundColor(Color(.systemFill))
                                                 Image(systemName: self.icons[col]).font(Font.system(size: 20)).foregroundColor(Color(.black))

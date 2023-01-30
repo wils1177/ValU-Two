@@ -66,6 +66,10 @@ class DataManager {
         return BudgetCategory(category: category, order: order, context: context)
     }
     
+    func createBalanceHistory(accountId: String, date: Date, balance: Double) -> BalanceHistory{
+        return BalanceHistory(accountId: accountId, date: date, balance: balance, context: context)
+    }
+    
     func saveAccount(account : AccountJSON, itemId: String){
         
         AccountData(account: account, itemId: itemId, context: self.context)

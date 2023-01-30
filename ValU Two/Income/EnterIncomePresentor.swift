@@ -81,11 +81,12 @@ class EnterIncomePresentor : Presentor, ObservableObject {
         }
         */
         
+        /*
         if self.budget.budgetTimeFrame == nil{
             self.budget.budgetTimeFrame = TimeFrameManager().getCurrentTimeFrame()
         }
         
-        
+        */
     }
     
     

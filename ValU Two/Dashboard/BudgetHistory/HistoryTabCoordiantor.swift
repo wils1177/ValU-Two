@@ -19,7 +19,7 @@ class HistoryTabCoordiantor : Coordinator{
     var budget : Budget?
     
     func start() {
-        
+        self.navigationController = UINavigationController()
         self.budget = try? DataManager().getBudget()
         let viewModel = HistoryViewModel(budget: self.budget)
         viewModel.coordinator = self

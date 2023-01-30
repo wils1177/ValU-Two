@@ -52,38 +52,11 @@ struct BudgetDetailViewModel {
         
         let transactions = getTransactionsForCategory(category: category)
         
-        let merchantArray = transactions.compactMap { $0.merchantName ?? $0.name}
-        let merchantSet = Set(merchantArray)
-        
-        var totals = [MerchantTotals]()
-        merchantSet.forEach {
-            let merchantKey = $0
-            let filterArray = transactions.filter { $0.merchantName == merchantKey || $0.name == merchantKey}
-            var amount = 0.0
-            for transaction in filterArray{
-                
-                if !transaction.isHidden{
-                    let categoryMatches = transaction.categoryMatches?.allObjects as! [CategoryMatch]
-                    
-                    for match in categoryMatches{
-                        amount = amount + Double(match.amount)
-                    }
-                }
-                
-                
-            }
-            
-            let merchantTotal = MerchantTotals(transactions: filterArray, name: merchantKey, amount: amount)
-            totals.append(merchantTotal)
-            
-            
-        }
-        
-        return totals.sorted(by: { $0.amount > $1.amount })
+        return BudgetTransactionsService.createMerchantTotals(transactions: transactions)
         
     }
     
-    func getThisMonthTransactionsForSection(section: BudgetSection) -> [Double]{
+    func getThisMonthTransactionsForSection(section: BudgetSection) -> [BalanceHistoryTotal]{
         let budget = section.budget!
         
         
@@ -96,7 +69,7 @@ struct BudgetDetailViewModel {
             end = budget.endDate!
         }
         
-        let transactions = TransactionsCategoryFetcher.fetchTransactionsForBudgetSectionAndDateRange(section: section, startDate: start, endDate: end)
+        let transactions = TransactionsCategoryFetcher.fetchTransactionsForBudgetSectionAndDateRange(section: section, startDate: start, endDate: end).filter { $0.isHidden == false }
         
         return ThisMonthLastMonthService.createDataPoints(start: start, end: end, transactions: transactions)
         
@@ -104,7 +77,7 @@ struct BudgetDetailViewModel {
         
     }
     
-    func getThisMonthTransactionsForCategory(category: BudgetCategory) -> [Double]{
+    func getThisMonthTransactionsForCategory(category: BudgetCategory) -> [BalanceHistoryTotal]{
         let budget = category.budgetSection!.budget!
         
         let start = budget.startDate!
@@ -116,7 +89,7 @@ struct BudgetDetailViewModel {
             end = budget.endDate!
         }
         
-        let transactions = self.getTransactionsForCategory(category: category, start: start, end: end)
+        let transactions = self.getTransactionsForCategory(category: category, start: start, end: end).filter { $0.isHidden == false }
         
         return ThisMonthLastMonthService.createDataPoints(start: start, end: end, transactions: transactions)
         
@@ -124,13 +97,13 @@ struct BudgetDetailViewModel {
         
     }
     
-    func getLastMonthTransactionsForCategory(category: BudgetCategory) -> [Double]{
+    func getLastMonthTransactionsForCategory(category: BudgetCategory) -> [BalanceHistoryTotal]{
         let budget = category.budgetSection!.budget!
         
         let start = Calendar.current.date(byAdding: .month, value: -1, to: budget.startDate!)!
         let end = budget.startDate!
         
-        let transactions = self.getTransactionsForCategory(category: category, start: start, end: end)
+        let transactions = self.getTransactionsForCategory(category: category, start: start, end: end).filter { $0.isHidden == false }
         
         return ThisMonthLastMonthService.createDataPoints(start: start, end: end, transactions: transactions)
         
@@ -138,12 +111,12 @@ struct BudgetDetailViewModel {
         
     }
     
-    func getLastMonthTransactionsForSection(section: BudgetSection) -> [Double]{
+    func getLastMonthTransactionsForSection(section: BudgetSection) -> [BalanceHistoryTotal]{
         let budget = section.budget!
         let start = Calendar.current.date(byAdding: .month, value: -1, to: budget.startDate!)!
         let end = budget.startDate!
         
-        let transactions = TransactionsCategoryFetcher.fetchTransactionsForBudgetSectionAndDateRange(section: section, startDate: start, endDate: end)
+        let transactions = TransactionsCategoryFetcher.fetchTransactionsForBudgetSectionAndDateRange(section: section, startDate: start, endDate: end).filter { $0.isHidden == false }
         
         return ThisMonthLastMonthService.createDataPoints(start: start, end: end, transactions: transactions)
     }

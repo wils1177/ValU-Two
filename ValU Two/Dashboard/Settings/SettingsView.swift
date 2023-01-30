@@ -109,35 +109,14 @@ struct SettingsView: View {
                 
                 Section(header: Text("Transaction Rules"), footer: Text("With transaction rules, ValU Two can remember what categories should be assigned to transactions.")){
                     
-                    ForEach(self.viewModel.rules, id: \.self){ rule in
-                        
-                        Button(action: {
-                            // What to perform
-                            self.viewModel.coordinator?.showTransactionRuleDetail(rule: rule)
-                        }) {
-                            HStack{
-                                Text(rule.name!)
-                                Spacer()
-                                ForEach(rule.spendingCategories!.allObjects as! [SpendingCategory], id: \.self){ category in
-                                    
-                                    SpendingCategoryLabelView(name: category.name!, icon: category.icon!)
-                                    
-                                    
-                                }
-                                
-                                
-                            }
-                        }
-                        
-                        
-                        
+                    Button(action: {
+                        // What to perform
+                        self.viewModel.coordinator?.showTransactionRules()
+                    }) {
+                        Text("View Transaction Rules")
                     }
                     
-                    Button(action: {
-                        self.viewModel.coordinator?.newTransactionRule()
-                    }) {
-                        Text("Create New Transaction Rule")
-                    }
+
                     
                 }
                     
@@ -162,6 +141,53 @@ struct SettingsView: View {
         
         
     }
+}
+
+struct TransactionRulesView: View {
+    
+    
+    @ObservedObject var viewModel : SettingsViewModel
+    
+    var body: some View{
+        Form{
+            Section(header: Text("Transaction Rules"), footer: Text("With transaction rules, ValU Two can remember what categories should be assigned to transactions.")){
+                
+                
+                
+                ForEach(self.viewModel.rules, id: \.self){ rule in
+                    
+                    Button(action: {
+                        // What to perform
+                        self.viewModel.coordinator?.showTransactionRuleDetail(rule: rule)
+                    }) {
+                        HStack{
+                            Text(rule.name!)
+                            Spacer()
+                            ForEach(rule.spendingCategories!.allObjects as! [SpendingCategory], id: \.self){ category in
+                                
+                                SpendingCategoryLabelView(name: category.name!, icon: category.icon!)
+                                
+                                
+                            }
+                            
+                            
+                        }
+                    }
+                    
+                    
+                    
+                }
+                
+                Button(action: {
+                    self.viewModel.coordinator?.newTransactionRule()
+                }) {
+                    Text("Create New Transaction Rule")
+                }
+                
+            }
+        }.navigationBarTitle("Transaction Rules", displayMode: .large)
+    }
+    
 }
 
 

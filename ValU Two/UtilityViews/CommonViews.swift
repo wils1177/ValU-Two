@@ -14,7 +14,7 @@ struct NavigationBarTextButton: View {
     
     var body : some View {
         ZStack(alignment:.center){
-            Text(self.text).font(Font.system(size: 16, weight: .semibold, design: .rounded)).foregroundColor(color)
+            Text(self.text).font(Font.system(size: 16, weight: .semibold, design: .rounded)).lineLimit(1).foregroundColor(color)
                 .padding(.horizontal, 13).padding(.vertical, 5).background(color.opacity(0.15)).cornerRadius(20)
             
     }
@@ -30,7 +30,7 @@ struct NavigationBarTextIconButton: View {
     var body : some View {
         HStack(alignment:.center, spacing: 2){
             Image(systemName: self.icon).font(.system(size: 16, weight: .semibold))
-            Text(self.text).font(Font.system(size: 16, weight: .semibold))
+            Text(self.text).font(Font.system(size: 16, weight: .semibold)).lineLimit(1)
             
     }.foregroundColor(color)
             .padding(.horizontal, 13).padding(.vertical, 5).background(color.opacity(0.15)).cornerRadius(20)

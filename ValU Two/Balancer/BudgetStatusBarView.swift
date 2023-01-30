@@ -55,8 +55,8 @@ struct BudgetStatusBarView: View {
    
     
     func getWidthOfBar(totalSize: CGFloat, barCount: Int, percentage: Double) -> CGFloat{
-        //return (totalSize * CGFloat(percentage)) - CGFloat((4 * (barCount)) / barCount)
-        return totalSize * CGFloat(percentage)
+        return (totalSize * CGFloat(percentage)) - CGFloat((2 * (barCount)) / barCount)
+        //return totalSize * CGFloat(percentage)
     }
     
     var legendV2 : some View {

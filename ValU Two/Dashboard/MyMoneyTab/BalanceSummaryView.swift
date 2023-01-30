@@ -19,21 +19,23 @@ struct BalanceSummaryView: View {
     
     var body: some View {
         HStack{
-            Spacer()
             
             
-            VStack(alignment: .center, spacing: 0){
+            
+            VStack(alignment: .leading, spacing: 0){
+                
+                
                 
                 HStack{
-                    Image(systemName: "creditcard.fill").font(.system(size: 18, design: .rounded)).foregroundColor(Color(.lightGray))
-                    Text("Available Balance").font(.system(size: 18, design: .rounded)).bold().foregroundColor(Color(.lightGray))
+                    //Image(systemName: "creditcard.fill").font(.system(size: 18, design: .rounded)).foregroundColor(Color(.lightGray))
+                    Text("Available Balance").font(.system(size: 16, design: .rounded)).bold().foregroundColor(Color(.lightGray))
                 }
                 
-                Text(balanceTotal).font(.system(size: 43, design: .rounded)).bold().bold().padding(.top, 3)
+                Text(balanceTotal).font(.system(size: 31, design: .rounded)).fontWeight(.heavy).foregroundColor(globalAppTheme.themeColorPrimary)
                 
             }
             Spacer()
-        }.padding()
+        }
     }
 }
 

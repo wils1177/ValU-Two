@@ -70,6 +70,7 @@ protocol SetSpendingLimitDelegate {
     func finishedSettingLimits()
     func showCategoryDetail(budgetSection: BudgetSection, viewModel: BudgetBalancerPresentor)
     func showNewSectionView()
+    func editBudgetSection(section: BudgetSection)
     
     
 }

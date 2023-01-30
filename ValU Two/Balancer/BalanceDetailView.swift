@@ -117,12 +117,12 @@ struct BalanceDetailView: View {
             
             HStack{
                 Spacer()
-                Text(CommonUtils.makeMoneyString(number: Int(self.budgetSection.getLimit()))).font(.system(size: 42, design: .rounded)).foregroundColor(colorMap[Int(self.budgetSection.colorCode)]).bold()
+                Text(CommonUtils.makeMoneyString(number: Int(self.budgetSection.getLimit()))).font(.system(size: 42, weight: .bold, design: .rounded)).foregroundColor(colorMap[Int(self.budgetSection.colorCode)])
                 Spacer()
             }
             HStack{
                 Spacer()
-                Text("Budgeted").font(.headline).foregroundColor(Color(.lightGray))
+                Text("Budgeted").font(.system(size: 18, weight: .semibold, design: .rounded)).foregroundColor(Color(.lightGray))
                 Spacer()
             }.padding(.bottom).padding(.bottom)
             
@@ -152,9 +152,9 @@ struct BalanceDetailView: View {
         VStack{
             HStack{
                 Spacer()
-                Text("No Categories Yet").foregroundColor(Color(.gray)).bold().padding(.vertical, 20)
+                Text("No Categories Yet").font(.system(size: 18, weight: .semibold, design: .rounded)).foregroundColor(Color(.gray)).padding(.vertical, 20)
                 Spacer()
-            }
+            }.padding().background(Color(.tertiarySystemBackground)).cornerRadius(23).padding().shadow(radius: 7)
             
             
             /*
@@ -172,7 +172,7 @@ struct BalanceDetailView: View {
             
             
             
-        }
+        }.listRowSeparator(.hidden)
         
     }
     
@@ -185,8 +185,8 @@ struct BalanceDetailView: View {
         
         
         List{
-            summarySection
-            topCard.padding(.vertical, 20)
+            summarySection.listRowSeparator(.hidden)
+            topCard.padding(.vertical, 20).listRowSeparator(.hidden)
                            
                        
             
@@ -194,8 +194,8 @@ struct BalanceDetailView: View {
                 //self.sectionHeader
                     ForEach((self.budgetSection.getBudgetCategories()), id: \.self) { child in
                             VStack{
-                                BudgetDetailCard(budgetCategory: child, coordinator: self.coordinator, viewModel: self.viewModel, color: colorMap[Int(self.budgetSection.colorCode)]).padding(.vertical, 10).padding(.horizontal, 25)
-                            }.listRowInsets(EdgeInsets())
+                                BudgetDetailCard(budgetCategory: child, coordinator: self.coordinator, viewModel: self.viewModel, color: colorMap[Int(self.budgetSection.colorCode)]).padding(.vertical, 2).padding(.horizontal, 5)
+                            }.listRowSeparator(.hidden).shadow(radius: 5)
                         
                         
                     }.onMove(perform: move)
@@ -211,10 +211,10 @@ struct BalanceDetailView: View {
             
                 
                 
-        }.padding(.horizontal, -20)
-            //.background(Color(.systemGroupedBackground))
+        }//.padding(.horizontal, -20)
+            .background(Color(.systemBackground))
         
-        .listStyle(SidebarListStyle())
+        .listStyle(PlainListStyle())
     
             .navigationBarTitle(Text(self.budgetSection.name!)).navigationBarItems(trailing: Button(action: {
                 self.coordinator.categoryDetailDone()

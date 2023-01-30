@@ -139,11 +139,12 @@ struct HistoryEntryView: View {
                     }
                 }
                 
-                
+                /*
                 HStack{
                     Text("This is some dummy placeholder text").font(.system(size: 15, design: .rounded)).foregroundColor(Color(.lightGray)).fontWeight(.semibold)
                     Spacer()
                 }
+                 */
                 
                 Line()
                     .stroke(Color(.lightGray), style: StrokeStyle(lineWidth: 1, dash: [5]))

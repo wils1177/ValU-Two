@@ -33,7 +33,6 @@ struct BudgetZeroState: View {
     
     var body: some View {
         VStack(alignment: .center){
-            Spacer()
             
                 VStack(alignment: .center, spacing: 10){
                     Image(systemName: "mail.and.text.magnifyingglass")
@@ -42,11 +41,11 @@ struct BudgetZeroState: View {
                         .symbolRenderingMode(.hierarchical)
                         .foregroundColor(globalAppTheme.themeColorPrimary).padding(.bottom)
                     Text("Start Budgeting").font(.system(size: 30, weight: .heavy, design: .rounded)).multilineTextAlignment(.center)
-                    Text("Start here to setup your very first budget. This is how you can track your spending!").font(.system(size: 18, weight: .semibold, design: .rounded)).foregroundColor(Color(.lightGray)).multilineTextAlignment(.center).padding(.top, 10)
+                    Text("Start here to setup your very first budget. This is how you can track your spending!").font(.system(size: 17, weight: .semibold, design: .rounded)).foregroundColor(Color(.lightGray)).multilineTextAlignment(.center).padding(.top, 10)
                 
                 
                 
-            }.padding(.bottom, 50).padding(.horizontal, 25)
+                }.padding(.bottom, 40).padding(.horizontal, 25).padding(.top, 100)
             
             
                 Button(action: {

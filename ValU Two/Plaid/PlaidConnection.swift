@@ -34,13 +34,13 @@ struct Keys : Codable{
     
     enum CodingKeys : String, CodingKey {
         case clientID =  "CLIENT_ID"
-        case clientSecret =  "SANDBOX_CLIENT_SECRET"
+        case clientSecret =  "DEVELOPMENT_CLIENT_SECRET"
     }
 }
 
 class PlaidConnection{
     
-    var rootURL = "https://sandbox.plaid.com"
+    var rootURL = "https://development.plaid.com"
     let webhookURL = "https://us-central1-valu-2.cloudfunctions.net/plaidWebhook"
     var URLdict : [PlaidURLs : URL]
     var clientName = "ValU-Two"
@@ -81,8 +81,8 @@ class PlaidConnection{
         
     }
     
-    // TODO
-    func getLinkToken(completion : @escaping (Result<Data, Error>) -> ()) throws{
+    
+    func getLinkToken(completion : @escaping (Result<Data, Error>) -> (), itemId: String? = nil) throws{
         
         let URL = PlaidURLs.GetLinkToken
         let keys = getAPIKeys()
@@ -90,10 +90,29 @@ class PlaidConnection{
         let userId = UserDefaults.standard.string(forKey: "userID") ?? "no user id"
         let user: [String : Any] = ["client_user_id" : userId]
         
-        let json: [String: Any] = ["client_id" : keys.clientID, "secret" : keys.clientSecret, "client_name" : self.clientName, "language" : "en", "country_codes" : ["US"], "user" : user, "products" : ["transactions"], "webhook" : self.webhookURL]
+        //If there is no ItemID, we're not doing update mode
+        if itemId == nil{
+            let json: [String: Any] = ["client_id" : keys.clientID, "secret" : keys.clientSecret, "client_name" : self.clientName, "language" : "en", "country_codes" : ["US"], "user" : user, "products" : ["transactions"], "webhook" : self.webhookURL]
+            
+            try postRequest(url: URL, jsonBody: json, completion: completion)
+        }
+        //If there is an ItemId, this is an update mode case
+        else{
+            
+            guard let accessToken: String = KeychainWrapper.standard.string(forKey: PlaidUserDefaultKeys.accessTokenKey.rawValue + itemId!) else{
+                print("Error: missing access Token")
+                throw PlaidConnectionError.AccessTokenNotFound
+            }
+            
+            let json: [String: Any] = ["client_id" : keys.clientID, "secret" : keys.clientSecret, "client_name" : self.clientName, "language" : "en", "country_codes" : ["US"], "user" : user, "access_token" : accessToken, "webhook" : self.webhookURL]
+            
+            try postRequest(url: URL, jsonBody: json, completion: completion)
+        }
         
         
-        try postRequest(url: URL, jsonBody: json, completion: completion)
+        
+        
+        
         
         
     }
@@ -273,6 +292,16 @@ class PlaidConnection{
         do{
             let (data, _) = try await URLSession.shared.data(for: request)
             
+            /*
+            if let httpResponse = response as? HTTPURLResponse {
+                    print("statusCode: \(httpResponse.statusCode)")
+                if httpResponse.statusCode != 200{
+                    
+                    return .failure(PlaidConnectionError.BadRequest)
+                }
+                
+            }
+            */
             
            return .success(data)
             

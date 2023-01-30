@@ -13,15 +13,16 @@ struct SpendingCardView: View {
     var viewModel : SpendingCardViewModel
     @ObservedObject var budget : Budget
     
-    @State var selectedSpendingState = 0
+    @Binding var budgetFilter: BudgetFilter
     
     var coordinator : BudgetsTabCoordinator?
     
-    init(budget : Budget, budgetTransactionsService: BudgetTransactionsService, coordinator: BudgetsTabCoordinator? = nil){
+    init(budget : Budget, budgetTransactionsService: BudgetTransactionsService, coordinator: BudgetsTabCoordinator? = nil, budgetFilter: Binding<BudgetFilter>){
         //print("Spending Card init")
         self.viewModel = SpendingCardViewModel(budget: budget, budgetTransactionsService: budgetTransactionsService)
         self.budget = budget
         self.coordinator = coordinator
+        self._budgetFilter = budgetFilter
         // To remove only extra separators below the list:
         UITableView.appearance().tableFooterView = UIView()
 
@@ -57,53 +58,71 @@ struct SpendingCardView: View {
                 Button("Action 3", action: {})
             }
         }
-
     
+    
+    var recurringZeroState: some View{
+        VStack{
+            Image(systemName: "clock.arrow.circlepath").font(.system(size: 65)).font(.largeTitle.weight(.heavy)).symbolRenderingMode(.hierarchical).padding(.trailing, 10).foregroundColor(AppTheme().themeColorPrimary)
+            Text("No Recurring Categories Yet").font(.system(size: 20, weight: .bold, design: .rounded)).multilineTextAlignment(.center).padding(.top)
+            Text("Recurring categories are those that repeat every month (Rent, Subscriptsions, etc). Budget App can assume that within your budget, you've already spent these. To create one, simple mark one of your existing categories as reuccing in the edit screen.").font(.system(size: 16, weight: .semibold, design: .rounded)).foregroundColor(Color.gray).multilineTextAlignment(.center).padding(.top, 3)
+        }.padding(.horizontal).background(Color(.systemBackground)).cornerRadius(23).padding(.bottom).padding(.bottom)
+    }
+
+    @ViewBuilder
     var large : some View{
             
-        VStack{
+            
+            
+            
+            
+            if budgetFilter == .Recurring && self.viewModel.budgetTransactionsService.getRecurringBudgetCategories().count == 0{
+                
+                self.recurringZeroState
+            }
+        
+        if budgetFilter == .Spending || budgetFilter == .Recurring{
             
             HStack{
-                if self.selectedSpendingState == 0{
-                    Text("Free Spending").font(.system(size: 23, design: .rounded)).fontWeight(.bold).listRowSeparator(.hidden)
-                }
-                else{
-                    Text("Recurring").font(.system(size: 23, design: .rounded)).fontWeight(.bold).listRowSeparator(.hidden)
-                }
-                
+                Text("Categories").font(.system(size: 24, weight: .bold, design: .rounded))
                 Spacer()
-                
-                Picker("", selection: $selectedSpendingState) {
-                                Image(systemName: "play.fill").tag(0)
-                                Image(systemName: "clock.arrow.circlepath").tag(1)
-                                
-                            }
-                .pickerStyle(.segmented).frame(width: 105)
-            }.padding(.bottom, 10).padding(.horizontal, 5)
+            }.padding([.horizontal], 16)
+            
+        }
+        
             
             ForEach(self.budget.getBudgetSections(), id: \.self){ section in
                                       
                 
-                
-                                              
-                VStack(spacing: 0){
-                    if self.selectedSpendingState == 0 && section.hasAnyFreeCategories(){
-                        ParentCategoryCard(budgetSection: section, coordiantor: self.coordinator, selectedState: self.$selectedSpendingState).padding(.bottom, 20).padding(.horizontal, 2.5)
-                    }
-                    else if self.selectedSpendingState == 1 && section.hasAnyRecurringCategories(){
-                        ParentCategoryCard(budgetSection: section, coordiantor: self.coordinator, selectedState: self.$selectedSpendingState).padding(.bottom, 20).padding(.horizontal, 2.5)
-                    }
-                }
-                
+                    if self.budgetFilter == .Spending && section.hasAnyFreeCategories(){
                         
+                        VStack(spacing: 0){
+                            
+                            ParentCategoryCard(budgetSection: section, coordiantor: self.coordinator, budgetFilter: self.$budgetFilter)
+                        }.padding(10).background(Color(.tertiarySystemBackground)).cornerRadius(12).padding([.horizontal, .bottom], 16)
+                        
+                        
+                            
+                        
+                            
+                        }
+                    else if self.budgetFilter == .Recurring && section.hasAnyRecurringCategories(){
+                        
+                        VStack(spacing: 0){
+                            
+                            ParentCategoryCard(budgetSection: section, coordiantor: self.coordinator, budgetFilter: self.$budgetFilter)
+                        }.padding(10).background(Color(.tertiarySystemBackground)).cornerRadius(12).padding([.horizontal, .bottom], 16)
+                           
+                        }
                 
-
-                    
                 
-                //Divider().padding(.bottom, 10)
+                
+                      
+                
+                
             }
             
-            if selectedSpendingState == 0{
+        /*
+            if budgetFilter == .Spending{
                 Button(action: {
                         // your action here
                     self.coordinator?.showListOfTransactions(title: "Other", list: self.viewModel.budgetTransactionsService.getOtherTransactionsInBudget())
@@ -114,8 +133,8 @@ struct SpendingCardView: View {
                         
                         }.buttonStyle(PlainButtonStyle())
             }
-            
-        }
+          */
+        
             
         
         
@@ -127,7 +146,7 @@ struct SpendingCardView: View {
     
     var body: some View {
         
-        large//.padding().padding(.vertical, 5).background(Color(.tertiarySystemBackground)).cornerRadius(25)
+        large
         
         
     }

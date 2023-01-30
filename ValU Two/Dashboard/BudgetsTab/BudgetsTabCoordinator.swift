@@ -215,8 +215,8 @@ class BudgetsTabCoordinator : Coordinator, TransactionRowDelegate, EditBudgetDel
         DataManager().saveDatabase()
     }
     
-    func showPlaidUpdate(publicToken: String, itemId: String, sender: FixNowService){
-        self.plaidUpdateCoordiantor = PlaidUpdateFlowCoordinator(navigationController: self.navigationController, itemId: itemId, publicToken: publicToken, fixNowService : sender)
+    func showPlaidUpdate(itemId: String, sender: FixNowService){
+        self.plaidUpdateCoordiantor = PlaidUpdateFlowCoordinator(navigationController: self.navigationController, itemId: itemId, fixNowService : sender)
         plaidUpdateCoordiantor?.start()
         
     }
@@ -236,6 +236,7 @@ class BudgetsTabCoordinator : Coordinator, TransactionRowDelegate, EditBudgetDel
         let owner = parent!
         owner.onboardingCanLaod = true
         self.parent = nil
+        self.budget = try? DataManager().getBudget()
         owner.setupViews()
         
     }
@@ -246,6 +247,10 @@ class BudgetsTabCoordinator : Coordinator, TransactionRowDelegate, EditBudgetDel
     }
     
     func showNewSectionView() {
+        
+    }
+    
+    func editBudgetSection(section: BudgetSection){
         
     }
     

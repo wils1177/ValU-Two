@@ -135,4 +135,108 @@ struct SetSavingsSlider: View {
     }
 }
 
+struct HorizontalSetSavingsSlider: View {
+    
+    var presentor : SetSavingsPresentor?
+    
+    @Binding var savingPercentage : Double
+    
+    var reccommendedSavingsPercentage = 0.2
+    
+    var scalingFactor : Double
+    
+    func sliderChange(widthDelta: CGFloat, total: CGFloat){
+        let ratio = widthDelta / total
+        if !(ratio <= 0 || ratio >= 1.0){
+            self.savingPercentage = ((widthDelta / total))
+        }
+        
+        
+    }
+    
+    var mainRectangles : some View{
+        GeometryReader{ g in
+            //let height = g.size.height
+            let width = g.size.width
+            
+            HStack(spacing: 0){
+                
+                Rectangle().foregroundColor(Color(.systemGreen)).frame( width: width *  savingPercentage)
+                Rectangle().foregroundColor(Color(.systemRed)).frame( width: width * ( 1.0 - savingPercentage))
+                
+                
+            }
+            
+            
+        }
+    }
+    
+    var sliderBar : some View{
+        GeometryReader{ g in
+            //let height = g.size.height
+            let width = g.size.width
+            
+            Capsule().frame(width: 10, alignment: .center).shadow(radius: 12)
+
+                .offset(x: (width * (savingPercentage)) - 5)
+            
+                .gesture(DragGesture()
+                .onChanged({ value in
+                    sliderChange(widthDelta: value.location.x, total: width)
+                    
+                }))
+            
+        }
+    }
+    
+    var body: some View{
+        
+        ZStack{
+            
+            mainRectangles
+            sliderBar
+        }.cornerRadius(45).shadow(radius: 10)
+        
+    }
+    
+}
+
+struct LinesSetSavingsSlider: View {
+    
+    
+    
+    @Binding var savingPercentage : Double
+    
+    var lines: some View{
+        ScrollView(.horizontal){
+            
+        HStack(){
+            
+                ForEach(0..<10) { _ in
+                    Rectangle().frame(width: 4, height: 50).foregroundColor(Color(.lightGray))
+                    
+                    ForEach(0..<10) { _ in
+                        Rectangle().frame(width: 3, height: 24).foregroundColor(Color(.lightGray))
+                    }
+                    
+                }
+            Rectangle().frame(width: 3, height: 50).foregroundColor(Color(.lightGray))
+            }
+        }
+    }
+    
+    var body: some View{
+        
+        ZStack{
+            lines
+            ZStack{
+                Text("75%").font(.system(size: 18, weight: .bold, design: .rounded)).lineLimit(3).multilineTextAlignment(.center).foregroundColor(Color(.systemGreen)).offset(y: -60)
+                Capsule().frame(width: 10, height: 70).foregroundColor(Color(.systemGreen))
+            }
+            
+        }
+        
+    }
+}
+
 

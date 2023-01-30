@@ -11,7 +11,7 @@ import Foundation
 import CoreData
 
 @objc(BudgetSection)
-public class BudgetSection: NSManagedObject, NSCopying {
+public class BudgetSection: NSManagedObject, NSCopying, Identifiable {
     
     convenience init(name : String, icon: String, colorCode: Int, order: Int, context: NSManagedObjectContext!){
         
@@ -89,6 +89,7 @@ public class BudgetSection: NSManagedObject, NSCopying {
     
     func getFreeSpent() -> Double{
         var total = 0.0
+        
         for child in self.budgetCategories?.allObjects as! [BudgetCategory]{
             
             if !child.recurring{

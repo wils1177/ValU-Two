@@ -105,6 +105,11 @@ class BudgetBalancerPresentor : ObservableObject {
         self.coordinator?.showNewSectionView()
     }
     
+    func editSection(section: BudgetSection){
+        self.coordinator?.editBudgetSection(section: section)
+        
+    }
+    
     
     
     func roundToTens(x : Float) -> Int {
@@ -155,15 +160,15 @@ class BudgetBalancerPresentor : ObservableObject {
         
         do{
             self.budget.removeFromBudgetSection(section)
-            DataManager().saveDatabase()
-            self.budget.objectWillChange.send()
+            //DataManager().saveDatabase()
+            
             
             
             try DataManager().deleteEntity(predicate: PredicateBuilder().generateByIdPredicate(id: section.id!), entityName: "BudgetSection")
             print("section deleted")
             
             DataManager().saveDatabase()
-            
+            self.budget.objectWillChange.send()
         }
         catch{
             print("Could Not Delete Budget Section")

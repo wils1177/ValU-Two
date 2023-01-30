@@ -91,7 +91,7 @@ struct TransactionRow: View {
                     }.frame(maxWidth: 70)
 
                 }
-            }.buttonStyle(BorderlessButtonStyle())
+            }.buttonStyle(BorderlessButtonStyle()).listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)).padding(9)
              
         }
          

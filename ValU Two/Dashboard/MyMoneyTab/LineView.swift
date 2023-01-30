@@ -66,6 +66,32 @@ struct LineView: View {
         print(self.legendSet.count)
     }
     
+    func getSpendingXOffset(width: CGFloat) -> CGFloat{
+        if (Double(dataSet1.count) / Double(maxCount)) > 0.85{
+            
+            return CGFloat((dataSet1.count - 1)) * width / CGFloat(maxCount - 1) - 40
+        }
+        else if (Double(dataSet1.count) / Double(maxCount)) < 0.1{
+            return CGFloat((dataSet1.count - 1)) * width / CGFloat(maxCount - 1) - 5
+        }
+        else{
+            return CGFloat((dataSet1.count - 1)) * width / CGFloat(maxCount - 1) - 18
+        }
+    }
+    
+    func getSpendingYOffset(height: CGFloat) -> CGFloat{
+        if (Double(dataSet1.count) / Double(maxCount)) > 0.85{
+            
+            return height * (1 - (dataSet1.last! / highestPoint)) - 21
+        }
+        else if (Double(dataSet1.count) / Double(maxCount)) < 0.1{
+            return (height * (1 - (dataSet1.last! / highestPoint))) - 21
+        }
+        else{
+            return height * (1 - (dataSet1.last! / highestPoint)) - 21
+        }
+    }
+    
     var spendingLabelView : some View{
         GeometryReader { geometry in
             let height = geometry.size.height
@@ -73,19 +99,12 @@ struct LineView: View {
             
             VStack(alignment: .leading){
                 
-                if (Double(dataSet1.count) / Double(maxCount)) > 0.85{
+                
                     
-                    Text(CommonUtils.makeMoneyString(number: Int(dataSet1.last!))).font(.system(size: 13, weight: .bold)).foregroundColor(color1).offset(x: CGFloat((dataSet1.count - 1)) * width / CGFloat(maxCount - 1) - 40,
-                                        y: height * (1 - (dataSet1.last! / highestPoint)) - 21)
-                }
-                else if (Double(dataSet1.count) / Double(maxCount)) < 0.1{
-                    Text(CommonUtils.makeMoneyString(number: Int(dataSet1.last!))).font(.system(size: 13, weight: .bold)).foregroundColor(color1).offset(x: CGFloat((dataSet1.count - 1)) * width / CGFloat(maxCount - 1) - 5,
-                                        y: (height * (1 - (dataSet1.last! / highestPoint))) - 21)
-                }
-                else{
-                    Text(CommonUtils.makeMoneyString(number: Int(dataSet1.last!))).font(.system(size: 13, weight: .bold)).foregroundColor(color1).offset(x: CGFloat((dataSet1.count - 1)) * width / CGFloat(maxCount - 1) - 18,
-                                        y: (height * (1 - (dataSet1.last! / highestPoint))) - 21)
-                }
+                Text(CommonUtils.makeMoneyString(number: Int(dataSet1.last!))).font(.system(size: 13, weight: .bold, design: .rounded)).foregroundColor(color1).offset(x: self.getSpendingXOffset(width: width),
+                                                                                                                                                     y: self.getSpendingYOffset(height: height))
+                
+                
                 
                 
             }

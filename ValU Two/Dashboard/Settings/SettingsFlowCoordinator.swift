@@ -87,10 +87,19 @@ class SettingsFlowCoordinator : Coordinator, PlaidLinkDelegate{
         self.settingsViewModel?.updateView()
         self.settingsViewModel?.objectWillChange.send()
         
+        NotificationCenter.default.post(name: .modelUpdate, object: nil)
+        
     }
     
     func connectMoreAccounts(){
         launchPlaidLink()
+    }
+    
+    func showTransactionRules(){
+        let view = TransactionRulesView(viewModel: self.settingsViewModel!)
+        let vc = UIHostingController(rootView: view)
+        vc.title = "Transactions Rules"
+        self.navigationController.pushViewController(vc, animated: true)
     }
     
     
@@ -98,7 +107,7 @@ class SettingsFlowCoordinator : Coordinator, PlaidLinkDelegate{
         let model = TransactionRuleViewModel(rule: rule)
         model.coordinator = self
         let vc = UIHostingController(rootView: TransactionRuleDetailView(viewModel: model))
-        vc.title = "New Rule"
+        vc.title = "Rule"
         self.navigationController.pushViewController(vc, animated: true)
     }
     

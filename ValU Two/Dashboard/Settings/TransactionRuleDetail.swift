@@ -38,7 +38,7 @@ struct TransactionRuleDetailView: View {
             }.padding(.leading)
             
             
-            TextEditor(text: self.$viewModel.currentName).font(Font.system(size: 24, weight: .semibold)).frame(height: 55, alignment: .center).frame(minWidth: 0, maxWidth: 400, minHeight: 100, maxHeight: 600).multilineTextAlignment(.center).padding(.horizontal).background(Color(.tertiarySystemGroupedBackground)).cornerRadius(20).padding(.horizontal).padding(.bottom)
+            TextEditor(text: self.$viewModel.currentName).font(Font.system(size: 24, weight: .semibold)).frame(height: 55, alignment: .center).frame(minWidth: 0, maxWidth: 400, minHeight: 100, maxHeight: 600).multilineTextAlignment(.center).padding(.horizontal).background(Color(.tertiarySystemBackground)).cornerRadius(20).padding(.horizontal).padding(.bottom)
             
             HStack(){
                 Text("Then, it will be assigned to:").font(.system(size: 20, design: .rounded)).bold().padding(.top)
@@ -78,7 +78,7 @@ struct TransactionRuleDetailView: View {
             
             
 
-        }
+        }.background(Color(.systemGroupedBackground))
         .navigationBarTitle("Rule", displayMode: .large)
         .navigationBarItems(trailing:
             

@@ -88,9 +88,9 @@ class MainTabBarController: UITabBarController {
         
         if self.historyTabCoordinator == nil {
             self.historyTabCoordinator = HistoryTabCoordiantor()
-            self.historyTabCoordinator?.start()
+            
         }
-        
+        self.historyTabCoordinator?.start()
             
             viewControllers = [self.homeTabCoordinator!.navigationController, self.transactionTabCoordinator!.navigationController, self.moneyTabCoordinator!.navigationController, self.historyTabCoordinator!.navigationController]
         

@@ -91,7 +91,7 @@ struct CategoryDetailTransactionsSection: View {
                         
                         HStack{
                             Spacer()
-                            self.transactionsZeroState.padding(.vertical, 10)
+                            self.transactionsZeroState
                             Spacer()
                         }.transition(.scale)
                         
